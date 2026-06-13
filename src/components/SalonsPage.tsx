@@ -140,6 +140,24 @@ export default function SalonsPage({
   // Impersonating Banner State
   const [impersonatingSalon, setImpersonatingSalon] = useState<string | null>(null);
 
+  // Reactivate Profile modal states
+  const [isReactivateModalOpen, setIsReactivateModalOpen] = useState(false);
+  const [reactivateSalonId, setReactivateSalonId] = useState<string | null>(null);
+
+  // New action modal states
+  const [deleteSalonId, setDeleteSalonId] = useState<string | null>(null);
+  const [suspendSalonId, setSuspendSalonId] = useState<string | null>(null);
+  const [resetPasswordSalonId, setResetPasswordSalonId] = useState<string | null>(null);
+  const [mailsSentSalonId, setMailsSentSalonId] = useState<string | null>(null);
+
+  // New state variables for password reset inputs
+  const [newPassword, setNewPassword] = useState("");
+  const [confirmPassword, setConfirmPassword] = useState("");
+
+  // New state variables for Mails Sent filters
+  const [modalMailRange, setModalMailRange] = useState("All Time");
+  const [modalMailSource, setModalMailSource] = useState("All Sources");
+
   // Selected Salon Details State is passed as a prop
 
   // Modal State
@@ -285,10 +303,11 @@ export default function SalonsPage({
   };
 
   const handleImpersonate = (id: string) => {
-    const name = salons.find(s => s.id === id)?.name;
-    setImpersonatingSalon(name || null);
+    const salon = salons.find(s => s.id === id);
+    if (!salon) return;
+    setReactivateSalonId(id);
+    setIsReactivateModalOpen(true);
     setActiveActionMenuId(null);
-    window.scrollTo({ top: 0, behavior: "smooth" });
   };
 
   // Add salon submission
@@ -859,7 +878,7 @@ export default function SalonsPage({
                           </button>
                           <button
                             onClick={() => {
-                              alert(`Viewing mails sent to: ${salon.email}`);
+                              setMailsSentSalonId(salon.id);
                               setActiveActionMenuId(null);
                             }}
                             className="flex items-center gap-2.5 px-3 py-2 text-xs font-semibold text-slate-600 hover:bg-slate-50 hover:text-slate-800 rounded-xl transition-colors text-left"
@@ -869,7 +888,7 @@ export default function SalonsPage({
                           </button>
                           <button
                             onClick={() => {
-                              alert(`Password reset link dispatched for: ${salon.email}`);
+                              setResetPasswordSalonId(salon.id);
                               setActiveActionMenuId(null);
                             }}
                             className="flex items-center gap-2.5 px-3 py-2 text-xs font-semibold text-slate-600 hover:bg-slate-50 hover:text-slate-800 rounded-xl transition-colors text-left"
@@ -879,7 +898,7 @@ export default function SalonsPage({
                           </button>
                           <button
                             onClick={() => {
-                              alert(`Suspended salon: ${salon.name}`);
+                              setSuspendSalonId(salon.id);
                               setActiveActionMenuId(null);
                             }}
                             className="flex items-center gap-2.5 px-3 py-2 text-xs font-semibold text-amber-600 hover:bg-amber-50 rounded-xl transition-colors text-left"
@@ -891,7 +910,10 @@ export default function SalonsPage({
                             Suspend
                           </button>
                           <button
-                            onClick={() => handleDeleteSalon(salon.id)}
+                            onClick={() => {
+                              setDeleteSalonId(salon.id);
+                              setActiveActionMenuId(null);
+                            }}
                             className="flex items-center gap-2.5 px-3 py-2 text-xs font-semibold text-rose-600 hover:bg-rose-50 rounded-xl transition-colors text-left border-t border-slate-100/60 mt-1 pt-1.5"
                           >
                             <TrashIcon />
@@ -1601,6 +1623,320 @@ export default function SalonsPage({
               </div>
             )}
 
+          </div>
+        </div>
+      )}
+
+      {/* Reactivate Profile Modal */}
+      {isReactivateModalOpen && (
+        <div className="fixed inset-0 bg-[#0f172a]/40 backdrop-blur-[6px] z-50 flex items-center justify-center p-4">
+          <div className="bg-white rounded-[20px] w-full max-w-[480px] shadow-2xl p-8 flex flex-col gap-6 relative animate-in zoom-in-95 duration-200 text-left">
+            <div className="flex flex-col gap-2">
+              <h3 className="text-xl font-bold text-[#0f172a] tracking-tight">Reactive Profile</h3>
+              <p className="text-sm text-[#475569] font-normal mt-1.5">Are you sure you want to reactive this profile?</p>
+            </div>
+            <div className="flex items-center justify-end gap-3 mt-4">
+              <button
+                type="button"
+                onClick={() => {
+                  setIsReactivateModalOpen(false);
+                  setReactivateSalonId(null);
+                }}
+                className="px-6 py-2.5 bg-[#f8fafc] hover:bg-[#f1f5f9] text-[#475569] hover:text-[#1e293b] rounded-lg text-sm font-medium transition-all"
+              >
+                Cancel
+              </button>
+              <button
+                type="button"
+                onClick={() => {
+                  if (reactivateSalonId) {
+                    // Update salon status to Active
+                    setSalons(prev => prev.map(s => s.id === reactivateSalonId ? { ...s, status: "Active" } : s));
+                    // Set impersonation
+                    const name = salons.find(s => s.id === reactivateSalonId)?.name;
+                    setImpersonatingSalon(name || null);
+                  }
+                  setIsReactivateModalOpen(false);
+                  setReactivateSalonId(null);
+                  window.scrollTo({ top: 0, behavior: "smooth" });
+                }}
+                className="px-6 py-2.5 bg-[#ecfeff] hover:bg-[#cffafe] text-[#0891b2] rounded-lg text-sm font-semibold transition-all"
+              >
+                Reactive Profile Now
+              </button>
+            </div>
+          </div>
+        </div>
+      )}
+
+      {/* Delete Salon Modal */}
+      {deleteSalonId !== null && (
+        <div className="fixed inset-0 bg-[#0f172a]/40 backdrop-blur-[6px] z-50 flex items-center justify-center p-4">
+          <div className="bg-white rounded-[20px] w-full max-w-[480px] shadow-2xl p-8 flex flex-col gap-6 relative animate-in zoom-in-95 duration-200 text-left">
+            <div className="flex flex-col gap-2">
+              <h3 className="text-xl font-bold text-[#0f172a] tracking-tight">Are you sure you want to delete this Salon?</h3>
+              <p className="text-sm text-[#475569] font-normal mt-1">This action cannot be undone.</p>
+            </div>
+            <div className="flex items-center justify-end gap-3 mt-4">
+              <button
+                type="button"
+                onClick={() => setDeleteSalonId(null)}
+                className="px-6 py-2.5 bg-[#f8fafc] hover:bg-[#f1f5f9] text-[#475569] hover:text-[#1e293b] rounded-xl text-sm font-medium transition-all"
+              >
+                Cancel
+              </button>
+              <button
+                type="button"
+                onClick={() => {
+                  setSalons(prev => prev.filter(s => s.id !== deleteSalonId));
+                  setSelectedSalonIds(prev => prev.filter(rowId => rowId !== deleteSalonId));
+                  setDeleteSalonId(null);
+                  alert("Salon deleted successfully.");
+                }}
+                className="px-6 py-2.5 bg-[#ffe4e6] hover:bg-[#fecdd3] text-[#ff4e73] rounded-xl text-sm font-semibold transition-all"
+              >
+                Delete Salon
+              </button>
+            </div>
+          </div>
+        </div>
+      )}
+
+      {/* Suspend Salon Modal */}
+      {suspendSalonId !== null && (
+        <div className="fixed inset-0 bg-[#0f172a]/40 backdrop-blur-[6px] z-50 flex items-center justify-center p-4">
+          <div className="bg-white rounded-[20px] w-full max-w-[480px] shadow-2xl p-8 flex flex-col gap-6 relative animate-in zoom-in-95 duration-200 text-left">
+            <div className="flex flex-col gap-2">
+              <h3 className="text-xl font-bold text-[#0f172a] tracking-tight">Confirm Suspend Salon</h3>
+              <p className="text-sm text-[#475569] font-normal mt-1">Are you sure you want to suspend this Salon?</p>
+            </div>
+            <div className="flex items-center justify-end gap-3 mt-4">
+              <button
+                type="button"
+                onClick={() => setSuspendSalonId(null)}
+                className="px-6 py-2.5 bg-[#f8fafc] hover:bg-[#f1f5f9] text-[#475569] hover:text-[#1e293b] rounded-xl text-sm font-medium transition-all"
+              >
+                Cancel
+              </button>
+              <button
+                type="button"
+                onClick={() => {
+                  setSalons(prev => prev.map(s => s.id === suspendSalonId ? { ...s, status: "Cancelled" } : s));
+                  setSuspendSalonId(null);
+                  alert("Salon suspended successfully.");
+                }}
+                className="px-6 py-2.5 bg-[#fffbeb] hover:bg-[#fef3c7] text-[#d97706] rounded-xl text-sm font-semibold transition-all"
+              >
+                Suspend Salon
+              </button>
+            </div>
+          </div>
+        </div>
+      )}
+
+      {/* Reset Password Modal */}
+      {resetPasswordSalonId !== null && (
+        <div className="fixed inset-0 bg-[#0f172a]/40 backdrop-blur-[6px] z-50 flex items-center justify-center p-4">
+          <div className="bg-white rounded-[20px] w-full max-w-[480px] shadow-2xl p-8 flex flex-col gap-6 relative animate-in zoom-in-95 duration-200 text-left">
+            <h3 className="text-xl font-bold text-[#0f172a] tracking-tight mb-2">Reset Password</h3>
+            <div className="flex flex-col gap-4">
+              <div className="flex flex-col gap-1.5">
+                <label className="text-xs font-bold text-slate-700">New Password *</label>
+                <input
+                  type="password"
+                  placeholder="Enter the new password"
+                  value={newPassword}
+                  onChange={(e) => setNewPassword(e.target.value)}
+                  className="border border-slate-200 focus:border-[#5e53fc] focus:outline-none rounded-xl px-4 py-2.5 text-xs font-semibold text-slate-700 placeholder:text-slate-300 w-full"
+                />
+              </div>
+              <div className="flex flex-col gap-1.5">
+                <label className="text-xs font-bold text-slate-700">Confirm New Password *</label>
+                <input
+                  type="password"
+                  placeholder="Enter the new password"
+                  value={confirmPassword}
+                  onChange={(e) => setConfirmPassword(e.target.value)}
+                  className="border border-slate-200 focus:border-[#5e53fc] focus:outline-none rounded-xl px-4 py-2.5 text-xs font-semibold text-slate-700 placeholder:text-slate-300 w-full"
+                />
+              </div>
+            </div>
+            <div className="flex items-center justify-end gap-3 mt-4">
+              <button
+                type="button"
+                onClick={() => {
+                  setResetPasswordSalonId(null);
+                  setNewPassword("");
+                  setConfirmPassword("");
+                }}
+                className="px-6 py-2.5 bg-[#f8fafc] hover:bg-[#f1f5f9] text-[#475569] hover:text-[#1e293b] rounded-xl text-sm font-medium transition-all"
+              >
+                Cancel
+              </button>
+              <button
+                type="button"
+                onClick={() => {
+                  if (!newPassword || !confirmPassword) {
+                    alert("Please fill in all fields.");
+                    return;
+                  }
+                  if (newPassword !== confirmPassword) {
+                    alert("Passwords do not match.");
+                    return;
+                  }
+                  setResetPasswordSalonId(null);
+                  setNewPassword("");
+                  setConfirmPassword("");
+                  alert("Password has been reset successfully.");
+                }}
+                className="px-6 py-2.5 bg-[#5e53fc] hover:bg-[#4d42eb] text-white rounded-xl text-sm font-semibold transition-all shadow-md shadow-indigo-100"
+              >
+                Reset Password
+              </button>
+            </div>
+          </div>
+        </div>
+      )}
+
+      {/* Mails Sent Modal */}
+      {mailsSentSalonId !== null && (
+        <div className="fixed inset-0 bg-[#0f172a]/40 backdrop-blur-[6px] z-50 flex items-center justify-center p-4">
+          <div className="bg-white rounded-[20px] w-full max-w-[960px] shadow-2xl p-8 flex flex-col gap-6 relative animate-in zoom-in-95 duration-200 text-left">
+            <button
+              onClick={() => setMailsSentSalonId(null)}
+              className="absolute right-6 top-6 p-1.5 rounded-xl hover:bg-slate-100 text-slate-400 hover:text-slate-600 transition-all"
+            >
+              <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5">
+                <line x1="18" y1="6" x2="6" y2="18" />
+                <line x1="6" y1="6" x2="18" y2="18" />
+              </svg>
+            </button>
+            
+            <h3 className="text-xl font-bold text-[#0f172a] tracking-tight">
+              Mails Sent - {salons.find(s => s.id === mailsSentSalonId)?.name || ""}
+            </h3>
+
+            {/* Filter selectors */}
+            <div className="flex items-center gap-4">
+              <div className="flex flex-col gap-1.5 min-w-[150px]">
+                <label className="text-[10px] font-bold text-slate-400 uppercase tracking-wide">Data Range</label>
+                <div className="relative">
+                  <select
+                    value={modalMailRange}
+                    onChange={(e) => setModalMailRange(e.target.value)}
+                    className="w-full bg-white border border-[#eef2f6] rounded-xl px-4 py-2.5 pr-10 text-xs font-semibold text-slate-700 appearance-none cursor-pointer focus:outline-none focus:border-[#5e53fc]"
+                  >
+                    <option value="All Time">All Time</option>
+                    <option value="Last 7 Days">Last 7 Days</option>
+                    <option value="Last 30 Days">Last 30 Days</option>
+                  </select>
+                  <div className="absolute inset-y-0 right-0 flex items-center pr-3 pointer-events-none text-slate-400">
+                    <svg width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5">
+                      <polyline points="6 9 12 15 18 9" />
+                    </svg>
+                  </div>
+                </div>
+              </div>
+
+              <div className="flex flex-col gap-1.5 min-w-[150px]">
+                <label className="text-[10px] font-bold text-slate-400 uppercase tracking-wide">Source</label>
+                <div className="relative">
+                  <select
+                    value={modalMailSource}
+                    onChange={(e) => setModalMailSource(e.target.value)}
+                    className="w-full bg-white border border-[#eef2f6] rounded-xl px-4 py-2.5 pr-10 text-xs font-semibold text-slate-700 appearance-none cursor-pointer focus:outline-none focus:border-[#5e53fc]"
+                  >
+                    <option value="All Sources">All Sources</option>
+                    <option value="Auto">Auto</option>
+                    <option value="Manual">Manual</option>
+                  </select>
+                  <div className="absolute inset-y-0 right-0 flex items-center pr-3 pointer-events-none text-slate-400">
+                    <svg width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5">
+                      <polyline points="6 9 12 15 18 9" />
+                    </svg>
+                  </div>
+                </div>
+              </div>
+            </div>
+
+            {/* Invoices List Table */}
+            <div className="border border-slate-100 rounded-2xl overflow-hidden w-full bg-white">
+              <table className="w-full border-collapse text-left text-xs">
+                <thead>
+                  <tr className="bg-[#f5f4ff] border-b border-slate-100 text-slate-600 font-bold uppercase tracking-wider">
+                    <th className="px-6 py-4">Date</th>
+                    <th className="px-6 py-4">Subject</th>
+                    <th className="px-6 py-4">Type</th>
+                    <th className="px-6 py-4">Source</th>
+                    <th className="px-6 py-4">Category</th>
+                    <th className="px-6 py-4 text-center">Actions</th>
+                  </tr>
+                </thead>
+                <tbody className="divide-y divide-slate-100 text-slate-700 font-semibold">
+                  {[
+                    { date: "08/08/2025 13:59", subject: "Payment expired", type: "Email", source: "Auto", category: "Opened" },
+                    { date: "08/08/2025 13:59", subject: "Credit card update", type: "Email", source: "Auto", category: "Opened" },
+                    { date: "08/08/2025 13:59", subject: "Invoice reminder", type: "Email", source: "Auto", category: "Sent" },
+                    { date: "08/08/2025 13:59", subject: "Welcome to SalonFlow", type: "Email", source: "Auto", category: "Sent" },
+                    { date: "08/08/2025 13:59", subject: "Premium features update", type: "Email", source: "Auto", category: "Sent" }
+                  ]
+                  .filter(item => modalMailSource === "All Sources" || item.source === modalMailSource)
+                  .map((item, idx) => (
+                    <tr key={idx} className="hover:bg-slate-50/50 transition-colors">
+                      <td className="px-6 py-4 text-slate-500">{item.date}</td>
+                      <td className="px-6 py-4 text-slate-800 font-bold">{item.subject}</td>
+                      <td className="px-6 py-4">
+                        <span className="px-2.5 py-1 rounded-full text-[9px] font-extrabold uppercase tracking-wide bg-[#ecfeff] text-[#0891b2]">
+                          {item.type}
+                        </span>
+                      </td>
+                      <td className="px-6 py-4">
+                        <span className="px-2.5 py-1 rounded-full text-[9px] font-extrabold uppercase tracking-wide bg-slate-100 text-slate-650">
+                          {item.source}
+                        </span>
+                      </td>
+                      <td className="px-6 py-4">
+                        <span className={`px-2.5 py-1 rounded-full text-[9px] font-extrabold uppercase tracking-wide ${
+                          item.category === "Opened" ? "bg-[#f0fdf4] text-[#16a34a]" : "bg-[#eff6ff] text-[#2563eb]"
+                        }`}>
+                          {item.category}
+                        </span>
+                      </td>
+                      <td className="px-6 py-4 text-center flex items-center justify-center gap-2">
+                        <button
+                          onClick={() => alert(`Viewing details of email: "${item.subject}"`)}
+                          className="p-2 bg-[#f2f1ff] text-[#5e53fc] hover:bg-[#e4e2ff] rounded-lg transition-colors inline-flex"
+                          title="View Details"
+                        >
+                          <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round">
+                            <path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z" />
+                            <circle cx="12" cy="12" r="3" />
+                          </svg>
+                        </button>
+                        <button
+                          onClick={() => alert(`Resending email: "${item.subject}"`)}
+                          className="p-2 bg-[#ecfeff] text-[#0891b2] hover:bg-[#cffafe] rounded-lg transition-colors inline-flex"
+                          title="Resend Email"
+                        >
+                          <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round">
+                            <path d="M21.5 2v6h-6M21.34 15.57a10 10 0 1 1-.57-8.38l.57.57" />
+                          </svg>
+                        </button>
+                      </td>
+                    </tr>
+                  ))}
+                </tbody>
+              </table>
+            </div>
+
+            <div className="flex justify-end">
+              <button
+                onClick={() => alert("Loading more mails...")}
+                className="px-6 py-2.5 bg-[#f2f1ff] hover:bg-[#e4e2ff] text-[#5e53fc] rounded-xl text-xs font-bold transition-all shadow-sm"
+              >
+                View More
+              </button>
+            </div>
           </div>
         </div>
       )}

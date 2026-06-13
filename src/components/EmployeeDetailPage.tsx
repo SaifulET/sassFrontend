@@ -62,6 +62,131 @@ export default function EmployeeDetailPage({ employee, onBack, onViewPermissions
   // Previous Thinking modal state
   const [isPreviousThinkingOpen, setIsPreviousThinkingOpen] = useState(false);
   const [previousThinking, setPreviousThinking] = useState("");
+
+  // Touch/hover states for charts
+  const [hoveredPoint, setHoveredPoint] = useState<number | null>(1); // default Tuesday
+  const [hoveredBarMonth, setHoveredBarMonth] = useState<number | null>(3); // default Apr
+  const [hoveredTrendYear, setHoveredTrendYear] = useState<number | null>(1); // default 2020
+
+  // Interactive drop-down states
+  const [productionPeriod, setProductionPeriod] = useState("Monthly");
+  const [isProdPeriodDropdownOpen, setIsProdPeriodDropdownOpen] = useState(false);
+
+  const [trendsPeriod, setTrendsPeriod] = useState("Yearly");
+  const [isTrendsPeriodDropdownOpen, setIsTrendsPeriodDropdownOpen] = useState(false);
+
+  const [perfSelectedMonth, setPerfSelectedMonth] = useState("April");
+  const [perfSelectedYear, setPerfSelectedYear] = useState(2025);
+  const [isPerfMetricDropdownOpen, setIsPerfMetricDropdownOpen] = useState(false);
+  const [perfDropdownSubMenu, setPerfDropdownSubMenu] = useState<"month" | "year">("month");
+
+  const [opsPeriod, setOpsPeriod] = useState("Last Month");
+  const [isOpsPeriodDropdownOpen, setIsOpsPeriodDropdownOpen] = useState(false);
+
+  // Terminate Contract modal state
+  const [isTerminateModalOpen, setIsTerminateModalOpen] = useState(false);
+  const [terminateEndDate, setTerminateEndDate] = useState("");
+  const [terminateReason, setTerminateReason] = useState("");
+  const [terminateAccessDate, setTerminateAccessDate] = useState("");
+
+  // Touch handlers for charts
+  const handleActivityTouch = (e: React.TouchEvent<SVGSVGElement>) => {
+    if (e.touches.length === 0) return;
+    const touch = e.touches[0];
+    const svg = e.currentTarget;
+    const rect = svg.getBoundingClientRect();
+    const touchX = ((touch.clientX - rect.left) / rect.width) * 1000;
+
+    let closestIdx = 0;
+    let minDistance = Infinity;
+    weeklyData.forEach((d, i) => {
+      const dist = Math.abs(touchX - d.x);
+      if (dist < minDistance) {
+        minDistance = dist;
+        closestIdx = i;
+      }
+    });
+
+    if (minDistance < 80) {
+      setHoveredPoint(closestIdx);
+    }
+  };
+
+  const handleBarTouch = (e: React.TouchEvent<SVGSVGElement>) => {
+    if (e.touches.length === 0) return;
+    const touch = e.touches[0];
+    const svg = e.currentTarget;
+    const rect = svg.getBoundingClientRect();
+    const touchX = ((touch.clientX - rect.left) / rect.width) * 1000;
+
+    let closestIdx = 0;
+    let minDistance = Infinity;
+    prodBarData.forEach((d, i) => {
+      const dist = Math.abs(touchX - d.cx);
+      if (dist < minDistance) {
+        minDistance = dist;
+        closestIdx = i;
+      }
+    });
+
+    if (minDistance < 80) {
+      setHoveredBarMonth(closestIdx);
+    }
+  };
+
+  const handleTrendTouch = (e: React.TouchEvent<SVGSVGElement>) => {
+    if (e.touches.length === 0) return;
+    const touch = e.touches[0];
+    const svg = e.currentTarget;
+    const rect = svg.getBoundingClientRect();
+    const touchX = ((touch.clientX - rect.left) / rect.width) * 1000;
+
+    let closestIdx = 0;
+    let minDistance = Infinity;
+    trendPoints.forEach((p, i) => {
+      const dist = Math.abs(touchX - p.x);
+      if (dist < minDistance) {
+        minDistance = dist;
+        closestIdx = i;
+      }
+    });
+
+    if (minDistance < 80) {
+      setHoveredTrendYear(closestIdx);
+    }
+  };
+
+  // Weekly appointments data
+  const weeklyData = [
+    { day: "Monday", x: 110, y: 128, value: 45 },
+    { day: "Tuesday", x: 250, y: 118, value: 40 },
+    { day: "Wednesday", x: 390, y: 102, value: 55 },
+    { day: "Thursday", x: 530, y: 92, value: 60 },
+    { day: "Friday", x: 670, y: 108, value: 50 },
+    { day: "Saturday", x: 810, y: 32, value: 125 },
+    { day: "Sunday", x: 950, y: 38, value: 120 },
+  ];
+
+  // Production bar chart data
+  const prodBarData = [
+    { month: "Jan", cx: 140, tealH: 30, pinkH: 74, total: "€ 1.4k", threshold: "€ 1.2k", above: "€ 0.2k", date: "January, 2025" },
+    { month: "Feb", cx: 270, tealH: 80, pinkH: 34, total: "€ 2.1k", threshold: "€ 1.5k", above: "€ 0.6k", date: "February, 2025" },
+    { month: "Mar", cx: 400, tealH: 24, pinkH: 64, total: "€ 1.5k", threshold: "€ 1.3k", above: "€ 0.2k", date: "March, 2025" },
+    { month: "Apr", cx: 530, tealH: 84, pinkH: 44, total: "€ 1.7k", threshold: "€ 1.7k", above: "€ 1.7k", date: "April, 2025" },
+    { month: "Jun", cx: 710, tealH: 0, pinkH: 74, total: "€ 2.3k", threshold: "€ 1.8k", above: "€ 0.5k", date: "June, 2025" },
+    { month: "Jul", cx: 850, tealH: 90, pinkH: 54, total: "€ 2.6k", threshold: "€ 2.0k", above: "€ 0.6k", date: "July, 2025" },
+  ];
+
+  // Production trends data points
+  const trendPoints = [
+    { year: "2019", x: 100, y: 68, color: "#10b981", status: "Above Threshold", value: "€ 2.5k" },
+    { year: "2020", x: 240, y: 62, color: "#10b981", status: "Above Threshold", value: "€ 1.7k" },
+    { year: "2021", x: 380, y: 70, color: "#10b981", status: "Above Threshold", value: "€ 2.4k" },
+    { year: "2022", x: 520, y: 78, color: "#10b981", status: "Above Threshold", value: "€ 2.2k" },
+    { year: "2023", x: 660, y: 124, color: "#f43f5e", status: "Below Threshold", value: "€ 1.7k" },
+    { year: "2024", x: 800, y: 48, color: "#10b981", status: "Above Threshold", value: "€ 2.8k" },
+    { year: "2025", x: 940, y: 54, color: "#10b981", status: "Above Threshold", value: "€ 2.6k" },
+  ];
   const [certifications, setCertifications] = useState(["Professional Hairdresser", "Business Management"]);
   const [newCert, setNewCert] = useState("");
   const [courses, setCourses] = useState(["Leadership Management", "Customer Service Excellence"]);
@@ -214,7 +339,7 @@ export default function EmployeeDetailPage({ employee, onBack, onViewPermissions
               Edit Employee
             </button>
             <button
-              onClick={() => alert(`Terminating contract for: ${employee.firstName}`)}
+              onClick={() => setIsTerminateModalOpen(true)}
               className="px-5 py-2.5 bg-[#fee2e2] hover:bg-[#fecaca] text-[#dc2626] rounded-xl text-xs font-bold transition-all"
             >
               Terminate Contract
@@ -688,41 +813,125 @@ export default function EmployeeDetailPage({ employee, onBack, onViewPermissions
 
               {/* Weekly Appointments Line Chart */}
               <div className="border border-slate-100 rounded-3xl p-6 bg-white flex flex-col gap-4">
-                <h4 className="text-xs font-extrabold text-slate-800 uppercase tracking-wider">Weekly Appointments</h4>
+                <h4 className="text-sm font-bold text-slate-800">Weekly Appointments</h4>
 
-                {/* SVG Line Chart */}
-                <div className="w-full flex justify-center py-4">
-                  <svg className="w-full max-w-xl h-[160px]" viewBox="0 0 500 160" xmlns="http://www.w3.org/2000/svg">
-                    {/* Gridlines */}
-                    <line x1="20" y1="20" x2="480" y2="20" stroke="#f8fafc" strokeWidth="1" />
-                    <line x1="20" y1="60" x2="480" y2="60" stroke="#f8fafc" strokeWidth="1" />
-                    <line x1="20" y1="100" x2="480" y2="100" stroke="#f8fafc" strokeWidth="1" />
-                    <line x1="20" y1="130" x2="480" y2="130" stroke="#e2e8f0" strokeWidth="1.5" />
+                {/* SVG Line Chart — full width, interactive */}
+                <div className="w-full py-2">
+                  <svg 
+                    className="w-full h-[250px]" 
+                    viewBox="0 0 1000 250" 
+                    preserveAspectRatio="none" 
+                    xmlns="http://www.w3.org/2000/svg" 
+                    onMouseLeave={() => setHoveredPoint(null)}
+                    onTouchMove={handleActivityTouch}
+                    onTouchStart={handleActivityTouch}
+                    style={{ touchAction: "none" }}
+                  >
+                    {/* Y-axis labels */}
+                    <text x="30" y="22" textAnchor="end" fontSize="11" fill="#94a3b8" fontWeight="600">140</text>
+                    <text x="30" y="62" textAnchor="end" fontSize="11" fill="#94a3b8" fontWeight="600">105</text>
+                    <text x="30" y="102" textAnchor="end" fontSize="11" fill="#94a3b8" fontWeight="600">70</text>
+                    <text x="30" y="142" textAnchor="end" fontSize="11" fill="#94a3b8" fontWeight="600">35</text>
+                    <text x="30" y="182" textAnchor="end" fontSize="11" fill="#94a3b8" fontWeight="600">0</text>
 
-                    {/* Chart Spline Path */}
+                    {/* Horizontal gridlines */}
+                    <line x1="40" y1="18" x2="980" y2="18" stroke="#f1f5f9" strokeWidth="1" />
+                    <line x1="40" y1="58" x2="980" y2="58" stroke="#f1f5f9" strokeWidth="1" />
+                    <line x1="40" y1="98" x2="980" y2="98" stroke="#f1f5f9" strokeWidth="1" />
+                    <line x1="40" y1="138" x2="980" y2="138" stroke="#f1f5f9" strokeWidth="1" />
+                    <line x1="40" y1="178" x2="980" y2="178" stroke="#f1f5f9" strokeWidth="1" />
+
+                    {/* Green gradient fill */}
+                    <defs>
+                      <linearGradient id="greenGradient" x1="0" y1="0" x2="0" y2="1">
+                        <stop offset="0%" stopColor="#10b981" />
+                        <stop offset="100%" stopColor="#10b981" stopOpacity="0" />
+                      </linearGradient>
+                    </defs>
+
+                    {/* Green area fill under curve */}
                     <path
-                      d="M 20 110 Q 90 120 160 100 T 300 70 T 440 85 T 480 90"
-                      fill="none"
-                      stroke="#10b981"
-                      strokeWidth="3"
+                      d="M 40 128 C 80 120, 140 115, 250 118 C 320 120, 350 125, 390 102 C 430 80, 480 88, 530 92 C 580 96, 620 112, 670 108 C 720 104, 760 48, 810 32 C 860 16, 900 28, 950 38 L 950 178 L 40 178 Z"
+                      fill="url(#greenGradient)"
+                      opacity="0.12"
                     />
 
-                    {/* Hover highlights */}
-                    <circle cx="230" cy="80" r="5" fill="#10b981" stroke="white" strokeWidth="2" />
+                    {/* Green smooth curve line */}
+                    <path
+                      d="M 40 128 C 80 120, 140 115, 250 118 C 320 120, 350 125, 390 102 C 430 80, 480 88, 530 92 C 580 96, 620 112, 670 108 C 720 104, 760 48, 810 32 C 860 16, 900 28, 950 38"
+                      fill="none"
+                      stroke="#10b981"
+                      strokeWidth="2.5"
+                      strokeLinecap="round"
+                    />
 
-                    {/* Tooltip Card */}
-                    <rect x="180" y="25" width="100" height="35" rx="8" fill="white" stroke="#e2e8f0" strokeWidth="1" filter="drop-shadow(0 2px 4px rgba(0,0,0,0.02))" />
-                    <text x="230" y="38" textAnchor="middle" fontSize="8" fill="#64748b" fontWeight="bold">Tuesday</text>
-                    <text x="230" y="50" textAnchor="middle" fontSize="9" fill="#10b981" fontWeight="extrabold">30 Appointments</text>
+                    {/* Interactive data points — invisible hit areas + visible dots */}
+                    {weeklyData.map((d, i) => (
+                      <g key={`pt-${i}`}>
+                        {/* Invisible hit area for hover/click */}
+                        <rect
+                          x={d.x - 50}
+                          y="0"
+                          width="100"
+                          height="200"
+                          fill="transparent"
+                          style={{ cursor: "pointer" }}
+                          onMouseEnter={() => setHoveredPoint(i)}
+                          onClick={() => setHoveredPoint(i)}
+                        />
+                        {/* Visible dot */}
+                        <circle
+                          cx={d.x}
+                          cy={d.y}
+                          r={hoveredPoint === i ? 6 : 0}
+                          fill="#10b981"
+                          stroke="white"
+                          strokeWidth="2.5"
+                          style={{ transition: "r 0.15s ease" }}
+                        />
+                        {/* Vertical indicator line */}
+                        {hoveredPoint === i && (
+                          <line x1={d.x} y1={d.y + 8} x2={d.x} y2="178" stroke="#10b981" strokeWidth="1" strokeDasharray="3 3" opacity="0.3" />
+                        )}
+                      </g>
+                    ))}
 
-                    {/* Days labels */}
-                    <text x="20" y="150" textAnchor="middle" fontSize="9" fill="#94a3b8" fontWeight="bold">Monday</text>
-                    <text x="96" y="150" textAnchor="middle" fontSize="9" fill="#94a3b8" fontWeight="bold">Tuesday</text>
-                    <text x="172" y="150" textAnchor="middle" fontSize="9" fill="#94a3b8" fontWeight="bold">Wednesday</text>
-                    <text x="248" y="150" textAnchor="middle" fontSize="9" fill="#94a3b8" fontWeight="bold">Thursday</text>
-                    <text x="324" y="150" textAnchor="middle" fontSize="9" fill="#94a3b8" fontWeight="bold">Friday</text>
-                    <text x="400" y="150" textAnchor="middle" fontSize="9" fill="#94a3b8" fontWeight="bold">Saturday</text>
-                    <text x="476" y="150" textAnchor="middle" fontSize="9" fill="#94a3b8" fontWeight="bold">Sunday</text>
+                    {/* Tooltip Card (using transform translation) */}
+                    {(() => {
+                      if (hoveredPoint === null) return null;
+                      const activePoint = weeklyData[hoveredPoint];
+                      const tooltipX = activePoint.x - 65;
+                      const tooltipY = activePoint.y - 45;
+                      return (
+                        <g 
+                          style={{ 
+                            transform: `translate(${tooltipX}px, ${tooltipY}px)`, 
+                            transition: "transform 0.2s cubic-bezier(0.4, 0, 0.2, 1)",
+                            pointerEvents: "none"
+                          }}
+                        >
+                          <rect x="0" y="0" width="130" height="36" rx="8" fill="white" stroke="#e2e8f0" strokeWidth="1" filter="drop-shadow(0 2px 4px rgba(0,0,0,0.02))" />
+                          <text x="65" y="14" textAnchor="middle" fontSize="9" fill="#64748b" fontWeight="bold">{activePoint.day}</text>
+                          <text x="65" y="27" textAnchor="middle" fontSize="10" fill="#10b981" fontWeight="extrabold">{activePoint.value} Appointments</text>
+                        </g>
+                      );
+                    })()}
+
+                    {/* Day labels */}
+                    {weeklyData.map((d, i) => (
+                      <text 
+                        key={`dl-${i}`} 
+                        x={d.x} 
+                        y="198" 
+                        textAnchor="middle" 
+                        fontSize="11" 
+                        fill={hoveredPoint === i ? "#10b981" : "#94a3b8"} 
+                        fontWeight={hoveredPoint === i ? "700" : "600"}
+                        style={{ transition: "fill 0.2s ease" }}
+                      >
+                        {d.day}
+                      </text>
+                    ))}
                   </svg>
                 </div>
               </div>
@@ -853,57 +1062,156 @@ export default function EmployeeDetailPage({ employee, onBack, onViewPermissions
               {/* Stacked bar chart: Daily production */}
               <div className="border border-slate-100 rounded-3xl p-6 bg-white flex flex-col gap-4">
                 <div className="flex items-center justify-between">
-                  <h4 className="text-xs font-extrabold text-slate-800 uppercase tracking-wider">Production Last 30 Days</h4>
-                  <span className="text-[10px] text-slate-400 font-bold uppercase">Monthly</span>
+                  <h4 className="text-sm font-bold text-slate-800">Daily Production (Monthly)</h4>
+                  {/* Daily Production Period Selector */}
+                  <div className="relative">
+                    <button 
+                      onClick={() => setIsProdPeriodDropdownOpen(!isProdPeriodDropdownOpen)}
+                      className="px-3 py-1.5 border border-slate-200 rounded-xl text-[10px] font-bold text-slate-600 bg-white flex items-center gap-1.5 hover:bg-slate-50 transition-colors"
+                    >
+                      {productionPeriod} <HugeiconsIcon icon={ArrowDown01Icon} size={10} className={`transition-transform duration-200 ${isProdPeriodDropdownOpen ? "rotate-180" : ""}`} />
+                    </button>
+                    {isProdPeriodDropdownOpen && (
+                      <>
+                        <div className="fixed inset-0 z-10" onClick={() => setIsProdPeriodDropdownOpen(false)}></div>
+                        <div className="absolute right-0 mt-1.5 w-32 bg-white border border-slate-100 rounded-xl shadow-lg py-1 z-20 animate-in fade-in slide-in-from-top-2 duration-150 text-left text-xs font-semibold text-slate-600">
+                          {["Monthly", "Yearly"].map((option) => (
+                            <button
+                              key={option}
+                              onClick={() => {
+                                setProductionPeriod(option);
+                                setIsProdPeriodDropdownOpen(false);
+                              }}
+                              className={`w-full px-3 py-2 text-left transition-colors ${productionPeriod === option ? "bg-indigo-50 text-indigo-600 font-bold" : "hover:bg-slate-50 hover:text-slate-800"}`}
+                            >
+                              {option}
+                            </button>
+                          ))}
+                        </div>
+                      </>
+                    )}
+                  </div>
                 </div>
 
-                <div className="w-full flex justify-center py-4">
-                  <svg className="w-full max-w-xl h-[160px]" viewBox="0 0 500 160" xmlns="http://www.w3.org/2000/svg">
+                <div className="w-full py-2">
+                  <svg 
+                    className="w-full h-[280px]" 
+                    viewBox="0 0 1000 280" 
+                    preserveAspectRatio="none" 
+                    xmlns="http://www.w3.org/2000/svg"
+                    onMouseLeave={() => setHoveredBarMonth(null)}
+                    onTouchStart={handleBarTouch}
+                    onTouchMove={handleBarTouch}
+                    style={{ touchAction: "none" }}
+                  >
+                    {/* Y-axis */}
+                    <text x="32" y="30" textAnchor="end" fontSize="10" fill="#94a3b8" fontWeight="600">€ 3k</text>
+                    <text x="32" y="80" textAnchor="end" fontSize="10" fill="#94a3b8" fontWeight="600">€ 2.5k</text>
+                    <text x="32" y="130" textAnchor="end" fontSize="10" fill="#94a3b8" fontWeight="600">€ 2k</text>
+                    <text x="32" y="180" textAnchor="end" fontSize="10" fill="#94a3b8" fontWeight="600">€ 1.5k</text>
+                    <text x="32" y="230" textAnchor="end" fontSize="10" fill="#94a3b8" fontWeight="600">€ 1k</text>
+
                     {/* Gridlines */}
-                    <line x1="20" y1="20" x2="480" y2="20" stroke="#f8fafc" strokeWidth="1" />
-                    <line x1="20" y1="80" x2="480" y2="80" stroke="#cbd5e1" strokeWidth="1.5" />
-                    <line x1="20" y1="130" x2="480" y2="130" stroke="#f8fafc" strokeWidth="1" />
+                    <line x1="42" y1="26" x2="980" y2="26" stroke="#f1f5f9" strokeWidth="1" />
+                    <line x1="42" y1="76" x2="980" y2="76" stroke="#f1f5f9" strokeWidth="1" />
+                    <line x1="42" y1="126" x2="980" y2="126" stroke="#f1f5f9" strokeWidth="1" />
+                    <line x1="42" y1="176" x2="980" y2="176" stroke="#f1f5f9" strokeWidth="1" />
+                    <line x1="42" y1="226" x2="980" y2="226" stroke="#f1f5f9" strokeWidth="1" />
 
-                    {/* Stacked Bars representing daily values */}
-                    {/* Group 1 (Teal - Above target) */}
-                    <rect x="40" y="30" width="10" height="50" rx="3" fill="#06b6d4" />
-                    <rect x="40" y="80" width="10" height="50" rx="3" fill="#f43f5e" />
+                    {/* Bar groups */}
+                    {prodBarData.map((d, i) => {
+                      const isActive = hoveredBarMonth === i;
+                      const isAnyActive = hoveredBarMonth !== null;
+                      const opacity = isActive ? 1 : (isAnyActive ? 0.3 : 1);
 
-                    {/* Group 2 */}
-                    <rect x="90" y="45" width="10" height="35" rx="3" fill="#06b6d4" />
-                    <rect x="90" y="80" width="10" height="40" rx="3" fill="#f43f5e" />
+                      // Center axis is at y = 140
+                      // Teal top bar grows upward (y decreases)
+                      const tealY = 134 - d.tealH;
+                      // Pink bottom bar grows downward (y increases)
+                      const pinkY = 146;
 
-                    {/* Group 3 */}
-                    <rect x="140" y="55" width="10" height="25" rx="3" fill="#06b6d4" />
-                    <rect x="140" y="80" width="10" height="35" rx="3" fill="#f43f5e" />
+                      return (
+                        <g key={`bar-${i}`} style={{ opacity, transition: "opacity 0.2s ease" }}>
+                          {/* Hit area */}
+                          <rect 
+                            x={d.cx - 60} 
+                            y="0" 
+                            width="120" 
+                            height="260" 
+                            fill="transparent" 
+                            style={{ cursor: "pointer" }} 
+                            onMouseEnter={() => setHoveredBarMonth(i)} 
+                            onClick={() => setHoveredBarMonth(i)} 
+                          />
+                          {/* Teal top bar */}
+                          {d.tealH > 0 && (
+                            <rect 
+                              x={d.cx - 12} 
+                              y={tealY} 
+                              width="24" 
+                              height={d.tealH} 
+                              rx="5" 
+                              fill="#14b8a6" 
+                              style={{ transition: "fill 0.2s ease" }}
+                            />
+                          )}
+                          {/* Pink bottom bar */}
+                          {d.pinkH > 0 && (
+                            <rect 
+                              x={d.cx - 12} 
+                              y={pinkY} 
+                              width="24" 
+                              height={d.pinkH} 
+                              rx="5" 
+                              fill="#ff6289" 
+                              style={{ transition: "fill 0.2s ease" }}
+                            />
+                          )}
+                        </g>
+                      );
+                    })}
 
-                    {/* Group 4 (Teal/Pink hover highlight) */}
-                    <rect x="190" y="20" width="10" height="60" rx="3" fill="#06b6d4" />
-                    <rect x="190" y="80" width="10" height="45" rx="3" fill="#f43f5e" />
+                    {/* Sliding Tooltip */}
+                    {(() => {
+                      if (hoveredBarMonth === null) return null;
+                      const activeBar = prodBarData[hoveredBarMonth];
+                      const tooltipX = activeBar.cx - 72;
+                      const tooltipY = 15;
+                      return (
+                        <g
+                          style={{
+                            transform: `translate(${tooltipX}px, ${tooltipY}px)`,
+                            transition: "transform 0.2s cubic-bezier(0.4, 0, 0.2, 1)",
+                            pointerEvents: "none"
+                          }}
+                        >
+                          <rect x="0" y="0" width="145" height="72" rx="8" fill="white" stroke="#e5e7eb" strokeWidth="1" filter="drop-shadow(0 4px 6px rgba(0,0,0,0.05))" />
+                          <text x="10" y="18" fontSize="9" fill="#94a3b8" fontWeight="bold">{activeBar.date}</text>
+                          <text x="10" y="33" fontSize="8" fill="#374151" fontWeight="650">Total Production</text>
+                          <text x="135" y="33" textAnchor="end" fontSize="8" fill="#94a3b8" fontWeight="600">{activeBar.total}</text>
+                          <text x="10" y="46" fontSize="8" fill="#14b8a6" fontWeight="650">Threshold</text>
+                          <text x="135" y="46" textAnchor="end" fontSize="8" fill="#94a3b8" fontWeight="600">{activeBar.threshold}</text>
+                          <text x="10" y="59" fontSize="8" fill="#ff6289" fontWeight="650">Above Threshold</text>
+                          <text x="135" y="59" textAnchor="end" fontSize="8" fill="#94a3b8" fontWeight="600">{activeBar.above}</text>
+                        </g>
+                      );
+                    })()}
 
-                    <circle cx="195" cy="50" r="3" fill="white" />
-                    {/* Tooltip */}
-                    <rect x="215" y="10" width="100" height="35" rx="6" fill="white" stroke="#e2e8f0" strokeWidth="1" />
-                    <text x="265" y="22" textAnchor="middle" fontSize="7" fill="#94a3b8" fontWeight="bold">April 6, 2025</text>
-                    <text x="265" y="32" textAnchor="middle" fontSize="8" fill="#06b6d4" fontWeight="extrabold">Teal: € 420</text>
-                    <text x="265" y="42" textAnchor="middle" fontSize="8" fill="#f43f5e" fontWeight="extrabold">Pink: € 280</text>
-
-                    {/* Group 5 */}
-                    <rect x="290" y="35" width="10" height="45" rx="3" fill="#06b6d4" />
-                    <rect x="290" y="80" width="10" height="40" rx="3" fill="#f43f5e" />
-
-                    {/* Group 6 */}
-                    <rect x="340" y="40" width="10" height="40" rx="3" fill="#06b6d4" />
-                    <rect x="340" y="80" width="10" height="42" rx="3" fill="#f43f5e" />
-
-                    {/* Threshold label */}
-                    <text x="30" y="76" fontSize="8" fill="#475569" fontWeight="bold">Threshold: € 5,000</text>
-
-                    {/* Legend */}
-                    <circle cx="200" cy="150" r="4" fill="#06b6d4" />
-                    <text x="210" y="153" fontSize="8" fill="#64748b" fontWeight="bold">Above Threshold</text>
-                    <circle cx="300" cy="150" r="4" fill="#f43f5e" />
-                    <text x="310" y="153" fontSize="8" fill="#64748b" fontWeight="bold">Below Threshold</text>
+                    {/* X-axis Month labels */}
+                    {prodBarData.map((d, i) => (
+                      <text 
+                        key={`lbl-${i}`} 
+                        x={d.cx} 
+                        y="262" 
+                        textAnchor="middle" 
+                        fontSize="11" 
+                        fill={hoveredBarMonth === i ? "#374151" : "#94a3b8"} 
+                        fontWeight={hoveredBarMonth === i ? "700" : "600"}
+                        style={{ transition: "fill 0.2s ease" }}
+                      >
+                        {d.month}
+                      </text>
+                    ))}
                   </svg>
                 </div>
               </div>
@@ -929,37 +1237,149 @@ export default function EmployeeDetailPage({ employee, onBack, onViewPermissions
 
               {/* Production Trends spline chart */}
               <div className="border border-slate-100 rounded-3xl p-6 bg-white flex flex-col gap-4">
-                <h4 className="text-xs font-extrabold text-slate-800 uppercase tracking-wider">Production Trends (Yearly)</h4>
+                <div className="flex items-center justify-between">
+                  <h4 className="text-xs font-extrabold text-slate-800 uppercase tracking-wider">Production Trends (Yearly)</h4>
+                  {/* Trends Period Selector */}
+                  <div className="relative">
+                    <button 
+                      onClick={() => setIsTrendsPeriodDropdownOpen(!isTrendsPeriodDropdownOpen)}
+                      className="px-3 py-1.5 border border-slate-200 rounded-xl text-[10px] font-bold text-slate-600 bg-white flex items-center gap-1.5 hover:bg-slate-50 transition-colors"
+                    >
+                      {trendsPeriod} <HugeiconsIcon icon={ArrowDown01Icon} size={10} className={`transition-transform duration-200 ${isTrendsPeriodDropdownOpen ? "rotate-180" : ""}`} />
+                    </button>
+                    {isTrendsPeriodDropdownOpen && (
+                      <>
+                        <div className="fixed inset-0 z-10" onClick={() => setIsTrendsPeriodDropdownOpen(false)}></div>
+                        <div className="absolute right-0 mt-1.5 w-32 bg-white border border-slate-100 rounded-xl shadow-lg py-1 z-20 animate-in fade-in slide-in-from-top-2 duration-150 text-left text-xs font-semibold text-slate-600">
+                          {["Yearly", "Custom Range"].map((option) => (
+                            <button
+                              key={option}
+                              onClick={() => {
+                                setTrendsPeriod(option);
+                                setIsTrendsPeriodDropdownOpen(false);
+                              }}
+                              className={`w-full px-3 py-2 text-left transition-colors ${trendsPeriod === option ? "bg-indigo-50 text-indigo-600 font-bold" : "hover:bg-slate-50 hover:text-slate-800"}`}
+                            >
+                              {option}
+                            </button>
+                          ))}
+                        </div>
+                      </>
+                    )}
+                  </div>
+                </div>
 
-                {/* SVG Spline Chart */}
-                <div className="w-full flex justify-center py-4">
-                  <svg className="w-full max-w-xl h-[160px]" viewBox="0 0 500 160" xmlns="http://www.w3.org/2000/svg">
+                <div className="w-full py-2">
+                  <svg 
+                    className="w-full h-[250px]" 
+                    viewBox="0 0 1000 250" 
+                    preserveAspectRatio="none" 
+                    xmlns="http://www.w3.org/2000/svg" 
+                    onMouseLeave={() => setHoveredTrendYear(null)}
+                    onTouchStart={handleTrendTouch}
+                    onTouchMove={handleTrendTouch}
+                    style={{ touchAction: "none" }}
+                  >
+                    <defs>
+                      <linearGradient id="trendGradient" x1="0" y1="0" x2="1" y2="0">
+                        <stop offset="0%" stopColor="#10b981" />
+                        <stop offset="50%" stopColor="#10b981" />
+                        <stop offset="58%" stopColor="#10b981" />
+                        <stop offset="66%" stopColor="#f43f5e" />
+                        <stop offset="75%" stopColor="#10b981" />
+                        <stop offset="100%" stopColor="#10b981" />
+                      </linearGradient>
+                    </defs>
+
+                    {/* Y-axis labels */}
+                    <text x="32" y="32" textAnchor="end" fontSize="11" fill="#94a3b8" fontWeight="600">€ 3.0k</text>
+                    <text x="32" y="72" textAnchor="end" fontSize="11" fill="#94a3b8" fontWeight="600">€ 2.5k</text>
+                    <text x="32" y="112" textAnchor="end" fontSize="11" fill="#94a3b8" fontWeight="600">€ 2.0k</text>
+                    <text x="32" y="152" textAnchor="end" fontSize="11" fill="#94a3b8" fontWeight="600">€ 1.5k</text>
+                    <text x="32" y="192" textAnchor="end" fontSize="11" fill="#94a3b8" fontWeight="600">€ 1.0k</text>
+                    <text x="32" y="232" textAnchor="end" fontSize="11" fill="#94a3b8" fontWeight="600">€ 0.5k</text>
+
                     {/* Gridlines */}
-                    <line x1="20" y1="20" x2="480" y2="20" stroke="#f8fafc" strokeWidth="1" />
-                    <line x1="20" y1="80" x2="480" y2="80" stroke="#f8fafc" strokeWidth="1" />
-                    <line x1="20" y1="130" x2="480" y2="130" stroke="#e2e8f0" strokeWidth="1.5" />
+                    <line x1="42" y1="28" x2="980" y2="28" stroke="#f1f5f9" strokeWidth="1" />
+                    <line x1="42" y1="68" x2="980" y2="68" stroke="#f1f5f9" strokeWidth="1" />
+                    <line x1="42" y1="108" x2="980" y2="108" stroke="#f1f5f9" strokeWidth="1" />
+                    <line x1="42" y1="148" x2="980" y2="148" stroke="#f1f5f9" strokeWidth="1" />
+                    <line x1="42" y1="188" x2="980" y2="188" stroke="#f1f5f9" strokeWidth="1" />
+                    <line x1="42" y1="228" x2="980" y2="228" stroke="#f1f5f9" strokeWidth="1" />
 
-                    {/* Yearly Spline Curve */}
+                    {/* Trend spline line */}
                     <path
-                      d="M 20 100 Q 100 90 180 110 T 320 80 T 440 90 T 480 85"
+                      d="M 100 68 C 170 65, 170 62, 240 62 C 310 62, 310 70, 380 70 C 450 70, 450 78, 520 78 C 590 78, 590 124, 660 124 C 730 124, 730 48, 800 48 C 870 48, 870 54, 940 54"
                       fill="none"
-                      stroke="#06b6d4"
-                      strokeWidth="3"
+                      stroke="url(#trendGradient)"
+                      strokeWidth="3.5"
+                      strokeLinecap="round"
                     />
 
-                    {/* Tooltip info */}
-                    <circle cx="340" cy="80" r="4" fill="#06b6d4" stroke="white" strokeWidth="2" />
-                    <rect x="300" y="30" width="90" height="30" rx="6" fill="white" stroke="#e2e8f0" strokeWidth="1" />
-                    <text x="345" y="42" textAnchor="middle" fontSize="7" fill="#64748b" fontWeight="bold">August 24, 2025</text>
-                    <text x="345" y="52" textAnchor="middle" fontSize="8" fill="#10b981" fontWeight="extrabold">Above Threshold</text>
+                    {/* Dots and hit areas */}
+                    {trendPoints.map((p, i) => (
+                      <g key={`trend-${i}`}>
+                        {/* Hit area */}
+                        <rect
+                          x={p.x - 50}
+                          y="0"
+                          width="100"
+                          height="240"
+                          fill="transparent"
+                          style={{ cursor: "pointer" }}
+                          onMouseEnter={() => setHoveredTrendYear(i)}
+                          onClick={() => setHoveredTrendYear(i)}
+                        />
+                        {/* Dot */}
+                        <circle
+                          cx={p.x}
+                          cy={p.y}
+                          r={hoveredTrendYear === i ? 6 : 4}
+                          fill={p.color}
+                          stroke="white"
+                          strokeWidth="2"
+                          style={{ transition: "r 0.2s cubic-bezier(0.4, 0, 0.2, 1)" }}
+                        />
+                      </g>
+                    ))}
 
-                    {/* X Axis labels */}
-                    <text x="20" y="150" textAnchor="middle" fontSize="9" fill="#94a3b8" fontWeight="bold">2020</text>
-                    <text x="112" y="150" textAnchor="middle" fontSize="9" fill="#94a3b8" fontWeight="bold">2021</text>
-                    <text x="204" y="150" textAnchor="middle" fontSize="9" fill="#94a3b8" fontWeight="bold">2022</text>
-                    <text x="296" y="150" textAnchor="middle" fontSize="9" fill="#94a3b8" fontWeight="bold">2023</text>
-                    <text x="388" y="150" textAnchor="middle" fontSize="9" fill="#94a3b8" fontWeight="bold">2024</text>
-                    <text x="480" y="150" textAnchor="middle" fontSize="9" fill="#94a3b8" fontWeight="bold">2025</text>
+                    {/* Sliding Tooltip */}
+                    {(() => {
+                      if (hoveredTrendYear === null) return null;
+                      const activeTrend = trendPoints[hoveredTrendYear];
+                      const tooltipX = activeTrend.x - 75;
+                      const tooltipY = activeTrend.y - 45;
+                      return (
+                        <g
+                          style={{
+                            transform: `translate(${tooltipX}px, ${tooltipY}px)`,
+                            transition: "transform 0.2s cubic-bezier(0.4, 0, 0.2, 1)",
+                            pointerEvents: "none"
+                          }}
+                        >
+                          <rect x="0" y="0" width="150" height="32" rx="6" fill="white" stroke="#e5e7eb" strokeWidth="1" filter="drop-shadow(0 2px 4px rgba(0,0,0,0.02))" />
+                          <text x="75" y="12" textAnchor="middle" fontSize="8" fill="#94a3b8" fontWeight="bold">August 24, {activeTrend.year}</text>
+                          <text x="8" y="24" textAnchor="start" fontSize="8" fill={activeTrend.color} fontWeight="bold">{activeTrend.status}</text>
+                          <text x="142" y="24" textAnchor="end" fontSize="9" fill="#374151" fontWeight="extrabold">{activeTrend.value}</text>
+                        </g>
+                      );
+                    })()}
+
+                    {/* X-axis labels */}
+                    {trendPoints.map((p, i) => (
+                      <text 
+                        key={`xl-${i}`} 
+                        x={p.x} 
+                        y="245" 
+                        textAnchor="middle" 
+                        fontSize="11" 
+                        fill={hoveredTrendYear === i ? "#374151" : "#94a3b8"} 
+                        fontWeight={hoveredTrendYear === i ? "700" : "600"}
+                        style={{ transition: "fill 0.2s ease" }}
+                      >
+                        {p.year}
+                      </text>
+                    ))}
                   </svg>
                 </div>
               </div>
@@ -967,7 +1387,106 @@ export default function EmployeeDetailPage({ employee, onBack, onViewPermissions
               {/* Performance Metrics & Operation Statistics */}
               <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
                 <div className="border border-slate-100 rounded-3xl p-6 bg-white flex flex-col text-left">
-                  <h4 className="text-xs font-extrabold text-slate-800 uppercase tracking-wider mb-5">Performance Metrics (Last Month)</h4>
+                  <div className="flex items-center justify-between mb-5">
+                    <h4 className="text-xs font-extrabold text-slate-800 uppercase tracking-wider">Performance Metrics</h4>
+                    <div className="relative">
+                      <button
+                        type="button"
+                        onClick={() => setIsPerfMetricDropdownOpen(!isPerfMetricDropdownOpen)}
+                        className="px-3 py-1.5 border border-slate-200 rounded-xl text-[10px] font-bold text-slate-600 bg-white flex items-center gap-1.5 hover:bg-slate-50 transition-colors"
+                      >
+                        {perfSelectedMonth}, {perfSelectedYear} <HugeiconsIcon icon={ArrowDown01Icon} size={10} className={`transition-transform duration-200 ${isPerfMetricDropdownOpen ? "rotate-180" : ""}`} />
+                      </button>
+                      {isPerfMetricDropdownOpen && (
+                        <>
+                          <div className="fixed inset-0 z-10" onClick={() => setIsPerfMetricDropdownOpen(false)}></div>
+                          <div className="absolute right-0 mt-1.5 w-[280px] bg-white border border-slate-100 rounded-2xl shadow-xl p-3 z-20 animate-in fade-in slide-in-from-top-2 duration-150 flex gap-3">
+                            {/* Left Pane: Month / Year menu selectors */}
+                            <div className="flex flex-col gap-1 border-r border-slate-100 pr-3 w-[80px]">
+                              <button
+                                type="button"
+                                onClick={() => setPerfDropdownSubMenu("month")}
+                                className={`px-2 py-1.5 rounded-lg text-[10px] font-bold text-left transition-colors ${perfDropdownSubMenu === "month" ? "bg-indigo-50 text-[#5e53fc]" : "text-slate-400 hover:bg-slate-50"}`}
+                              >
+                                Month
+                              </button>
+                              <button
+                                type="button"
+                                onClick={() => setPerfDropdownSubMenu("year")}
+                                className={`px-2 py-1.5 rounded-lg text-[10px] font-bold text-left transition-colors ${perfDropdownSubMenu === "year" ? "bg-indigo-50 text-[#5e53fc]" : "text-slate-400 hover:bg-slate-50"}`}
+                              >
+                                Year
+                              </button>
+                            </div>
+
+                            {/* Right Pane */}
+                            <div className="flex-1">
+                              {perfDropdownSubMenu === "month" && (
+                                <div className="flex flex-col gap-2">
+                                  {/* Year navigation row */}
+                                  <div className="flex items-center justify-between border-b border-slate-50 pb-1.5">
+                                    <button 
+                                      type="button" 
+                                      onClick={() => setPerfSelectedYear(prev => prev - 1)}
+                                      className="p-1 hover:bg-slate-50 rounded text-slate-400 hover:text-slate-650"
+                                    >
+                                      <svg width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="3"><polyline points="15 18 9 12 15 6" /></svg>
+                                    </button>
+                                    <span className="text-[10px] font-bold text-slate-705">{perfSelectedYear}</span>
+                                    <button 
+                                      type="button" 
+                                      onClick={() => setPerfSelectedYear(prev => prev + 1)}
+                                      className="p-1 hover:bg-slate-50 rounded text-slate-400 hover:text-slate-650"
+                                    >
+                                      <svg width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="3"><polyline points="9 18 15 12 9 6" /></svg>
+                                    </button>
+                                  </div>
+                                  {/* Month Grid */}
+                                  <div className="grid grid-cols-3 gap-1.5 max-h-[120px] overflow-y-auto pr-0.5">
+                                    {["Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"].map((m, idx) => {
+                                      const fullMonths = ["January", "February", "March", "April", "May", "June", "July", "August", "September", "October", "November", "December"];
+                                      const fullMonthName = fullMonths[idx];
+                                      return (
+                                        <button
+                                          key={m}
+                                          type="button"
+                                          onClick={() => {
+                                            setPerfSelectedMonth(fullMonthName);
+                                            setIsPerfMetricDropdownOpen(false);
+                                          }}
+                                          className={`py-1 rounded text-[10px] font-semibold transition-colors ${perfSelectedMonth === fullMonthName ? "bg-[#5e53fc] text-white" : "hover:bg-slate-50 text-slate-600"}`}
+                                        >
+                                          {m}
+                                        </button>
+                                      );
+                                    })}
+                                  </div>
+                                </div>
+                              )}
+
+                              {perfDropdownSubMenu === "year" && (
+                                <div className="flex flex-col gap-1 max-h-[140px] overflow-y-auto pr-0.5 text-left">
+                                  {[2020, 2021, 2022, 2023, 2024, 2025, 2026].map((y) => (
+                                    <button
+                                      key={y}
+                                      type="button"
+                                      onClick={() => {
+                                        setPerfSelectedYear(y);
+                                        setPerfDropdownSubMenu("month");
+                                      }}
+                                      className={`w-full px-2.5 py-1.5 rounded text-[10px] font-semibold text-left transition-colors ${perfSelectedYear === y ? "bg-indigo-50 text-[#5e53fc] font-bold" : "hover:bg-slate-50 text-slate-600"}`}
+                                    >
+                                      {y}
+                                    </button>
+                                  ))}
+                                </div>
+                              )}
+                            </div>
+                          </div>
+                        </>
+                      )}
+                    </div>
+                  </div>
                   <div className="flex flex-col gap-4 text-xs font-semibold">
                     <div className="flex items-center justify-between">
                       <span className="text-slate-500">Target Threshold</span>
@@ -991,7 +1510,37 @@ export default function EmployeeDetailPage({ employee, onBack, onViewPermissions
                 </div>
 
                 <div className="border border-slate-100 rounded-3xl p-6 bg-white flex flex-col text-left">
-                  <h4 className="text-xs font-extrabold text-slate-800 uppercase tracking-wider mb-5">Operation Statics</h4>
+                  <div className="flex items-center justify-between mb-5">
+                    <h4 className="text-xs font-extrabold text-slate-800 uppercase tracking-wider">Operation Statics</h4>
+                    <div className="relative">
+                      <button
+                        type="button"
+                        onClick={() => setIsOpsPeriodDropdownOpen(!isOpsPeriodDropdownOpen)}
+                        className="px-3 py-1.5 border border-slate-200 rounded-xl text-[10px] font-bold text-slate-600 bg-white flex items-center gap-1.5 hover:bg-slate-50 transition-colors"
+                      >
+                        {opsPeriod} <HugeiconsIcon icon={ArrowDown01Icon} size={10} className={`transition-transform duration-200 ${isOpsPeriodDropdownOpen ? "rotate-180" : ""}`} />
+                      </button>
+                      {isOpsPeriodDropdownOpen && (
+                        <>
+                          <div className="fixed inset-0 z-10" onClick={() => setIsOpsPeriodDropdownOpen(false)}></div>
+                          <div className="absolute right-0 mt-1.5 w-32 bg-white border border-slate-100 rounded-xl shadow-lg py-1 z-20 animate-in fade-in slide-in-from-top-2 duration-150 text-left text-xs font-semibold text-slate-600">
+                            {["Last Month", "Last Year", "Custom Range"].map((option) => (
+                              <button
+                                key={option}
+                                onClick={() => {
+                                  setOpsPeriod(option);
+                                  setIsOpsPeriodDropdownOpen(false);
+                                }}
+                                className={`w-full px-3 py-2 text-left transition-colors ${opsPeriod === option ? "bg-indigo-50 text-indigo-600 font-bold" : "hover:bg-slate-50 hover:text-slate-800"}`}
+                              >
+                                {option}
+                              </button>
+                            ))}
+                          </div>
+                        </>
+                      )}
+                    </div>
+                  </div>
                   <div className="flex flex-col gap-4 text-xs font-semibold">
                     <div className="flex items-center justify-between">
                       <span className="text-slate-500">Completed Appointments</span>
@@ -1205,37 +1754,148 @@ export default function EmployeeDetailPage({ employee, onBack, onViewPermissions
               </div>
             </form>
           </div>
-          {/* Previous Thinking Modal */}
-          {isPreviousThinkingOpen && (
-            <div className="fixed inset-0 bg-slate-900/60 backdrop-blur-sm z-50 flex items-center justify-center p-4">
-              <div className="bg-white rounded-3xl w-full max-w-lg shadow-2xl flex flex-col relative overflow-hidden animate-in zoom-in-95 duration-200">
-                <div className="px-8 pt-8 pb-5 border-b border-slate-100 flex flex-col relative text-left">
-                  <button type="button" onClick={() => setIsPreviousThinkingOpen(false)} className="absolute right-6 top-6 p-1.5 rounded-xl text-slate-400 hover:bg-slate-50 hover:text-slate-600 transition-colors">
-                    <HugeiconsIcon icon={Cancel01Icon} size={20} />
-                  </button>
-                  <h3 className="text-lg font-bold text-slate-800">Previous Thinking</h3>
-                </div>
-                <form onSubmit={handleSaveThinking} className="flex-1 overflow-y-auto px-8 py-6 max-h-[70vh] flex flex-col gap-6 text-left">
-                  <div className="flex flex-col gap-3">
-                    <span className="text-[10px] font-extrabold uppercase tracking-widest text-[#5e53fc] block mb-1">Thoughts & Decisions</span>
-                    <textarea
-                      value={previousThinking}
-                      onChange={(e) => setPreviousThinking(e.target.value)}
-                      placeholder="Record previous design decisions, notes, or rationale..."
-                      className="w-full h-48 border border-slate-200 focus:border-[#5e53fc] focus:outline-none rounded-xl p-2.5 text-xs text-slate-700"
-                    />
-                  </div>
-                  <div className="flex justify-end mt-4 pt-4 border-t border-slate-100">
-                    <button type="submit" className="px-6 py-2.5 bg-[#5e53fc] hover:bg-[#4d42eb] text-white rounded-xl text-xs font-bold transition-all shadow-md shadow-indigo-100">Save Thoughts</button>
-                  </div>
-                </form>
-              </div>
-            </div>
-          )}
         </div>
       )}
 
+      {/* Previous Thinking Modal */}
+      {isPreviousThinkingOpen && (
+        <div className="fixed inset-0 bg-slate-900/60 backdrop-blur-sm z-50 flex items-center justify-center p-4">
+          <div className="bg-white rounded-3xl w-full max-w-lg shadow-2xl flex flex-col relative overflow-hidden animate-in zoom-in-95 duration-200">
+            <div className="px-8 pt-8 pb-5 border-b border-slate-100 flex flex-col relative text-left">
+              <button type="button" onClick={() => setIsPreviousThinkingOpen(false)} className="absolute right-6 top-6 p-1.5 rounded-xl text-slate-400 hover:bg-slate-50 hover:text-slate-600 transition-colors">
+                <HugeiconsIcon icon={Cancel01Icon} size={20} />
+              </button>
+              <h3 className="text-lg font-bold text-slate-800">Previous Thinking</h3>
+            </div>
+            <form onSubmit={handleSaveThinking} className="flex-1 overflow-y-auto px-8 py-6 max-h-[70vh] flex flex-col gap-6 text-left">
+              <div className="flex flex-col gap-3">
+                <span className="text-[10px] font-extrabold uppercase tracking-widest text-[#5e53fc] block mb-1">Thoughts & Decisions</span>
+                <textarea
+                  value={previousThinking}
+                  onChange={(e) => setPreviousThinking(e.target.value)}
+                  placeholder="Record previous design decisions, notes, or rationale..."
+                  className="w-full h-48 border border-slate-200 focus:border-[#5e53fc] focus:outline-none rounded-xl p-2.5 text-xs text-slate-700"
+                />
+              </div>
+              <div className="flex justify-end mt-4 pt-4 border-t border-slate-100">
+                <button type="submit" className="px-6 py-2.5 bg-[#5e53fc] hover:bg-[#4d42eb] text-white rounded-xl text-xs font-bold transition-all shadow-md shadow-indigo-100">Save Thoughts</button>
+              </div>
+            </form>
+          </div>
+        </div>
+      )}
 
+      {/* Terminate Contract Modal */}
+      {isTerminateModalOpen && (
+        <div className="fixed inset-0 bg-[#0f172a]/40 backdrop-blur-[6px] z-50 flex items-center justify-center p-4">
+          <div className="bg-white rounded-[20px] w-full max-w-[480px] shadow-2xl p-8 flex flex-col gap-6 relative animate-in zoom-in-95 duration-200 text-left">
+            {/* Header */}
+            <div className="flex flex-col gap-1">
+              <h3 className="text-xl font-bold text-[#0f172a] tracking-tight">Terminate Contract</h3>
+              <p className="text-sm text-[#475569] font-normal mt-1.5">Are you sure you want to termnate this contract?</p>
+            </div>
+
+            {/* Form fields */}
+            <form 
+              onSubmit={(e) => {
+                e.preventDefault();
+                alert(`Contract terminated! End Date: ${terminateEndDate}, Access Date: ${terminateAccessDate}`);
+                setIsTerminateModalOpen(false);
+              }}
+              className="flex flex-col gap-5 text-sm"
+            >
+              {/* End Date */}
+              <div className="flex flex-col gap-2">
+                <label className="text-[#334155] font-semibold text-sm">End Date *</label>
+                <div className="relative flex items-center">
+                  <input
+                    type="text"
+                    required
+                    placeholder="Enter end date"
+                    onFocus={(e) => {
+                      e.target.type = "date";
+                    }}
+                    onBlur={(e) => {
+                      if (!e.target.value) {
+                        e.target.type = "text";
+                      }
+                    }}
+                    value={terminateEndDate}
+                    onChange={(e) => setTerminateEndDate(e.target.value)}
+                    className="w-full h-11 border border-slate-200 rounded-lg px-4 pr-10 text-sm text-slate-800 placeholder:text-slate-400 focus:outline-none focus:border-[#5e53fc]"
+                  />
+                  <div className="absolute right-4 pointer-events-none text-slate-500">
+                    <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round">
+                      <rect x="3" y="4" width="18" height="18" rx="2" ry="2"/>
+                      <line x1="16" y1="2" x2="16" y2="6"/>
+                      <line x1="8" y1="2" x2="8" y2="6"/>
+                      <line x1="3" y1="10" x2="21" y2="10"/>
+                    </svg>
+                  </div>
+                </div>
+              </div>
+
+              {/* Reason for termination */}
+              <div className="flex flex-col gap-2">
+                <label className="text-[#334155] font-semibold text-sm">Reason for termination</label>
+                <textarea
+                  placeholder="Enter reason for termination"
+                  value={terminateReason}
+                  onChange={(e) => setTerminateReason(e.target.value)}
+                  className="w-full min-h-[90px] border border-slate-200 rounded-lg p-3 text-sm text-slate-800 placeholder:text-slate-400 focus:outline-none focus:border-[#5e53fc] resize-none"
+                />
+              </div>
+
+              {/* Platform access date */}
+              <div className="flex flex-col gap-2">
+                <label className="text-[#334155] font-semibold text-sm">Platform access date</label>
+                <div className="relative flex items-center">
+                  <input
+                    type="text"
+                    placeholder="Enter platform access date"
+                    onFocus={(e) => {
+                      e.target.type = "date";
+                    }}
+                    onBlur={(e) => {
+                      if (!e.target.value) {
+                        e.target.type = "text";
+                      }
+                    }}
+                    value={terminateAccessDate}
+                    onChange={(e) => setTerminateAccessDate(e.target.value)}
+                    className="w-full h-11 border border-slate-200 rounded-lg px-4 pr-10 text-sm text-slate-800 placeholder:text-slate-400 focus:outline-none focus:border-[#5e53fc]"
+                  />
+                  <div className="absolute right-4 pointer-events-none text-slate-500">
+                    <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round">
+                      <rect x="3" y="4" width="18" height="18" rx="2" ry="2"/>
+                      <line x1="16" y1="2" x2="16" y2="6"/>
+                      <line x1="8" y1="2" x2="8" y2="6"/>
+                      <line x1="3" y1="10" x2="21" y2="10"/>
+                    </svg>
+                  </div>
+                </div>
+              </div>
+
+              {/* Buttons */}
+              <div className="flex items-center justify-end gap-3 mt-6">
+                <button
+                  type="button"
+                  onClick={() => setIsTerminateModalOpen(false)}
+                  className="px-6 py-2.5 bg-[#f8fafc] hover:bg-[#f1f5f9] text-[#475569] hover:text-[#1e293b] rounded-lg text-sm font-medium transition-all"
+                >
+                  Cancel
+                </button>
+                <button
+                  type="submit"
+                  className="px-6 py-2.5 bg-[#fff1f2] hover:bg-[#ffe4e6] text-[#ff4e73] rounded-lg text-sm font-semibold transition-all"
+                >
+                  Terminate Now
+                </button>
+              </div>
+            </form>
+          </div>
+        </div>
+      )}
     </div>
   );
 }

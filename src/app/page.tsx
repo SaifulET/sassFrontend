@@ -8,6 +8,13 @@ import SalonsPage from "../components/SalonsPage";
 import SalonDetailPage from "../components/SalonDetailPage";
 import UsersAndStaffPage from "../components/UsersAndStaffPage";
 import PermissionsPage from "../components/PermissionsPage";
+import BillingHistoryPage from "../components/BillingHistoryPage";
+import BillingRevenuePage from "../components/BillingRevenuePage";
+import SalonSettingsPage from "../components/SalonSettingsPage";
+import SalonActivityPage from "../components/SalonActivityPage";
+import SalonSupportPage from "../components/SalonSupportPage";
+import SalonAutomationsPage from "../components/SalonAutomationsPage";
+import WaiversPage from "../components/WaiversPage";
 
 interface Salon {
   id: string;
@@ -332,6 +339,56 @@ export default function Home() {
                 }}
               />
             );
+          case "billing":
+            return (
+              <BillingHistoryPage
+                salon={activeSalon}
+                onBack={() => {
+                  setSelectedSalonId(null);
+                  setSalonSubTab("overview");
+                }}
+              />
+            );
+          case "settings":
+            return (
+              <SalonSettingsPage
+                salon={activeSalon}
+                onBack={() => {
+                  setSelectedSalonId(null);
+                  setSalonSubTab("overview");
+                }}
+              />
+            );
+          case "activity":
+            return (
+              <SalonActivityPage
+                salon={activeSalon}
+                onBack={() => {
+                  setSelectedSalonId(null);
+                  setSalonSubTab("overview");
+                }}
+              />
+            );
+          case "support":
+            return (
+              <SalonSupportPage
+                salon={activeSalon}
+                onBack={() => {
+                  setSelectedSalonId(null);
+                  setSalonSubTab("overview");
+                }}
+              />
+            );
+          case "automations":
+            return (
+              <SalonAutomationsPage
+                salon={activeSalon}
+                onBack={() => {
+                  setSelectedSalonId(null);
+                  setSalonSubTab("overview");
+                }}
+              />
+            );
           default:
             return (
               <div className="bg-white rounded-3xl p-8 border border-slate-100 shadow-sm text-center max-w-lg mx-auto my-12 animate-in fade-in slide-in-from-bottom-4">
@@ -378,6 +435,14 @@ export default function Home() {
             currentRange={dateRange}
             onRangeChange={setDateRange}
           />
+        );
+      case "billing":
+        return (
+          <BillingRevenuePage />
+        );
+      case "waivers":
+        return (
+          <WaiversPage />
         );
       default:
         return (

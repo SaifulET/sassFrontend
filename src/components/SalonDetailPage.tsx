@@ -126,6 +126,8 @@ export default function SalonDetailPage({ salon, onBack, onImpersonate }: SalonD
   const [isEditModalOpen, setIsEditModalOpen] = useState(false);
   const [isPaymentModalOpen, setIsPaymentModalOpen] = useState(false);
   const [isLocationModalOpen, setIsLocationModalOpen] = useState(false);
+  const [isReactivateModalOpen, setIsReactivateModalOpen] = useState(false);
+  const [salonStatus, setSalonStatus] = useState(salon.status);
 
   // Edit form state
   const [editName, setEditName] = useState(salon.name);
@@ -307,10 +309,37 @@ export default function SalonDetailPage({ salon, onBack, onImpersonate }: SalonD
           <p className="text-xs font-semibold text-[#98A4AE] mt-0.5">{salon.city}, Italy</p>
           
           <div className="flex items-center gap-2 mt-3">
-            {/* Active status */}
-            <span className="inline-flex px-3 py-1 text-[10px] font-bold rounded-full bg-[#EBFAF0] text-[#36C76C] uppercase tracking-wide">
-              Active
-            </span>
+            {/* Dynamic Status Badge */}
+            {salonStatus === "Active" && (
+              <span className="inline-flex px-3 py-1 text-[10px] font-bold rounded-full bg-[#EBFAF0] text-[#36C76C] uppercase tracking-wide">
+                Active
+              </span>
+            )}
+            {salonStatus === "Trial" && (
+              <span className="inline-flex px-3 py-1 text-[10px] font-bold rounded-full bg-[#e6fcf9] text-[#14b8a6] uppercase tracking-wide">
+                Trial
+              </span>
+            )}
+            {salonStatus === "Cancelled" && (
+              <span className="inline-flex px-3 py-1 text-[10px] font-bold rounded-full bg-[#f1f5f9] text-[#64748b] uppercase tracking-wide">
+                Cancelled
+              </span>
+            )}
+            {salonStatus === "Leads" && (
+              <span className="inline-flex px-3 py-1 text-[10px] font-bold rounded-full bg-[#f2f1ff] text-[#5e53fc] uppercase tracking-wide">
+                Leads
+              </span>
+            )}
+            {salonStatus === "Past Due" && (
+              <span className="inline-flex px-3 py-1 text-[10px] font-bold rounded-full bg-[#fff0f3] text-[#f43f5e] uppercase tracking-wide">
+                Past Due
+              </span>
+            )}
+            {salonStatus === "Expired" && (
+              <span className="inline-flex px-3 py-1 text-[10px] font-bold rounded-full bg-slate-100 text-slate-400 uppercase tracking-wide">
+                Expired
+              </span>
+            )}
             {/* Premium Plan badge */}
             <span className="inline-flex px-3 py-1 text-[10px] font-bold rounded-full bg-[#D2F4F2] text-[#29343D] uppercase tracking-wide">
               {salon.plan}
@@ -358,7 +387,9 @@ export default function SalonDetailPage({ salon, onBack, onImpersonate }: SalonD
 
           {/* Action Button */}
           <button 
-            onClick={() => onImpersonate(salon.name)}
+            onClick={() => {
+              setIsReactivateModalOpen(true);
+            }}
             className="w-[155px] h-11 bg-[#DDDBFF] hover:bg-[#c9c5ff] text-[#635BFF] font-bold rounded-lg text-xs transition-all shadow-sm flex items-center justify-center"
           >
             Impersonate Salon
@@ -1722,6 +1753,42 @@ export default function SalonDetailPage({ salon, onBack, onImpersonate }: SalonD
                 className="px-6 py-2.5 bg-[#5e53fc] hover:bg-indigo-700 text-white rounded-xl text-xs font-bold shadow-md shadow-indigo-100 transition-all"
               >
                 View Permissions
+              </button>
+            </div>
+          </div>
+        </div>
+      )}
+      {/* Reactivate Profile Modal */}
+      {isReactivateModalOpen && (
+        <div className="fixed inset-0 bg-[#0f172a]/40 backdrop-blur-[6px] z-50 flex items-center justify-center p-4">
+          <div className="bg-white rounded-[20px] w-full max-w-[480px] shadow-2xl p-8 flex flex-col gap-6 relative animate-in zoom-in-95 duration-200 text-left animate-in duration-200">
+            <div className="flex flex-col gap-2">
+              <h3 className="text-xl font-bold text-[#0f172a] tracking-tight">Reactive Profile</h3>
+              <p className="text-sm text-[#475569] font-normal mt-1.5">Are you sure you want to reactive this profile?</p>
+            </div>
+            <div className="flex items-center justify-end gap-3 mt-4">
+              <button
+                type="button"
+                onClick={() => {
+                  setIsReactivateModalOpen(false);
+                }}
+                className="px-6 py-2.5 bg-[#f8fafc] hover:bg-[#f1f5f9] text-[#475569] hover:text-[#1e293b] rounded-lg text-sm font-medium transition-all"
+              >
+                Cancel
+              </button>
+              <button
+                type="button"
+                onClick={() => {
+                  // Reactivate the status
+                  setSalonStatus("Active");
+                  salon.status = "Active";
+                  setIsReactivateModalOpen(false);
+                  // Trigger impersonation
+                  onImpersonate(salon.name);
+                }}
+                className="px-6 py-2.5 bg-[#ecfeff] hover:bg-[#cffafe] text-[#0891b2] rounded-lg text-sm font-semibold transition-all"
+              >
+                Reactive Profile Now
               </button>
             </div>
           </div>

@@ -14,6 +14,17 @@ import {
   Cancel01Icon
 } from "@hugeicons/core-free-icons";
 
+// Custom SVG Icon for Waivers to match design perfectly
+const WaiversIcon = ({ color }: { color?: string }) => (
+  <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke={color || "currentColor"} strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round">
+    <path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z" />
+    <polyline points="14 2 14 8 20 8" />
+    <line x1="16" y1="13" x2="8" y2="13" />
+    <line x1="16" y1="17" x2="8" y2="17" />
+    <circle cx="9" cy="9" r="1.2" fill={color || "currentColor"} />
+  </svg>
+);
+
 interface SidebarProps {
   activeTab: string;
   setActiveTab: (tab: string) => void;
@@ -36,14 +47,15 @@ export default function Sidebar({
   setIsOpen
 }: SidebarProps) {
 
-  // Main menu item mappings
+  // Main menu item mappings (added Waivers)
   const mainNavigation = [
     { id: "dashboard", label: "Dashboard", icon: DashboardCircleIcon },
     { id: "salons", label: "Salons", icon: Shop },
     { id: "leads", label: "Leads", icon: UserGroupIcon },
     { id: "billing", label: "Billing", icon: CreditCardIcon },
     { id: "analytics", label: "Analytics", icon: ChartAreaIcon },
-    { id: "automations", label: "Automations & Mail", icon: Mail01Icon }
+    { id: "automations", label: "Automations & Mail", icon: Mail01Icon },
+    { id: "waivers", label: "Waivers", icon: WaiversIcon }
   ];
 
   const secondaryNavigation = [
@@ -83,11 +95,18 @@ export default function Sidebar({
         }`}
         title={item.label}
       >
-        <HugeiconsIcon
-          icon={item.icon}
-          size={22}
-          color={isHighlighted ? "#ffffff" : "currentColor"}
-        />
+        {typeof item.icon === "function" ? (
+          (() => {
+            const IconComp = item.icon as any;
+            return <IconComp color={isHighlighted ? "#ffffff" : "currentColor"} />;
+          })()
+        ) : (
+          <HugeiconsIcon
+            icon={item.icon}
+            size={22}
+            color={isHighlighted ? "#ffffff" : "currentColor"}
+          />
+        )}
         {isHighlighted && (
           <span className="absolute right-0 w-1.5 h-1.5 rounded-full bg-white mr-1" />
         )}
@@ -180,11 +199,15 @@ export default function Sidebar({
                         : "text-[#7e8b9b] hover:bg-slate-50 hover:text-slate-900"
                     }`}
                   >
-                    <HugeiconsIcon
-                      icon={item.icon}
-                      size={20}
-                      color={isActive ? "#ffffff" : "currentColor"}
-                    />
+                    {typeof item.icon === "function" ? (
+                      <item.icon color={isActive ? "#ffffff" : "currentColor"} />
+                    ) : (
+                      <HugeiconsIcon
+                        icon={item.icon}
+                        size={20}
+                        color={isActive ? "#ffffff" : "currentColor"}
+                      />
+                    )}
                     <span className="text-xs font-semibold tracking-wide">{item.label}</span>
                   </button>
                 );
@@ -208,11 +231,18 @@ export default function Sidebar({
                         : "text-[#7e8b9b] hover:bg-slate-50 hover:text-slate-900"
                     }`}
                   >
-                    <HugeiconsIcon
-                      icon={item.icon}
-                      size={20}
-                      color={isActive ? "#ffffff" : "currentColor"}
-                    />
+                    {typeof item.icon === "function" ? (
+                      (() => {
+                        const IconComp = item.icon as any;
+                        return <IconComp color={isActive ? "#ffffff" : "currentColor"} />;
+                      })()
+                    ) : (
+                      <HugeiconsIcon
+                        icon={item.icon}
+                        size={20}
+                        color={isActive ? "#ffffff" : "currentColor"}
+                      />
+                    )}
                     <span className="text-xs font-semibold tracking-wide">{item.label}</span>
                   </button>
                 );
