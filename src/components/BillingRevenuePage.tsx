@@ -1,6 +1,7 @@
 "use client";
 
 import React, { useMemo, useState } from "react";
+import InvoiceDetailPage from "./InvoiceDetailPage";
 
 const SearchIcon = () => (
   <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.4" strokeLinecap="round">
@@ -444,6 +445,7 @@ export default function BillingRevenuePage() {
   const [distributionView, setDistributionView] = useState<"monthly" | "yearly">("monthly");
   const [notice, setNotice] = useState("Ready");
   const [lastSynced, setLastSynced] = useState("Just now");
+  const [selectedInvoice, setSelectedInvoice] = useState<BillingRecord | null>(null);
 
   const filteredRecords = useMemo(() => records.filter((record) => {
     const matchesStatus = statusFilter === "All Statuses" || record.status === statusFilter;
@@ -480,6 +482,15 @@ export default function BillingRevenuePage() {
     setLastSynced(now);
     showNotice(`Payments synced at ${now}`);
   };
+
+  if (selectedInvoice) {
+    return (
+      <InvoiceDetailPage
+        record={selectedInvoice}
+        onBack={() => setSelectedInvoice(null)}
+      />
+    );
+  }
 
   return (
     <div className="flex w-full flex-col gap-5 text-left text-[#283442]">
@@ -529,7 +540,7 @@ export default function BillingRevenuePage() {
             <FilterButton id="time" value={timeFilter} options={["All Time", "This Month", "Last Month", "Custom..."]} openFilter={openFilter} setOpenFilter={setOpenFilter} showNotice={showNotice} onSelect={(value) => setTimeFilter(value as FilterTime)} />
           </div>
         </div>
-        <div className="overflow-hidden rounded-lg border border-[#edf1f6]"><div className="max-h-[360px] overflow-auto"><table className="w-full min-w-[920px] border-collapse text-left text-xs"><thead className="sticky top-0 z-10 bg-[#f5f4ff]"><tr><th className="w-9 px-3 py-3"><input type="checkbox" aria-label="Select all records" /></th><th className="px-3 py-3">Salon</th><th className="px-3 py-3">Invoice</th><th className="px-3 py-3">Plan</th><th className="px-3 py-3">Amount</th><th className="px-3 py-3">Status</th><th className="px-3 py-3">Billing Date</th><th className="px-3 py-3">Due Date</th><th className="px-3 py-3 text-center">Actions</th></tr></thead><tbody className="divide-y divide-[#edf1f6]">{filteredRecords.map((record) => <tr key={record.id} className={`${record.selected ? "bg-[#f3f1ff]" : "bg-white"} hover:bg-[#f9fbfe]`}><td className="px-3 py-3"><input type="checkbox" defaultChecked={record.selected} aria-label={`Select ${record.salon}`} /></td><td className="px-3 py-3"><div className="flex items-center gap-3"><AvatarMark /><div><div className="flex items-center gap-2"><span className="font-extrabold">{record.salon}</span><span className="rounded-full border px-1.5 py-0.5 text-[8px]">{record.legal}</span></div><div className="text-[10px] text-[#8190a4]">{record.owner} &bull; {record.city}</div><div className="text-[10px] text-[#a4afbd]">{record.email}</div></div></div></td><td className="px-3 py-3">{record.invoice}</td><td className="px-3 py-3"><span className={`${planClass(record.plan)} rounded-md px-2 py-1 text-[10px] font-bold`}>{record.plan}</span></td><td className="px-3 py-3">{record.amount}</td><td className="px-3 py-3"><span className={`${statusClass(record.status)} rounded-md px-2 py-1 text-[10px] font-bold`}>{record.status}</span>{record.tag && <div className="mt-1 text-[10px] text-[#ff4f82]">{record.tag}</div>}</td><td className="px-3 py-3">{record.billingDate}</td><td className="px-3 py-3">{record.dueDate}</td><td className="px-3 py-3"><div className="flex justify-center gap-2"><button onClick={() => showNotice(`${record.invoice} opened`)} className="flex h-8 w-10 items-center justify-center rounded-lg bg-[#eeedff] text-[#635bff]"><EyeIcon /></button><button onClick={() => exportFile(`${record.invoice}.txt`, `${record.invoice}\n${record.salon}`)} className="flex h-8 w-10 items-center justify-center rounded-lg bg-[#eeedff] text-[#635bff]"><DownloadIcon /></button><button onClick={() => retryRecord(record.id)} className="flex h-8 w-10 items-center justify-center rounded-lg bg-[#e9fbfc] text-[#00c4cb]"><RefreshIcon /></button></div></td></tr>)}</tbody></table></div></div>
+        <div className="overflow-hidden rounded-lg border border-[#edf1f6]"><div className="max-h-[360px] overflow-auto"><table className="w-full min-w-[920px] border-collapse text-left text-xs"><thead className="sticky top-0 z-10 bg-[#f5f4ff]"><tr><th className="w-9 px-3 py-3"><input type="checkbox" aria-label="Select all records" /></th><th className="px-3 py-3">Salon</th><th className="px-3 py-3">Invoice</th><th className="px-3 py-3">Plan</th><th className="px-3 py-3">Amount</th><th className="px-3 py-3">Status</th><th className="px-3 py-3">Billing Date</th><th className="px-3 py-3">Due Date</th><th className="px-3 py-3 text-center">Actions</th></tr></thead><tbody className="divide-y divide-[#edf1f6]">{filteredRecords.map((record) => <tr key={record.id} className={`${record.selected ? "bg-[#f3f1ff]" : "bg-white"} hover:bg-[#f9fbfe]`}><td className="px-3 py-3"><input type="checkbox" defaultChecked={record.selected} aria-label={`Select ${record.salon}`} /></td><td className="px-3 py-3"><div className="flex items-center gap-3"><AvatarMark /><div><div className="flex items-center gap-2"><span className="font-extrabold">{record.salon}</span><span className="rounded-full border px-1.5 py-0.5 text-[8px]">{record.legal}</span></div><div className="text-[10px] text-[#8190a4]">{record.owner} &bull; {record.city}</div><div className="text-[10px] text-[#a4afbd]">{record.email}</div></div></div></td><td className="px-3 py-3">{record.invoice}</td><td className="px-3 py-3"><span className={`${planClass(record.plan)} rounded-md px-2 py-1 text-[10px] font-bold`}>{record.plan}</span></td><td className="px-3 py-3">{record.amount}</td><td className="px-3 py-3"><span className={`${statusClass(record.status)} rounded-md px-2 py-1 text-[10px] font-bold`}>{record.status}</span>{record.tag && <div className="mt-1 text-[10px] text-[#ff4f82]">{record.tag}</div>}</td><td className="px-3 py-3">{record.billingDate}</td><td className="px-3 py-3">{record.dueDate}</td><td className="px-3 py-3"><div className="flex justify-center gap-2"><button onClick={() => setSelectedInvoice(record)} className="flex h-8 w-10 items-center justify-center rounded-lg bg-[#eeedff] text-[#635bff]" title="View Invoice"><EyeIcon /></button><button onClick={() => setSelectedInvoice(record)} className="flex h-8 w-10 items-center justify-center rounded-lg bg-[#eeedff] text-[#635bff]" title="Open Details"><DownloadIcon /></button><button onClick={() => retryRecord(record.id)} className="flex h-8 w-10 items-center justify-center rounded-lg bg-[#e9fbfc] text-[#00c4cb]"><RefreshIcon /></button></div></td></tr>)}</tbody></table></div></div>
       </section>
 
       <div className="grid grid-cols-1 gap-5 lg:grid-cols-3">
