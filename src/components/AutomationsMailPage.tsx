@@ -301,7 +301,7 @@ const initialNotifications: NotificationItem[] = [
 export default function AutomationsMailPage() {
   // Lists data states
   const [notifications, setNotifications] = useState<NotificationItem[]>(initialNotifications);
-  
+
   // Filtering states
   const [activeTypeTab, setActiveTypeTab] = useState<"All" | "Email" | "SMS" | "WhatsApp">("All");
   const [sourceFilter, setSourceFilter] = useState("All Sources");
@@ -406,11 +406,11 @@ export default function AutomationsMailPage() {
       setNotifications((prev) => [newNotif, ...prev]);
       setIsSending(false);
       setShowSendModal(false);
-      
+
       setSendRecipient("");
       setSendSubject("");
       setSendMessage("");
-      
+
       triggerToast(`Email to ${sendRecipient} sent successfully!`, "success");
     }, 1200);
   };
@@ -529,7 +529,7 @@ export default function AutomationsMailPage() {
         </button>
 
         {isOpen && (
-          <div 
+          <div
             className="absolute left-0 top-full mt-1.5 w-64 bg-white border border-[#E0E6EB] rounded-xl shadow-2xl z-50 p-2 flex flex-col gap-0.5 animate-in fade-in slide-in-from-top-1 origin-top"
             style={{ boxShadow: "0px 16px 32px -8px rgba(12, 12, 13, 0.4)" }}
           >
@@ -541,11 +541,10 @@ export default function AutomationsMailPage() {
                     setValue(option);
                     setActiveDropdown(null);
                   }}
-                  className={`w-full text-left px-3.5 py-2 rounded-lg text-xs font-semibold transition-colors ${
-                    currentValue === option
+                  className={`w-full text-left px-3.5 py-2 rounded-lg text-xs font-semibold transition-colors ${currentValue === option
                       ? "bg-[#EFF4FA] text-[#635BFF]"
                       : "text-[#29343D] hover:bg-[#EFF4FA] hover:text-[#29343D]"
-                  }`}
+                    }`}
                 >
                   {option}
                 </button>
@@ -559,12 +558,12 @@ export default function AutomationsMailPage() {
 
   return (
     <div className="flex flex-col gap-6 w-full text-left relative font-sans">
-      
+
       {/* Invisible backdrop to dismiss dropdowns seamlessly */}
       {activeDropdown && (
-        <div 
-          className="fixed inset-0 z-40 bg-transparent" 
-          onClick={() => setActiveDropdown(null)} 
+        <div
+          className="fixed inset-0 z-40 bg-transparent"
+          onClick={() => setActiveDropdown(null)}
         />
       )}
 
@@ -573,13 +572,12 @@ export default function AutomationsMailPage() {
         {toasts.map((toast) => (
           <div
             key={toast.id}
-            className={`flex items-center gap-3 px-5 py-3.5 rounded-2xl shadow-xl border text-xs font-bold text-[#29343D] bg-white pointer-events-auto animate-in slide-in-from-right duration-250 ${
-              toast.type === "success"
+            className={`flex items-center gap-3 px-5 py-3.5 rounded-2xl shadow-xl border text-xs font-bold text-[#29343D] bg-white pointer-events-auto animate-in slide-in-from-right duration-250 ${toast.type === "success"
                 ? "border-emerald-100 shadow-emerald-50/20"
                 : toast.type === "error"
-                ? "border-[#FFE5ED] shadow-rose-50/20"
-                : "border-indigo-100 shadow-indigo-50/20"
-            }`}
+                  ? "border-[#FFE5ED] shadow-rose-50/20"
+                  : "border-indigo-100 shadow-indigo-50/20"
+              }`}
           >
             {toast.type === "success" && <div className="w-5 h-5 rounded-full bg-[#EBFAF0] text-[#36C76C] flex items-center justify-center"><CheckIcon className="w-3.5 h-3.5" /></div>}
             {toast.type === "error" && <div className="w-5 h-5 rounded-full bg-[#FFE5ED] text-[#FF6692] flex items-center justify-center font-black">!</div>}
@@ -590,7 +588,7 @@ export default function AutomationsMailPage() {
       </div>
 
       {/* Main Top Header Section (Figma: title) */}
-      <div 
+      <div
         className="bg-white rounded-xl flex items-center justify-between w-full px-6 py-4"
         style={{
           boxShadow: "0px 2px 4px -1px rgba(175, 182, 201, 0.2)",
@@ -607,9 +605,8 @@ export default function AutomationsMailPage() {
           <button
             onClick={handleRefreshData}
             disabled={refreshing}
-            className={`flex items-center justify-center px-4 py-2.5 bg-[#EFF4FA] hover:bg-slate-200 text-xs font-medium text-[#0A2540] rounded-lg transition-all ${
-              refreshing ? "opacity-50 cursor-not-allowed" : ""
-            }`}
+            className={`flex items-center justify-center px-4 py-2.5 bg-[#EFF4FA] hover:bg-slate-200 text-xs font-medium text-[#0A2540] rounded-lg transition-all ${refreshing ? "opacity-50 cursor-not-allowed" : ""
+              }`}
             style={{ height: "44px" }}
           >
             <RefreshIcon />
@@ -629,7 +626,7 @@ export default function AutomationsMailPage() {
       </div>
 
       {/* Top Filter Bar Section */}
-      <div 
+      <div
         className="bg-white rounded-xl p-6 flex flex-col lg:flex-row lg:items-center justify-between gap-5 w-full"
         style={{
           boxShadow: "0px 2px 4px -1px rgba(175, 182, 201, 0.2)",
@@ -645,11 +642,10 @@ export default function AutomationsMailPage() {
               <button
                 key={type}
                 onClick={() => setActiveTypeTab(type as any)}
-                className={`px-4 py-2 text-xs font-semibold rounded-lg border transition-all ${
-                  isActive
+                className={`px-4 py-2 text-xs font-semibold rounded-lg border transition-all ${isActive
                     ? "border-[#635BFF] bg-[#F1F2FE] text-[#635BFF] font-bold"
                     : "border-[#EFF4FA] hover:bg-slate-50 text-slate-400 hover:text-slate-650"
-                }`}
+                  }`}
                 style={{ height: "36px" }}
               >
                 {type}
@@ -667,20 +663,20 @@ export default function AutomationsMailPage() {
       </div>
 
       {/* Split Body Layout (Figma: Details) */}
-      <div 
+      <div
         className="grid grid-cols-1 lg:grid-cols-12 gap-0 items-start w-full bg-white rounded-xl overflow-hidden"
         style={{
           boxShadow: "0px 2px 4px -1px rgba(175, 182, 201, 0.2)",
           border: "1px solid #E0E6EB"
         }}
       >
-        
+
         {/* Left Side: Advanced Filters Column (Figma: Filters) */}
         <div className="lg:col-span-3 border-r border-[#E0E6EB] p-7 flex flex-col gap-6 h-full min-h-[600px] text-left">
           <div className="border-b border-[#EFF4FA] pb-3">
             <h2 className="font-bold text-[15px] leading-[20px] text-[#29343D]">Advanced Filters</h2>
           </div>
-          
+
           <div className="flex flex-col gap-4">
             {renderCustomDropdown("Data Range", "dataRange", dataRangeFilter, dataRangeOptions, setDataRangeFilter)}
             {renderCustomDropdown("Salon", "salon", salonFilter, salonOptions, setSalonFilter)}
@@ -697,7 +693,7 @@ export default function AutomationsMailPage() {
             >
               Reset Filters
             </button>
-            
+
             {/* Export Menu trigger button matching Figma primary blue style */}
             <div className="relative">
               <button
@@ -716,7 +712,7 @@ export default function AutomationsMailPage() {
               </button>
 
               {activeDropdown === "export" && (
-                <div 
+                <div
                   className="absolute left-0 bottom-full mb-1.5 w-full bg-white border border-[#E0E6EB] rounded-xl shadow-2xl z-50 p-2 flex flex-col gap-0.5 animate-in fade-in duration-100 origin-bottom"
                   style={{ boxShadow: "0px 16px 32px -8px rgba(12, 12, 13, 0.4)" }}
                 >
@@ -746,7 +742,7 @@ export default function AutomationsMailPage() {
 
         {/* Right Side: Notifications List Column (Figma: products) */}
         <div className="lg:col-span-9 p-7 flex flex-col gap-6 min-h-[600px] text-left">
-          
+
           {/* Notifications Header */}
           <div className="flex items-center justify-between pb-3 border-b border-[#EFF4FA]">
             <div className="flex items-center gap-3 text-left">
@@ -786,9 +782,8 @@ export default function AutomationsMailPage() {
                 return (
                   <div
                     key={item.id}
-                    className={`py-4 flex items-center justify-between gap-4 group transition-colors px-2 rounded-xl hover:bg-slate-50/50 ${
-                      !item.read ? "bg-slate-50/25" : ""
-                    }`}
+                    className={`py-4 flex items-center justify-between gap-4 group transition-colors px-2 rounded-xl hover:bg-slate-50/50 ${!item.read ? "bg-slate-50/25" : ""
+                      }`}
                   >
                     {/* Circle Icon and Text description combo */}
                     <div className="flex items-center gap-4 flex-1 min-w-0">
@@ -804,7 +799,7 @@ export default function AutomationsMailPage() {
                         <span className={`text-[15px] font-semibold leading-[20px] text-[#29343D] ${!item.read ? "font-bold" : ""}`}>
                           {item.title}
                         </span>
-                        
+
                         <div className="flex items-center gap-x-2.5 flex-wrap text-xs text-[#98A4AE] mt-1 font-semibold">
                           <span>{item.category}</span>
                           <span className="text-slate-300">•</span>
@@ -813,7 +808,7 @@ export default function AutomationsMailPage() {
                           <span>{item.date}</span>
                           <span className="text-slate-300">•</span>
                           <span>{item.time}</span>
-                          
+
                           {item.hasAttachment && (
                             <>
                               <span className="text-slate-300">•</span>
@@ -823,7 +818,7 @@ export default function AutomationsMailPage() {
                               </span>
                             </>
                           )}
-                          
+
                           {item.emailLink && (
                             <>
                               <span className="text-slate-300">•</span>
@@ -842,7 +837,7 @@ export default function AutomationsMailPage() {
 
                     {/* Badge state indicator & Actions buttons layout */}
                     <div className="flex items-center gap-4 shrink-0">
-                      
+
                       {/* Badges status details */}
                       <div className="flex items-center gap-1.5 select-none font-bold">
                         {item.source && (
@@ -851,13 +846,12 @@ export default function AutomationsMailPage() {
                           </span>
                         )}
                         <span
-                          className={`text-[13px] leading-none px-2.5 py-1.5 rounded-md uppercase tracking-wide ${
-                            item.status === "Opened" || item.status === "Clicked"
+                          className={`text-[13px] leading-none px-2.5 py-1.5 rounded-md uppercase tracking-wide ${item.status === "Opened" || item.status === "Clicked"
                               ? "bg-[#EBFAF0] text-[#36C76C]"
                               : item.status === "Sent"
-                              ? "bg-[#E0F2FE] text-[#0284c7]"
-                              : "bg-[#FFE5ED] text-[#FF6692]"
-                          }`}
+                                ? "bg-[#E0F2FE] text-[#0284c7]"
+                                : "bg-[#FFE5ED] text-[#FF6692]"
+                            }`}
                         >
                           {item.status}
                         </span>
@@ -874,7 +868,7 @@ export default function AutomationsMailPage() {
                           >
                             <EyeIcon />
                           </button>
-                          
+
                           {/* Eye Tooltip */}
                           <div className="absolute bottom-full left-1/2 transform -translate-x-1/2 mb-2 px-3 py-1.5 bg-[#635BFF] text-white text-[10px] font-bold rounded-lg shadow-lg opacity-0 group-hover/btn:opacity-100 transition-opacity duration-200 pointer-events-none whitespace-nowrap z-50">
                             View Details
@@ -892,7 +886,7 @@ export default function AutomationsMailPage() {
                             >
                               <CheckIcon className="w-3.5 h-3.5" />
                             </button>
-                            
+
                             {/* Checkmark Tooltip */}
                             <div className="absolute bottom-full left-1/2 transform -translate-x-1/2 mb-2 px-3 py-1.5 bg-[#36C76C] text-white text-[10px] font-bold rounded-lg shadow-lg opacity-0 group-hover/btn:opacity-100 transition-opacity duration-200 pointer-events-none whitespace-nowrap z-50">
                               Mark As Read
@@ -915,7 +909,7 @@ export default function AutomationsMailPage() {
       {/* VIEW DETAILS DIALOG MODAL */}
       {viewDetailsItem && (
         <div className="fixed inset-0 bg-slate-900/40 backdrop-blur-sm z-50 flex items-center justify-center p-4 animate-in fade-in duration-200">
-          <div 
+          <div
             className="bg-white rounded-xl p-6 shadow-2xl flex flex-col gap-6 max-w-[638px] w-full max-h-[95vh] overflow-y-auto custom-scrollbar select-none"
             style={{ boxShadow: "0px 16px 32px -8px rgba(12, 12, 13, 0.4)" }}
           >
@@ -937,16 +931,15 @@ export default function AutomationsMailPage() {
             </div>
 
             {/* Main Widget Card */}
-            <div 
+            <div
               className="bg-white border border-[#E0E6EB] rounded-xl p-6 flex flex-col gap-6 w-full"
               style={{ boxShadow: "0px 2px 4px -1px rgba(175, 182, 201, 0.2)" }}
             >
               {/* Profile/Category header (username) */}
               <div className="flex items-center gap-3">
-                <div 
-                  className={`w-10 h-10 rounded-full flex items-center justify-center shrink-0 ${
-                    getCategoryTheme(viewDetailsItem.category).bg
-                  } ${getCategoryTheme(viewDetailsItem.category).text}`}
+                <div
+                  className={`w-10 h-10 rounded-full flex items-center justify-center shrink-0 ${getCategoryTheme(viewDetailsItem.category).bg
+                    } ${getCategoryTheme(viewDetailsItem.category).text}`}
                 >
                   {getCategoryTheme(viewDetailsItem.category).icon}
                 </div>
@@ -961,14 +954,14 @@ export default function AutomationsMailPage() {
               </div>
 
               {/* Sub-widget 1: Informations */}
-              <div 
+              <div
                 className="bg-white border border-[#E0E6EB] rounded-xl p-6 flex flex-col gap-4 text-left"
                 style={{ boxShadow: "0px 2px 4px -1px rgba(175, 182, 201, 0.2)" }}
               >
                 <h4 className="font-bold text-xs text-[#29343D] uppercase tracking-wider pb-1 border-b border-[#EFF4FA]">
                   Informations
                 </h4>
-                
+
                 <div className="grid grid-cols-2 gap-4 text-xs font-semibold">
                   <div className="col-span-2">
                     <span className="text-[12px] font-semibold text-[#999999] block mb-0.5">Salon</span>
@@ -990,13 +983,12 @@ export default function AutomationsMailPage() {
                   </div>
                   <div>
                     <span className="text-[12px] font-semibold text-[#999999] block mb-1">Status</span>
-                    <span className={`text-[13px] font-bold px-2.5 py-1 rounded-md uppercase inline-block ${
-                      viewDetailsItem.status === "Opened" || viewDetailsItem.status === "Clicked"
+                    <span className={`text-[13px] font-bold px-2.5 py-1 rounded-md uppercase inline-block ${viewDetailsItem.status === "Opened" || viewDetailsItem.status === "Clicked"
                         ? "bg-[#EBFAF0] text-[#36C76C]"
                         : viewDetailsItem.status === "Sent"
-                        ? "bg-[#E0F2FE] text-[#0284c7]"
-                        : "bg-[#FFE5ED] text-[#FF6692]"
-                    }`}>
+                          ? "bg-[#E0F2FE] text-[#0284c7]"
+                          : "bg-[#FFE5ED] text-[#FF6692]"
+                      }`}>
                       {viewDetailsItem.status}
                     </span>
                   </div>
@@ -1004,14 +996,14 @@ export default function AutomationsMailPage() {
               </div>
 
               {/* Sub-widget 2: Details */}
-              <div 
+              <div
                 className="bg-white border border-[#E0E6EB] rounded-xl p-6 flex flex-col gap-4 text-left"
                 style={{ boxShadow: "0px 2px 4px -1px rgba(175, 182, 201, 0.2)" }}
               >
                 <h4 className="font-bold text-xs text-[#29343D] uppercase tracking-wider pb-1 border-b border-[#EFF4FA]">
                   Details
                 </h4>
-                
+
                 <div className="grid grid-cols-2 gap-4 text-xs font-semibold">
                   <div>
                     <span className="text-[12px] font-semibold text-[#999999] block mb-0.5">Created</span>
@@ -1033,7 +1025,7 @@ export default function AutomationsMailPage() {
               </div>
 
               {/* Sub-widget 3: Content */}
-              <div 
+              <div
                 className="bg-white border border-[#E0E6EB] rounded-xl p-6 flex flex-col gap-4 text-left"
                 style={{ boxShadow: "0px 2px 4px -1px rgba(175, 182, 201, 0.2)" }}
               >
@@ -1049,14 +1041,14 @@ export default function AutomationsMailPage() {
 
               {/* Sub-widget 4: Metadata (conditional) */}
               {(viewDetailsItem.category === "Payments & Billing" || viewDetailsItem.category === "Accountant-Specific") && (
-                <div 
+                <div
                   className="bg-white border border-[#E0E6EB] rounded-xl p-6 flex flex-col gap-4 text-left"
                   style={{ boxShadow: "0px 2px 4px -1px rgba(175, 182, 201, 0.2)" }}
                 >
                   <h4 className="font-bold text-xs text-[#29343D] uppercase tracking-wider pb-1 border-b border-[#EFF4FA]">
                     Metadata
                   </h4>
-                  
+
                   <div className="grid grid-cols-2 gap-4 text-xs font-semibold">
                     <div>
                       <span className="text-[12px] font-semibold text-[#999999] block mb-0.5">Transaction ID</span>
@@ -1072,14 +1064,14 @@ export default function AutomationsMailPage() {
 
               {/* Sub-widget 5: Attachments (conditional) */}
               {(viewDetailsItem.hasAttachment || viewDetailsItem.category === "Client Engagement" || viewDetailsItem.category === "Inventory & Product Management") && (
-                <div 
+                <div
                   className="bg-white border border-[#E0E6EB] rounded-xl p-6 flex flex-col gap-4 text-left"
                   style={{ boxShadow: "0px 2px 4px -1px rgba(175, 182, 201, 0.2)" }}
                 >
                   <h4 className="font-bold text-xs text-[#29343D] uppercase tracking-wider">
                     Attachments
                   </h4>
-                  
+
                   <div className="flex items-center justify-between bg-white border border-[#E9EAEB] rounded-xl p-4 gap-4">
                     <div className="flex items-center gap-3">
                       <div className="w-10 h-10 rounded-full bg-[#635BFF] flex items-center justify-center shrink-0">
@@ -1099,7 +1091,7 @@ export default function AutomationsMailPage() {
                     </div>
 
                     <div className="flex items-center gap-2">
-                      <button 
+                      <button
                         type="button"
                         onClick={() => triggerToast("Viewing attachment details...", "info")}
                         className="p-2 bg-[#F1F2FE] hover:bg-[#e4e2ff] text-[#635BFF] rounded-lg transition-all flex items-center justify-center"
@@ -1107,7 +1099,7 @@ export default function AutomationsMailPage() {
                       >
                         <EyeIcon />
                       </button>
-                      <button 
+                      <button
                         type="button"
                         onClick={() => triggerToast("Downloading attachment file...", "success")}
                         className="p-2 bg-[#DDDBFF] hover:bg-[#c6c2ff] text-[#635BFF] rounded-lg transition-all flex items-center justify-center"
@@ -1138,7 +1130,7 @@ export default function AutomationsMailPage() {
               >
                 Foward
               </button>
-              
+
               <div className="flex items-center gap-3">
                 {!viewDetailsItem.read && (
                   <button
@@ -1153,7 +1145,7 @@ export default function AutomationsMailPage() {
                     Mark As Read
                   </button>
                 )}
-                
+
                 <button
                   type="button"
                   onClick={() => {

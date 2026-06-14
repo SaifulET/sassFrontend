@@ -10,6 +10,7 @@ import UsersAndStaffPage from "../components/UsersAndStaffPage";
 import PermissionsPage from "../components/PermissionsPage";
 import BillingHistoryPage from "../components/BillingHistoryPage";
 import BillingRevenuePage from "../components/BillingRevenuePage";
+import AnalyticsPage from "../components/AnalyticsPage";
 import SalonSettingsPage from "../components/SalonSettingsPage";
 import SalonActivityPage from "../components/SalonActivityPage";
 import SalonSupportPage from "../components/SalonSupportPage";
@@ -17,6 +18,8 @@ import SalonAutomationsPage from "../components/SalonAutomationsPage";
 import AutomationsMailPage from "../components/AutomationsMailPage";
 import WaiversPage from "../components/WaiversPage";
 import SettingsPage from "../components/SettingsPage";
+import SupportPage from "../components/SupportPage";
+
 
 interface Salon {
   id: string;
@@ -323,7 +326,7 @@ export default function Home() {
                 setEmployees={(newEmployees) => {
                   setEmployeesBySalon((prev) => ({
                     ...prev,
-                    [activeSalon.id]: typeof newEmployees === "function" 
+                    [activeSalon.id]: typeof newEmployees === "function"
                       ? (newEmployees as any)(prev[activeSalon.id] || defaultEmployees)
                       : newEmployees
                   }));
@@ -442,6 +445,10 @@ export default function Home() {
         return (
           <BillingRevenuePage />
         );
+      case "analytics":
+        return (
+          <AnalyticsPage />
+        );
       case "automations":
         return (
           <AutomationsMailPage />
@@ -454,6 +461,11 @@ export default function Home() {
         return (
           <SettingsPage />
         );
+      case "support":
+        return (
+          <SupportPage />
+        );
+
       default:
         return (
           <div className="bg-white rounded-3xl p-8 border border-[#eef2f6] shadow-[0_4px_20px_rgba(0,0,0,0.01)] text-center max-w-lg mx-auto my-12 animate-in fade-in slide-in-from-bottom-4">
