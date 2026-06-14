@@ -14,6 +14,7 @@ import SalonSettingsPage from "../components/SalonSettingsPage";
 import SalonActivityPage from "../components/SalonActivityPage";
 import SalonSupportPage from "../components/SalonSupportPage";
 import SalonAutomationsPage from "../components/SalonAutomationsPage";
+import AutomationsMailPage from "../components/AutomationsMailPage";
 import WaiversPage from "../components/WaiversPage";
 import SettingsPage from "../components/SettingsPage";
 
@@ -440,6 +441,10 @@ export default function Home() {
       case "billing":
         return (
           <BillingRevenuePage />
+        );
+      case "automations":
+        return (
+          <AutomationsMailPage />
         );
       case "waivers":
         return (
