@@ -15,6 +15,7 @@ import SalonActivityPage from "../components/SalonActivityPage";
 import SalonSupportPage from "../components/SalonSupportPage";
 import SalonAutomationsPage from "../components/SalonAutomationsPage";
 import WaiversPage from "../components/WaiversPage";
+import SettingsPage from "../components/SettingsPage";
 
 interface Salon {
   id: string;
@@ -443,6 +444,10 @@ export default function Home() {
       case "waivers":
         return (
           <WaiversPage />
+        );
+      case "settings":
+        return (
+          <SettingsPage />
         );
       default:
         return (

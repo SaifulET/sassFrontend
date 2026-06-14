@@ -123,10 +123,7 @@ export default function Header({ activeTab, setActiveTab, selectedSalonId, toggl
           >
             {/* User Avatar Image or Placeholder */}
             <div className="w-9 h-9 rounded-full overflow-hidden border border-slate-100 shadow-sm relative bg-indigo-50 flex items-center justify-center">
-              {/* Using a premium looking avatar generator or CSS */}
-              <div className="w-full h-full bg-gradient-to-tr from-indigo-200 to-violet-300 flex items-center justify-center text-xs font-bold text-indigo-700">
-                DM
-              </div>
+              <img src="/avatar.png" alt="Admin Avatar" className="w-full h-full object-cover" />
             </div>
           </button>
 
@@ -135,8 +132,8 @@ export default function Header({ activeTab, setActiveTab, selectedSalonId, toggl
             <div className="absolute right-0 mt-3.5 w-72 bg-white rounded-3xl shadow-xl border border-slate-100 py-3 z-50 transform origin-top-right transition-all duration-200 animate-in fade-in slide-in-from-top-2">
               {/* Header profile info */}
               <div className="px-5 py-3 border-b border-slate-50 flex items-center gap-3">
-                <div className="w-10 h-10 rounded-full bg-gradient-to-tr from-indigo-200 to-violet-300 flex items-center justify-center text-sm font-bold text-indigo-700">
-                  DM
+                <div className="w-10 h-10 rounded-full overflow-hidden border border-slate-100 bg-slate-50 shadow-inner flex items-center justify-center">
+                  <img src="/avatar.png" alt="Admin Avatar" className="w-full h-full object-cover" />
                 </div>
                 <div className="flex flex-col min-w-0">
                   <span className="text-sm font-semibold text-slate-800 truncate flex items-center gap-1.5">
