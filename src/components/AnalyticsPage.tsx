@@ -1,11 +1,11 @@
-﻿"use client";
+"use client";
 
 import React, { useMemo, useState, useCallback, useRef } from "react";
 
 type PlanType = "All" | "Basic" | "Premium" | "Enterprise";
 type ChartMode = "line" | "bar";
 type ChartTab = "MRR" | "Movements" | "Breakdown";
-type TimeRange = "Monthly" | "Yearly" | "2023-2024";
+type TimeRange = "Monthly" | "Yearly" | "2023-2025";
 type FilterStage = "root" | "plan";
 
 type ChartPoint = { month: string; value: number };
@@ -14,7 +14,7 @@ type MovementSegment = { label: string; value: number; color: string };
 type MovementPoint = { month: string; segments: MovementSegment[] };
 
 const planTypeOptions: PlanType[] = ["All", "Basic", "Premium", "Enterprise"];
-const timeRangeOptions: TimeRange[] = ["Monthly", "Yearly", "2023-2024"];
+const timeRangeOptions: TimeRange[] = ["Monthly", "Yearly", "2023-2025"];
 const salonOptions = ["All / Select Salon", "Beauty Wellness Center", "Bella Vista Salon", "Elite Beauty Group"];
 const cityOptions = ["All cities", "Bologna", "Milano", "Roma", "Torino"];
 
@@ -38,15 +38,91 @@ const breakdownPoints: ChartPoint[] = [
 ];
 
 const movementBars: MovementPoint[] = [
-  { month: "Jan", segments: [{ label: "New", value: 12, color: "#20C9C5" },{ label: "Expand", value: 10, color: "#635BFF" },{ label: "Churn", value: 8, color: "#FF6692" }] },
-  { month: "Feb", segments: [{ label: "New", value: 10, color: "#20C9C5" },{ label: "Expand", value: 9, color: "#635BFF" },{ label: "Churn", value: 7, color: "#FF6692" }] },
-  { month: "Mar", segments: [{ label: "New", value: 11, color: "#20C9C5" },{ label: "Expand", value: 11, color: "#635BFF" },{ label: "Churn", value: 6, color: "#FF6692" }] },
-  { month: "Apr", segments: [{ label: "New", value: 9, color: "#20C9C5" },{ label: "Expand", value: 10, color: "#635BFF" },{ label: "Churn", value: 7, color: "#FF6692" }] },
-  { month: "May", segments: [{ label: "New", value: 13, color: "#20C9C5" },{ label: "Expand", value: 9, color: "#635BFF" },{ label: "Churn", value: 19, color: "#FF6692" }] },
-  { month: "Jun", segments: [{ label: "New", value: 8, color: "#20C9C5" },{ label: "Expand", value: 8, color: "#635BFF" },{ label: "Churn", value: 6, color: "#FF6692" }] },
-  { month: "Jul", segments: [{ label: "New", value: 10, color: "#20C9C5" },{ label: "Expand", value: 10, color: "#635BFF" },{ label: "Churn", value: 7, color: "#FF6692" }] },
-  { month: "Aug", segments: [{ label: "New", value: 6, color: "#20C9C5" },{ label: "Expand", value: 7, color: "#635BFF" },{ label: "Churn", value: 5, color: "#FF6692" }] },
-  { month: "Sep", segments: [{ label: "New", value: 8, color: "#20C9C5" },{ label: "Expand", value: 6, color: "#635BFF" },{ label: "Churn", value: 4, color: "#FF6692" }] },
+  {
+    month: "Jan",
+    segments: [
+      { label: "New", value: 25000, color: "#34C759" },
+      { label: "Expansion", value: 15000, color: "#00C7BE" },
+      { label: "Reactivation", value: 10000, color: "#32ADE6" },
+      { label: "Other", value: 3300, color: "#F3F3F3" },
+      { label: "Contracted", value: 4000, color: "#FFCC00" },
+      { label: "Churned", value: 20000, color: "#FF6692" },
+    ],
+  },
+  {
+    month: "Feb",
+    segments: [
+      { label: "New", value: 24000, color: "#34C759" },
+      { label: "Expansion", value: 14000, color: "#00C7BE" },
+      { label: "Reactivation", value: 10000, color: "#32ADE6" },
+      { label: "Other", value: 3200, color: "#F3F3F3" },
+      { label: "Contracted", value: 3000, color: "#FFCC00" },
+      { label: "Churned", value: 20000, color: "#FF6692" },
+    ],
+  },
+  {
+    month: "Mar",
+    segments: [
+      { label: "New", value: 26000, color: "#34C759" },
+      { label: "Expansion", value: 15000, color: "#00C7BE" },
+      { label: "Reactivation", value: 8000, color: "#32ADE6" },
+      { label: "Other", value: 2800, color: "#F3F3F3" },
+      { label: "Contracted", value: 3300, color: "#FFCC00" },
+      { label: "Churned", value: 20000, color: "#FF6692" },
+    ],
+  },
+  {
+    month: "Apr",
+    segments: [
+      { label: "New", value: 25000, color: "#34C759" },
+      { label: "Expansion", value: 14200, color: "#00C7BE" },
+      { label: "Reactivation", value: 10000, color: "#32ADE6" },
+      { label: "Other", value: 3000, color: "#F3F3F3" },
+      { label: "Contracted", value: 4800, color: "#FFCC00" },
+      { label: "Churned", value: 20000, color: "#FF6692" },
+    ],
+  },
+  {
+    month: "May",
+    segments: [
+      { label: "New", value: 27000, color: "#34C759" },
+      { label: "Expansion", value: 15000, color: "#00C7BE" },
+      { label: "Reactivation", value: 9000, color: "#32ADE6" },
+      { label: "Other", value: 3000, color: "#F3F3F3" },
+      { label: "Contracted", value: 12000, color: "#FFCC00" },
+      { label: "Churned", value: 40000, color: "#FF6692" },
+    ],
+  },
+  {
+    month: "Jun",
+    segments: [
+      { label: "New", value: 22000, color: "#34C759" },
+      { label: "Expansion", value: 13000, color: "#00C7BE" },
+      { label: "Reactivation", value: 10000, color: "#32ADE6" },
+      { label: "Other", value: 3200, color: "#F3F3F3" },
+      { label: "Contracted", value: 5000, color: "#FFCC00" },
+      { label: "Churned", value: 18000, color: "#FF6692" },
+    ],
+  },
+  {
+    month: "Jul",
+    segments: [
+      { label: "New", value: 23000, color: "#34C759" },
+      { label: "Expansion", value: 14000, color: "#00C7BE" },
+      { label: "Reactivation", value: 10000, color: "#32ADE6" },
+      { label: "Other", value: 3200, color: "#F3F3F3" },
+      { label: "Contracted", value: 5800, color: "#FFCC00" },
+      { label: "Churned", value: 20000, color: "#FF6692" },
+    ],
+  },
+  {
+    month: "Aug",
+    segments: [],
+  },
+  {
+    month: "Sep",
+    segments: [],
+  },
 ];
 
 const tableMonths = [
@@ -65,6 +141,77 @@ const tableRows = [
   { label: "FX Impact", amount: "(€ 19,866)", count: "79", change: "-" },
   { label: "Total MRR", amount: "€ 7,474", count: "-", change: "-" },
   { label: "Growth Rate", amount: "-", count: "-", change: "5.25%" },
+];
+
+const movementTransactions = [
+  { date: "Aug 31, 2024", customer: "Advocate Data (haylie.zboncak@advocate.com)", description: "Subscribed to Scheduler Basic yearly (EUR) v2 + 3", type: "New", change: "US$ 181 (€ 175)" },
+  { date: "Aug 31, 2024", customer: "Advocate Data (haylie.zboncak@advocate.com)", description: "Subscribed to Scheduler Basic yearly (EUR) v2 + 3", type: "New", change: "US$ 181 (€ 175)" },
+  { date: "Aug 31, 2024", customer: "Advocate Data (haylie.zboncak@advocate.com)", description: "Subscribed to Scheduler Basic yearly (EUR) v2 + 3", type: "New", change: "US$ 181 (€ 175)" },
+  { date: "Aug 31, 2024", customer: "Advocate Data (haylie.zboncak@advocate.com)", description: "Subscribed to Scheduler Basic yearly (EUR) v2 + 3", type: "New", change: "US$ 181 (€ 175)" },
+  { date: "Aug 31, 2024", customer: "Advocate Data (haylie.zboncak@advocate.com)", description: "Subscribed to Scheduler Basic yearly (EUR) v2 + 3", type: "New", change: "US$ 181 (€ 175)" },
+  { date: "Aug 31, 2024", customer: "Advocate Data (haylie.zboncak@advocate.com)", description: "Subscribed to Scheduler Basic yearly (EUR) v2 + 3", type: "New", change: "US$ 181 (€ 175)" },
+  { date: "Aug 31, 2024", customer: "Advocate Data (haylie.zboncak@advocate.com)", description: "Subscribed to Scheduler Basic yearly (EUR) v2 + 3", type: "New", change: "US$ 181 (€ 175)" },
+  { date: "Aug 31, 2024", customer: "Advocate Data (haylie.zboncak@advocate.com)", description: "Subscribed to Scheduler Basic yearly (EUR) v2 + 3", type: "New", change: "US$ 181 (€ 175)" },
+  { date: "Aug 31, 2024", customer: "Advocate Data (haylie.zboncak@advocate.com)", description: "Subscribed to Scheduler Basic yearly (EUR) v2 + 3", type: "New", change: "US$ 181 (€ 175)" },
+  { date: "MRR Change", customer: "Advocate Data (haylie.zboncak@advocate.com)", description: "Subscribed to Scheduler Basic yearly (EUR) v2 + 3", type: "New", change: "US$ 181 (€ 175)" },
+];
+
+const breakdownSeriesList = [
+  {
+    label: "Analytics Insights",
+    color: "#3B82F6",
+    points: [91000, 91500, 91000, 84000, 84000, 90000, 93000, 95000, 92000],
+  },
+  {
+    label: "Custom Fields",
+    color: "#EF4444",
+    points: [68000, 70500, 67000, 60000, 58000, 63000, 68000, 69000, 67000],
+  },
+  {
+    label: "Developer API",
+    color: "#FFCC00",
+    points: [53000, 54500, 51000, 40000, 36000, 44000, 46000, 47500, 45000],
+  },
+  {
+    label: "File Share Basic",
+    color: "#F97316",
+    points: [27000, 27500, 28000, 27500, 27200, 27800, 28200, 28000, 27800],
+  },
+  {
+    label: "File Share Plus",
+    color: "#8B5CF6",
+    points: [25000, 25200, 25500, 25000, 24800, 25300, 25800, 25600, 25400],
+  },
+  {
+    label: "File Share Unlimited",
+    color: "#34C759",
+    points: [22000, 22200, 22500, 22000, 21800, 22300, 22800, 22600, 22400],
+  },
+  {
+    label: "Meta Pixel Integration",
+    color: "#EC4899",
+    points: [19000, 19200, 19500, 19000, 18800, 19300, 19800, 19600, 19400],
+  },
+  {
+    label: "Multi Branch",
+    color: "#06B6D4",
+    points: [16000, 16200, 16500, 16000, 15800, 16300, 16800, 16600, 16400],
+  },
+  {
+    label: "Online Payments",
+    color: "#4F46E5",
+    points: [13000, 13200, 13500, 13000, 12800, 13300, 13800, 13600, 13400],
+  },
+  {
+    label: "Queue Manager",
+    color: "#98A4AE",
+    points: [10000, 10200, 10500, 10000, 9800, 10300, 10800, 10600, 10400],
+  },
+  {
+    label: "Scheduler Basic",
+    color: "#14B8A6",
+    points: [3500, 3700, 3500, 3800, 3600, 4200, 8000, 10000, 10200],
+  },
 ];
 
 // ---- Icons ----
@@ -109,12 +256,14 @@ const CloseIcon = () => (
   </svg>
 );
 
-function StatCard({ title, value, note, noteClass = "text-[#263241]" }: { title: string; value: string; note: string; noteClass?: string }) {
+function StatCard({ title, value, note, noteClass = "text-[#98A4AE]" }: { title: string; value: string; note: React.ReactNode; noteClass?: string }) {
   return (
-    <div className="rounded-[12px] border border-[#E0E6EB] bg-white px-5 py-4 shadow-[0px_2px_4px_-1px_rgba(175,182,201,0.2)]">
-      <div className="text-[13px] font-semibold leading-5 text-[#29343D]">{title}</div>
-      <div className="mt-3 text-[28px] font-semibold leading-9 text-[#29343D]">{value}</div>
-      <div className={`mt-1 text-[12px] leading-5 ${noteClass}`}>{note}</div>
+    <div className="box-sizing-border-box flex flex-col justify-center items-center p-6 gap-1 h-[129px] bg-white border border-[#E0E6EB] shadow-[0px_2px_4px_-1px_rgba(175,182,201,0.2)] rounded-[12px] flex-1 min-w-0">
+      <div className="font-manrope font-semibold text-[13px] leading-[18px] text-[#29343D] text-center">{title}</div>
+      <div className="font-manrope font-semibold text-[24px] leading-[29px] text-[#29343D] text-center mt-1">{value}</div>
+      {note ? (
+        <div className={`font-manrope font-semibold text-[13px] leading-[18px] text-center mt-1 ${noteClass}`}>{note}</div>
+      ) : null}
     </div>
   );
 }
@@ -124,10 +273,12 @@ function MRRChart({
   activeTab,
   chartMode,
   planType,
+  timeRange,
 }: {
   activeTab: ChartTab;
   chartMode: ChartMode;
   planType: PlanType;
+  timeRange: TimeRange;
 }) {
   const [hoveredIndex, setHoveredIndex] = useState<number | null>(null);
   const svgRef = useRef<SVGSVGElement>(null);
@@ -135,24 +286,245 @@ function MRRChart({
   const isMovements = activeTab === "Movements";
 
   const baseSeries = useMemo(() => {
-    if (activeTab === "Movements") return movementsPoints;
-    if (activeTab === "Breakdown") return breakdownPoints;
-    return mrrPoints;
-  }, [activeTab]);
+    if (timeRange === "Monthly") {
+      if (activeTab === "Movements") return movementsPoints;
+      if (activeTab === "Breakdown") return breakdownPoints;
+      return mrrPoints;
+    }
+    if (timeRange === "Yearly") {
+      if (activeTab === "Movements") {
+        return [
+          { month: "2020", value: 18 },
+          { month: "2021", value: 20 },
+          { month: "2022", value: 22 },
+          { month: "2023", value: 24 },
+          { month: "2024", value: 26 },
+          { month: "2025", value: 29 },
+        ];
+      }
+      if (activeTab === "Breakdown") {
+        return [
+          { month: "2020", value: 12 },
+          { month: "2021", value: 15 },
+          { month: "2022", value: 20 },
+          { month: "2023", value: 25 },
+          { month: "2024", value: 28 },
+          { month: "2025", value: 32 },
+        ];
+      }
+      return [
+        { month: "2020", value: 25000 },
+        { month: "2021", value: 30000 },
+        { month: "2022", value: 35000 },
+        { month: "2023", value: 38000 },
+        { month: "2024", value: 42000 },
+        { month: "2025", value: 48000 },
+      ];
+    }
+    // "2023-2025"
+    if (activeTab === "Movements") {
+      return [
+        { month: "2023", value: 24 },
+        { month: "2024", value: 26 },
+        { month: "2025", value: 29 },
+      ];
+    }
+    if (activeTab === "Breakdown") {
+      return [
+        { month: "2023", value: 25 },
+        { month: "2024", value: 28 },
+        { month: "2025", value: 32 },
+      ];
+    }
+    return [
+      { month: "2023", value: 38000 },
+      { month: "2024", value: 42000 },
+      { month: "2025", value: 48000 },
+    ];
+  }, [activeTab, timeRange]);
 
   const series = useMemo(() => {
     const mult = planType === "Basic" ? 0.82 : planType === "Premium" ? 1.08 : planType === "Enterprise" ? 1.2 : 1;
     return baseSeries.map((p) => ({ ...p, value: Math.round(p.value * mult) }));
   }, [baseSeries, planType]);
 
+  const breakdownSeries = useMemo(() => {
+    const mult = planType === "Basic" ? 0.82 : planType === "Premium" ? 1.08 : planType === "Enterprise" ? 1.2 : 1;
+    return breakdownSeriesList.map((s) => {
+      let pts = s.points;
+      if (timeRange === "Yearly") {
+        pts = [
+          s.points[0] - 20000,
+          s.points[0] - 10000,
+          s.points[0],
+          s.points[3],
+          s.points[6],
+          s.points[8],
+        ];
+      } else if (timeRange === "2023-2025") {
+        pts = [
+          s.points[0],
+          s.points[4],
+          s.points[8],
+        ];
+      }
+      return {
+        ...s,
+        points: pts.map((v) => Math.round(v * mult)),
+      };
+    });
+  }, [planType, timeRange]);
+
+  const rankedBreakdownPlans = useMemo(() => {
+    if (activeTab !== "Breakdown" || hoveredIndex === null) return [];
+    return breakdownSeries
+      .map((s) => ({
+        label: s.label,
+        color: s.color,
+        value: s.points[hoveredIndex],
+      }))
+      .sort((a, b) => b.value - a.value)
+      .slice(0, 4);
+  }, [activeTab, hoveredIndex, breakdownSeries]);
+
   const movementSeries = useMemo(() => {
     const mult = planType === "Basic" ? 0.82 : planType === "Premium" ? 1.08 : planType === "Enterprise" ? 1.2 : 1;
-    return movementBars.map((bar) => ({
-      month: bar.month,
-      total: Math.round(bar.segments.reduce((s, seg) => s + seg.value, 0) * mult),
-      segments: bar.segments.map((seg) => ({ ...seg, value: Math.round(seg.value * mult) })),
-    }));
-  }, [planType]);
+    const baseBars = timeRange === "Monthly"
+      ? movementBars
+      : timeRange === "Yearly"
+      ? [
+          {
+            month: "2020",
+            segments: [
+              { label: "New", value: 180000, color: "#34C759" },
+              { label: "Expansion", value: 110000, color: "#00C7BE" },
+              { label: "Reactivation", value: 80000, color: "#32ADE6" },
+              { label: "Other", value: 25000, color: "#F3F3F3" },
+              { label: "Contracted", value: 30000, color: "#FFCC00" },
+              { label: "Churned", value: 150000, color: "#FF6692" },
+            ],
+          },
+          {
+            month: "2021",
+            segments: [
+              { label: "New", value: 200000, color: "#34C759" },
+              { label: "Expansion", value: 120000, color: "#00C7BE" },
+              { label: "Reactivation", value: 90000, color: "#32ADE6" },
+              { label: "Other", value: 28000, color: "#F3F3F3" },
+              { label: "Contracted", value: 32000, color: "#FFCC00" },
+              { label: "Churned", value: 160000, color: "#FF6692" },
+            ],
+          },
+          {
+            month: "2022",
+            segments: [
+              { label: "New", value: 220000, color: "#34C759" },
+              { label: "Expansion", value: 130000, color: "#00C7BE" },
+              { label: "Reactivation", value: 95000, color: "#32ADE6" },
+              { label: "Other", value: 30000, color: "#F3F3F3" },
+              { label: "Contracted", value: 35000, color: "#FFCC00" },
+              { label: "Churned", value: 170000, color: "#FF6692" },
+            ],
+          },
+          {
+            month: "2023",
+            segments: [
+              { label: "New", value: 240000, color: "#34C759" },
+              { label: "Expansion", value: 140000, color: "#00C7BE" },
+              { label: "Reactivation", value: 100000, color: "#32ADE6" },
+              { label: "Other", value: 31000, color: "#F3F3F3" },
+              { label: "Contracted", value: 38000, color: "#FFCC00" },
+              { label: "Churned", value: 180000, color: "#FF6692" },
+            ],
+          },
+          {
+            month: "2024",
+            segments: [
+              { label: "New", value: 260000, color: "#34C759" },
+              { label: "Expansion", value: 150000, color: "#00C7BE" },
+              { label: "Reactivation", value: 110000, color: "#32ADE6" },
+              { label: "Other", value: 32000, color: "#F3F3F3" },
+              { label: "Contracted", value: 40000, color: "#FFCC00" },
+              { label: "Churned", value: 190000, color: "#FF6692" },
+            ],
+          },
+          {
+            month: "2025",
+            segments: [
+              { label: "New", value: 290000, color: "#34C759" },
+              { label: "Expansion", value: 170000, color: "#00C7BE" },
+              { label: "Reactivation", value: 120000, color: "#32ADE6" },
+              { label: "Other", value: 35000, color: "#F3F3F3" },
+              { label: "Contracted", value: 45000, color: "#FFCC00" },
+              { label: "Churned", value: 200000, color: "#FF6692" },
+            ],
+          },
+        ]
+      : [
+          {
+            month: "2023",
+            segments: [
+              { label: "New", value: 240000, color: "#34C759" },
+              { label: "Expansion", value: 140000, color: "#00C7BE" },
+              { label: "Reactivation", value: 100000, color: "#32ADE6" },
+              { label: "Other", value: 31000, color: "#F3F3F3" },
+              { label: "Contracted", value: 38000, color: "#FFCC00" },
+              { label: "Churned", value: 180000, color: "#FF6692" },
+            ],
+          },
+          {
+            month: "2024",
+            segments: [
+              { label: "New", value: 260000, color: "#34C759" },
+              { label: "Expansion", value: 150000, color: "#00C7BE" },
+              { label: "Reactivation", value: 110000, color: "#32ADE6" },
+              { label: "Other", value: 32000, color: "#F3F3F3" },
+              { label: "Contracted", value: 40000, color: "#FFCC00" },
+              { label: "Churned", value: 190000, color: "#FF6692" },
+            ],
+          },
+          {
+            month: "2025",
+            segments: [
+              { label: "New", value: 290000, color: "#34C759" },
+              { label: "Expansion", value: 170000, color: "#00C7BE" },
+              { label: "Reactivation", value: 120000, color: "#32ADE6" },
+              { label: "Other", value: 35000, color: "#F3F3F3" },
+              { label: "Contracted", value: 45000, color: "#FFCC00" },
+              { label: "Churned", value: 200000, color: "#FF6692" },
+            ],
+          },
+        ];
+
+    return baseBars.map((bar) => {
+      const newVal = Math.round((bar.segments.find((s) => s.label === "New")?.value || 0) * mult);
+      const expVal = Math.round((bar.segments.find((s) => s.label === "Expansion")?.value || 0) * mult);
+      const reactVal = Math.round((bar.segments.find((s) => s.label === "Reactivation")?.value || 0) * mult);
+      const otherVal = Math.round((bar.segments.find((s) => s.label === "Other")?.value || 0) * mult);
+      const contractVal = Math.round((bar.segments.find((s) => s.label === "Contracted")?.value || 0) * mult);
+      const churnVal = Math.round((bar.segments.find((s) => s.label === "Churned")?.value || 0) * mult);
+      const total = newVal + expVal + reactVal + otherVal - contractVal - churnVal;
+
+      return {
+        month: bar.month,
+        New: newVal,
+        Expansion: expVal,
+        Reactivation: reactVal,
+        Other: otherVal,
+        Contracted: contractVal,
+        Churned: churnVal,
+        total,
+        segments: [
+          { label: "New", value: newVal, color: "#34C759" },
+          { label: "Expansion", value: expVal, color: "#00C7BE" },
+          { label: "Reactivation", value: reactVal, color: "#32ADE6" },
+          { label: "Contracted", value: contractVal, color: "#FFCC00" },
+          { label: "Churned", value: churnVal, color: "#FF6692" },
+          { label: "Other", value: otherVal, color: "#F3F3F3" },
+        ],
+      };
+    });
+  }, [planType, timeRange]);
 
   // Chart dimensions tuned to the screenshot frame
   const W = 1115.87;
@@ -165,13 +537,37 @@ function MRRChart({
   const range = Math.max(maxVal - minVal, 1);
   const maxMov = Math.max(...movementSeries.map((p) => p.total), 1);
 
+  const getY = (val: number) => {
+    if (timeRange === "Monthly") {
+      if (val >= 0) {
+        if (val <= 50000) {
+          return 114 - (val / 50000) * (114 - 91.13);
+        } else {
+          return 91.13 - ((val - 50000) / 20000) * (91.13 - 0.35);
+        }
+      } else {
+        if (val >= -20000) {
+          return 114 + (-val / 20000) * (136.52 - 114);
+        } else {
+          return 136.52 + ((-val - 20000) / 40000) * (227.3 - 136.52);
+        }
+      }
+    } else {
+      if (val >= 0) {
+        return 114 - (val / 600000) * (114 - 0.35);
+      } else {
+        return 114 + (-val / 600000) * (227.3 - 114);
+      }
+    }
+  };
+
   const pts: PositionedPoint[] = series.map((p, i) => {
     const x = PX + (i * (W - PX * 2)) / (count - 1);
     const y = H - PY - ((p.value - minVal) / range) * (H - PY * 2);
     return { ...p, x, y };
   });
 
-  const buildPath = (points: PositionedPoint[]) => {
+  const buildPath = (points: { x: number; y: number }[]) => {
     if (points.length < 2) return "";
     const d = [`M ${points[0].x} ${points[0].y}`];
     for (let i = 0; i < points.length - 1; i++) {
@@ -189,10 +585,20 @@ function MRRChart({
 
   // Y-axis labels
   const ySteps = 5;
-  const yLabels = Array.from({ length: ySteps + 1 }, (_, i) => {
-    const v = maxVal - (i / ySteps) * (maxVal - minVal);
-    return v >= 1000 ? `${Math.round(v / 1000)}k` : `${Math.round(v)}`;
-  });
+  const yLabels = useMemo(() => {
+    if (activeTab === "Movements") {
+      return timeRange === "Monthly"
+        ? ["70k", "60k", "50k", "-20K", "-40K", "-60K"]
+        : ["600k", "400k", "200k", "-200k", "-400k", "-600k"];
+    }
+    if (activeTab === "Breakdown") {
+      return ["100k", "80k", "60k", "40k", "20k", "0"];
+    }
+    return Array.from({ length: ySteps + 1 }, (_, i) => {
+      const v = maxVal - (i / ySteps) * (maxVal - minVal);
+      return v >= 1000 ? `${Math.round(v / 1000)}k` : `${Math.round(v)}`;
+    });
+  }, [activeTab, maxVal, minVal, timeRange]);
 
   const formatVal = (v: number) => activeTab === "MRR" ? `€ ${v >= 1000 ? `${Math.round(v / 1000)}K` : v}` : `${v}`;
   const hovered = hoveredIndex !== null;
@@ -200,37 +606,60 @@ function MRRChart({
   const hMov = hovered ? movementSeries[hoveredIndex!] : null;
 
   // Tooltip position
-  const tipX = isMovements
+  const tipX = (isMovements || activeTab === "Breakdown")
     ? PX + (hoveredIndex! * (W - PX * 2)) / (count - 1)
     : hPt?.x ?? 0;
-  const tipY = isMovements ? 60 : hPt?.y ?? 0;
+
+  const tipY = useMemo(() => {
+    if (isMovements && hMov) {
+      const val = (hMov.New || 0) + (hMov.Expansion || 0) + (hMov.Reactivation || 0) + (hMov.Other || 0);
+      return getY(val);
+    }
+    if (activeTab === "Breakdown") {
+      const topVal = breakdownSeries[0].points[hoveredIndex ?? 0];
+      return H - PY - (topVal / 100000) * (H - PY * 2);
+    }
+    return hPt?.y ?? 0;
+  }, [isMovements, hMov, hPt, activeTab, breakdownSeries, hoveredIndex]);
 
   // Bar width
   const barSlot = (W - PX * 2) / count;
-  const barW = Math.max(barSlot * 0.45, 12);
+  const barW = Math.min(Math.max(barSlot * 0.45, 12), 48);
 
   return (
     <div className="relative w-full select-none">
-      <div className="relative h-[264px] w-full min-w-0">
+      <div className={`relative w-full min-w-0 ${chartMode === "bar" ? "h-[327px]" : "h-[264px]"}`}>
         {/* Y-axis */}
-        <div className="absolute left-0 top-0 flex h-[228px] w-[34px] flex-col justify-between pr-0 pt-0 text-right">
+        <div className={`absolute left-0 flex h-[228px] w-[34px] flex-col justify-between p-0 gap-[30.39px] items-start ${chartMode === "bar" ? "top-[39px]" : "top-0"}`}>
           {yLabels.map((l) => (
-            <span key={l} className="block text-[10px] leading-none text-[#B8C4CE]">{l}</span>
+            <span
+              key={l}
+              className="w-[34px] h-[15.35px] font-manrope font-normal text-[11.3951px] leading-[15px] text-center text-[#98A4AE] self-stretch flex-none order-none grow-0"
+            >
+              {l}
+            </span>
           ))}
         </div>
 
         {/* Chart area */}
-        <div className="absolute left-[35px] top-[0.35px] h-[227.55px] right-0 overflow-hidden rounded-[10px] border border-[#F0F4F9] bg-[#FAFBFD]">
+        <div
+          className={`absolute left-[35px] right-0 overflow-visible bg-transparent ${
+            chartMode === "bar" ? "top-[32px] h-[263.45px]" : "top-[0.35px] h-[227.55px]"
+          }`}
+        >
           {/* Grid lines */}
-          <svg className="pointer-events-none absolute inset-0 h-full w-full" preserveAspectRatio="none" viewBox={`0 0 ${W} ${H}`}>
+          <svg className="overflow-visible pointer-events-none absolute inset-0 h-full w-full" preserveAspectRatio="none" viewBox={`0 0 ${W} ${H}`}>
             {Array.from({ length: ySteps + 1 }, (_, i) => {
               const y = PY + (i / ySteps) * (H - PY * 2);
-              return <line key={i} x1={0} y1={y} x2={W} y2={y} stroke="#EEF2F7" strokeWidth="1" />;
+              return <line key={i} x1={0} y1={y} x2={W} y2={y} stroke="#F6F7F9" strokeWidth="0.949594" />;
             })}
-            {series.map((_, i) => {
+            {chartMode !== "bar" && series.map((_, i) => {
               const x = PX + (i * (W - PX * 2)) / (count - 1);
-              return <line key={i} x1={x} y1={0} x2={x} y2={H} stroke="#F0F4F8" strokeWidth="1" strokeDasharray="3 3" />;
+              return <line key={i} x1={x} y1={0} x2={x} y2={H} stroke="#F6F7F9" strokeWidth="0.949594" />;
             })}
+            {activeTab === "Movements" && (
+              <line x1={0} y1={114} x2={W} y2={114} stroke="#0A2540" strokeWidth="0.949594" strokeOpacity="0.2" />
+            )}
           </svg>
 
           {/* Hover zones */}
@@ -246,11 +675,11 @@ function MRRChart({
           </div>
 
           {/* SVG content */}
-          <svg ref={svgRef} className="pointer-events-none absolute inset-0 h-full w-full" viewBox={`0 0 ${W} ${H}`} preserveAspectRatio="none">
+          <svg ref={svgRef} className="overflow-visible pointer-events-none absolute inset-0 h-full w-full" viewBox={`0 0 ${W} ${H}`} preserveAspectRatio="none">
             <defs>
               <linearGradient id="area-fill" x1="0" x2="0" y1="0" y2="1">
-                <stop offset="0%" stopColor="#20C9C5" stopOpacity="0.22" />
-                <stop offset="100%" stopColor="#20C9C5" stopOpacity="0.01" />
+                <stop offset="0%" stopColor="#16CDC7" stopOpacity="0.04" />
+                <stop offset="100%" stopColor="#16CDC7" stopOpacity="0" />
               </linearGradient>
               <linearGradient id="bar-new" x1="0" x2="0" y1="0" y2="1">
                 <stop offset="0%" stopColor="#22D4D0" /><stop offset="100%" stopColor="#17A8A5" />
@@ -276,39 +705,89 @@ function MRRChart({
                   const isHov = hoveredIndex === i;
 
                   if (isMovements) {
-                    const mp = point as typeof movementSeries[0];
-                    const totalH = maxMov > 0 ? (mp.total / maxMov) * (H - PY * 2) : 0;
-                    const gradMap: Record<string, string> = { New: "url(#bar-new)", Expand: "url(#bar-expand)", Churn: "url(#bar-churn)" };
-                    let yOff = H - PY;
+                    const mp = point as any;
+                    const newVal = mp.New || 0;
+                    const expVal = mp.Expansion || 0;
+                    const reactVal = mp.Reactivation || 0;
+                    const contractVal = Math.abs(mp.Contracted || 0);
+                    const churnVal = Math.abs(mp.Churned || 0);
+                    const otherVal = Math.abs(mp.Other || 0);
+
+                    // Stack segments with their yStart and yEnd values
+                    const segmentsToDraw = [
+                      // Positive
+                      { label: "New", yStart: getY(reactVal + expVal), yEnd: getY(reactVal + expVal + newVal), color: "#34C759" },
+                      { label: "Expansion", yStart: getY(reactVal), yEnd: getY(reactVal + expVal), color: "#00C7BE" },
+                      { label: "Reactivation", yStart: getY(0), yEnd: getY(reactVal), color: "#32ADE6" },
+                      // Negative
+                      { label: "Contracted", yStart: getY(0), yEnd: getY(-contractVal), color: "#FFCC00" },
+                      { label: "Churned", yStart: getY(-contractVal), yEnd: getY(-contractVal - churnVal), color: "#FF6692" },
+                      { label: "Other", yStart: getY(-contractVal - churnVal), yEnd: getY(-contractVal - churnVal - otherVal), color: "#F3F3F3" },
+                    ];
+
                     return (
                       <g key={i} opacity={isHov ? 1 : 0.88} filter={isHov ? "url(#bar-shadow)" : undefined}>
-                        {mp.segments.map((seg) => {
-                          if (mp.total === 0 || seg.value === 0) return null;
-                          const segH = (seg.value / mp.total) * totalH;
-                          yOff -= segH;
+                        {segmentsToDraw.map((seg, idx) => {
+                          const yMin = Math.min(seg.yStart, seg.yEnd);
+                          const yMax = Math.max(seg.yStart, seg.yEnd);
+                          const height = Math.max(yMax - yMin, 0.5);
+                          if (height <= 1 && seg.yStart === seg.yEnd) return null; // skip if value is 0
+
+                          let rx = 0;
+                          if (seg.label === "New" && newVal > 0) rx = 4;
+                          if (seg.label === "Other" && otherVal > 0) rx = 4;
+
                           return (
                             <rect
                               key={seg.label}
                               x={bx}
-                              y={yOff}
+                              y={yMin}
                               width={barW}
-                              height={segH}
-                              fill={gradMap[seg.label] ?? seg.color}
-                              rx={seg.label === "New" ? 4 : 0}
+                              height={height}
+                              fill={seg.color}
+                              rx={rx}
                             />
                           );
                         })}
+
+                        {/* Hover circles for Movements tab stacked segments */}
+                        {isHov && (
+                          <g className="pointer-events-none">
+                            {[
+                              { y: getY(reactVal + expVal + newVal), color: "#34C759", draw: newVal > 0 },
+                              { y: getY(reactVal + expVal), color: "#00C7BE", draw: expVal > 0 },
+                              { y: getY(reactVal), color: "#32ADE6", draw: reactVal > 0 },
+                              { y: getY(0), color: "#FFCC00", draw: contractVal > 0 },
+                              { y: getY(-contractVal), color: "#FF6692", draw: churnVal > 0 },
+                              { y: getY(-contractVal - churnVal), color: "#F3F3F3", draw: otherVal > 0 },
+                            ].map((dot, dIdx) => {
+                              if (!dot.draw) return null;
+                              return (
+                                <circle
+                                  key={dIdx}
+                                  cx={cx}
+                                  cy={dot.y}
+                                  r={2.75}
+                                  fill={dot.color}
+                                  stroke="#FFFFFF"
+                                  strokeWidth="1.89919"
+                                />
+                              );
+                            })}
+                          </g>
+                        )}
                       </g>
                     );
                   } else {
                     const sp = point as ChartPoint;
                     const bh = Math.max((sp.value / maxVal) * (H - PY * 2), 8);
                     const by = H - PY - bh;
+                    const isMarch = i === 2;
                     return (
-                      <g key={i} opacity={isHov ? 1 : hoveredIndex !== null ? 0.6 : 0.9} filter={isHov ? "url(#bar-shadow)" : undefined}>
+                      <g key={i} opacity={isHov ? 1 : hoveredIndex !== null ? 0.65 : 0.9} filter={isHov ? "url(#bar-shadow)" : undefined}>
                         <rect
                           x={bx} y={by} width={barW} height={bh}
-                          fill={isHov ? "#20C9C5" : i === 2 ? "#20C9C5" : "#D8E5F2"}
+                          fill={isHov ? "#16CDC7" : isMarch ? "#16CDC7" : "#EFF4FA"}
                           rx={4}
                         />
                       </g>
@@ -319,21 +798,69 @@ function MRRChart({
             ) : (
               // Line chart
               <>
-                <path d={areaPath} fill="url(#area-fill)" />
-                <path d={linePath} fill="none" stroke="#20C9C5" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round" />
-                {pts.map((p, i) => (
-                  <circle
-                    key={i}
-                    cx={p.x} cy={p.y} r={hoveredIndex === i ? 5 : 3}
-                    fill={hoveredIndex === i ? "#20C9C5" : "#fff"}
-                    stroke="#20C9C5"
-                    strokeWidth="2"
-                    opacity={hoveredIndex === null ? 0 : hoveredIndex === i ? 1 : 0}
-                    style={{ transition: "r 0.15s, opacity 0.15s" }}
-                  />
-                ))}
-                {hPt && (
-                  <line x1={hPt.x} y1={PY} x2={hPt.x} y2={H - PY} stroke="#20C9C5" strokeWidth="1" strokeDasharray="4 3" opacity="0.5" />
+                {activeTab === "Breakdown" ? (
+                  <>
+                    {breakdownSeries.map((s) => {
+                      const seriesPts = s.points.map((val, i) => ({
+                        x: PX + (i * (W - PX * 2)) / (s.points.length - 1),
+                        y: H - PY - (val / 100000) * (H - PY * 2),
+                      }));
+                      const pathD = buildPath(seriesPts);
+                      return (
+                        <g key={s.label}>
+                          <path
+                            d={pathD}
+                            fill="none"
+                            stroke={s.color}
+                            strokeWidth="1.89919"
+                            strokeLinecap="round"
+                            strokeLinejoin="round"
+                          />
+                          {hoveredIndex !== null && seriesPts[hoveredIndex] && (
+                            <circle
+                              cx={seriesPts[hoveredIndex].x}
+                              cy={seriesPts[hoveredIndex].y}
+                              r={2.75}
+                              fill={s.color}
+                              stroke="#FFFFFF"
+                              strokeWidth="1.89919"
+                            />
+                          )}
+                        </g>
+                      );
+                    })}
+                    {hoveredIndex !== null && (
+                      <line
+                        x1={tipX}
+                        y1={PY}
+                        x2={tipX}
+                        y2={H - PY}
+                        stroke="#98A4AE"
+                        strokeWidth="1"
+                        strokeDasharray="4 3"
+                        opacity="0.5"
+                      />
+                    )}
+                  </>
+                ) : (
+                  <>
+                    <path d={areaPath} fill="url(#area-fill)" />
+                    <path d={linePath} fill="none" stroke="#16CDC7" strokeWidth="1.89919" strokeLinecap="round" strokeLinejoin="round" />
+                    {pts.map((p, i) => (
+                      <circle
+                        key={i}
+                        cx={p.x} cy={p.y} r={2.75}
+                        fill="#16CDC7"
+                        stroke="#FFFFFF"
+                        strokeWidth="1.89919"
+                        opacity={hoveredIndex === i ? 1 : 0}
+                        style={{ transition: "opacity 0.15s" }}
+                      />
+                    ))}
+                    {hPt && (
+                      <line x1={hPt.x} y1={PY} x2={hPt.x} y2={H - PY} stroke="#16CDC7" strokeWidth="1" strokeDasharray="4 3" opacity="0.5" />
+                    )}
+                  </>
                 )}
               </>
             )}
@@ -342,59 +869,111 @@ function MRRChart({
           {/* Tooltip */}
           {hovered && (
             <div
-              className="pointer-events-none absolute z-30 min-w-[120px] rounded-[10px] bg-white px-3 py-2.5 shadow-[0_8px_24px_-4px_rgba(17,31,56,0.18)] ring-1 ring-black/5"
+              className={`pointer-events-none absolute z-30 flex flex-col items-start p-0 ${
+                activeTab === "Breakdown" ? "w-[190px]" : "w-[103.58px]"
+              } h-auto min-h-[54.79px] bg-[#FFFFFF] shadow-[0px_3.79837px_45.5805px_-11.3951px_rgba(10,37,64,0.14)] rounded-[7.59675px]`}
               style={{
                 left: Math.min(Math.max((tipX / W) * 100, 10), 72) + "%",
-                top: Math.max((tipY / H) * 100 - 20, 4) + "%",
+                top: Math.max((tipY / H) * 100 - (isMovements ? 35 : (activeTab === "Breakdown" ? 30 : 20)), 4) + "%",
                 transform: "translateX(-50%)",
               }}
             >
-              <p className="mb-1.5 text-[10px] font-semibold text-[#98A4AE]">
-                {(isMovements ? movementSeries[hoveredIndex!]?.month : series[hoveredIndex!]?.month)} 2025
-              </p>
-              {isMovements ? (
-                <>
-                  {hMov?.segments.map((seg) => (
-                    <div key={seg.label} className="flex items-center justify-between gap-3 py-[2px]">
-                      <div className="flex items-center gap-1.5">
-                        <span className="h-2 w-2 rounded-full" style={{ backgroundColor: seg.color }} />
-                        <span className="text-[11px] text-[#253143]">{seg.label}</span>
-                      </div>
-                      <span className="text-[11px] font-semibold text-[#253143]">{seg.value}</span>
-                    </div>
-                  ))}
-                  <div className="mt-1.5 flex items-center justify-between gap-3 border-t border-[#F0F4F8] pt-1.5">
-                    <span className="text-[11px] font-semibold text-[#253143]">Total</span>
-                    <span className="text-[11px] font-semibold text-[#635BFF]">{hMov?.total}</span>
-                  </div>
-                </>
-              ) : (
-                <div className="flex items-center gap-2">
-                  <span className="h-2 w-2 rounded-full bg-[#20C9C5]" />
-                  <span className="text-[11px] text-[#253143]">{activeTab}</span>
-                  <span className="text-[11px] font-semibold text-[#253143]">{formatVal(series[hoveredIndex!]?.value ?? 0)}</span>
+              <div className={`flex flex-col items-start p-0 ${
+                activeTab === "Breakdown" ? "w-[190px]" : "w-[103.58px]"
+              } h-auto min-h-[54.79px]`}>
+                {/* row 2 */}
+                <div className={`flex flex-row items-center pt-[3.79837px] px-[11.3951px] pb-[7.59675px] gap-[7.6px] ${
+                  activeTab === "Breakdown" ? "w-full" : "w-[96.79px]"
+                } h-[27.4px] flex-none order-0 grow-0`}>
+                  <span className="w-full h-[16px] font-manrope font-semibold text-[12px] leading-[16px] text-[#29343D] flex-none order-0 grow-0">
+                    {(isMovements ? movementSeries[hoveredIndex!]?.month : series[hoveredIndex!]?.month)} 03, 2025
+                  </span>
                 </div>
-              )}
+
+                {/* row 3 */}
+                {activeTab === "Breakdown" ? (
+                  <div className="flex flex-col gap-1.5 pt-[3.79837px] px-[11.3951px] pb-[7.59675px] w-full">
+                    {rankedBreakdownPlans.map((plan) => (
+                      <div key={plan.label} className="flex items-center justify-between gap-[7.6px] w-full">
+                        <div className="flex items-center gap-[7.6px]">
+                          <span className="w-[7.6px] h-[7.6px] rounded-[7.59675px] shrink-0" style={{ backgroundColor: plan.color }} />
+                          <span className="font-manrope font-semibold text-[11px] leading-[14px] text-[#29343D]">{plan.label}</span>
+                        </div>
+                        <span className="font-manrope font-semibold text-[11px] leading-[14px] text-[#98A4AE]">
+                          € {plan.value.toLocaleString()}
+                        </span>
+                      </div>
+                    ))}
+                  </div>
+                ) : isMovements ? (
+                  <div className="flex flex-col gap-1.5 pt-[3.79837px] px-[11.3951px] pb-[7.59675px] w-full">
+                    {hMov?.segments.map((seg) => (
+                      <div key={seg.label} className="flex items-center justify-between gap-[7.6px] w-full">
+                        <div className="flex items-center gap-[7.6px]">
+                          <span className="w-[7.6px] h-[7.6px] rounded-[7.59675px] shrink-0" style={{ backgroundColor: seg.color }} />
+                          <span className="font-manrope font-semibold text-[11px] leading-[14px] text-[#29343D]">{seg.label}</span>
+                        </div>
+                        <span className="font-manrope font-semibold text-[11px] leading-[14px] text-[#98A4AE]">{seg.value}</span>
+                      </div>
+                    ))}
+                  </div>
+                ) : (
+                  <div className="flex flex-row items-center pt-[3.79837px] px-[11.3951px] pb-[7.59675px] gap-[7.6px] w-[103.58px] h-[27.4px] self-stretch flex-none order-1 grow-0">
+                    <span className="w-[7.6px] h-[7.6px] bg-[#16CDC7] rounded-[7.59675px] flex-none order-0 grow-0" />
+                    <span className="w-[26px] h-[16px] font-manrope font-semibold text-[12px] leading-[16px] text-[#29343D] flex-none order-1 grow-0">
+                      {activeTab}
+                    </span>
+                    <span className="w-[32px] h-[16px] font-manrope font-semibold text-[12px] leading-[16px] text-[#98A4AE] flex-none order-2 grow-0">
+                      {formatVal(series[hoveredIndex!]?.value ?? 0)}
+                    </span>
+                  </div>
+                )}
+              </div>
             </div>
           )}
 
           {/* X-axis labels */}
-          <div className="absolute left-[36px] top-[239px] flex h-[15px] w-[calc(100%-36px)] items-start">
-            {series.map((p, i) => (
-              <div key={i} className="basis-0 flex-1 min-w-0 text-center">
-                <span className={`text-[10px] font-medium ${hoveredIndex === i ? "text-[#20C9C5]" : "text-[#C1CBD6]"}`}>{p.month}</span>
-              </div>
-            ))}
+          <div
+            className="absolute h-[15.35px] right-0 left-0"
+            style={{
+              top: chartMode === "bar" ? "279.45px" : "239px",
+            }}
+          >
+            {series.map((p, i) => {
+              const x = PX + (i * (W - PX * 2)) / Math.max(count - 1, 1);
+              return (
+                <span
+                  key={i}
+                  className={`absolute font-manrope font-normal text-center transition-colors ${
+                    chartMode === "bar" ? "text-[12px] leading-[16px] h-[15.1px]" : "text-[11.3951px] leading-[15px] h-[15.35px]"
+                  } ${hoveredIndex === i ? "text-[#16CDC7]" : "text-[#98A4AE]"}`}
+                  style={{
+                    left: `${(x / W) * 100}%`,
+                    transform: "translateX(-50%)",
+                    width: "80px",
+                  }}
+                >
+                  {p.month}
+                </span>
+              );
+            })}
           </div>
         </div>
       </div>
 
       {/* Legend for Movements */}
       {isMovements && (
-        <div className="mt-3 flex items-center gap-5 pl-9">
-          {[{ label: "New", color: "#20C9C5" }, { label: "Expand", color: "#635BFF" }, { label: "Churn", color: "#FF6692" }].map((l) => (
+        <div className="mt-3 flex flex-wrap items-center gap-5 pl-9">
+          {[
+            { label: "New", color: "#34C759" },
+            { label: "Expansion", color: "#00C7BE" },
+            { label: "Reactivation", color: "#32ADE6" },
+            { label: "Contracted", color: "#FFCC00" },
+            { label: "Churned", color: "#FF6692" },
+            { label: "Other", color: "#F3F3F3" },
+          ].map((l) => (
             <div key={l.label} className="flex items-center gap-1.5">
-              <span className="h-2.5 w-2.5 rounded-sm" style={{ backgroundColor: l.color }} />
+              <span className="h-2.5 w-2.5 rounded-sm border border-[#E0E6EB]" style={{ backgroundColor: l.color }} />
               <span className="text-[11px] font-medium text-[#7A8897]">{l.label}</span>
             </div>
           ))}
@@ -405,23 +984,71 @@ function MRRChart({
 }
 
 // ---- Page ----
-export default function AnalyticsPage() {
+export default function AnalyticsPage({ setActiveTab }: { setActiveTab?: (tab: string) => void } = {}) {
   const [planType, setPlanType] = useState<PlanType>("All");
   const [salon, setSalon] = useState(salonOptions[0]);
   const [city, setCity] = useState(cityOptions[0]);
   const [chartMode, setChartMode] = useState<ChartMode>("line");
-  const [activeTab, setActiveTab] = useState<ChartTab>("MRR");
+  const [activeTab, setActiveTabTab] = useState<ChartTab>("MRR");
   const [timeRange, setTimeRange] = useState<TimeRange>("Monthly");
   const [timeRangeOpen, setTimeRangeOpen] = useState(false);
   const [filterOpen, setFilterOpen] = useState(false);
   const [filterStage, setFilterStage] = useState<FilterStage>("root");
   const [selectedPlanFilter, setSelectedPlanFilter] = useState<string | null>(null);
+  const [exportModalOpen, setExportModalOpen] = useState(false);
+
+  const currentTableMonths = useMemo(() => {
+    if (timeRange === "Monthly") {
+      return [
+        { label: "Jan 2025", key: "jan" },
+        { label: "Feb 2025", key: "feb" },
+        { label: "Mar 2025", key: "mar" },
+      ] as const;
+    }
+    return [
+      { label: "2023", key: "jan" },
+      { label: "2024", key: "feb" },
+      { label: "2025", key: "mar" },
+    ] as const;
+  }, [timeRange]);
+
+  const currentTableRows = useMemo(() => {
+    if (timeRange === "Monthly") {
+      return [
+        { label: "New", amount: "€ 19,866", count: "79", change: "-" },
+        { label: "Expanded", amount: "€ 19,866", count: "79", change: "-" },
+        { label: "Reactivated", amount: "€ 19,866", count: "79", change: "-" },
+        { label: "Contracted", amount: "€ 19,866", count: "79", change: "-" },
+        { label: "Churned", amount: "€ 19,866", count: "79", change: "-" },
+        { label: "MRR Change", amount: "(€ 19,866)", count: "79", change: "-" },
+        { label: "FX Impact", amount: "(€ 19,866)", count: "79", change: "-" },
+        { label: "Total MRR", amount: "€ 7,474", count: "-", change: "-" },
+        { label: "Growth Rate", amount: "-", count: "-", change: "5.25%" },
+      ];
+    }
+    return [
+      { label: "New", amount: "€ 240,000", count: "950", change: "-" },
+      { label: "Expanded", amount: "€ 150,000", count: "580", change: "-" },
+      { label: "Reactivated", amount: "€ 110,000", count: "340", change: "-" },
+      { label: "Contracted", amount: "€ 40,000", count: "120", change: "-" },
+      { label: "Churned", amount: "€ 190,000", count: "610", change: "-" },
+      { label: "MRR Change", amount: "(€ 270,000)", count: "1,140", change: "-" },
+      { label: "FX Impact", amount: "(€ 270,000)", count: "1,140", change: "-" },
+      { label: "Total MRR", amount: "€ 89,474", count: "-", change: "-" },
+      { label: "Growth Rate", amount: "-", count: "-", change: "26.5%" },
+    ];
+  }, [timeRange]);
 
   const isMovements = activeTab === "Movements";
 
   const handleTabChange = useCallback((tab: ChartTab) => {
-    setActiveTab(tab);
-    if (tab === "Movements") setChartMode("bar");
+    setActiveTabTab(tab);
+    if (tab === "Movements") {
+      setChartMode("bar");
+    } else if (tab === "Breakdown") {
+      setChartMode("line");
+      setTimeRange("2023-2025");
+    }
   }, []);
 
   const toggleChartMode = useCallback(() => {
@@ -438,60 +1065,32 @@ export default function AnalyticsPage() {
     <div className="w-full min-w-0">
       <div className="flex w-full flex-col gap-6 rounded-[20px] bg-[#F4F7FB] p-6">
 
-        {/* Top filters */}
-        <section className="flex w-full flex-col gap-6 rounded-[12px] bg-white p-6 shadow-[0px_2px_4px_-1px_rgba(175,182,201,0.2)]">
-          <div className="flex flex-col gap-4 lg:flex-row lg:items-start lg:justify-between">
-            <div className="flex flex-col gap-5">
-              <h1 className="text-[16px] font-semibold leading-[22px] text-[#29343D]">Analytics Overview</h1>
-              <div className="grid w-full grid-cols-1 gap-4 md:grid-cols-3">
-                <div className="flex flex-col gap-2">
-                  <span className="text-[12px] font-semibold leading-4 text-[#98A4AE]">Plan Type</span>
-                  <div className="flex flex-wrap gap-2">
-                    {planTypeOptions.map((opt) => (
-                      <button
-                        key={opt}
-                        type="button"
-                        onClick={() => setPlanType(opt)}
-                        className={`h-9 rounded-[8px] border px-4 text-[12px] font-medium transition-colors ${
-                          planType === opt
-                            ? "border-[#635BFF] bg-white text-[#29343D] shadow-[0_0_0_1px_rgba(99,91,255,0.18)]"
-                            : "border-[#EFF4FA] bg-white text-[#29343D] hover:bg-[#F7F9FC]"
-                        }`}
-                      >
-                        {opt}
-                      </button>
-                    ))}
-                  </div>
-                </div>
-                <label className="flex flex-col gap-2">
-                  <span className="text-[12px] font-semibold leading-4 text-[#98A4AE]">Salon</span>
-                  <div className="relative">
-                    <select value={salon} onChange={(e) => setSalon(e.target.value)} className="h-9 w-full appearance-none rounded-[8px] border border-[#EFF4FA] bg-white px-4 pr-10 text-[12px] font-medium text-[#29343D] outline-none">
-                      {salonOptions.map((o) => <option key={o}>{o}</option>)}
-                    </select>
-                    <span className="pointer-events-none absolute inset-y-0 right-3 flex items-center text-[#29343D]"><ChevronDownIcon /></span>
-                  </div>
-                </label>
-                <label className="flex flex-col gap-2">
-                  <span className="text-[12px] font-semibold leading-4 text-[#98A4AE]">City</span>
-                  <div className="relative">
-                    <select value={city} onChange={(e) => setCity(e.target.value)} className="h-9 w-full appearance-none rounded-[8px] border border-[#EFF4FA] bg-white px-4 pr-10 text-[12px] font-medium text-[#29343D] outline-none">
-                      {cityOptions.map((o) => <option key={o}>{o}</option>)}
-                    </select>
-                    <span className="pointer-events-none absolute inset-y-0 right-3 flex items-center text-[#29343D]"><ChevronDownIcon /></span>
-                  </div>
-                </label>
-              </div>
-            </div>
-            <div className="flex flex-wrap items-center gap-3">
-              <button type="button" onClick={() => { setPlanType("All"); setSalon(salonOptions[0]); setCity(cityOptions[0]); }} className="inline-flex h-11 items-center gap-2 rounded-[8px] bg-[#EFF4FA] px-4 text-[14px] font-medium text-[#0A2540] hover:bg-[#E8EEF7]">
-                <RefreshIcon /> Refresh Data
-              </button>
-              <button type="button" className="inline-flex h-11 items-center gap-2 rounded-[8px] bg-[#635BFF] px-4 text-[14px] font-medium text-white shadow-[0_8px_18px_rgba(94,83,252,0.22)] hover:bg-[#4d42eb]">
-                <DownloadIcon /> Export Data
-              </button>
-            </div>
-          </div>
+        {/* Top Header Bar */}
+        <section className="flex w-full items-center justify-between rounded-[12px] bg-white px-6 py-4 shadow-[0px_2px_4px_-1px_rgba(175,182,201,0.2)]">
+          <button
+            type="button"
+            onClick={() => setActiveTab && setActiveTab("dashboard")}
+            className="flex items-center text-[#29343D] hover:opacity-80 transition-opacity"
+          >
+            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round" className="mr-2">
+              <path d="m15 18-6-6 6-6" />
+            </svg>
+            <span className="text-[18px] font-bold tracking-tight text-[#29343D]">
+              Analytics
+            </span>
+          </button>
+
+          <button
+            type="button"
+            onClick={() => {
+              setPlanType("All");
+              setSalon(salonOptions[0]);
+              setCity(cityOptions[0]);
+            }}
+            className="inline-flex h-10 items-center gap-2 rounded-[8px] bg-[#635BFF] hover:bg-[#4d42eb] px-4 text-[14px] font-semibold text-white shadow-[0_8px_18px_rgba(94,83,252,0.22)] transition-all duration-150"
+          >
+            <RefreshIcon /> Resync
+          </button>
         </section>
 
         {/* Chart section */}
@@ -500,7 +1099,7 @@ export default function AnalyticsPage() {
             <div className="flex flex-col gap-3">
               <div className="flex flex-wrap items-center gap-3">
                 <h2 className="text-[16px] font-semibold leading-[22px] text-[#29343D]">
-                  MRR Growth – {timeRange === "Yearly" ? "Yearly" : "Monthly"} Recurring Revenue
+                  MRR Growth – {timeRange === "2023-2025" ? "2023-2025" : (timeRange === "Yearly" ? "Yearly" : "Monthly")} Recurring Revenue
                 </h2>
                 {selectedPlanFilter && (
                   <span className="inline-flex h-7 items-center gap-2 rounded-full bg-[#635BFF]/10 px-3 text-[11px] font-medium text-[#635BFF]">
@@ -550,7 +1149,7 @@ export default function AnalyticsPage() {
               </div>
 
               {/* Chart mode toggle */}
-              {!isMovements && (
+              {activeTab === "MRR" && (
                 <div className="flex rounded-[8px] border border-[#EFF4FA] bg-white p-0.5">
                   <button
                     type="button"
@@ -571,7 +1170,11 @@ export default function AnalyticsPage() {
                 </div>
               )}
 
-              <button type="button" className="inline-flex h-9 items-center rounded-[8px] border border-[#635BFF] bg-white px-4 text-[12px] font-medium text-[#635BFF] hover:bg-[#F1F2FE]">
+              <button
+                type="button"
+                onClick={() => setExportModalOpen(true)}
+                className="inline-flex h-9 items-center rounded-[8px] border border-[#635BFF] bg-white px-4 text-[12px] font-medium text-[#635BFF] hover:bg-[#F1F2FE]"
+              >
                 Export Data
               </button>
             </div>
@@ -579,11 +1182,39 @@ export default function AnalyticsPage() {
 
           {/* The chart */}
           <div className="pb-4">
-            <MRRChart activeTab={activeTab} chartMode={chartMode} planType={planType} />
+            <MRRChart activeTab={activeTab} chartMode={chartMode} planType={planType} timeRange={timeRange} />
           </div>
 
           {/* Stat cards */}
-          {isMovements ? (
+          {activeTab === "Breakdown" ? (
+            <div className="mt-4 grid grid-cols-1 gap-4 sm:grid-cols-2 xl:grid-cols-5">
+              <StatCard title="Top plan over range" value="Premium" note={null} />
+              <StatCard title="Bottom plan over range" value="Enterprise" note={null} />
+              <StatCard
+                title="Best performing plan year"
+                value="2024"
+                note={
+                  <span>
+                    € 865,259 <span className="text-[#36C76C]">36%</span>
+                  </span>
+                }
+              />
+              <StatCard
+                title="Worst performing plan year"
+                value="2023"
+                note={
+                  <span>
+                    € 365,259 <span className="text-[#FF6692]">(0.53%)</span>
+                  </span>
+                }
+              />
+              <StatCard
+                title="Total change in all plans over range"
+                value="€ 407,060"
+                note={<span className="text-[#36C76C]">26%</span>}
+              />
+            </div>
+          ) : isMovements ? (
             <div className="mt-4 grid grid-cols-1 gap-4 sm:grid-cols-2 xl:grid-cols-5">
               <StatCard title="Top plan by MRR" value="Basic" note="200 20%" noteClass="text-[#36C76C]" />
               <StatCard title="Bottom plan by MRR" value="Enterprise" note="100 (6%)" noteClass="text-[#FF6692]" />
@@ -650,13 +1281,13 @@ export default function AnalyticsPage() {
               <thead>
                 <tr className="bg-[#F5F4FF]">
                   <th className="w-[140px] border-b border-r border-[#E0E6EB] px-5 py-4 text-[14px] font-semibold text-[#29343D]"></th>
-                  {tableMonths.map((m) => (
+                  {currentTableMonths.map((m) => (
                     <th key={m.key} colSpan={3} className="border-b border-r border-[#E0E6EB] px-5 py-4 text-center text-[16px] font-semibold text-[#29343D]">{m.label}</th>
                   ))}
                 </tr>
                 <tr className="bg-[#F5F4FF]">
                   <th className="border-b border-r border-[#E0E6EB] px-5 py-4 text-[14px] font-semibold text-[#29343D]"></th>
-                  {tableMonths.flatMap((m) => [
+                  {currentTableMonths.flatMap((m) => [
                     <th key={`${m.key}-a`} className="border-b border-r border-[#E0E6EB] px-5 py-3 text-center text-[12px] font-medium text-[#29343D]">Amount</th>,
                     <th key={`${m.key}-c`} className="border-b border-r border-[#E0E6EB] px-5 py-3 text-center text-[12px] font-medium text-[#29343D]">Count</th>,
                     <th key={`${m.key}-ch`} className="border-b border-r border-[#E0E6EB] px-5 py-3 text-center text-[12px] font-medium text-[#29343D]">Change</th>,
@@ -664,10 +1295,10 @@ export default function AnalyticsPage() {
                 </tr>
               </thead>
               <tbody>
-                {tableRows.map((row) => (
+                {currentTableRows.map((row) => (
                   <tr key={row.label} className="odd:bg-white even:bg-[#FAFAFA]">
                     <td className="border-b border-r border-[#E0E6EB] px-5 py-4 text-[12px] font-semibold text-[#29343D]">{row.label}</td>
-                    {tableMonths.flatMap((m) => [
+                    {currentTableMonths.flatMap((m) => [
                       <td key={`${row.label}-${m.key}-a`} className={`border-b border-r border-[#E0E6EB] px-5 py-4 text-center text-[12px] ${row.label === "Total MRR" || row.label === "Growth Rate" ? "font-semibold text-[#36C76C]" : "text-[#29343D]"}`}>{row.amount}</td>,
                       <td key={`${row.label}-${m.key}-c`} className={`border-b border-r border-[#E0E6EB] px-5 py-4 text-center text-[12px] ${row.label === "Total MRR" || row.label === "Growth Rate" ? "font-semibold text-[#36C76C]" : "text-[#29343D]"}`}>{row.count}</td>,
                       <td key={`${row.label}-${m.key}-ch`} className={`border-b border-r border-[#E0E6EB] px-5 py-4 text-center text-[12px] ${row.label === "Growth Rate" ? "font-semibold text-[#36C76C]" : "text-[#29343D]"}`}>{row.change}</td>,
@@ -678,6 +1309,165 @@ export default function AnalyticsPage() {
             </table>
           </div>
         </section>
+
+        {/* Table 2: Recent Movements Logs (Only for Movements and Breakdown tabs) */}
+        {(activeTab === "Movements" || activeTab === "Breakdown") && (
+          <section className="overflow-hidden rounded-[12px] bg-white p-6 shadow-[0px_2px_4px_-1px_rgba(175,182,201,0.2)]">
+            <div className="overflow-x-auto rounded-[12px] border border-[#E0E6EB]">
+              <table className="min-w-[980px] w-full border-collapse text-left">
+                <thead>
+                  <tr className="bg-[#F5F4FF]">
+                    <th className="border-b border-r border-[#E0E6EB] px-5 py-4 text-[12px] font-semibold text-[#29343D]">Date</th>
+                    <th className="border-b border-r border-[#E0E6EB] px-5 py-4 text-[12px] font-semibold text-[#29343D]">Customer</th>
+                    <th className="border-b border-r border-[#E0E6EB] px-5 py-4 text-[12px] font-semibold text-[#29343D]">Description</th>
+                    <th className="border-b border-r border-[#E0E6EB] px-5 py-4 text-[12px] font-semibold text-[#29343D]">Type</th>
+                    <th className="border-b border-[#E0E6EB] px-5 py-4 text-[12px] font-semibold text-[#29343D]">MRR change</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  {movementTransactions.map((row, idx) => (
+                    <tr key={idx} className="odd:bg-white even:bg-[#FAFAFA]">
+                      <td className="border-b border-r border-[#E0E6EB] px-5 py-4 text-[12px] text-[#29343D]">{row.date}</td>
+                      <td className="border-b border-r border-[#E0E6EB] px-5 py-4 text-[12px] text-[#29343D]">{row.customer}</td>
+                      <td className="border-b border-r border-[#E0E6EB] px-5 py-4 text-[12px] text-[#29343D]">{row.description}</td>
+                      <td className="border-b border-r border-[#E0E6EB] px-5 py-4 text-[12px] text-[#29343D]">{row.type}</td>
+                      <td className="border-b border-[#E0E6EB] px-5 py-4 text-[12px] text-[#29343D]">{row.change}</td>
+                    </tr>
+                  ))}
+                </tbody>
+              </table>
+            </div>
+          </section>
+        )}
+
+        {/* Export Modal overlay */}
+        {exportModalOpen && (
+          <div className="fixed inset-0 z-50 flex items-center justify-center bg-slate-900/40 backdrop-blur-sm px-4">
+            <div className="relative w-[638px] h-[826px] bg-white rounded-[12px] shadow-[0px_16px_32px_-8px_rgba(12, 12, 13, 0.4)] flex flex-col p-6 gap-6 box-sizing-border-box">
+              {/* Title row */}
+              <div className="flex flex-row items-center justify-between w-full h-[54px] flex-none self-stretch">
+                <div className="flex flex-col items-start gap-1 flex-grow">
+                  <span className="w-[110px] h-[25px] font-manrope font-semibold text-[18px] leading-[25px] text-[#29343D] flex items-center">
+                    Current MRR
+                  </span>
+                  <span className="w-[294px] h-[19px] font-manrope font-semibold text-[14px] leading-[19px] text-[#29343D] flex items-center">
+                    Current MRR breakdown and growth metrics
+                  </span>
+                </div>
+                <button
+                  type="button"
+                  onClick={() => setExportModalOpen(false)}
+                  className="w-6 h-6 flex items-center justify-center rounded-full text-[#29343D] hover:bg-[#EFF4FA] transition-colors"
+                >
+                  <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round">
+                    <line x1="18" y1="6" x2="6" y2="18"></line>
+                    <line x1="6" y1="6" x2="18" y2="18"></line>
+                  </svg>
+                </button>
+              </div>
+
+              {/* 2x2 Cards Grid */}
+              <div className="grid grid-cols-2 gap-6 w-full flex-grow">
+                {[
+                  {
+                    label: "New",
+                    centerText: "€ 98,260",
+                    value: "45",
+                    note: "2.5%",
+                    noteClass: "text-[#36C76C]",
+                  },
+                  {
+                    label: "Reactivation",
+                    centerText: "€ 40,000",
+                    value: "5",
+                    note: "5.5%",
+                    noteClass: "text-[#36C76C]",
+                  },
+                  {
+                    label: "Renewals",
+                    centerText: "€ 80,000",
+                    value: "45",
+                    note: "5%",
+                    noteClass: "text-[#36C76C]",
+                  },
+                  {
+                    label: "Churn",
+                    centerText: "€ 60,260",
+                    value: "5%",
+                    note: "(2.5%)",
+                    noteClass: "text-[#FF6692]",
+                  },
+                ].map((card) => (
+                  <div
+                    key={card.label}
+                    className="flex flex-col items-start p-[30px] gap-[34px] w-[283px] h-[338px] bg-white border border-[#E0E6EB] shadow-[0px_2px_4px_-1px_rgba(175,182,201,0.2)] rounded-[12px] flex-none"
+                  >
+                    {/* Gauge SVG */}
+                    <div className="w-[223px] h-[198px] flex-none self-stretch flex items-center justify-center">
+                      <svg className="w-[223px] h-[198px] overflow-visible" viewBox="0 0 200 200">
+                        <circle
+                          cx="100"
+                          cy="100"
+                          r="70"
+                          fill="none"
+                          stroke="#EFF4FA"
+                          strokeWidth="12"
+                          strokeLinecap="round"
+                          strokeDasharray="330 440"
+                          transform="rotate(135 100 100)"
+                        />
+                        <circle
+                          cx="100"
+                          cy="100"
+                          r="70"
+                          fill="none"
+                          stroke="#16CDC7"
+                          strokeWidth="12"
+                          strokeLinecap="round"
+                          strokeDasharray="165 440"
+                          transform="rotate(135 100 100)"
+                        />
+                        <circle
+                          cx="100"
+                          cy="100"
+                          r="70"
+                          fill="none"
+                          stroke="#635BFF"
+                          strokeWidth="12"
+                          strokeLinecap="round"
+                          strokeDasharray="165 440"
+                          transform="rotate(270 100 100)"
+                        />
+                        <text
+                          x="100"
+                          y="108"
+                          textAnchor="middle"
+                          className="font-manrope font-semibold text-[20px] fill-[#29343D]"
+                        >
+                          {card.centerText}
+                        </text>
+                      </svg>
+                    </div>
+                    {/* Stats Row */}
+                    <div className="flex flex-row items-end justify-between p-0 gap-[30px] w-[223px] h-[46px] flex-none">
+                      <div className="flex flex-col items-start p-0 w-[149px] h-[46px] flex-grow">
+                        <span className="w-[94px] h-[20px] font-manrope font-normal text-[14px] leading-[20px] text-[#98A4AE] flex items-center">
+                          {card.label}
+                        </span>
+                        <span className="w-auto h-[26px] font-manrope font-semibold text-[22px] leading-[120%] text-[#29343D] flex items-center">
+                          {card.value}
+                        </span>
+                      </div>
+                      <span className={`w-[44px] h-[20px] font-manrope font-normal text-[14px] leading-[20px] flex items-center justify-end text-right ${card.noteClass}`}>
+                        {card.note}
+                      </span>
+                    </div>
+                  </div>
+                ))}
+              </div>
+            </div>
+          </div>
+        )}
 
       </div>
     </div>

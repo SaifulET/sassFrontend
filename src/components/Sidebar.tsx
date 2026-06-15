@@ -25,6 +25,12 @@ const WaiversIcon = ({ color }: { color?: string }) => (
   </svg>
 );
 
+const ChevronDownIcon = () => (
+  <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round">
+    <path d="m6 9 6 6 6-6" />
+  </svg>
+);
+
 interface SidebarProps {
   activeTab: string;
   setActiveTab: (tab: string) => void;
@@ -46,6 +52,10 @@ export default function Sidebar({
   isOpen,
   setIsOpen
 }: SidebarProps) {
+  const [analyticsExpanded, setAnalyticsExpanded] = React.useState(true);
+  const [revenueExpanded, setRevenueExpanded] = React.useState(true);
+  const [customersExpanded, setCustomersExpanded] = React.useState(false);
+  const [performanceExpanded, setPerformanceExpanded] = React.useState(false);
 
   // Main menu item mappings (added Waivers)
   const mainNavigation = [
@@ -81,13 +91,19 @@ export default function Sidebar({
   };
 
   const renderNarrowIcon = (item: any) => {
-    const isTabActive = activeTab === item.id;
+    const isTabActive = activeTab === item.id || (item.id === "analytics" && activeTab.startsWith("analytics_"));
     const isHighlighted = item.id === "salons" ? (activeTab === "salons" || selectedSalonId !== null) : isTabActive;
 
     return (
       <button
         key={item.id}
-        onClick={() => handleMainItemClick(item.id)}
+        onClick={() => {
+          if (item.id === "analytics") {
+            handleMainItemClick("analytics_revenue_mrr_arr");
+          } else {
+            handleMainItemClick(item.id);
+          }
+        }}
         className={`w-12 h-12 rounded-2xl flex items-center justify-center transition-all duration-200 relative group ${
           isHighlighted
             ? "bg-[#5e53fc] text-white shadow-md shadow-indigo-150 scale-105"
@@ -189,9 +205,187 @@ export default function Sidebar({
               </span>
               {mainNavigation.map((item) => {
                 const isActive = activeTab === item.id;
+                if (item.id === "analytics") {
+                  const isAnalyticsActive = activeTab.startsWith("analytics_") || activeTab === "analytics";
+                  return (
+                    <div key={item.id} className="flex flex-col gap-1 w-full">
+                      <button
+                        type="button"
+                        onClick={() => setAnalyticsExpanded(!analyticsExpanded)}
+                        className={`w-full flex items-center justify-between px-4 py-3 rounded-2xl transition-all duration-200 ${
+                          isAnalyticsActive
+                            ? "bg-[#F5F8FC]/60 text-[#635BFF]"
+                            : "text-[#7e8b9b] hover:bg-slate-50 hover:text-slate-900"
+                        }`}
+                      >
+                        <div className="flex items-center gap-3">
+                          {typeof item.icon === "function" ? (
+                            <item.icon color={isAnalyticsActive ? "#635BFF" : "currentColor"} />
+                          ) : (
+                            <HugeiconsIcon
+                              icon={item.icon}
+                              size={20}
+                              color={isAnalyticsActive ? "#635BFF" : "currentColor"}
+                            />
+                          )}
+                          <span className="text-xs font-semibold tracking-wide">{item.label}</span>
+                        </div>
+                        <span className={`text-[#b0bac9] transition-transform duration-200 ${analyticsExpanded ? "rotate-180" : ""}`}>
+                          <ChevronDownIcon />
+                        </span>
+                      </button>
+
+                      {analyticsExpanded && (
+                        <div className="mx-1.5 p-3.5 bg-[#F4F7FB] border border-[#E8EEF5] rounded-[16px] flex flex-col gap-3.5">
+                          {/* Revenue Submenu */}
+                          <div className="flex flex-col gap-2">
+                            <button
+                              type="button"
+                              onClick={() => setRevenueExpanded(!revenueExpanded)}
+                              className="w-full flex items-center justify-between py-1.5 px-2 rounded-xl text-[#29343D] hover:bg-[#EFF4FA] transition-colors"
+                            >
+                              <div className="flex items-center gap-2">
+                                <span className="text-[14px] leading-none select-none font-bold text-[#29343D]">
+                                  €
+                                </span>
+                                <span className="text-xs font-bold text-[#29343D]">Revenue</span>
+                              </div>
+                              <span className={`text-[#b0bac9] transition-transform duration-200 ${revenueExpanded ? "rotate-180" : ""}`}>
+                                <ChevronDownIcon />
+                              </span>
+                            </button>
+
+                            {revenueExpanded && (
+                              <div className="flex flex-col gap-1.5 pl-3">
+                                {[
+                                  { id: "analytics_revenue_mrr_arr", label: "MRR / ARR" },
+                                  { id: "analytics_revenue_asp", label: "ASP" },
+                                  { id: "analytics_revenue_ltv", label: "LTV" },
+                                  { id: "analytics_revenue_cashflow", label: "Cashflow" }
+                                ].map((sub) => {
+                                  const isSubActive = activeTab === sub.id;
+                                  return (
+                                    <button
+                                      key={sub.id}
+                                      type="button"
+                                      onClick={() => handleMainItemClick(sub.id)}
+                                      className={`w-full text-left px-4 py-2.5 rounded-xl text-[11px] font-bold tracking-wide transition-all duration-150 ${
+                                        isSubActive
+                                          ? "bg-[#635BFF] text-white shadow-sm"
+                                          : "bg-white border border-[#E0E6EB] text-[#7e8b9b] hover:bg-slate-50 hover:text-slate-950"
+                                      }`}
+                                    >
+                                      {sub.label}
+                                    </button>
+                                  );
+                                })}
+                              </div>
+                            )}
+                          </div>
+
+                          {/* Customers Submenu */}
+                          <div className="flex flex-col gap-2">
+                            <button
+                              type="button"
+                              onClick={() => setCustomersExpanded(!customersExpanded)}
+                              className="w-full flex items-center justify-between py-1.5 px-2 rounded-xl text-[#29343D] hover:bg-[#EFF4FA] transition-colors"
+                            >
+                              <div className="flex items-center gap-2">
+                                <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round">
+                                  <path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2" />
+                                  <circle cx="9" cy="7" r="4" />
+                                  <path d="M23 21v-2a4 4 0 0 0-3-3.87" />
+                                  <path d="M16 3.13a4 4 0 0 1 0 7.75" />
+                                </svg>
+                                <span className="text-xs font-bold text-[#29343D]">Customers</span>
+                              </div>
+                              <span className={`text-[#b0bac9] transition-transform duration-200 ${customersExpanded ? "rotate-180" : ""}`}>
+                                <ChevronDownIcon />
+                              </span>
+                            </button>
+                            {customersExpanded && (
+                              <div className="flex flex-col gap-1.5 pl-3">
+                                {[
+                                  { id: "analytics_customers_subscribers", label: "Subscribers" },
+                                  { id: "analytics_customers_leads", label: "Leads" },
+                                  { id: "analytics_customers_trials", label: "Trials" }
+                                ].map((sub) => {
+                                  const isSubActive = activeTab === sub.id;
+                                  return (
+                                    <button
+                                      key={sub.id}
+                                      type="button"
+                                      onClick={() => handleMainItemClick(sub.id)}
+                                      className={`w-full text-left px-4 py-2.5 rounded-xl text-[11px] font-bold tracking-wide transition-all duration-150 ${
+                                        isSubActive
+                                          ? "bg-[#635BFF] text-white shadow-sm"
+                                          : "bg-white border border-[#E0E6EB] text-[#7e8b9b] hover:bg-slate-50 hover:text-slate-950"
+                                      }`}
+                                    >
+                                      {sub.label}
+                                    </button>
+                                  );
+                                })}
+                              </div>
+                            )}
+                          </div>
+
+                          {/* Performance Submenu */}
+                          <div className="flex flex-col gap-2">
+                            <button
+                              type="button"
+                              onClick={() => setPerformanceExpanded(!performanceExpanded)}
+                              className="w-full flex items-center justify-between py-1.5 px-2 rounded-xl text-[#29343D] hover:bg-[#EFF4FA] transition-colors"
+                            >
+                              <div className="flex items-center gap-2">
+                                <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round">
+                                  <line x1="18" y1="20" x2="18" y2="10" />
+                                  <line x1="12" y1="20" x2="12" y2="4" />
+                                  <line x1="6" y1="20" x2="6" y2="14" />
+                                </svg>
+                                <span className="text-xs font-bold text-[#29343D]">Performance</span>
+                              </div>
+                              <span className={`text-[#b0bac9] transition-transform duration-200 ${performanceExpanded ? "rotate-180" : ""}`}>
+                                <ChevronDownIcon />
+                              </span>
+                            </button>
+                            {performanceExpanded && (
+                              <div className="flex flex-col gap-1.5 pl-3">
+                                {[
+                                  { id: "analytics_performance_arpa", label: "ARPA" },
+                                  { id: "analytics_performance_churn", label: "Churn" },
+                                  { id: "analytics_performance_cohorts", label: "Cohorts" },
+                                  { id: "analytics_performance_map", label: "Map" }
+                                ].map((sub) => {
+                                  const isSubActive = activeTab === sub.id;
+                                  return (
+                                    <button
+                                      key={sub.id}
+                                      type="button"
+                                      onClick={() => handleMainItemClick(sub.id)}
+                                      className={`w-full text-left px-4 py-2.5 rounded-xl text-[11px] font-bold tracking-wide transition-all duration-150 ${
+                                        isSubActive
+                                          ? "bg-[#635BFF] text-white shadow-sm"
+                                          : "bg-white border border-[#E0E6EB] text-[#7e8b9b] hover:bg-slate-50 hover:text-slate-950"
+                                      }`}
+                                    >
+                                      {sub.label}
+                                    </button>
+                                  );
+                                })}
+                              </div>
+                            )}
+                          </div>
+                        </div>
+                      )}
+                    </div>
+                  );
+                }
+
                 return (
                   <button
                     key={item.id}
+                    type="button"
                     onClick={() => handleMainItemClick(item.id)}
                     className={`w-full flex items-center gap-3 px-4 py-3 rounded-2xl transition-all duration-200 ${
                       isActive

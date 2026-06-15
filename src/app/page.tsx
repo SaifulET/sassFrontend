@@ -19,6 +19,13 @@ import AutomationsMailPage from "../components/AutomationsMailPage";
 import WaiversPage from "../components/WaiversPage";
 import SettingsPage from "../components/SettingsPage";
 import SupportPage from "../components/SupportPage";
+import ASPPage from "../components/ASPPage";
+import LTVPage from "../components/LTVPage";
+import CashflowPage from "../components/CashflowPage";
+import SubscribersPage from "../components/SubscribersPage";
+import LeadsPage from "../components/LeadsPage";
+import TrialsPage from "../components/TrialsPage";
+import ARPAPage from "../components/ARPAPage";
 
 
 interface Salon {
@@ -446,8 +453,57 @@ export default function Home() {
           <BillingRevenuePage />
         );
       case "analytics":
+      case "analytics_revenue_mrr_arr":
         return (
-          <AnalyticsPage />
+          <AnalyticsPage setActiveTab={setActiveTab} />
+        );
+      case "analytics_revenue_asp":
+        return (
+          <ASPPage setActiveTab={setActiveTab} />
+        );
+      case "analytics_revenue_ltv":
+        return (
+          <LTVPage setActiveTab={setActiveTab} />
+        );
+      case "analytics_revenue_cashflow":
+        return (
+          <CashflowPage setActiveTab={setActiveTab} />
+        );
+      case "analytics_customers_subscribers":
+        return (
+          <SubscribersPage setActiveTab={setActiveTab} />
+        );
+      case "analytics_customers_leads":
+        return (
+          <LeadsPage setActiveTab={setActiveTab} />
+        );
+      case "analytics_customers_trials":
+        return (
+          <TrialsPage setActiveTab={setActiveTab} />
+        );
+      case "analytics_performance_arpa":
+        return (
+          <ARPAPage setActiveTab={setActiveTab} />
+        );
+      case "analytics_performance_churn":
+      case "analytics_performance_cohorts":
+      case "analytics_performance_map":
+        return (
+          <div className="bg-white rounded-3xl p-8 border border-[#eef2f6] text-center max-w-lg mx-auto my-12 animate-in fade-in">
+            <h2 className="text-xl font-bold text-slate-800 mb-2 capitalize">
+              {activeTab.replace("analytics_performance_", "").toUpperCase()} Page
+            </h2>
+            <p className="text-slate-400 text-sm mb-6">
+              This section is currently under construction.
+            </p>
+            <button
+              type="button"
+              onClick={() => setActiveTab("dashboard")}
+              className="px-6 py-2.5 bg-[#5e53fc] hover:bg-indigo-700 text-white rounded-2xl text-xs font-semibold shadow-lg transition-all"
+            >
+              Back to Dashboard
+            </button>
+          </div>
         );
       case "automations":
         return (
