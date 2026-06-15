@@ -56,6 +56,7 @@ export default function Sidebar({
   const [revenueExpanded, setRevenueExpanded] = React.useState(true);
   const [customersExpanded, setCustomersExpanded] = React.useState(false);
   const [performanceExpanded, setPerformanceExpanded] = React.useState(false);
+  const [leadsExpanded, setLeadsExpanded] = React.useState(true);
 
   // Main menu item mappings (added Waivers)
   const mainNavigation = [
@@ -91,7 +92,10 @@ export default function Sidebar({
   };
 
   const renderNarrowIcon = (item: any) => {
-    const isTabActive = activeTab === item.id || (item.id === "analytics" && activeTab.startsWith("analytics_"));
+    const isTabActive =
+      activeTab === item.id ||
+      (item.id === "analytics" && activeTab.startsWith("analytics_")) ||
+      (item.id === "leads" && (activeTab.startsWith("leads_") || activeTab === "analytics_customers_leads"));
     const isHighlighted = item.id === "salons" ? (activeTab === "salons" || selectedSalonId !== null) : isTabActive;
 
     return (
@@ -100,6 +104,8 @@ export default function Sidebar({
         onClick={() => {
           if (item.id === "analytics") {
             handleMainItemClick("analytics_revenue_mrr_arr");
+          } else if (item.id === "leads") {
+            handleMainItemClick("leads_pipeline");
           } else {
             handleMainItemClick(item.id);
           }
@@ -205,6 +211,64 @@ export default function Sidebar({
               </span>
               {mainNavigation.map((item) => {
                 const isActive = activeTab === item.id;
+                if (item.id === "leads") {
+                  const isLeadsActive = activeTab.startsWith("leads_") || activeTab === "leads" || activeTab === "analytics_customers_leads";
+                  return (
+                    <div key={item.id} className="flex flex-col gap-1 w-full">
+                      <button
+                        type="button"
+                        onClick={() => setLeadsExpanded(!leadsExpanded)}
+                        className={`w-full flex items-center justify-between px-4 py-3 rounded-2xl transition-all duration-200 ${
+                          isLeadsActive
+                            ? "bg-[#F5F8FC]/60 text-[#635BFF]"
+                            : "text-[#7e8b9b] hover:bg-slate-50 hover:text-slate-900"
+                        }`}
+                      >
+                        <div className="flex items-center gap-3">
+                          {typeof item.icon === "function" ? (
+                            <item.icon color={isLeadsActive ? "#635BFF" : "currentColor"} />
+                          ) : (
+                            <HugeiconsIcon
+                              icon={item.icon}
+                              size={20}
+                              color={isLeadsActive ? "#635BFF" : "currentColor"}
+                            />
+                          )}
+                          <span className="text-xs font-semibold tracking-wide">{item.label}</span>
+                        </div>
+                        <span className={`text-[#b0bac9] transition-transform duration-200 ${leadsExpanded ? "rotate-180" : ""}`}>
+                          <ChevronDownIcon />
+                        </span>
+                      </button>
+
+                      {leadsExpanded && (
+                        <div className="mx-1.5 p-3.5 bg-[#F4F7FB] border border-[#E8EEF5] rounded-[16px] flex flex-col gap-2">
+                          {[
+                            { id: "leads_pipeline", label: "Pipeline" },
+                            { id: "analytics_customers_leads", label: "Data Analysis" }
+                          ].map((sub) => {
+                            const isSubActive = activeTab === sub.id;
+                            return (
+                              <button
+                                key={sub.id}
+                                type="button"
+                                onClick={() => handleMainItemClick(sub.id)}
+                                className={`w-full text-left px-4 py-2.5 rounded-xl text-[11px] font-bold tracking-wide transition-all duration-150 ${
+                                  isSubActive
+                                    ? "bg-[#635BFF] text-white shadow-sm"
+                                    : "bg-white border border-[#E0E6EB] text-[#7e8b9b] hover:bg-slate-50 hover:text-slate-950"
+                                }`}
+                              >
+                                {sub.label}
+                              </button>
+                            );
+                          })}
+                        </div>
+                      )}
+                    </div>
+                  );
+                }
+
                 if (item.id === "analytics") {
                   const isAnalyticsActive = activeTab.startsWith("analytics_") || activeTab === "analytics";
                   return (

@@ -26,6 +26,9 @@ import SubscribersPage from "../components/SubscribersPage";
 import LeadsPage from "../components/LeadsPage";
 import TrialsPage from "../components/TrialsPage";
 import ARPAPage from "../components/ARPAPage";
+import ChurnPage from "../components/ChurnPage";
+import CohortsPage from "../components/CohortsPage";
+import MapPage from "../components/MapPage";
 
 
 interface Salon {
@@ -486,24 +489,16 @@ export default function Home() {
           <ARPAPage setActiveTab={setActiveTab} />
         );
       case "analytics_performance_churn":
+        return (
+          <ChurnPage setActiveTab={setActiveTab} />
+        );
       case "analytics_performance_cohorts":
+        return (
+          <CohortsPage setActiveTab={setActiveTab} />
+        );
       case "analytics_performance_map":
         return (
-          <div className="bg-white rounded-3xl p-8 border border-[#eef2f6] text-center max-w-lg mx-auto my-12 animate-in fade-in">
-            <h2 className="text-xl font-bold text-slate-800 mb-2 capitalize">
-              {activeTab.replace("analytics_performance_", "").toUpperCase()} Page
-            </h2>
-            <p className="text-slate-400 text-sm mb-6">
-              This section is currently under construction.
-            </p>
-            <button
-              type="button"
-              onClick={() => setActiveTab("dashboard")}
-              className="px-6 py-2.5 bg-[#5e53fc] hover:bg-indigo-700 text-white rounded-2xl text-xs font-semibold shadow-lg transition-all"
-            >
-              Back to Dashboard
-            </button>
-          </div>
+          <MapPage setActiveTab={setActiveTab} />
         );
       case "automations":
         return (
