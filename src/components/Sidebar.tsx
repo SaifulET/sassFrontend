@@ -150,46 +150,19 @@ export default function Sidebar({
 
         {/* Sidebar Container - Desktop */}
         <aside
-          className={`fixed inset-y-0 left-0 w-64 bg-white border-r border-[#eef2f6] flex flex-col z-30 transform lg:transform-none transition-transform duration-300 ease-in-out ${
+          className={`fixed inset-y-0 left-0 w-[280px] bg-white border-r border-[#eef2f6] flex flex-col z-30 transform lg:transform-none transition-transform duration-300 ease-in-out ${
             isOpen ? "translate-x-0" : "-translate-x-full lg:translate-x-0"
           }`}
         >
           {/* Brand/Logo Header */}
-          <div className="h-20 px-6 border-b border-[#eef2f6] flex items-center justify-between shrink-0">
+          <div className="h-[63px] px-6 border-b border-[#eef2f6] flex items-center justify-between shrink-0">
             <div className="flex items-center gap-2.5">
-              <div className="w-8 h-8 rounded-lg bg-gradient-to-tr from-[#5e53fc] to-[#8075ff] flex items-center justify-center shadow-sm">
-                <svg
-                  width="16"
-                  height="16"
-                  viewBox="0 0 24 24"
-                  fill="none"
-                  xmlns="http://www.w3.org/2000/svg"
-                >
-                  <path
-                    d="M12 2L2 7L12 12L22 7L12 2Z"
-                    fill="white"
-                    stroke="white"
-                    strokeWidth="2"
-                    strokeLinejoin="round"
-                  />
-                  <path
-                    d="M2 17L12 22L22 17"
-                    stroke="white"
-                    strokeWidth="2"
-                    strokeLinecap="round"
-                    strokeLinejoin="round"
-                  />
-                  <path
-                    d="M2 12L12 17L22 12"
-                    stroke="white"
-                    strokeWidth="2"
-                    strokeLinecap="round"
-                    strokeLinejoin="round"
-                  />
-                </svg>
-              </div>
-              <span className="text-xl font-bold tracking-tight text-[#2c3a50]">
-                MatDash
+              <svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                <path d="M3 12.5C6.5 12.5 7.5 7.5 11 7.5C14.5 7.5 15.5 12.5 19 12.5C21.5 12.5 22.5 10 23 9.5" stroke="#635BFF" strokeWidth="3.5" strokeLinecap="round" strokeLinejoin="round" />
+                <path d="M1 16.5C4.5 16.5 5.5 11.5 9 11.5C12.5 11.5 13.5 16.5 17 16.5C19.5 16.5 20.5 14 21 13.5" stroke="#8075ff" strokeWidth="3.5" strokeLinecap="round" strokeLinejoin="round" />
+              </svg>
+              <span className="text-xl font-bold tracking-tight text-[#29343D]">
+                Your logo
               </span>
             </div>
 
@@ -244,22 +217,43 @@ export default function Sidebar({
                       {leadsExpanded && (
                         <div className="mx-1.5 p-3.5 bg-[#F4F7FB] border border-[#E8EEF5] rounded-[16px] flex flex-col gap-2">
                           {[
-                            { id: "leads_pipeline", label: "Pipeline" },
-                            { id: "analytics_customers_leads", label: "Data Analysis" }
+                            {
+                              id: "leads_pipeline",
+                              label: "Pipeline",
+                              icon: (color: string) => (
+                                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke={color} strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round">
+                                  <circle cx="6" cy="6" r="3" />
+                                  <circle cx="18" cy="18" r="3" />
+                                  <path d="M6 9v7a3 3 0 0 0 3 3h6" />
+                                </svg>
+                              )
+                            },
+                            {
+                              id: "analytics_customers_leads",
+                              label: "Data Analysis",
+                              icon: (color: string) => (
+                                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke={color} strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round">
+                                  <path d="M3 3v18h18" />
+                                  <path d="m18.7 8-5.1 5.2-2.8-2.7L7 14.3" />
+                                </svg>
+                              )
+                            }
                           ].map((sub) => {
                             const isSubActive = activeTab === sub.id;
+                            const colorClass = isSubActive ? "#635BFF" : "#7e8b9b";
                             return (
                               <button
                                 key={sub.id}
                                 type="button"
                                 onClick={() => handleMainItemClick(sub.id)}
-                                className={`w-full text-left px-4 py-2.5 rounded-xl text-[11px] font-bold tracking-wide transition-all duration-150 ${
+                                className={`w-full flex items-center gap-2 px-4 py-2.5 rounded-xl text-[11px] font-bold tracking-wide transition-all duration-150 ${
                                   isSubActive
-                                    ? "bg-[#635BFF] text-white shadow-sm"
-                                    : "bg-white border border-[#E0E6EB] text-[#7e8b9b] hover:bg-slate-50 hover:text-slate-950"
+                                    ? "bg-white text-[#635BFF] shadow-sm"
+                                    : "bg-transparent text-[#7e8b9b] hover:bg-white/40 hover:text-slate-950"
                                 }`}
                               >
-                                {sub.label}
+                                {sub.icon(colorClass)}
+                                <span>{sub.label}</span>
                               </button>
                             );
                           })}
@@ -523,8 +517,8 @@ export default function Sidebar({
         />
       )}
 
-      {/* DESKTOP SIDEBAR: Double column fixed structure starting below header (top-20) */}
-      <aside className="hidden lg:flex fixed top-20 bottom-0 left-0 w-72 bg-white z-30">
+      {/* DESKTOP SIDEBAR: Double column fixed structure starting below header (top-[63px]) */}
+      <aside className="hidden lg:flex fixed top-[63px] bottom-0 left-0 w-72 bg-white z-30">
         {/* Column 1: Narrow vertical icon bar */}
         <div className="w-20 bg-white border-r border-[#eef2f6] flex flex-col items-center py-6 justify-between shrink-0">
           <div className="flex flex-col items-center gap-4.5 w-full">

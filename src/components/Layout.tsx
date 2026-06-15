@@ -49,11 +49,11 @@ export default function Layout({
 
       {/* Main Container - offsets for desktop single vs double sidebar */}
       <div className={`flex flex-col min-h-screen transition-all duration-300 ${
-        selectedSalonId !== null ? "lg:pl-72" : "lg:pl-64"
+        selectedSalonId !== null ? "lg:pl-72" : "lg:pl-[280px]"
       }`}>
         {/* Page Content - scrolls under header */}
         <main className={`flex-1 px-4 md:px-8 pb-12 overflow-y-auto transition-all duration-300 ${
-          selectedSalonId !== null ? "pt-24" : "pt-24"
+          selectedSalonId !== null ? "pt-[63px]" : "pt-[63px]"
         }`}>
           <div className="max-w-[1600px] mx-auto w-full">
             {children}

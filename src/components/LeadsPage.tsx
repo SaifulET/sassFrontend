@@ -530,16 +530,16 @@ export default function LeadsPage({ setActiveTab }: { setActiveTab?: (tab: strin
               <path d="m15 18-6-6 6-6" />
             </svg>
             <span className="text-[16px] font-bold tracking-tight text-[#29343D]">
-              Analytics
+              Leads Management
             </span>
           </button>
 
           <button
             type="button"
             onClick={() => setTimeRange("Monthly")}
-            className="inline-flex h-11 items-center gap-2 rounded-[8px] bg-[#635BFF] hover:bg-[#4d42eb] px-4 text-[14px] font-medium text-white shadow-[0px_2px_4px_-1px_rgba(175,182,201,0.2)] transition-all duration-150"
+            className="inline-flex h-11 items-center gap-2 rounded-[8px] bg-[#EFF4FA] hover:bg-slate-200 px-4 text-[14px] font-bold text-[#29343D] border border-[#E0E6EB] shadow-sm transition-all duration-150"
           >
-            <RefreshIcon /> Resync
+            <RefreshIcon /> Refresh Data
           </button>
         </section>
 

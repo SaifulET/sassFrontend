@@ -24,6 +24,7 @@ import LTVPage from "../components/LTVPage";
 import CashflowPage from "../components/CashflowPage";
 import SubscribersPage from "../components/SubscribersPage";
 import LeadsPage from "../components/LeadsPage";
+import LeadsPipelinePage from "../components/LeadsPipelinePage";
 import TrialsPage from "../components/TrialsPage";
 import ARPAPage from "../components/ARPAPage";
 import ChurnPage from "../components/ChurnPage";
@@ -479,6 +480,11 @@ export default function Home() {
       case "analytics_customers_leads":
         return (
           <LeadsPage setActiveTab={setActiveTab} />
+        );
+      case "leads":
+      case "leads_pipeline":
+        return (
+          <LeadsPipelinePage setActiveTab={setActiveTab} />
         );
       case "analytics_customers_trials":
         return (
