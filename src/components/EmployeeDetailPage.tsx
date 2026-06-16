@@ -348,7 +348,7 @@ export default function EmployeeDetailPage({ employee, onBack, onViewPermissions
         </div>
 
         {/* Sub Navigation Tabs Row */}
-        <div className="flex items-center border-b border-slate-100 mt-8">
+        <div className="flex items-center border-b border-slate-100 mt-8 overflow-x-auto whitespace-nowrap scrollbar-none">
           <button
             onClick={() => setActiveSubTab("basic")}
             className={`px-6 py-3 border-b-2 text-xs font-bold transition-all flex items-center gap-2 ${activeSubTab === "basic"
@@ -403,7 +403,7 @@ export default function EmployeeDetailPage({ employee, onBack, onViewPermissions
                     Edit
                   </button>
                   <h3 className="text-sm font-extrabold text-slate-800 mb-6 uppercase tracking-wider">Personal data</h3>
-                  <div className="grid grid-cols-2 gap-y-5 gap-x-4 text-xs font-semibold">
+                  <div className="grid grid-cols-1 sm:grid-cols-2 gap-y-5 gap-x-4 text-xs font-semibold">
                     <div className="flex flex-col gap-1">
                       <span className="text-[10px] font-bold text-slate-400 uppercase">Date of birth</span>
                       <span className="text-slate-700">{employee.dob || "November 7, 1992"}</span>
@@ -446,7 +446,7 @@ export default function EmployeeDetailPage({ employee, onBack, onViewPermissions
                     </button>
                   </div>
                   <h3 className="text-sm font-extrabold text-slate-800 mb-6 uppercase tracking-wider">Contract</h3>
-                  <div className="grid grid-cols-2 gap-y-5 gap-x-4 text-xs font-semibold">
+                  <div className="grid grid-cols-1 sm:grid-cols-2 gap-y-5 gap-x-4 text-xs font-semibold">
                     <div className="flex flex-col gap-1">
                       <span className="text-[10px] font-bold text-slate-400 uppercase">End Date</span>
                       <span className="text-slate-700">{employee.endDate || "Indeterminate"}</span>
@@ -480,7 +480,7 @@ export default function EmployeeDetailPage({ employee, onBack, onViewPermissions
                   Edit
                 </button>
                 <h3 className="text-sm font-extrabold text-slate-800 mb-6 uppercase tracking-wider">Additional Data</h3>
-                <div className="grid grid-cols-2 gap-y-6 gap-x-8 text-xs font-semibold">
+                <div className="grid grid-cols-1 sm:grid-cols-2 gap-y-6 gap-x-8 text-xs font-semibold">
                   {/* Left column: Certifications + Languages */}
                   <div className="flex flex-col gap-6">
                     <div className="flex flex-col gap-2">
@@ -539,7 +539,7 @@ export default function EmployeeDetailPage({ employee, onBack, onViewPermissions
                   Change Permits
                 </button>
                 <h3 className="text-sm font-extrabold text-slate-800 mb-6 uppercase tracking-wider">Social & Access</h3>
-                <div className="grid grid-cols-2 gap-y-6 gap-x-8 text-xs font-semibold">
+                <div className="grid grid-cols-1 sm:grid-cols-2 gap-y-6 gap-x-8 text-xs font-semibold">
                   {/* Left: Social Connected */}
                   <div className="flex flex-col gap-2.5">
                     <span className="text-[10px] font-bold text-slate-400 uppercase block mb-1">Social Connected</span>
@@ -654,8 +654,9 @@ export default function EmployeeDetailPage({ employee, onBack, onViewPermissions
                 </div>
 
                 {/* SVG Bar Chart — wide stacked bars */}
-                <div className="w-full py-2">
-                  <svg className="w-full h-[300px]" viewBox="0 0 1385 300" preserveAspectRatio="none" xmlns="http://www.w3.org/2000/svg">
+                <div className="w-full py-2 overflow-x-auto scrollbar-thin">
+                  <div className="min-w-[1000px] md:min-w-0 w-full">
+                    <svg className="w-full h-[300px]" viewBox="0 0 1385 300" preserveAspectRatio="none" xmlns="http://www.w3.org/2000/svg">
                     {/* Y-axis labels */}
                     <text x="42" y="32" textAnchor="end" fontSize="11" fill="#94a3b8" fontWeight="600">€ 4,000</text>
                     <text x="42" y="72" textAnchor="end" fontSize="11" fill="#94a3b8" fontWeight="600">€ 3,500</text>
@@ -706,6 +707,7 @@ export default function EmployeeDetailPage({ employee, onBack, onViewPermissions
                     <text x="1255" y="290" textAnchor="middle" fontSize="12" fill="#94a3b8" fontWeight="600">2025</text>
                   </svg>
                 </div>
+              </div>
 
                 {/* Chart navigation arrows — circular */}
                 <div className="flex justify-end gap-2 -mt-2">
@@ -728,8 +730,8 @@ export default function EmployeeDetailPage({ employee, onBack, onViewPermissions
                     </button>
                   </div>
                 </div>
-
-                <table className="w-full border-collapse text-left text-xs">
+                <div className="overflow-x-auto w-full">
+                  <table className="w-full border-collapse text-left text-xs min-w-[600px]">
                   <thead>
                     <tr className="bg-slate-50/50 border-b border-slate-100 text-slate-400 font-bold uppercase tracking-widest text-[9px]">
                       <th className="px-6 py-4">Data</th>
@@ -762,8 +764,9 @@ export default function EmployeeDetailPage({ employee, onBack, onViewPermissions
                     ))}
                   </tbody>
                 </table>
+              </div>
 
-                {/* Table Footer with pagination */}
+              {/* Table Footer with pagination */}
                 <div className="px-6 py-4 flex items-center justify-end gap-4 border-t border-slate-100 text-slate-400 text-xs font-semibold">
                   <div className="flex items-center gap-1.5">
                     <span>Items per page:</span>
@@ -816,17 +819,18 @@ export default function EmployeeDetailPage({ employee, onBack, onViewPermissions
                 <h4 className="text-sm font-bold text-slate-800">Weekly Appointments</h4>
 
                 {/* SVG Line Chart — full width, interactive */}
-                <div className="w-full py-2">
-                  <svg 
-                    className="w-full h-[250px]" 
-                    viewBox="0 0 1000 250" 
-                    preserveAspectRatio="none" 
-                    xmlns="http://www.w3.org/2000/svg" 
-                    onMouseLeave={() => setHoveredPoint(null)}
-                    onTouchMove={handleActivityTouch}
-                    onTouchStart={handleActivityTouch}
-                    style={{ touchAction: "none" }}
-                  >
+                <div className="w-full py-2 overflow-x-auto scrollbar-thin">
+                  <div className="min-w-[800px] md:min-w-0 w-full">
+                    <svg 
+                      className="w-full h-[250px]" 
+                      viewBox="0 0 1000 250" 
+                      preserveAspectRatio="none" 
+                      xmlns="http://www.w3.org/2000/svg" 
+                      onMouseLeave={() => setHoveredPoint(null)}
+                      onTouchMove={handleActivityTouch}
+                      onTouchStart={handleActivityTouch}
+                      style={{ touchAction: "none" }}
+                    >
                     {/* Y-axis labels */}
                     <text x="30" y="22" textAnchor="end" fontSize="11" fill="#94a3b8" fontWeight="600">140</text>
                     <text x="30" y="62" textAnchor="end" fontSize="11" fill="#94a3b8" fontWeight="600">105</text>
@@ -935,6 +939,7 @@ export default function EmployeeDetailPage({ employee, onBack, onViewPermissions
                   </svg>
                 </div>
               </div>
+              </div>
 
               {/* Top 3 Services */}
               <div className="border border-slate-100 rounded-3xl p-6 bg-white flex flex-col gap-4">
@@ -972,7 +977,8 @@ export default function EmployeeDetailPage({ employee, onBack, onViewPermissions
                     Custom Range <HugeiconsIcon icon={ArrowDown01Icon} size={10} />
                   </button>
                 </div>
-                <table className="w-full border-collapse text-left text-xs">
+                <div className="overflow-x-auto w-full">
+                  <table className="w-full border-collapse text-left text-xs min-w-[600px]">
                   <thead>
                     <tr className="bg-slate-50/50 border-b border-slate-100 text-slate-400 font-bold uppercase tracking-widest text-[9px]">
                       <th className="px-6 py-4">Data</th>
@@ -999,6 +1005,7 @@ export default function EmployeeDetailPage({ employee, onBack, onViewPermissions
                     </tr>
                   </tbody>
                 </table>
+              </div>
               </div>
 
               {/* Most Loyal Customers */}
@@ -1093,17 +1100,18 @@ export default function EmployeeDetailPage({ employee, onBack, onViewPermissions
                   </div>
                 </div>
 
-                <div className="w-full py-2">
-                  <svg 
-                    className="w-full h-[280px]" 
-                    viewBox="0 0 1000 280" 
-                    preserveAspectRatio="none" 
-                    xmlns="http://www.w3.org/2000/svg"
-                    onMouseLeave={() => setHoveredBarMonth(null)}
-                    onTouchStart={handleBarTouch}
-                    onTouchMove={handleBarTouch}
-                    style={{ touchAction: "none" }}
-                  >
+                <div className="w-full py-2 overflow-x-auto scrollbar-thin">
+                  <div className="min-w-[800px] md:min-w-0 w-full">
+                    <svg 
+                      className="w-full h-[280px]" 
+                      viewBox="0 0 1000 280" 
+                      preserveAspectRatio="none" 
+                      xmlns="http://www.w3.org/2000/svg"
+                      onMouseLeave={() => setHoveredBarMonth(null)}
+                      onTouchStart={handleBarTouch}
+                      onTouchMove={handleBarTouch}
+                      style={{ touchAction: "none" }}
+                    >
                     {/* Y-axis */}
                     <text x="32" y="30" textAnchor="end" fontSize="10" fill="#94a3b8" fontWeight="600">€ 3k</text>
                     <text x="32" y="80" textAnchor="end" fontSize="10" fill="#94a3b8" fontWeight="600">€ 2.5k</text>
@@ -1215,6 +1223,7 @@ export default function EmployeeDetailPage({ employee, onBack, onViewPermissions
                   </svg>
                 </div>
               </div>
+              </div>
 
               {/* Production Details Metrics */}
               <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
@@ -1269,17 +1278,18 @@ export default function EmployeeDetailPage({ employee, onBack, onViewPermissions
                   </div>
                 </div>
 
-                <div className="w-full py-2">
-                  <svg 
-                    className="w-full h-[250px]" 
-                    viewBox="0 0 1000 250" 
-                    preserveAspectRatio="none" 
-                    xmlns="http://www.w3.org/2000/svg" 
-                    onMouseLeave={() => setHoveredTrendYear(null)}
-                    onTouchStart={handleTrendTouch}
-                    onTouchMove={handleTrendTouch}
-                    style={{ touchAction: "none" }}
-                  >
+                <div className="w-full py-2 overflow-x-auto scrollbar-thin">
+                  <div className="min-w-[800px] md:min-w-0 w-full">
+                    <svg 
+                      className="w-full h-[250px]" 
+                      viewBox="0 0 1000 250" 
+                      preserveAspectRatio="none" 
+                      xmlns="http://www.w3.org/2000/svg" 
+                      onMouseLeave={() => setHoveredTrendYear(null)}
+                      onTouchStart={handleTrendTouch}
+                      onTouchMove={handleTrendTouch}
+                      style={{ touchAction: "none" }}
+                    >
                     <defs>
                       <linearGradient id="trendGradient" x1="0" y1="0" x2="1" y2="0">
                         <stop offset="0%" stopColor="#10b981" />
@@ -1382,6 +1392,7 @@ export default function EmployeeDetailPage({ employee, onBack, onViewPermissions
                     ))}
                   </svg>
                 </div>
+              </div>
               </div>
 
               {/* Performance Metrics & Operation Statistics */}

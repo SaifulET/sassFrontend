@@ -41,7 +41,7 @@ const InfoSection: React.FC<SectionProps> = ({ title, items }) => {
         {title}
       </h3>
 
-      <div className="mt-6 grid grid-cols-2 gap-x-[30px] gap-y-4">
+      <div className="mt-6 grid grid-cols-1 sm:grid-cols-2 gap-x-[30px] gap-y-4">
         {items.map((item) => (
           <div key={item.label}>
             <p className="text-[12px] leading-4 text-[#999999]">
@@ -76,7 +76,7 @@ const ViewLeadModal: React.FC<ViewLeadModalProps> = ({ lead, onClose, onAssign }
 
   return (
     <div className="fixed inset-0 z-50 flex items-center justify-center bg-slate-900/40 backdrop-blur-sm px-4">
-      <div className="w-[638px] max-h-[90vh] overflow-y-auto rounded-xl bg-white p-6 shadow-[0_16px_32px_-8px_rgba(12,12,13,0.4)] animate-in scale-in-95 duration-100">
+      <div className="w-full max-w-[638px] max-h-[90vh] overflow-y-auto rounded-xl bg-white p-6 shadow-[0_16px_32px_-8px_rgba(12,12,13,0.4)] animate-in scale-in-95 duration-100">
         <div className="flex flex-col gap-6">
           {/* Header */}
           <div className="flex items-center justify-between">
@@ -97,7 +97,7 @@ const ViewLeadModal: React.FC<ViewLeadModalProps> = ({ lead, onClose, onAssign }
           <div className="rounded-xl border border-[#E0E6EB] bg-white p-6 shadow-[0_2px_4px_-1px_rgba(175,182,201,0.2)]">
             <div className="flex flex-col gap-6">
               {/* User */}
-              <div className="flex items-start justify-between">
+              <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
                 <div className="flex items-center gap-3">
                   <div className="h-12 w-12 rounded-full bg-slate-200 flex items-center justify-center text-[#635BFF] font-bold text-lg">
                     {lead.name.charAt(0)}
@@ -114,7 +114,7 @@ const ViewLeadModal: React.FC<ViewLeadModalProps> = ({ lead, onClose, onAssign }
                   </div>
                 </div>
 
-                <div className="flex items-center gap-4">
+                <div className="flex items-center gap-4 self-start sm:self-auto">
                   <span className="rounded-md bg-[#FFE5ED] px-2 py-[2px] text-[13px] font-semibold text-[#FF6692]">
                     {lead.receivedDaysAgo} days ago
                   </span>

@@ -15,7 +15,7 @@ export default function AssignToModal({ onClose, onAssign, assignees, initialNot
 
   return (
     <div className="fixed inset-0 z-50 flex items-center justify-center bg-slate-900/40 backdrop-blur-sm px-4">
-      <div className="w-[638px] h-[402px] rounded-xl bg-white p-6 shadow-[0_16px_32px_-8px_rgba(12,12,13,0.4)] font-['Manrope'] animate-in scale-in-95 duration-100">
+      <div className="w-full max-w-[638px] h-auto max-h-[95vh] overflow-y-auto rounded-xl bg-white p-6 shadow-[0_16px_32px_-8px_rgba(12,12,13,0.4)] font-['Manrope'] animate-in scale-in-95 duration-100">
         <div className="flex h-full flex-col gap-6">
           <div className="flex h-[25px] items-center justify-between">
             <h2 className="text-[18px] font-semibold leading-[25px] text-[#29343D]">

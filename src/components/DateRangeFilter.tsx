@@ -129,7 +129,7 @@ export default function DateRangeFilter({ onRangeChange, currentRange }: DateRan
 
       {/* Dual Month Calendar Overlay */}
       {isOpen && showCalendar && (
-        <div className="absolute left-0 mt-2 bg-white rounded-3xl shadow-2xl border border-slate-100 p-6 z-50 w-[600px] animate-in fade-in slide-in-from-top-2">
+        <div className="absolute left-1/2 -translate-x-1/2 sm:left-0 sm:translate-x-0 mt-2 bg-white rounded-3xl shadow-2xl border border-slate-100 p-6 z-50 w-[calc(100vw-32px)] sm:w-[600px] max-w-[600px] animate-in fade-in slide-in-from-top-2">
           {/* Calendar Header */}
           <div className="flex items-center justify-between pb-4 border-b border-slate-100 mb-6">
             <span className="text-sm font-bold text-slate-800 flex items-center gap-2">
@@ -149,7 +149,7 @@ export default function DateRangeFilter({ onRangeChange, currentRange }: DateRan
           </div>
 
           {/* Dual Months Grid */}
-          <div className="grid grid-cols-2 gap-8">
+          <div className="grid grid-cols-1 sm:grid-cols-2 gap-8">
             {/* June 2024 */}
             <div>
               <div className="flex items-center justify-between mb-4">

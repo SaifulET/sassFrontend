@@ -4,114 +4,139 @@ import React, { useMemo, useState, useCallback, useRef } from "react";
 
 type ChartMode = "line" | "bar";
 type SubTab = "New Leads" | "Lead-to-trial conversion" | "Lead-to-paid conversion";
-type TimeRange = "Monthly" | "Yearly" | "2023-2025";
-
+type TimeRange = "Monthly" | "Weekly" | "Daily" | "Custom range";
 type ChartPoint = { month: string; value: number };
 type PositionedPoint = ChartPoint & { x: number; y: number };
 
-const timeRangeOptions: TimeRange[] = ["Monthly", "Yearly", "2023-2025"];
+const timeRangeOptions: TimeRange[] = ["Monthly", "Weekly", "Daily", "Custom range"];
 
 // ---- Curves Data for each Tab ----
 const newLeadsPoints: ChartPoint[] = [
-  { month: "Jan", value: 43 },
-  { month: "Feb", value: 58 },
-  { month: "Mar", value: 48 },
-  { month: "Apr", value: 55 },
-  { month: "May", value: 46 },
-  { month: "Jun", value: 41 },
-  { month: "Jul", value: 36 },
-  { month: "Aug", value: 31 },
-  { month: "Sep", value: 24 },
+  { month: "Jul", value: 48 },
+  { month: "Aug", value: 50 },
+  { month: "Sep", value: 65 },
+  { month: "Oct", value: 58 },
+  { month: "Nov", value: 115 },
+  { month: "Dec", value: 110 },
 ];
 
 const leadToTrialPoints: ChartPoint[] = [
-  { month: "Jan", value: 38 },
-  { month: "Feb", value: 32 },
-  { month: "Mar", value: 37 },
-  { month: "Apr", value: 42 },
-  { month: "May", value: 62 },
-  { month: "Jun", value: 54 },
-  { month: "Jul", value: 44 },
-  { month: "Aug", value: 48 },
-  { month: "Sep", value: 38 },
+  { month: "Jul", value: 38 },
+  { month: "Aug", value: 45 },
+  { month: "Sep", value: 55 },
+  { month: "Oct", value: 60 },
+  { month: "Nov", value: 95 },
+  { month: "Dec", value: 105 },
 ];
 
 const leadToPaidPoints: ChartPoint[] = [
-  { month: "Jan", value: 43 },
-  { month: "Feb", value: 58 },
-  { month: "Mar", value: 48 },
-  { month: "Apr", value: 42 },
-  { month: "May", value: 57 },
-  { month: "Jun", value: 23 },
-  { month: "Jul", value: 21 },
-  { month: "Aug", value: 22 },
-  { month: "Sep", value: 21 },
+  { month: "Jul", value: 28 },
+  { month: "Aug", value: 35 },
+  { month: "Sep", value: 48 },
+  { month: "Oct", value: 52 },
+  { month: "Nov", value: 85 },
+  { month: "Dec", value: 92 },
 ];
 
-const mainTableMonths = [
-  { label: "Jan 2025", key: "jan" },
-  { label: "Feb 2025", key: "feb" },
-  { label: "Mar 2025", key: "mar" },
-  { label: "Apr 2025", key: "apr" },
-  { label: "May 2025", key: "may" },
-] as const;
-
-interface TableRowData {
-  label: string;
-  isBgGray?: boolean;
-  valueClass?: string;
-  values: {
-    [key in "jan" | "feb" | "mar" | "apr" | "may"]: string;
-  };
+interface PerformanceMetricRow {
+  period: string;
+  leads: string;
+  trials: string;
+  converted: string;
+  leadToTrialRate: string;
+  leadToPaidRate: string;
+  trialToPaidRate: string;
 }
 
-const mainTableRows: TableRowData[] = [
+const performanceMetricsRows: PerformanceMetricRow[] = [
   {
-    label: "Leads",
-    values: { jan: "476", feb: "476", mar: "476", apr: "476", may: "476" },
+    period: "Mar 2025",
+    leads: "108",
+    trials: "72",
+    converted: "54",
+    leadToTrialRate: "60%",
+    leadToPaidRate: "60%",
+    trialToPaidRate: "60%",
   },
   {
-    label: "Trials",
-    isBgGray: true,
-    values: { jan: "66", feb: "66", mar: "66", apr: "66", may: "66" },
+    period: "Apr 2025",
+    leads: "108",
+    trials: "72",
+    converted: "54",
+    leadToTrialRate: "60%",
+    leadToPaidRate: "60%",
+    trialToPaidRate: "60%",
   },
   {
-    label: "Converted",
-    values: { jan: "51", feb: "(51)", mar: "(51)", apr: "-", may: "51" },
+    period: "May 2025",
+    leads: "108",
+    trials: "72",
+    converted: "54",
+    leadToTrialRate: "5%",
+    leadToPaidRate: "5%",
+    trialToPaidRate: "5%",
   },
   {
-    label: "Lead-to-trial rate",
-    isBgGray: true,
-    values: { jan: "13.87%", feb: "13.87%", mar: "13.87%", apr: "13.87%", may: "-" },
+    period: "Jun 2025",
+    leads: "108",
+    trials: "72",
+    converted: "54",
+    leadToTrialRate: "9%",
+    leadToPaidRate: "9%",
+    trialToPaidRate: "9%",
   },
   {
-    label: "Lead-to-paid rate",
-    values: { jan: "10.71%", feb: "10.71%", mar: "10.71%", apr: "10.71%", may: "10.71%" },
+    period: "Jul 2025",
+    leads: "108",
+    trials: "72",
+    converted: "54",
+    leadToTrialRate: "20%",
+    leadToPaidRate: "20%",
+    trialToPaidRate: "20%",
   },
   {
-    label: "Trial-to-paid rate",
-    isBgGray: true,
-    values: { jan: "77.27%", feb: "77.27%", mar: "77.27%", apr: "-", may: "77.27%" },
+    period: "Aug 2025",
+    leads: "108",
+    trials: "72",
+    converted: "54",
+    leadToTrialRate: "20%",
+    leadToPaidRate: "20%",
+    trialToPaidRate: "20%",
   },
-];
-
-const leadsTransactionsLogs = [
-  { created: "Aug 31, 2024", customer: "Advocate Data (haylie.zboncak@advocate.com)", email: "Example", trialStarted: "-", paidStarted: "-", cancelDate: "-" },
-  { created: "Aug 31, 2024", customer: "Advocate Data (haylie.zboncak@advocate.com)", email: "Example", trialStarted: "-", paidStarted: "-", cancelDate: "-" },
-  { created: "Aug 31, 2024", customer: "Advocate Data (haylie.zboncak@advocate.com)", email: "Example", trialStarted: "-", paidStarted: "-", cancelDate: "-" },
-  { created: "Aug 31, 2024", customer: "Advocate Data (haylie.zboncak@advocate.com)", email: "Example", trialStarted: "-", paidStarted: "-", cancelDate: "-" },
-  { created: "Aug 31, 2024", customer: "Advocate Data (haylie.zboncak@advocate.com)", email: "Example", trialStarted: "-", paidStarted: "-", cancelDate: "-" },
-  { created: "Aug 31, 2024", customer: "Advocate Data (haylie.zboncak@advocate.com)", email: "Example", trialStarted: "-", paidStarted: "-", cancelDate: "-" },
-  { created: "Aug 31, 2024", customer: "Advocate Data (haylie.zboncak@advocate.com)", email: "Example", trialStarted: "-", paidStarted: "-", cancelDate: "-" },
-  { created: "Aug 31, 2024", customer: "Advocate Data (haylie.zboncak@advocate.com)", email: "Example", trialStarted: "-", paidStarted: "-", cancelDate: "-" },
 ];
 
 // ---- Icons ----
-const RefreshIcon = () => (
-  <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round">
-    <path d="M20 11a8 8 0 1 0 2 5" /><path d="M20 5v6h-6" />
+const RefreshIcon = ({ color }: { color?: string }) => (
+  <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke={color || "currentColor"} strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round">
+    <path d="M21.5 2v6h-6M21.34 15.57a10 10 0 1 1-.57-8.38l.73-.73" />
   </svg>
 );
+
+const TrashIconMini = ({ color }: { color?: string }) => (
+  <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke={color || "currentColor"} strokeWidth="2.0" strokeLinecap="round" strokeLinejoin="round">
+    <path d="M3 6h18" />
+    <path d="M19 6v14c0 1-1 2-2 2H7c-1 0-2-1-2-2V6" />
+    <path d="M8 6V4c0-1 1-2 2-2h4c1 0 2 1 2 2v2" />
+  </svg>
+);
+
+const DownloadIcon = ({ color }: { color?: string }) => (
+  <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke={color || "currentColor"} strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round">
+    <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4" />
+    <polyline points="7 10 12 15 17 10" />
+    <line x1="12" y1="15" x2="12" y2="3" />
+  </svg>
+);
+
+const getRateBadgeClass = (rate: string) => {
+  if (rate === "60%") {
+    return "bg-[#EBFAF0] text-[#36C76C]";
+  }
+  if (rate === "20%") {
+    return "bg-[#FFEAD2] text-[#FFAD46]";
+  }
+  return "bg-[#FFE5ED] text-[#FF6692]";
+};
 
 const AdjustmentsIcon = () => (
   <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
@@ -172,33 +197,70 @@ function LeadsChart({
   const svgRef = useRef<SVGSVGElement>(null);
 
   const series = useMemo(() => {
-    if (timeRange === "Monthly") {
+    if (timeRange === "Weekly") {
       return activeSubTab === "New Leads"
-        ? newLeadsPoints
+        ? [
+            { month: "W1", value: 30 },
+            { month: "W2", value: 45 },
+            { month: "W3", value: 35 },
+            { month: "W4", value: 50 },
+            { month: "W5", value: 40 },
+            { month: "W6", value: 65 },
+          ]
         : activeSubTab === "Lead-to-trial conversion"
-        ? leadToTrialPoints
-        : leadToPaidPoints;
+        ? [
+            { month: "W1", value: 20 },
+            { month: "W2", value: 35 },
+            { month: "W3", value: 40 },
+            { month: "W4", value: 30 },
+            { month: "W5", value: 45 },
+            { month: "W6", value: 50 },
+          ]
+        : [
+            { month: "W1", value: 15 },
+            { month: "W2", value: 25 },
+            { month: "W3", value: 30 },
+            { month: "W4", value: 22 },
+            { month: "W5", value: 35 },
+            { month: "W6", value: 42 },
+          ];
     }
-    // Yearly and custom ranges
-    if (activeSubTab === "New Leads") {
-      return [
-        { month: "2023", value: 35 },
-        { month: "2024", value: 48 },
-        { month: "2025", value: 58 },
-      ];
+
+    if (timeRange === "Daily") {
+      return activeSubTab === "New Leads"
+        ? [
+            { month: "Mon", value: 10 },
+            { month: "Tue", value: 15 },
+            { month: "Wed", value: 12 },
+            { month: "Thu", value: 20 },
+            { month: "Fri", value: 25 },
+            { month: "Sat", value: 18 },
+          ]
+        : activeSubTab === "Lead-to-trial conversion"
+        ? [
+            { month: "Mon", value: 8 },
+            { month: "Tue", value: 12 },
+            { month: "Wed", value: 10 },
+            { month: "Thu", value: 15 },
+            { month: "Fri", value: 18 },
+            { month: "Sat", value: 14 },
+          ]
+        : [
+            { month: "Mon", value: 5 },
+            { month: "Tue", value: 10 },
+            { month: "Wed", value: 8 },
+            { month: "Thu", value: 12 },
+            { month: "Fri", value: 14 },
+            { month: "Sat", value: 11 },
+          ];
     }
-    if (activeSubTab === "Lead-to-trial conversion") {
-      return [
-        { month: "2023", value: 38 },
-        { month: "2024", value: 48 },
-        { month: "2025", value: 62 },
-      ];
-    }
-    return [
-      { month: "2023", value: 40 },
-      { month: "2024", value: 48 },
-      { month: "2025", value: 58 },
-    ];
+
+    // Default to Monthly and Custom Range
+    return activeSubTab === "New Leads"
+      ? newLeadsPoints
+      : activeSubTab === "Lead-to-trial conversion"
+      ? leadToTrialPoints
+      : leadToPaidPoints;
   }, [timeRange, activeSubTab]);
 
   const count = series.length;
@@ -208,11 +270,11 @@ function LeadsChart({
   const PX = 36.42;
   const PY = 0.35;
 
-  const yLabels = ["70", "60", "50", "40", "30", "20"];
+  const yLabels = ["140", "105", "70", "35", "0"];
 
-  // Mapping function for Y-axis (scale raw value 20 to 70)
+  // Mapping function for Y-axis (scale raw value 0 to 140)
   const getY = (val: number) => {
-    return H - PY - ((val - 20) / 50) * (H - PY * 2);
+    return H - PY - (val / 140) * (H - PY * 2);
   };
 
   const pts: PositionedPoint[] = series.map((p, i) => {
@@ -258,17 +320,15 @@ function LeadsChart({
   // Tooltip Category segments values depending on active sub-tab
   const tooltipLabel =
     activeSubTab === "New Leads"
-      ? "Leads"
+      ? "New Leads"
       : activeSubTab === "Lead-to-trial conversion"
       ? "Trial rate"
       : "Paid rate";
 
   const tooltipValue =
     activeSubTab === "New Leads"
-      ? "581"
-      : activeSubTab === "Lead-to-trial conversion"
-      ? "13.87%"
-      : "10.71%";
+      ? `${hPt?.value}`
+      : `${hPt?.value}%`;
 
   const barW = Math.min(Math.max(((W - PX * 2) / count) * 0.45, 12), 48);
 
@@ -291,8 +351,8 @@ function LeadsChart({
         <div className="absolute left-[35px] right-0 overflow-visible bg-transparent top-[0.35px] h-[227.55px]">
           {/* Grid lines */}
           <svg className="overflow-visible pointer-events-none absolute inset-0 h-full w-full" viewBox={`0 0 ${W} ${H}`}>
-            {Array.from({ length: 6 }, (_, i) => {
-              const y = PY + (i / 5) * (H - PY * 2);
+            {Array.from({ length: 5 }, (_, i) => {
+              const y = PY + (i / 4) * (H - PY * 2);
               return <line key={i} x1={0} y1={y} x2={W} y2={y} stroke="#F6F7F9" strokeWidth="0.949594" />;
             })}
             {chartMode !== "bar" && series.map((_, i) => {
@@ -319,14 +379,14 @@ function LeadsChart({
                 {series.map((point, i) => {
                   const cx = PX + (i * (W - PX * 2)) / (count - 1);
                   const bx = cx - barW / 2;
-                  const bh = Math.max(((point.value - 20) / 50) * (H - PY * 2), 8);
+                  const bh = Math.max((point.value / 140) * (H - PY * 2), 8);
                   const by = H - PY - bh;
                   const isHov = hoveredIndex === i;
                   return (
                     <g key={i} opacity={isHov ? 1 : hoveredIndex !== null ? 0.65 : 0.9}>
                       <rect
                         x={bx} y={by} width={barW} height={bh}
-                        fill={isHov ? "#FFD648" : "#EFF4FA"}
+                        fill={isHov ? "#FF6692" : "#EFF4FA"}
                         rx={4}
                       />
                     </g>
@@ -336,23 +396,23 @@ function LeadsChart({
             ) : (
               <>
                 <defs>
-                  <linearGradient id="yellow-leads-gradient" x1="0" y1="0" x2="0" y2="1">
-                    <stop offset="43.39%" stopColor="#FFD648" stopOpacity="0.04" />
-                    <stop offset="100%" stopColor="#FFD648" stopOpacity="0" />
+                  <linearGradient id="pink-leads-gradient" x1="0" y1="0" x2="0" y2="1">
+                    <stop offset="0%" stopColor="#FF6692" stopOpacity="0.09" />
+                    <stop offset="91.46%" stopColor="#FF6692" stopOpacity="0" />
                   </linearGradient>
                 </defs>
 
                 {/* Gradient area fill */}
-                <path d={areaPath} fill="url(#yellow-leads-gradient)" />
+                <path d={areaPath} fill="url(#pink-leads-gradient)" />
 
                 {/* Line Curve */}
-                <path d={linePath} fill="none" stroke="#FFD648" strokeWidth="1.89919" strokeLinecap="round" strokeLinejoin="round" />
+                <path d={linePath} fill="none" stroke="#FF6692" strokeWidth="1.89919" strokeLinecap="round" strokeLinejoin="round" />
 
                 {/* Hover dot */}
                 {hPt && (
                   <>
-                    <circle cx={hPt.x} cy={hPt.y} r={5.5} fill="#FFD648" stroke="#FFFFFF" strokeWidth="1.89919" />
-                    <line x1={hPt.x} y1={PY} x2={hPt.x} y2={H - PY} stroke="#FFD648" strokeWidth="1" strokeDasharray="4 3" opacity="0.5" />
+                    <circle cx={hPt.x} cy={hPt.y} r={5.5} fill="#FF6692" stroke="#FFFFFF" strokeWidth="1.89919" />
+                    <line x1={hPt.x} y1={PY} x2={hPt.x} y2={H - PY} stroke="#FF6692" strokeWidth="1" strokeDasharray="4 3" opacity="0.5" />
                   </>
                 )}
               </>
@@ -360,25 +420,26 @@ function LeadsChart({
           </svg>
 
           {/* Tooltip */}
-          {hovered && (
+          {hovered && hPt && (
             <div
-              className="pointer-events-none absolute z-30 flex flex-col items-start p-0 w-[120px] h-[54.79px] bg-[#FFFFFF] shadow-[0px_3.79837px_45.5805px_-11.3951px_rgba(10,37,64,0.14)] rounded-[7.59675px]"
+              className="pointer-events-none absolute z-30 flex flex-col items-start p-0 w-[139.59px] h-[54.79px] bg-white shadow-[0px_3.79837px_45.5805px_-11.3951px_rgba(10,37,64,0.14)] rounded-[7.59675px]"
               style={{
-                left: Math.min(Math.max((tipX / W) * 100, 10), 80) + "%",
-                top: Math.max((tipY / H) * 100 - 15, 5) + "%",
-                transform: "translateX(-50%)",
+                left: `${(tipX / W) * 100}%`,
+                top: `${(tipY / H) * 100}%`,
+                transform: "translateX(-50%) translateY(-100%) translateY(-12px)",
               }}
             >
-              <div className="flex flex-col items-start p-0 w-[120px] h-[54.79px]">
-                <div className="flex flex-row items-center pt-[3.79837px] px-[11.3951px] pb-[7.59675px] gap-[7.6px] w-[96.79px] h-[27.4px]">
+              <div className="flex flex-col items-start w-full h-full">
+                {/* Row 1: Month */}
+                <div className="flex flex-row items-center pt-[3.79837px] px-[11.3951px] pb-[7.59675px] gap-[7.6px] h-[27.4px]">
                   <span className="font-manrope font-semibold text-[12px] leading-[16px] text-[#29343D]">
-                    {series[hoveredIndex!]?.month} 03, 2025
+                    {series[hoveredIndex!]?.month}
                   </span>
                 </div>
-                <div className="flex flex-row items-center pt-[3.79837px] px-[11.3951px] pb-[7.59675px] gap-[7.6px] w-[120px] h-[27.4px] self-stretch border-t border-slate-50">
-                  <span className="w-[7.6px] h-[7.6px] bg-[#FFD648] rounded-[7.59675px]" />
-                  <span className="font-manrope font-semibold text-[12px] leading-[16px] text-[#29343D] mr-auto">
-                    {tooltipLabel}
+                {/* Row 2: Value */}
+                <div className="flex flex-row items-center pt-[3.79837px] px-[11.3951px] pb-[7.59675px] gap-[7.6px] h-[27.4px] self-stretch border-t border-slate-50">
+                  <span className="font-manrope font-semibold text-[12px] leading-[16px] text-[#FF6692] mr-auto">
+                    {tooltipLabel}:
                   </span>
                   <span className="font-manrope font-semibold text-[12px] leading-[16px] text-[#98A4AE]">
                     {tooltipValue}
@@ -520,27 +581,43 @@ export default function LeadsPage({ setActiveTab }: { setActiveTab?: (tab: strin
       <div className="flex w-full flex-col gap-6 rounded-[20px] bg-[#F4F7FB] p-6">
         
         {/* Top Header Bar */}
-        <section className="flex w-full items-center justify-between rounded-[12px] bg-white px-6 py-4 shadow-[0px_2px_4px_-1px_rgba(175,182,201,0.2)]">
-          <button
-            type="button"
-            onClick={() => setActiveTab && setActiveTab("dashboard")}
-            className="flex items-center text-[#29343D] hover:opacity-80 transition-opacity"
-          >
-            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round" className="mr-2">
-              <path d="m15 18-6-6 6-6" />
-            </svg>
-            <span className="text-[16px] font-bold tracking-tight text-[#29343D]">
+        <section className="flex flex-col sm:flex-row w-full sm:items-center justify-between rounded-[12px] bg-white px-6 py-4 shadow-[0px_2px_4px_-1px_rgba(175,182,201,0.2)] sm:h-[76px] gap-4 shrink-0">
+          <div className="flex items-center text-[#29343D]">
+            <span className="text-[16px] font-bold tracking-tight text-[#29343D] font-sans">
               Leads Management
             </span>
-          </button>
+          </div>
 
-          <button
-            type="button"
-            onClick={() => setTimeRange("Monthly")}
-            className="inline-flex h-11 items-center gap-2 rounded-[8px] bg-[#EFF4FA] hover:bg-slate-200 px-4 text-[14px] font-bold text-[#29343D] border border-[#E0E6EB] shadow-sm transition-all duration-150"
-          >
-            <RefreshIcon /> Refresh Data
-          </button>
+          <div className="flex flex-wrap items-center gap-3 w-full sm:w-auto justify-start sm:justify-end">
+            {/* Trash button */}
+            <button
+              type="button"
+              className="w-[95px] h-[44px] flex flex-row justify-center items-center py-[10px] px-4 gap-2.5 border border-[#FF6692] rounded-lg text-[#FF6692] hover:bg-red-50/30 transition-colors cursor-pointer"
+            >
+              <TrashIconMini color="#FF6692" />
+              <span className="text-[14px] font-medium leading-[24px] text-center font-sans">Trash</span>
+            </button>
+
+            {/* Refresh Data button */}
+            <button
+              type="button"
+              onClick={() => setTimeRange("Monthly")}
+              className="w-[144px] h-[44px] flex flex-row justify-center items-center py-[10px] px-4 gap-2.5 bg-[#EFF4FA] rounded-lg text-[#0A2540] hover:bg-slate-200 transition-colors cursor-pointer"
+            >
+              <RefreshIcon color="#0A2540" />
+              <span className="text-[14px] font-medium leading-[24px] text-center font-sans">Refresh Data</span>
+            </button>
+
+            {/* Export button */}
+            <button
+              type="button"
+              onClick={() => setExportModalOpen(true)}
+              className="w-[149px] h-[44px] flex flex-row justify-center items-center py-[10px] px-4 gap-2.5 bg-[#635BFF] rounded-lg text-white hover:bg-[#4d42eb] transition-colors cursor-pointer"
+            >
+              <DownloadIcon color="#FFFFFF" />
+              <span className="text-[14px] font-medium leading-[24px] text-center font-sans">Export Report</span>
+            </button>
+          </div>
         </section>
 
         {/* Chart card panel */}
@@ -550,19 +627,13 @@ export default function LeadsPage({ setActiveTab }: { setActiveTab?: (tab: strin
             {/* Title, Filter button, and Sub-tabs */}
             <div className="flex flex-col items-start gap-3">
               <div className="flex items-center gap-3">
-                <h2 className="text-[16px] font-bold leading-[22px] text-[#29343D]">
-                  {dynamicTitle}
+                <h2 className="text-[16px] font-bold leading-[22px] text-[#29343D] font-sans">
+                  Lead Analytics
                 </h2>
-                <button
-                  type="button"
-                  className="inline-flex h-[36px] items-center gap-1.5 rounded-[8px] bg-[#EFF4FA] px-4 text-[12px] font-medium text-[#0A2540] hover:opacity-80 transition-opacity"
-                >
-                  <AdjustmentsIcon /> Filter
-                </button>
               </div>
 
               {/* Subtab selection links */}
-              <div className="flex items-center gap-4.5 h-[36px] mt-1 border-b border-slate-100 w-full">
+              <div className="flex items-center gap-6 h-[36px] mt-1 border-b border-[#E0E6EB] w-full overflow-x-auto whitespace-nowrap scrollbar-none">
                 {(["New Leads", "Lead-to-trial conversion", "Lead-to-paid conversion"] as SubTab[]).map((tab) => {
                   const isActive = activeSubTab === tab;
                   return (
@@ -570,13 +641,13 @@ export default function LeadsPage({ setActiveTab }: { setActiveTab?: (tab: strin
                       key={tab}
                       type="button"
                       onClick={() => setActiveSubTab(tab)}
-                      className={`h-full px-1 text-[12px] font-semibold transition-all border-b-2 ${
+                      className={`h-full px-1 text-[14px] font-semibold transition-all border-b-2 font-sans cursor-pointer whitespace-nowrap ${
                         isActive
                           ? "border-[#635BFF] text-[#635BFF]"
-                          : "border-transparent text-[#0A2540] hover:text-slate-800"
+                          : "border-transparent text-[#98A4AE] hover:text-[#29343D]"
                       }`}
                     >
-                      {tab === "New Leads" ? "New Leads" : tab === "Lead-to-trial conversion" ? "Lead-to-trial conversion" : "Lead-to-paid conversion"}
+                      {tab}
                     </button>
                   );
                 })}
@@ -589,12 +660,12 @@ export default function LeadsPage({ setActiveTab }: { setActiveTab?: (tab: strin
                 <button
                   type="button"
                   onClick={() => setTimeRangeOpen((v) => !v)}
-                  className="inline-flex h-9 items-center gap-2 rounded-[8px] border border-[#EFF4FA] bg-white px-3 text-[12px] font-medium text-[#0A2540] hover:bg-[#F7F9FC]"
+                  className="inline-flex h-9 items-center gap-2 rounded-[8px] border border-[#E0E6EB] bg-white px-3.5 text-[12px] font-semibold text-[#526B7A] hover:bg-[#F7F9FC] font-sans cursor-pointer"
                 >
                   {timeRange} <ChevronDownIcon />
                 </button>
                 {timeRangeOpen && (
-                  <div className="absolute right-0 top-[42px] z-30 w-[160px] rounded-[12px] bg-white p-1.5 shadow-[0px_16px_32px_-8px_rgba(12,12,13,0.18)]">
+                  <div className="absolute right-0 top-[42px] z-30 w-[160px] rounded-[12px] bg-white p-1.5 shadow-[0px_16px_32px_-8px_rgba(12,12,13,0.18)] border border-slate-100">
                     {timeRangeOptions.map((opt) => (
                       <button
                         key={opt}
@@ -603,7 +674,7 @@ export default function LeadsPage({ setActiveTab }: { setActiveTab?: (tab: strin
                           setTimeRange(opt);
                           setTimeRangeOpen(false);
                         }}
-                        className={`flex h-9 w-full items-center rounded-[8px] px-3 text-[12px] font-medium ${
+                        className={`flex h-9 w-full items-center rounded-[8px] px-3 text-[12px] font-medium font-sans cursor-pointer ${
                           timeRange === opt ? "bg-[#EFF4FA] text-[#0A2540]" : "text-[#0A2540] hover:bg-[#F7F9FC]"
                         }`}
                       >
@@ -613,81 +684,95 @@ export default function LeadsPage({ setActiveTab }: { setActiveTab?: (tab: strin
                   </div>
                 )}
               </div>
-
-              {/* Chart Mode Toggle */}
-              <button
-                type="button"
-                onClick={toggleChartMode}
-                className="inline-flex h-9 items-center gap-2 rounded-[8px] border border-[#EFF4FA] bg-white px-4 text-[12px] font-medium text-[#0A2540] hover:bg-[#F7F9FC]"
-              >
-                Change Chart View <LineChartIcon />
-              </button>
-
-              <button
-                type="button"
-                onClick={() => setExportModalOpen(true)}
-                className="inline-flex h-9 items-center rounded-[8px] border border-[#635BFF] bg-white px-4 text-[12px] font-medium text-[#635BFF] hover:bg-[#F1F2FE]"
-              >
-                Export Data
-              </button>
             </div>
           </div>
 
           {/* Renders line chart curve */}
-          <div className="pb-4">
-            <LeadsChart
-              timeRange={timeRange}
-              activeSubTab={activeSubTab}
-              chartMode={chartMode}
-              setExportModalOpen={setExportModalOpen}
-            />
-          </div>
-
-          {/* Five Stat Cards (ONLY shown on New Leads subtab view) */}
-          {activeSubTab === "New Leads" && (
-            <div className="mt-6 grid grid-cols-1 gap-4 sm:grid-cols-2 xl:grid-cols-5">
-              <StatCard title="Total Leads This Year" value="581" subtitle="" />
-              <StatCard title="YoY Change in Leads" value="34" subtitle={<span className="text-[#36C76C]">5%</span>} />
-              <StatCard title="Average Lead-to-Trial Conversion Rate (2024)" value="80" subtitle="" />
-              <StatCard title="Average Lead-to-Paid Conversion Rate (2025)" value="€ 10,000" subtitle="" />
-              <StatCard title="Source name" value="Largest Source of Leads" subtitle="" />
+          <div className="pb-4 overflow-x-auto w-full scrollbar-thin">
+            <div className="min-w-[600px] xl:min-w-0 w-full">
+              <LeadsChart
+                timeRange={timeRange}
+                activeSubTab={activeSubTab}
+                chartMode={chartMode}
+                setExportModalOpen={setExportModalOpen}
+              />
             </div>
-          )}
+          </div>
         </section>
 
-        {/* Table 1: Leads breakdown monthly grid table */}
+        {/* Performance Metrics Section */}
         <section className="overflow-hidden rounded-[12px] bg-white p-[30px] shadow-[0px_2px_4px_-1px_rgba(175,182,201,0.2)]">
+          <div className="mb-4 flex items-center justify-between">
+            <h3 className="text-[16px] font-bold text-[#29343D] font-sans">
+              Performance Metrics
+            </h3>
+          </div>
+          
           <div className="overflow-x-auto rounded-[12px] border border-[#E0E6EB]">
-            <table className="min-w-[980px] w-full border-collapse text-left">
+            <table className="min-w-[980px] w-full border-collapse text-left font-sans">
               <thead>
                 <tr className="bg-[#F3F3FF]">
-                  <th className="w-[180px] border-b border-r border-[#E0E6EB] px-6 py-4 text-[14px] font-bold text-[#29343D]"></th>
-                  {currentTableMonths.map((m) => (
-                    <th
-                      key={m.key}
-                      className="border-b border-r border-[#E0E6EB] px-6 py-4 text-right text-[16px] font-bold text-[#29343D]"
-                    >
-                      {m.label}
-                    </th>
-                  ))}
+                  <th className="border-b border-r border-[#E0E6EB] px-6 py-[14px] text-[16px] font-bold text-[#29343D] h-[57px] box-sizing-border-box">Period</th>
+                  <th className="border-b border-r border-[#E0E6EB] px-6 py-[14px] text-[16px] font-bold text-[#29343D] h-[57px] box-sizing-border-box">Leads</th>
+                  <th className="border-b border-r border-[#E0E6EB] px-6 py-[14px] text-[16px] font-bold text-[#29343D] h-[57px] box-sizing-border-box">Trials</th>
+                  <th className="border-b border-r border-[#E0E6EB] px-6 py-[14px] text-[16px] font-bold text-[#29343D] h-[57px] box-sizing-border-box">Converted</th>
+                  <th className="border-b border-r border-[#E0E6EB] px-6 py-[14px] text-[16px] font-bold text-[#29343D] h-[57px] box-sizing-border-box">Lead-to-Trial Rate</th>
+                  <th className="border-b border-r border-[#E0E6EB] px-6 py-[14px] text-[16px] font-bold text-[#29343D] h-[57px] box-sizing-border-box">Lead-to-Paid Rate</th>
+                  <th className="border-b border-[#E0E6EB] px-6 py-[14px] text-[16px] font-bold text-[#29343D] h-[57px] box-sizing-border-box">Trial-to-Paid Rate</th>
                 </tr>
               </thead>
               <tbody>
-                {currentTableRows.map((row) => {
-                  const bgClass = row.isBgGray ? "bg-[#FAFAFA]" : "bg-white";
+                {performanceMetricsRows.map((row, index) => {
+                  const isBgGray = index % 2 !== 0; // Alternating background matching Figma table spacing
+                  const bgClass = isBgGray ? "bg-[#FAFAFA]" : "bg-white";
                   return (
-                    <tr key={row.label} className={`${bgClass}`}>
-                      <td className="border-b border-r border-[#E0E6EB] px-6 py-4 text-[14px] font-bold text-[#29343D]">
-                        {row.label}
+                    <tr key={row.period} className={`${bgClass} h-[57px]`}>
+                      {/* Period */}
+                      <td className="border-b border-r border-[#E0E6EB] px-6 py-[14px] text-[14px] font-normal text-[#29343D]">
+                        {row.period}
                       </td>
-                      {currentTableMonths.map((m) => (
-                        <td
-                          key={m.key}
-                          className="border-b border-r border-[#E0E6EB] px-6 py-4 text-right text-[14px] text-[#29343D]"
-                        >
-                          {(row.values as any)[m.key]}
-                        </td>
-                      ))}
+                      
+                      {/* Leads */}
+                      <td className="border-b border-r border-[#E0E6EB] px-6 py-[14px] text-[14px]">
+                        <div className="inline-flex items-center justify-center bg-[#FFD648] text-white px-2.5 py-[5px] rounded-[999px] text-[12px] font-semibold min-w-[40px] h-[26px] box-sizing-border-box leading-none">
+                          {row.leads}
+                        </div>
+                      </td>
+
+                      {/* Trials */}
+                      <td className="border-b border-r border-[#E0E6EB] px-6 py-[14px] text-[14px]">
+                        <div className="inline-flex items-center justify-center bg-[#DDDBFF] text-[#635BFF] px-2.5 py-[5px] rounded-[999px] text-[12px] font-semibold min-w-[34px] h-[26px] box-sizing-border-box leading-none">
+                          {row.trials}
+                        </div>
+                      </td>
+
+                      {/* Converted */}
+                      <td className="border-b border-r border-[#E0E6EB] px-6 py-[14px] text-[14px]">
+                        <div className="inline-flex items-center justify-center bg-[#ECFDFD] text-[#16CDC7] px-2.5 py-[5px] rounded-[999px] text-[12px] font-semibold min-w-[34px] h-[26px] box-sizing-border-box leading-none">
+                          {row.converted}
+                        </div>
+                      </td>
+
+                      {/* Lead-to-Trial Rate */}
+                      <td className="border-b border-r border-[#E0E6EB] px-6 py-[14px] text-[14px]">
+                        <div className={`inline-flex items-center justify-center px-2.5 py-[5px] rounded-[999px] text-[12px] font-semibold min-w-[40px] h-[26px] box-sizing-border-box leading-none ${getRateBadgeClass(row.leadToTrialRate)}`}>
+                          {row.leadToTrialRate}
+                        </div>
+                      </td>
+
+                      {/* Lead-to-Paid Rate */}
+                      <td className="border-b border-r border-[#E0E6EB] px-6 py-[14px] text-[14px]">
+                        <div className={`inline-flex items-center justify-center px-2.5 py-[5px] rounded-[999px] text-[12px] font-semibold min-w-[40px] h-[26px] box-sizing-border-box leading-none ${getRateBadgeClass(row.leadToPaidRate)}`}>
+                          {row.leadToPaidRate}
+                        </div>
+                      </td>
+
+                      {/* Trial-to-Paid Rate */}
+                      <td className="border-b border-[#E0E6EB] px-6 py-[14px] text-[14px]">
+                        <div className={`inline-flex items-center justify-center px-2.5 py-[5px] rounded-[999px] text-[12px] font-semibold min-w-[40px] h-[26px] box-sizing-border-box leading-none ${getRateBadgeClass(row.trialToPaidRate)}`}>
+                          {row.trialToPaidRate}
+                        </div>
+                      </td>
                     </tr>
                   );
                 })}
@@ -696,97 +781,68 @@ export default function LeadsPage({ setActiveTab }: { setActiveTab?: (tab: strin
           </div>
         </section>
 
-        {/* Table 2: Leads Activity Logs */}
-        <section className="overflow-hidden rounded-[12px] bg-white p-[30px] shadow-[0px_2px_4px_-1px_rgba(175,182,201,0.2)]">
-          <div className="overflow-x-auto rounded-[12px] border border-[#E0E6EB]">
-            <table className="min-w-[980px] w-full border-collapse text-left">
-              <thead>
-                <tr className="bg-[#F5F4FF]">
-                  <th className="border-b border-r border-[#E0E6EB] px-6 py-4 text-[14px] font-semibold text-[#29343D]">Created</th>
-                  <th className="border-b border-r border-[#E0E6EB] px-6 py-4 text-[14px] font-semibold text-[#29343D]">Customer Name</th>
-                  <th className="border-b border-r border-[#E0E6EB] px-6 py-4 text-[14px] font-semibold text-[#29343D]">Email</th>
-                  <th className="border-b border-r border-[#E0E6EB] px-6 py-4 text-[14px] font-semibold text-[#29343D]">Trial started</th>
-                  <th className="border-b border-r border-[#E0E6EB] px-6 py-4 text-[14px] font-semibold text-[#29343D]">Paid started</th>
-                  <th className="border-b border-[#E0E6EB] px-6 py-4 text-[14px] font-semibold text-[#29343D]">Cancel date</th>
-                </tr>
-              </thead>
-              <tbody>
-                {leadsTransactionsLogs.map((row, idx) => (
-                  <tr key={idx} className="odd:bg-white even:bg-[#FAFAFA]">
-                    <td className="border-b border-r border-[#E0E6EB] px-6 py-4 text-[14px] text-[#29343D]">{row.created}</td>
-                    <td className="border-b border-r border-[#E0E6EB] px-6 py-4 text-[14px] text-[#29343D]">{row.customer}</td>
-                    <td className="border-b border-r border-[#E0E6EB] px-6 py-4 text-[14px] text-[#29343D]">{row.email}</td>
-                    <td className="border-b border-r border-[#E0E6EB] px-6 py-4 text-[14px] text-[#29343D]">{row.trialStarted}</td>
-                    <td className="border-b border-r border-[#E0E6EB] px-6 py-4 text-[14px] text-[#29343D]">{row.paidStarted}</td>
-                    <td className="border-b border-[#E0E6EB] px-6 py-4 text-[14px] text-[#29343D]">{row.cancelDate}</td>
-                  </tr>
-                ))}
-              </tbody>
-            </table>
-          </div>
-        </section>
+      </div>
 
-        {/* Export Data Modal */}
-        {exportModalOpen && (
-          <div className="fixed inset-0 z-50 flex items-center justify-center bg-slate-900/40 backdrop-blur-sm px-4">
-            <div className="relative w-[638px] h-[400px] bg-white rounded-[12px] shadow-[0px_16px_32px_-8px_rgba(12,12,13,0.4)] flex flex-col p-6 gap-6 justify-between box-sizing-border-box">
-              <div className="flex flex-row items-center justify-between w-full h-[54px] border-b border-slate-100 pb-2">
-                <div className="flex flex-col items-start gap-1">
-                  <span className="font-manrope font-bold text-[18px] text-[#29343D]">
-                    Export Lead Conversion Data
-                  </span>
-                  <span className="font-manrope font-normal text-[14px] text-[#98A4AE]">
-                    Generate spreadsheets for all leads funnel reports
-                  </span>
-                </div>
-                <button
-                  type="button"
-                  onClick={() => setExportModalOpen(false)}
-                  className="w-8 h-8 flex items-center justify-center rounded-full text-[#29343D] hover:bg-[#EFF4FA] transition-colors"
-                >
-                  <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round">
-                    <line x1="18" y1="6" x2="6" y2="18"></line>
-                    <line x1="6" y1="6" x2="18" y2="18"></line>
-                  </svg>
-                </button>
-              </div>
-
-              <div className="flex-1 flex flex-col justify-center items-center gap-4 text-center">
-                <svg className="text-[#FFD648]" width="48" height="48" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
-                  <path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z" />
-                  <polyline points="14 2 14 8 20 8" />
-                  <line x1="16" y1="13" x2="8" y2="13" />
-                  <line x1="16" y1="17" x2="8" y2="17" />
-                </svg>
-                <span className="text-[14px] text-[#29343D] font-medium max-w-sm">
-                  Click the button below to download the CSV statement of current leads conversion funnel.
+      {/* Export Data Modal */}
+      {exportModalOpen && (
+        <div className="fixed inset-0 z-50 flex items-center justify-center bg-slate-900/40 backdrop-blur-sm px-4">
+          <div className="relative w-full max-w-[638px] min-h-[350px] sm:h-[400px] max-h-[90vh] overflow-y-auto bg-white rounded-[12px] shadow-[0px_16px_32px_-8px_rgba(12,12,13,0.4)] flex flex-col p-6 gap-6 justify-between box-sizing-border-box">
+            <div className="flex flex-col sm:flex-row sm:items-center justify-between w-full border-b border-slate-100 pb-2 gap-2">
+              <div className="flex flex-col items-start gap-1">
+                <span className="font-manrope font-bold text-[18px] text-[#29343D]">
+                  Export Lead Conversion Data
+                </span>
+                <span className="font-manrope font-normal text-[14px] text-[#98A4AE]">
+                  Generate spreadsheets for all leads funnel reports
                 </span>
               </div>
+              <button
+                type="button"
+                onClick={() => setExportModalOpen(false)}
+                className="w-8 h-8 flex items-center justify-center rounded-full text-[#29343D] hover:bg-[#EFF4FA] transition-colors"
+              >
+                <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round">
+                  <line x1="18" y1="6" x2="6" y2="18"></line>
+                  <line x1="6" y1="6" x2="18" y2="18"></line>
+                </svg>
+              </button>
+            </div>
 
-              <div className="flex justify-end pt-4 gap-3">
-                <button
-                  type="button"
-                  onClick={() => setExportModalOpen(false)}
-                  className="px-4 py-2 border border-slate-200 text-slate-500 rounded-[8px] text-[14px] font-semibold hover:bg-slate-50"
-                >
-                  Cancel
-                </button>
-                <button
-                  type="button"
-                  onClick={() => {
-                    alert("Exporting CSV file...");
-                    setExportModalOpen(false);
-                  }}
-                  className="px-6 py-2.5 bg-[#635BFF] hover:bg-[#4d42eb] text-white rounded-[8px] text-[14px] font-semibold shadow-md transition-all"
-                >
-                  Export CSV
-                </button>
-              </div>
+            <div className="flex-1 flex flex-col justify-center items-center gap-4 text-center">
+              <svg className="text-[#FFD648]" width="48" height="48" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+                <path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z" />
+                <polyline points="14 2 14 8 20 8" />
+                <line x1="16" y1="13" x2="8" y2="13" />
+                <line x1="16" y1="17" x2="8" y2="17" />
+              </svg>
+              <span className="text-[14px] text-[#29343D] font-medium max-w-sm">
+                Click the button below to download the CSV statement of current leads conversion funnel.
+              </span>
+            </div>
+
+            <div className="flex justify-end pt-4 gap-3">
+              <button
+                type="button"
+                onClick={() => setExportModalOpen(false)}
+                className="px-4 py-2 border border-slate-200 text-slate-500 rounded-[8px] text-[14px] font-semibold hover:bg-slate-50"
+              >
+                Cancel
+              </button>
+              <button
+                type="button"
+                onClick={() => {
+                  alert("Exporting CSV file...");
+                  setExportModalOpen(false);
+                }}
+                className="px-6 py-2.5 bg-[#635BFF] hover:bg-[#4d42eb] text-white rounded-[8px] text-[14px] font-semibold shadow-md transition-all"
+              >
+                Export CSV
+              </button>
             </div>
           </div>
-        )}
+        </div>
+      )}
 
-      </div>
     </div>
   );
 }

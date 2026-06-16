@@ -3112,14 +3112,14 @@ export default function SupportPage({ activeTicketId, onCloseTicketDetail }: Sup
 
       {/* Tabs Navigation Card */}
       <div 
-        className="bg-white rounded-xl overflow-hidden w-full flex flex-col"
+        className="bg-white rounded-xl w-full flex flex-col"
         style={{
           boxShadow: "0px 2px 4px -1px rgba(175, 182, 201, 0.2)",
           border: "1px solid #E0E6EB"
         }}
       >
         {/* Tab selection bar */}
-        <div className="flex border-b border-[#E0E6EB] px-6 select-none bg-slate-50/50 justify-between items-center w-full">
+        <div className="flex border-b border-[#E0E6EB] px-6 select-none bg-slate-50/50 justify-between items-center w-full rounded-t-xl">
           <div className="flex">
             {[
               { id: "tickets", label: "Support Tickets", icon: <TicketIcon /> },
@@ -3418,7 +3418,7 @@ export default function SupportPage({ activeTicketId, onCloseTicketDetail }: Sup
           {currentTab === "audiences" && (
             <div className="flex flex-col gap-6 text-left w-full">
               {/* Dropdown Filters Bar */}
-              <div className="flex flex-row items-end gap-3 w-full border-b border-slate-100 pb-5 overflow-x-auto scrollbar-none select-none">
+              <div className="flex flex-wrap items-end gap-3 w-full border-b border-slate-100 pb-5 select-none">
                 {renderAudienceFilterDropdown("Recipient", "recipientFilter", recipientFilter, ["All Recipient", "Owner", "Employee", "Accountants", "Clients"], setRecipientFilter)}
                 {renderAudienceFilterDropdown("Number of employees", "employeesFilter", employeesFilter, ["All", "Between a and b"], setEmployeesFilter)}
                 {renderAudienceFilterDropdown("Age", "ageFilter", ageFilter, ["All Ages", "Between a and b"], setAgeFilter)}

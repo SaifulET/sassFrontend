@@ -52,11 +52,11 @@ export default function Sidebar({
   isOpen,
   setIsOpen
 }: SidebarProps) {
-  const [analyticsExpanded, setAnalyticsExpanded] = React.useState(true);
-  const [revenueExpanded, setRevenueExpanded] = React.useState(true);
+  const [analyticsExpanded, setAnalyticsExpanded] = React.useState(false);
+  const [revenueExpanded, setRevenueExpanded] = React.useState(false);
   const [customersExpanded, setCustomersExpanded] = React.useState(false);
   const [performanceExpanded, setPerformanceExpanded] = React.useState(false);
-  const [leadsExpanded, setLeadsExpanded] = React.useState(true);
+  const [leadsExpanded, setLeadsExpanded] = React.useState(false);
 
   // Main menu item mappings (added Waivers)
   const mainNavigation = [
@@ -150,7 +150,7 @@ export default function Sidebar({
 
         {/* Sidebar Container - Desktop */}
         <aside
-          className={`fixed inset-y-0 left-0 w-[280px] bg-white border-r border-[#eef2f6] flex flex-col z-30 transform lg:transform-none transition-transform duration-300 ease-in-out ${
+          className={`fixed inset-y-0 left-0 w-[280px] bg-white border-r border-[#eef2f6] flex flex-col z-50 lg:z-30 transform lg:transform-none transition-transform duration-300 ease-in-out ${
             isOpen ? "translate-x-0" : "-translate-x-full lg:translate-x-0"
           }`}
         >
@@ -190,7 +190,13 @@ export default function Sidebar({
                     <div key={item.id} className="flex flex-col gap-1 w-full">
                       <button
                         type="button"
-                        onClick={() => setLeadsExpanded(!leadsExpanded)}
+                        onClick={() => {
+                          const nextState = !leadsExpanded;
+                          setLeadsExpanded(nextState);
+                          if (nextState) {
+                            setAnalyticsExpanded(false);
+                          }
+                        }}
                         className={`w-full flex items-center justify-between px-4 py-3 rounded-2xl transition-all duration-200 ${
                           isLeadsActive
                             ? "bg-[#F5F8FC]/60 text-[#635BFF]"
@@ -269,7 +275,13 @@ export default function Sidebar({
                     <div key={item.id} className="flex flex-col gap-1 w-full">
                       <button
                         type="button"
-                        onClick={() => setAnalyticsExpanded(!analyticsExpanded)}
+                        onClick={() => {
+                          const nextState = !analyticsExpanded;
+                          setAnalyticsExpanded(nextState);
+                          if (nextState) {
+                            setLeadsExpanded(false);
+                          }
+                        }}
                         className={`w-full flex items-center justify-between px-4 py-3 rounded-2xl transition-all duration-200 ${
                           isAnalyticsActive
                             ? "bg-[#F5F8FC]/60 text-[#635BFF]"
@@ -299,7 +311,14 @@ export default function Sidebar({
                           <div className="flex flex-col gap-2">
                             <button
                               type="button"
-                              onClick={() => setRevenueExpanded(!revenueExpanded)}
+                              onClick={() => {
+                                const nextState = !revenueExpanded;
+                                setRevenueExpanded(nextState);
+                                if (nextState) {
+                                  setCustomersExpanded(false);
+                                  setPerformanceExpanded(false);
+                                }
+                              }}
                               className="w-full flex items-center justify-between py-1.5 px-2 rounded-xl text-[#29343D] hover:bg-[#EFF4FA] transition-colors"
                             >
                               <div className="flex items-center gap-2">
@@ -345,7 +364,14 @@ export default function Sidebar({
                           <div className="flex flex-col gap-2">
                             <button
                               type="button"
-                              onClick={() => setCustomersExpanded(!customersExpanded)}
+                              onClick={() => {
+                                const nextState = !customersExpanded;
+                                setCustomersExpanded(nextState);
+                                if (nextState) {
+                                  setRevenueExpanded(false);
+                                  setPerformanceExpanded(false);
+                                }
+                              }}
                               className="w-full flex items-center justify-between py-1.5 px-2 rounded-xl text-[#29343D] hover:bg-[#EFF4FA] transition-colors"
                             >
                               <div className="flex items-center gap-2">
@@ -392,7 +418,14 @@ export default function Sidebar({
                           <div className="flex flex-col gap-2">
                             <button
                               type="button"
-                              onClick={() => setPerformanceExpanded(!performanceExpanded)}
+                              onClick={() => {
+                                const nextState = !performanceExpanded;
+                                setPerformanceExpanded(nextState);
+                                if (nextState) {
+                                  setRevenueExpanded(false);
+                                  setCustomersExpanded(false);
+                                }
+                              }}
                               className="w-full flex items-center justify-between py-1.5 px-2 rounded-xl text-[#29343D] hover:bg-[#EFF4FA] transition-colors"
                             >
                               <div className="flex items-center gap-2">

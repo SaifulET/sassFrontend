@@ -707,8 +707,8 @@ export default function WaiversPage() {
         </div>
 
         {/* Table List Container */}
-        <div className="border border-slate-100 rounded-2xl overflow-visible w-full bg-white relative">
-          <table className="w-full border-collapse text-left text-xs">
+        <div className="border border-slate-100 rounded-2xl overflow-x-auto lg:overflow-visible w-full bg-white relative">
+          <table className="w-full border-collapse text-left text-xs min-w-[600px] lg:min-w-0">
             <thead>
               <tr className="bg-[#f5f4ff] border-b border-slate-100 text-slate-650 font-bold uppercase tracking-wider">
                 <th className="px-6 py-4 w-[60%]">Name</th>
@@ -926,7 +926,7 @@ export default function WaiversPage() {
       {/* ========================================================================= */}
       {activeModal === "view" && selectedWaiver && (
         <div className="fixed inset-0 bg-slate-900/40 backdrop-blur-sm z-50 flex items-center justify-center p-4">
-          <div className="bg-white rounded-3xl border border-[#eef2f6] shadow-xl p-8 max-w-2xl w-full flex flex-col gap-6 animate-in zoom-in-95 duration-200 relative">
+          <div className="bg-white rounded-3xl border border-[#eef2f6] shadow-xl p-6 sm:p-8 max-w-2xl w-full max-h-[90vh] overflow-y-auto flex flex-col gap-6 animate-in zoom-in-95 duration-200 relative">
 
             {/* Header */}
             <div className="flex items-center justify-between pb-2 border-b border-slate-100">
@@ -955,7 +955,7 @@ export default function WaiversPage() {
             </div>
 
             {/* Signature preview boxes */}
-            <div className="grid grid-cols-2 gap-4">
+            <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
               <div className="flex flex-col gap-2 text-left">
                 <div className="h-16 border border-slate-200 rounded-xl bg-slate-50/50 flex items-center justify-center overflow-hidden">
                   {selectedWaiver.clientSignature ? (
@@ -1020,7 +1020,7 @@ export default function WaiversPage() {
       {/* ========================================================================= */}
       {activeModal === "sign_flow" && selectedWaiver && (
         <div className="fixed inset-0 bg-slate-900/40 backdrop-blur-sm z-50 flex items-center justify-center p-4">
-          <div className="bg-white rounded-3xl border border-[#eef2f6] shadow-xl p-8 max-w-lg w-full flex flex-col gap-6 animate-in zoom-in-95 duration-200 relative">
+          <div className="bg-white rounded-3xl border border-[#eef2f6] shadow-xl p-6 sm:p-8 max-w-lg w-full max-h-[90vh] overflow-y-auto flex flex-col gap-6 animate-in zoom-in-95 duration-200 relative">
 
             {/* Header */}
             <div className="flex items-center justify-between pb-2 border-b border-slate-100">
@@ -1046,7 +1046,7 @@ export default function WaiversPage() {
             {/* Step 1: Selector (In person vs Remote) */}
             {signStep === 1 && (
               <div className="flex flex-col gap-6">
-                <div className="grid grid-cols-2 gap-4">
+                <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
                   {/* In person card */}
                   <div
                     onClick={() => setSignMethod("in_person")}
@@ -1249,7 +1249,7 @@ export default function WaiversPage() {
       {activeAssignModal && selectedWaiver && (
         <div className="fixed inset-0 bg-slate-900/25 backdrop-blur-[1px] z-50 flex items-center justify-center p-4">
           {assignStep === 1 && (
-            <div className="bg-white rounded-none shadow-2xl w-full max-w-[775px] px-6 py-7 sm:px-8 sm:py-8 animate-in zoom-in-95 duration-200">
+            <div className="bg-white rounded-none shadow-2xl w-full max-w-[775px] px-6 py-7 sm:px-8 sm:py-8 max-h-[90vh] overflow-y-auto animate-in zoom-in-95 duration-200">
               <h2 className="text-[28px] leading-tight font-bold text-[#273340]">
                 {activeAssignModal === "clients" ? "Assign to Client's Profiles" : "Assign to Employees"}
               </h2>
@@ -1276,7 +1276,7 @@ export default function WaiversPage() {
           )}
 
           {assignStep === 2 && activeAssignModal === "clients" && (
-            <div className="bg-white shadow-2xl w-full max-w-[880px] px-5 py-5 sm:px-6 sm:py-6 animate-in zoom-in-95 duration-200">
+            <div className="bg-white shadow-2xl w-full max-w-[880px] px-5 py-5 sm:px-6 sm:py-6 max-h-[90vh] overflow-y-auto animate-in zoom-in-95 duration-200">
               <div className="flex items-center justify-between">
                 <h2 className="text-[22px] font-bold text-[#273340]">{"Assign to Client's Profiles"}</h2>
                 <button
@@ -1329,7 +1329,7 @@ export default function WaiversPage() {
           )}
 
           {assignStep === 3 && activeAssignModal === "clients" && (
-            <div className="bg-white shadow-2xl w-full max-w-[744px] px-5 py-5 animate-in zoom-in-95 duration-200">
+            <div className="bg-white shadow-2xl w-full max-w-[744px] px-5 py-5 max-h-[90vh] overflow-y-auto animate-in zoom-in-95 duration-200">
               <div className="flex items-center justify-between">
                 <h2 className="text-[22px] font-bold text-[#273340]">Client Profile</h2>
                 <button
@@ -1380,7 +1380,7 @@ export default function WaiversPage() {
                   <h3 className="text-base font-semibold text-[#273340]">Waivers</h3>
                   <div className="mt-8 flex flex-col gap-5">
                     {clientProfilePreview.waivers.map((waiver) => (
-                      <div key={waiver.name} className="relative flex min-h-[86px] items-center justify-between gap-4 rounded-xl border border-[#e3e7ec] bg-white px-5 py-4">
+                      <div key={waiver.name} className="relative flex flex-col sm:flex-row min-h-[86px] sm:items-center justify-between gap-4 rounded-xl border border-[#e3e7ec] bg-white px-5 py-4">
                         <div className="flex items-center gap-4 text-[#6157ff]">
                           <WaiverFileIcon />
                           <span className="text-xl font-semibold">{waiver.name}</span>

@@ -13,8 +13,8 @@ export default function AddTaskModal({ onClose, onSave, initialTask = "" }: AddT
 
   return (
     <div className="fixed inset-0 z-50 flex items-center justify-center bg-slate-900/40 backdrop-blur-sm px-4">
-      <div className="w-[638px] h-[402px] rounded-xl bg-white p-6 shadow-[0_16px_32px_-8px_rgba(12,12,13,0.4)] font-['Manrope'] animate-in scale-in-95 duration-100">
-        <div className="flex h-full flex-col justify-between">
+      <div className="w-full max-w-[638px] h-auto max-h-[95vh] overflow-y-auto rounded-xl bg-white p-6 shadow-[0_16px_32px_-8px_rgba(12,12,13,0.4)] font-['Manrope'] animate-in scale-in-95 duration-100">
+        <div className="flex h-full flex-col justify-between gap-6">
           <div className="flex flex-col gap-6">
             <div className="flex items-center justify-between">
               <h2 className="text-[18px] font-semibold leading-[25px] text-[#29343D]">
@@ -55,7 +55,7 @@ export default function AddTaskModal({ onClose, onSave, initialTask = "" }: AddT
               </label>
             </div>
 
-            <div className="flex gap-6">
+            <div className="flex flex-col sm:flex-row gap-6">
               <div className="flex flex-1 flex-col gap-2">
                 <label className="text-[14px] font-semibold leading-[19px] text-[#29343D]">
                   Amount *

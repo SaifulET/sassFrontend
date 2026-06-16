@@ -23,7 +23,7 @@ interface DashboardPageProps {
 }
 
 export default function DashboardPage({ onViewAllActivities }: DashboardPageProps) {
-  const [hoveredIndex, setHoveredIndex] = useState<number | null>(3); // Default to Apr point for the tooltip
+  const [hoveredIndex, setHoveredIndex] = useState<number | null>(4); // Default to Mar point (index 4) for matching Figma/mockup
   const [isRefreshing, setIsRefreshing] = useState(false);
   const [activeModal, setActiveModal] = useState<"sales" | "subscriptions" | "leads" | "salons" | null>(null);
 
@@ -69,18 +69,45 @@ export default function DashboardPage({ onViewAllActivities }: DashboardPageProp
     }
   ];
 
-  // Chart data points
+  const xMin = 35.13;
+  const xMax = 568;
+  const yGridLines = [0.35, 45.74, 91.13, 136.52, 181.91, 227.31];
+
+  // Chart data points aligned to the exact pixel specs of the layout
   const chartPoints = [
-    { label: "Jan", val: 32000, x: 0, y: 164 },
-    { label: "Feb", val: 40000, x: 75, y: 134 },
-    { label: "Mar", val: 38000, x: 150, y: 142.4 },
-    { label: "Apr", val: 45000, x: 225, y: 116 },
-    { label: "May", val: 41000, x: 300, y: 130.4 },
-    { label: "Jun", val: 43000, x: 375, y: 123.2 },
-    { label: "Jul", val: 51000, x: 450, y: 92 },
-    { label: "Aug", val: 48000, x: 525, y: 104 },
-    { label: "Sep", val: 46000, x: 600, y: 111.2 }
-  ];
+    { label: "Jan", val: 30000 },
+    { label: "Feb", val: 42000 },
+    { label: "Feb", val: 40000 },
+    { label: "Feb", val: 35000 },
+    { label: "Mar", val: 34324 }, // Mar maps exactly to top: 162.29px (value ~34.3k)
+    { label: "Apr", val: 38000 },
+    { label: "Jun", val: 40000 },
+    { label: "Jul", val: 43000 },
+    { label: "Sep", val: 40000 },
+    { label: "", val: 35000 }
+  ].map((p, idx) => {
+    const x = xMin + idx * ((xMax - xMin) / 9);
+    return {
+      ...p,
+      x,
+      y: 227.31 - ((p.val - 20000) / 50000) * 226.96
+    };
+  });
+
+  const getSplinePath = (pts: { x: number; y: number }[]) => {
+    if (pts.length === 0) return "";
+    let d = `M ${pts[0].x} ${pts[0].y}`;
+    for (let i = 0; i < pts.length - 1; i++) {
+      const p0 = pts[i];
+      const p1 = pts[i + 1];
+      const cpX1 = p0.x + (p1.x - p0.x) / 2;
+      const cpY1 = p0.y;
+      const cpX2 = p0.x + (p1.x - p0.x) / 2;
+      const cpY2 = p1.y;
+      d += ` C ${cpX1} ${cpY1}, ${cpX2} ${cpY2}, ${p1.x} ${p1.y}`;
+    }
+    return d;
+  };
 
   const handleRefresh = () => {
     setIsRefreshing(true);
@@ -223,93 +250,211 @@ export default function DashboardPage({ onViewAllActivities }: DashboardPageProp
           </div>
 
           {/* Interactive SVG Chart wrapper */}
-          <div className="relative h-[266px] w-full select-none">
+          <div className="relative h-[264px] w-full select-none">
             {/* Tooltip Overlay */}
             {hoveredIndex !== null && (() => {
               const p = chartPoints[hoveredIndex];
-              const isFirst = hoveredIndex === 0;
-              const isLast = hoveredIndex === chartPoints.length - 1;
               
-              let leftStyle = `${(p.x / 600) * 100}%`;
+              // Calculate tooltip values based on scale factor
+              // index 4 corresponds to Mar (val: 34324) which should display € 96K total
+              const scaleFactor = 96000 / 34324;
+              const displayVal = p.val * scaleFactor;
+              
+              const formatK = (val: number, precision: number = 0) => {
+                const kVal = val / 1000;
+                return kVal.toFixed(precision).replace(".", ",");
+              };
+              
+              const totalRevenueK = formatK(displayVal, 0);
+              const basicValK = formatK(displayVal * 0.20, 1);
+              const premiumValK = formatK(displayVal * 0.32, 1);
+              const enterpriseValK = formatK(displayVal * 0.48, 0);
+              
+              const tooltipWidth = 190.58;
+              const tooltipHeight = 180.37;
+              
+              // Center the tooltip on the point's X coordinate as percentage of 568 viewBox
+              const leftPercent = (p.x / 568) * 100;
+              let leftStyle = `${leftPercent}%`;
               let transformStyle = "translateX(-50%)";
               
-              if (isFirst) {
-                leftStyle = "0%";
+              if (hoveredIndex === 0) {
+                leftStyle = "35.13px";
                 transformStyle = "translateX(0)";
-              } else if (isLast) {
+              } else if (hoveredIndex === chartPoints.length - 1) {
                 leftStyle = "100%";
                 transformStyle = "translateX(-100%)";
               }
+              
+              const topPos = p.y - tooltipHeight - 12; // 12px above the dot
               
               return (
                 <div
                   className="absolute z-20 bg-white pointer-events-none transition-all duration-150 ease-out flex flex-col justify-between"
                   style={{
-                    width: "190.58px",
-                    height: "180.37px",
+                    width: `${tooltipWidth}px`,
+                    height: `${tooltipHeight}px`,
                     left: leftStyle,
-                    top: `${p.y - 190}px`, // Hover above dot
+                    top: `${topPos}px`,
                     transform: transformStyle,
-                    boxShadow: "0px 3.79px 45.58px -11.39px rgba(10, 37, 64, 0.14)",
+                    boxShadow: "0px 3.79837px 45.5805px -11.3951px rgba(10, 37, 64, 0.14)",
                     borderRadius: "7.59675px",
-                    padding: "10px"
+                    padding: "3.8px 11.4px 7.6px",
+                    border: "0.949594px solid #E0E6EB"
                   }}
                 >
                   {/* row 6: Total gross revenue */}
-                  <div className="flex items-center gap-[7.6px] h-[27.4px]">
-                    <div className="w-[7.6px] h-[7.6px] bg-[#16CDC7] rounded-full flex-shrink-0" />
-                    <span className="text-[12px] font-semibold text-[#29343D] w-[112px] font-sans">
-                      Total gross revenue
-                    </span>
-                    <span className="text-[12px] font-semibold text-[#98A4AE] font-sans">
-                      € 96K
+                  <div className="flex items-center justify-between" style={{ height: "27.4px" }}>
+                    <div className="flex items-center gap-[7.6px]">
+                      <div className="w-[7.6px] h-[7.6px] bg-[#16CDC7] rounded-full shrink-0" />
+                      <span 
+                        className="text-[#29343D] font-semibold"
+                        style={{
+                          fontFamily: "'Manrope', sans-serif",
+                          fontSize: "12px",
+                          lineHeight: "16px"
+                        }}
+                      >
+                        Total gross revenue
+                      </span>
+                    </div>
+                    <span 
+                      className="text-[#98A4AE] font-semibold text-right"
+                      style={{
+                        fontFamily: "'Manrope', sans-serif",
+                        fontSize: "12px",
+                        lineHeight: "16px"
+                      }}
+                    >
+                      € {totalRevenueK}K
                     </span>
                   </div>
 
-                  {/* row 3: Basic 20% */}
-                  <div className="flex flex-col gap-1">
-                    <div className="flex items-center justify-between text-[12px] font-semibold text-[#29343D] font-sans">
-                      <span>Basic</span>
-                      <span>20%</span>
+                  {/* row 3: Basic (20%) */}
+                  <div className="flex flex-col justify-center gap-[7.6px]" style={{ height: "50.99px" }}>
+                    <div className="flex items-center justify-between">
+                      <span 
+                        className="text-[#29343D] font-semibold"
+                        style={{
+                          fontFamily: "'Manrope', sans-serif",
+                          fontSize: "12px",
+                          lineHeight: "16px"
+                        }}
+                      >
+                        Basic
+                      </span>
+                      <span 
+                        className="text-[#29343D] font-semibold"
+                        style={{
+                          fontFamily: "'Manrope', sans-serif",
+                          fontSize: "12px",
+                          lineHeight: "16px"
+                        }}
+                      >
+                        20%
+                      </span>
                     </div>
-                    <div className="flex items-center gap-[12px]">
-                      <div className="w-[114.79px] h-[6px] bg-[#F6F7F9] rounded-full relative overflow-hidden flex-shrink-0">
-                        <div className="absolute left-0 top-0 bottom-0 w-[82.9px] bg-[#DAD8FF] rounded-full" />
+                    <div className="flex items-center justify-between gap-3">
+                      {/* progressbar */}
+                      <div className="relative flex-1 bg-[#F6F7F9] rounded-full" style={{ height: "6px" }}>
+                        <div className="absolute left-0 top-0 bottom-0 bg-[#DAD8FF] rounded-full" style={{ width: "72.2%" }} />
                       </div>
-                      <span className="text-[12px] font-semibold text-[#98A4AE] font-sans text-right flex-1">
-                        € 19,2K
+                      <span 
+                        className="text-[#98A4AE] font-semibold text-right shrink-0"
+                        style={{
+                          fontFamily: "'Manrope', sans-serif",
+                          fontSize: "12px",
+                          lineHeight: "16px",
+                          width: "45px"
+                        }}
+                      >
+                        € {basicValK}K
                       </span>
                     </div>
                   </div>
 
-                  {/* row 7: Basic 32% */}
-                  <div className="flex flex-col gap-1">
-                    <div className="flex items-center justify-between text-[12px] font-semibold text-[#29343D] font-sans">
-                      <span>Basic</span>
-                      <span>32%</span>
+                  {/* row 7: Basic (32%) */}
+                  <div className="flex flex-col justify-center gap-[7.6px]" style={{ height: "50.99px" }}>
+                    <div className="flex items-center justify-between">
+                      <span 
+                        className="text-[#29343D] font-semibold"
+                        style={{
+                          fontFamily: "'Manrope', sans-serif",
+                          fontSize: "12px",
+                          lineHeight: "16px"
+                        }}
+                      >
+                        Basic
+                      </span>
+                      <span 
+                        className="text-[#29343D] font-semibold"
+                        style={{
+                          fontFamily: "'Manrope', sans-serif",
+                          fontSize: "12px",
+                          lineHeight: "16px"
+                        }}
+                      >
+                        32%
+                      </span>
                     </div>
-                    <div className="flex items-center gap-[12px]">
-                      <div className="w-[110.79px] h-[6px] bg-[#F6F7F9] rounded-full relative overflow-hidden flex-shrink-0">
-                        <div className="absolute left-0 top-0 bottom-0 w-[80.02px] bg-[#D2F4F2] rounded-full" />
+                    <div className="flex items-center justify-between gap-3">
+                      {/* progressbar */}
+                      <div className="relative flex-1 bg-[#F6F7F9] rounded-full" style={{ height: "6px" }}>
+                        <div className="absolute left-0 top-0 bottom-0 bg-[#D2F4F2] rounded-full" style={{ width: "72.2%" }} />
                       </div>
-                      <span className="text-[12px] font-semibold text-[#98A4AE] font-sans text-right flex-1">
-                        € 30,7K
+                      <span 
+                        className="text-[#98A4AE] font-semibold text-right shrink-0"
+                        style={{
+                          fontFamily: "'Manrope', sans-serif",
+                          fontSize: "12px",
+                          lineHeight: "16px",
+                          width: "45px"
+                        }}
+                      >
+                        € {premiumValK}K
                       </span>
                     </div>
                   </div>
 
-                  {/* row 8: Basic 48% */}
-                  <div className="flex flex-col gap-1">
-                    <div className="flex items-center justify-between text-[12px] font-semibold text-[#29343D] font-sans">
-                      <span>Basic</span>
-                      <span>48%</span>
+                  {/* row 8: Basic (48%) */}
+                  <div className="flex flex-col justify-center gap-[7.6px]" style={{ height: "50.99px" }}>
+                    <div className="flex items-center justify-between">
+                      <span 
+                        className="text-[#29343D] font-semibold"
+                        style={{
+                          fontFamily: "'Manrope', sans-serif",
+                          fontSize: "12px",
+                          lineHeight: "16px"
+                        }}
+                      >
+                        Basic
+                      </span>
+                      <span 
+                        className="text-[#29343D] font-semibold"
+                        style={{
+                          fontFamily: "'Manrope', sans-serif",
+                          fontSize: "12px",
+                          lineHeight: "16px"
+                        }}
+                      >
+                        48%
+                      </span>
                     </div>
-                    <div className="flex items-center gap-[12px]">
-                      <div className="w-[115.79px] h-[6px] bg-[#F6F7F9] rounded-full relative overflow-hidden flex-shrink-0">
-                        <div className="absolute left-0 top-0 bottom-0 w-[83.63px] bg-[#6C63FF] rounded-full" />
+                    <div className="flex items-center justify-between gap-3">
+                      {/* progressbar */}
+                      <div className="relative flex-1 bg-[#F6F7F9] rounded-full" style={{ height: "6px" }}>
+                        <div className="absolute left-0 top-0 bottom-0 bg-[#6C63FF] rounded-full" style={{ width: "72.2%" }} />
                       </div>
-                      <span className="text-[12px] font-semibold text-[#98A4AE] font-sans text-right flex-1">
-                        € 46K
+                      <span 
+                        className="text-[#98A4AE] font-semibold text-right shrink-0"
+                        style={{
+                          fontFamily: "'Manrope', sans-serif",
+                          fontSize: "12px",
+                          lineHeight: "16px",
+                          width: "45px"
+                        }}
+                      >
+                        € {enterpriseValK}K
                       </span>
                     </div>
                   </div>
@@ -317,23 +462,103 @@ export default function DashboardPage({ onViewAllActivities }: DashboardPageProp
               );
             })()}
 
-            {/* Custom Responsive SVG Chart */}
-            <svg viewBox="0 0 600 280" className="w-full h-full" style={{ overflow: "visible" }}>
-              {/* Grid Lines */}
-              <line x1="0" y1="20" x2="600" y2="20" stroke="#F6F7F9" strokeWidth="0.949594" />
-              <line x1="0" y1="62" x2="600" y2="62" stroke="#F6F7F9" strokeWidth="0.949594" />
-              <line x1="0" y1="104" x2="600" y2="104" stroke="#F6F7F9" strokeWidth="0.949594" />
-              <line x1="0" y1="146" x2="600" y2="146" stroke="#F6F7F9" strokeWidth="0.949594" />
-              <line x1="0" y1="188" x2="600" y2="188" stroke="#F6F7F9" strokeWidth="0.949594" />
-              <line x1="0" y1="230" x2="600" y2="230" stroke="#F6F7F9" strokeWidth="0.949594" />
+            {/* Y Axis Labels in HTML */}
+            <div className="absolute left-0 top-0 w-[34px] bottom-[36.69px] pointer-events-none select-none">
+              {yGridLines.map((y, idx) => {
+                const labels = ["70k", "60k", "50k", "40k", "30k", "20k"];
+                return (
+                  <div
+                    key={idx}
+                    className="absolute text-left text-[#98A4AE] font-normal"
+                    style={{
+                      top: `${(y / 264) * 100}%`,
+                      transform: "translateY(-50%)",
+                      fontFamily: "'Manrope', sans-serif",
+                      fontSize: "11.3951px",
+                      lineHeight: "15px"
+                    }}
+                  >
+                    {labels[idx]}
+                  </div>
+                );
+              })}
+            </div>
 
-              {/* Y Axis Labels */}
-              <text x="10" y="24" textAnchor="start" className="font-normal fill-[#98A4AE] font-sans" style={{ fontSize: "11.3951px" }}>70k</text>
-              <text x="10" y="66" textAnchor="start" className="font-normal fill-[#98A4AE] font-sans" style={{ fontSize: "11.3951px" }}>60k</text>
-              <text x="10" y="108" textAnchor="start" className="font-normal fill-[#98A4AE] font-sans" style={{ fontSize: "11.3951px" }}>50k</text>
-              <text x="10" y="150" textAnchor="start" className="font-normal fill-[#98A4AE] font-sans" style={{ fontSize: "11.3951px" }}>40k</text>
-              <text x="10" y="192" textAnchor="start" className="font-normal fill-[#98A4AE] font-sans" style={{ fontSize: "11.3951px" }}>30k</text>
-              <text x="10" y="234" textAnchor="start" className="font-normal fill-[#98A4AE] font-sans" style={{ fontSize: "11.3951px" }}>20k</text>
+            {/* X Axis Month Labels in HTML */}
+            <div className="absolute left-0 right-0 bottom-0 h-[15.35px] pointer-events-none select-none">
+              {chartPoints.map((p, idx) => (
+                p.label && (
+                  <div
+                    key={idx}
+                    className="absolute text-center text-[#98A4AE] font-normal"
+                    style={{
+                      left: `${(p.x / 568) * 100}%`,
+                      transform: "translateX(-50%)",
+                      fontFamily: "'Manrope', sans-serif",
+                      fontSize: "11.3951px",
+                      lineHeight: "15px"
+                    }}
+                  >
+                    {p.label}
+                  </div>
+                )
+              ))}
+            </div>
+
+            {/* Active Node Dot in HTML */}
+            {hoveredIndex !== null && (() => {
+              const p = chartPoints[hoveredIndex];
+              return (
+                <div
+                  className="absolute rounded-full pointer-events-none transition-all duration-150 ease-out"
+                  style={{
+                    width: "8px",
+                    height: "8px",
+                    left: `${(p.x / 568) * 100}%`,
+                    top: `${(p.y / 264) * 100}%`,
+                    transform: "translate(-50%, -50%)",
+                    backgroundColor: "#16CDC7",
+                    border: "1.89919px solid #FFFFFF",
+                    boxShadow: "0px 1px 2px rgba(0, 0, 0, 0.15)",
+                    zIndex: 15
+                  }}
+                />
+              );
+            })()}
+
+            {/* Custom Responsive SVG Chart */}
+            <svg 
+              viewBox="0 0 568 264" 
+              className="w-full h-full" 
+              style={{ overflow: "visible" }}
+              preserveAspectRatio="none"
+              onMouseLeave={() => setHoveredIndex(4)}
+            >
+              {/* Horizontal Grid Lines */}
+              {yGridLines.map((y, idx) => (
+                <line
+                  key={idx}
+                  x1="35.13"
+                  y1={y}
+                  x2="568"
+                  y2={y}
+                  stroke="#F6F7F9"
+                  strokeWidth="0.949594"
+                />
+              ))}
+
+              {/* Vertical Grid Lines */}
+              {chartPoints.map((p, idx) => (
+                <line
+                  key={idx}
+                  x1={p.x}
+                  y1="0.35"
+                  x2={p.x}
+                  y2="227.31"
+                  stroke="#F6F7F9"
+                  strokeWidth="0.949594"
+                />
+              ))}
 
               {/* Area Under Curve (Gradient) */}
               <defs>
@@ -342,44 +567,31 @@ export default function DashboardPage({ onViewAllActivities }: DashboardPageProp
                   <stop offset="100%" stopColor="#16CDC7" stopOpacity="0.00" />
                 </linearGradient>
               </defs>
+              
               <path
-                d="M 0 164 C 37.5 146, 37.5 134, 75 134 C 112.5 134, 112.5 146, 150 142.4 C 187.5 138.8, 187.5 116, 225 116 C 262.5 116, 262.5 130.4, 300 130.4 C 337.5 130.4, 337.5 123.2, 375 123.2 C 412.5 123.2, 412.5 92, 450 92 C 487.5 92, 487.5 104, 525 104 C 562.5 104, 562.5 111.2, 600 111.2 L 600 230 L 0 230 Z"
+                d={`${getSplinePath(chartPoints)} L 568 227.31 L 35.13 227.31 Z`}
                 fill="url(#chartGradient)"
               />
 
               {/* Spline Path */}
               <path
-                d="M 0 164 C 37.5 146, 37.5 134, 75 134 C 112.5 134, 112.5 146, 150 142.4 C 187.5 138.8, 187.5 116, 225 116 C 262.5 116, 262.5 130.4, 300 130.4 C 337.5 130.4, 337.5 123.2, 375 123.2 C 412.5 123.2, 412.5 92, 450 92 C 487.5 92, 487.5 104, 525 104 C 562.5 104, 562.5 111.2, 600 111.2"
+                d={getSplinePath(chartPoints)}
                 fill="none"
                 stroke="#16CDC7"
                 strokeWidth="1.89919"
                 strokeLinecap="round"
               />
 
-              {/* X Axis Month Labels */}
-              {chartPoints.map((p, idx) => (
-                <text
-                  key={idx}
-                  x={p.x}
-                  y="260"
-                  textAnchor="middle"
-                  className="font-normal fill-[#98A4AE] font-sans"
-                  style={{ fontSize: "11.3951px" }}
-                >
-                  {p.label}
-                </text>
-              ))}
-
-              {/* Interactive invisible hover column lines */}
+              {/* Interactive invisible hover column lines & touch targets */}
               {chartPoints.map((p, idx) => (
                 <g key={idx}>
                   {/* Hover vertical guidelining */}
                   {hoveredIndex === idx && (
                     <line
                       x1={p.x}
-                      y1="20"
+                      y1="0.35"
                       x2={p.x}
-                      y2="230"
+                      y2="227.31"
                       stroke="#16CDC7"
                       strokeWidth="1"
                       strokeDasharray="4 4"
@@ -387,27 +599,14 @@ export default function DashboardPage({ onViewAllActivities }: DashboardPageProp
                   )}
                   {/* Touch targets */}
                   <rect
-                    x={p.x - 25}
-                    y="10"
-                    width="50"
-                    height="220"
+                    x={p.x - 29.5}
+                    y="0.35"
+                    width="59"
+                    height="227"
                     fill="transparent"
                     className="cursor-pointer"
                     onMouseEnter={() => setHoveredIndex(idx)}
-                    onMouseLeave={() => setHoveredIndex(null)}
                   />
-                  {/* Active node dot */}
-                  {hoveredIndex === idx && (
-                    <circle
-                      cx={p.x}
-                      cy={p.y}
-                      r="4"
-                      fill="#16CDC7"
-                      stroke="#ffffff"
-                      strokeWidth="1.89919"
-                      className="pointer-events-none drop-shadow-sm"
-                    />
-                  )}
                 </g>
               ))}
             </svg>
@@ -439,18 +638,18 @@ export default function DashboardPage({ onViewAllActivities }: DashboardPageProp
 
           <div className="flex flex-col gap-4">
             {/* Alert Row 1 */}
-            <div className="flex items-center justify-between p-4 rounded-2xl bg-rose-50/20 border border-rose-100/30 group">
+            <div className="flex flex-col sm:flex-row sm:items-center justify-between p-4 rounded-2xl bg-rose-50/20 border border-rose-100/30 group gap-4">
               <div className="flex items-center gap-3">
                 <div className="w-10 h-10 rounded-xl bg-rose-50 flex items-center justify-center text-rose-500">
                   <HugeiconsIcon icon={Alert01Icon} size={20} />
                 </div>
-                <div className="flex flex-col">
+                <div className="flex flex-col text-left">
                   <span className="text-sm font-bold text-slate-800">Bella Vista Salon</span>
                   <span className="text-xs text-slate-400">Subscription failed - Card declined</span>
                 </div>
               </div>
 
-              <div className="flex items-center gap-4">
+              <div className="flex flex-wrap items-center gap-3 sm:gap-4 justify-between sm:justify-end w-full sm:w-auto">
                 <span className="text-[10px] font-bold text-rose-600 bg-rose-100/60 px-2 py-0.5 rounded-full uppercase">
                   High
                 </span>
@@ -471,18 +670,18 @@ export default function DashboardPage({ onViewAllActivities }: DashboardPageProp
             </div>
 
             {/* Alert Row 2 */}
-            <div className="flex items-center justify-between p-4 rounded-2xl bg-amber-50/20 border border-amber-100/30 group">
+            <div className="flex flex-col sm:flex-row sm:items-center justify-between p-4 rounded-2xl bg-amber-50/20 border border-amber-100/30 group gap-4">
               <div className="flex items-center gap-3">
                 <div className="w-10 h-10 rounded-xl bg-amber-50 flex items-center justify-center text-amber-500">
                   <HugeiconsIcon icon={Alert01Icon} size={20} />
                 </div>
-                <div className="flex flex-col">
+                <div className="flex flex-col text-left">
                   <span className="text-sm font-bold text-slate-800">Urban Hair Studio</span>
                   <span className="text-xs text-slate-400">Subscription expires in 3 days</span>
                 </div>
               </div>
 
-              <div className="flex items-center gap-4">
+              <div className="flex flex-wrap items-center gap-3 sm:gap-4 justify-between sm:justify-end w-full sm:w-auto">
                 <span className="text-[10px] font-bold text-amber-600 bg-amber-100/60 px-2 py-0.5 rounded-full uppercase">
                   Medium
                 </span>
@@ -522,18 +721,18 @@ export default function DashboardPage({ onViewAllActivities }: DashboardPageProp
 
           <div className="flex flex-col gap-4">
             {/* Ticket Row 1 */}
-            <div className="flex items-center justify-between p-4 rounded-2xl bg-slate-50/30 border border-slate-100 group">
+            <div className="flex flex-col sm:flex-row sm:items-center justify-between p-4 rounded-2xl bg-slate-50/30 border border-slate-100 group gap-4">
               <div className="flex items-center gap-3">
                 <div className="w-10 h-10 rounded-full bg-amber-50 flex items-center justify-center text-amber-500">
                   <HugeiconsIcon icon={Ticket01Icon} size={18} />
                 </div>
-                <div className="flex flex-col">
+                <div className="flex flex-col text-left">
                   <span className="text-sm font-bold text-slate-800">Bella Vista Salon</span>
                   <span className="text-xs text-slate-400">Employee access issues</span>
                 </div>
               </div>
 
-              <div className="flex items-center gap-4">
+              <div className="flex flex-wrap items-center gap-3 sm:gap-4 justify-between sm:justify-end w-full sm:w-auto">
                 <span className="text-[10px] font-bold text-rose-600 bg-rose-50 px-2.5 py-0.5 rounded-full uppercase">
                   High
                 </span>
@@ -553,18 +752,18 @@ export default function DashboardPage({ onViewAllActivities }: DashboardPageProp
             </div>
 
             {/* Ticket Row 2 */}
-            <div className="flex items-center justify-between p-4 rounded-2xl bg-slate-50/30 border border-slate-100 group">
+            <div className="flex flex-col sm:flex-row sm:items-center justify-between p-4 rounded-2xl bg-slate-50/30 border border-slate-100 group gap-4">
               <div className="flex items-center gap-3">
                 <div className="w-10 h-10 rounded-full bg-amber-50 flex items-center justify-center text-amber-500">
                   <HugeiconsIcon icon={Ticket01Icon} size={18} />
                 </div>
-                <div className="flex flex-col">
+                <div className="flex flex-col text-left">
                   <span className="text-sm font-bold text-slate-800">Bella Vista Salon</span>
                   <span className="text-xs text-slate-400">Employee access issues</span>
                 </div>
               </div>
 
-              <div className="flex items-center gap-4">
+              <div className="flex flex-wrap items-center gap-3 sm:gap-4 justify-between sm:justify-end w-full sm:w-auto">
                 <span className="text-[10px] font-bold text-rose-600 bg-rose-50 px-2.5 py-0.5 rounded-full uppercase">
                   High
                 </span>

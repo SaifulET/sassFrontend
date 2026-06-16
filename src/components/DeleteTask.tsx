@@ -12,7 +12,7 @@ const DeleteLeadModal: React.FC<DeleteLeadModalProps> = ({ onClose, onConfirm })
 
   return (
     <div className="fixed inset-0 z-50 flex items-center justify-center bg-slate-900/40 backdrop-blur-sm px-4">
-      <div className="flex h-[226px] w-[521px] flex-col gap-6 rounded-xl bg-white p-6 shadow-[0_16px_32px_-8px_rgba(12,12,13,0.4)] font-['Manrope'] animate-in scale-in-95 duration-100">
+      <div className="flex h-auto max-h-[95vh] overflow-y-auto w-full max-w-[521px] flex-col gap-6 rounded-xl bg-white p-6 shadow-[0_16px_32px_-8px_rgba(12,12,13,0.4)] font-['Manrope'] animate-in scale-in-95 duration-100">
         <h2 className="text-[18px] font-semibold leading-[25px] text-[#29343D]">
           Are you sure you want to delete this Lead?
         </h2>
