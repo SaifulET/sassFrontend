@@ -1,6 +1,10 @@
 "use client";
 
 import React, { useState, useMemo } from "react";
+import AddTaskModal from "./AddTask";
+import AssignToModal from "./AddAssignTo";
+import ViewLeadModal from "./SeeMore";
+import DeleteLeadModal from "./DeleteTask";
 
 interface Lead {
   id: string;
@@ -250,6 +254,7 @@ export default function LeadsPipelinePage({ setActiveTab }: { setActiveTab?: (ta
   const [addTaskLeadId, setAddTaskLeadId] = useState<string | null>(null);
   const [taskTextInput, setTaskTextInput] = useState("");
   const [detailLead, setDetailLead] = useState<Lead | null>(null);
+  const [deleteLeadId, setDeleteLeadId] = useState<string | null>(null);
   const [exportModalOpen, setExportModalOpen] = useState(false);
 
   // Column visibility state
@@ -315,12 +320,13 @@ export default function LeadsPipelinePage({ setActiveTab }: { setActiveTab?: (ta
   };
 
   // Save task
-  const handleSaveTask = () => {
+  const handleSaveTask = (taskContent?: string) => {
     if (!addTaskLeadId) return;
+    const finalTask = taskContent !== undefined ? taskContent : taskTextInput;
     setLeads((prev) =>
       prev.map((l) =>
         l.id === addTaskLeadId
-          ? { ...l, task: taskTextInput.trim() || null, taskCompleted: false }
+          ? { ...l, task: finalTask.trim() || null, taskCompleted: false }
           : l
       )
     );
@@ -718,7 +724,7 @@ export default function LeadsPipelinePage({ setActiveTab }: { setActiveTab?: (ta
                                     key="delete"
                                     type="button"
                                     onClick={() => {
-                                      handleDeleteLead(lead.id);
+                                      setDeleteLeadId(lead.id);
                                       setActiveActionsRowId(null);
                                     }}
                                     className="w-full h-[28px] flex items-center gap-2.5 px-3.5 hover:bg-slate-50 text-left transition-colors text-[14px] font-normal text-[#29343D] font-sans"
@@ -747,38 +753,13 @@ export default function LeadsPipelinePage({ setActiveTab }: { setActiveTab?: (ta
                           <button
                             type="button"
                             onClick={() => {
-                              setActiveAssigneeRowId(activeAssigneeRowId === lead.id ? null : lead.id);
+                              setActiveAssigneeRowId(lead.id);
                               setActiveActionsRowId(null);
                             }}
                             className="w-[85px] h-[36px] bg-[#DDDBFF] text-[#635BFF] text-[12px] font-bold rounded-[8px] flex items-center justify-center hover:bg-[#c7c4ff] transition-colors font-sans"
                           >
                             Assign to
                           </button>
-
-                          {/* Individual Assignee Dropdown menu */}
-                          {activeAssigneeRowId === lead.id && (
-                            <div className="absolute right-0 bottom-11 z-30 w-[160px] bg-white shadow-2xl rounded-[12px] py-1.5 border border-slate-100 flex flex-col items-start gap-0.5 animate-in fade-in zoom-in-95 duration-100">
-                              <span className="block px-3 py-1 text-[9px] font-bold text-slate-400 uppercase tracking-wider">Select Owner</span>
-                              {ASSIGNEES.map((user) => (
-                                <button
-                                  key={user}
-                                  type="button"
-                                  onClick={() => {
-                                    handleMoveLead(lead.id, "to_contact");
-                                    setLeads((prev) =>
-                                      prev.map((l) =>
-                                        l.id === lead.id ? { ...l, assignedTo: user } : l
-                                      )
-                                    );
-                                    setActiveAssigneeRowId(null);
-                                  }}
-                                  className="w-full h-8 flex items-center px-3 hover:bg-slate-50 text-xs font-semibold text-[#29343D] text-left transition-colors font-sans"
-                                >
-                                  {user}
-                                </button>
-                              ))}
-                            </div>
-                          )}
                         </div>
 
                       </div>
@@ -954,9 +935,71 @@ export default function LeadsPipelinePage({ setActiveTab }: { setActiveTab?: (ta
                                     <SourceIcon source={lead.source} />
                                     <span className="text-[10px] font-bold text-slate-400 uppercase">{lead.source}</span>
                                   </div>
-                                  <span className={`px-2 py-0.5 rounded-full text-[9px] font-bold ${priorityStyle.bg} ${priorityStyle.text}`}>
-                                    {lead.priority}
-                                  </span>
+                                  <div className="flex items-center gap-1.5">
+                                    <span className={`px-2 py-0.5 rounded-full text-[9px] font-bold ${priorityStyle.bg} ${priorityStyle.text}`}>
+                                      {lead.priority}
+                                    </span>
+                                    {/* Three dots button */}
+                                    <div className="relative">
+                                      <button
+                                        type="button"
+                                        onClick={(e) => {
+                                          e.stopPropagation();
+                                          setActiveActionsRowId(activeActionsRowId === lead.id ? null : lead.id);
+                                        }}
+                                        className="w-6 h-6 flex items-center justify-center rounded-full text-slate-400 hover:bg-slate-100 hover:text-slate-600 transition-colors"
+                                      >
+                                        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5">
+                                          <circle cx="12" cy="12" r="1.5" /><circle cx="12" cy="5" r="1.5" /><circle cx="12" cy="19" r="1.5" />
+                                        </svg>
+                                      </button>
+
+                                      {/* Card Triple dot menu dropdown */}
+                                      {activeActionsRowId === lead.id && (
+                                        <div className="absolute right-0 top-8 z-30 w-[119px] bg-white shadow-[0px_16px_32px_-8px_rgba(12,12,13,0.4)] rounded-[12px] py-2 border border-slate-100 flex flex-col items-start gap-1 animate-in fade-in zoom-in-95 duration-100">
+                                          <button
+                                            key="see_more"
+                                            type="button"
+                                            onClick={(e) => {
+                                              e.stopPropagation();
+                                              setDetailLead(lead);
+                                              setActiveActionsRowId(null);
+                                            }}
+                                            className="w-full h-[28px] flex items-center gap-2 px-3.5 hover:bg-slate-50 text-left transition-colors text-[14px] font-normal text-[#29343D] font-sans"
+                                          >
+                                            <EyeIcon color="#635BFF" />
+                                            <span className="text-xs">See more</span>
+                                          </button>
+                                          <button
+                                            key="add_task"
+                                            type="button"
+                                            onClick={(e) => {
+                                              e.stopPropagation();
+                                              openAddTask(lead.id);
+                                              setActiveActionsRowId(null);
+                                            }}
+                                            className="w-full h-[28px] flex items-center gap-2.5 px-3.5 hover:bg-slate-50 text-left transition-colors text-[14px] font-normal text-[#29343D] font-sans"
+                                          >
+                                            <TaskIcon color="#46CAEB" />
+                                            <span className="text-xs">Add task</span>
+                                          </button>
+                                          <button
+                                            key="delete"
+                                            type="button"
+                                            onClick={(e) => {
+                                              e.stopPropagation();
+                                              setDeleteLeadId(lead.id);
+                                              setActiveActionsRowId(null);
+                                            }}
+                                            className="w-full h-[28px] flex items-center gap-2.5 px-3.5 hover:bg-slate-50 text-left transition-colors text-[14px] font-normal text-[#29343D] font-sans"
+                                          >
+                                            <TrashIconMini color="#FF6692" />
+                                            <span className="text-xs">Delete</span>
+                                          </button>
+                                        </div>
+                                      )}
+                                    </div>
+                                  </div>
                                 </div>
 
                                 {/* Lead Details */}
@@ -975,19 +1018,6 @@ export default function LeadsPipelinePage({ setActiveTab }: { setActiveTab?: (ta
                                   <span className="text-[10px] font-bold text-slate-400">
                                     Time in stage: <span className="text-[#29343D]">{lead.receivedDaysAgo}d</span>
                                   </span>
-                                </div>
-
-                                {/* Action Overlay (Manual move) */}
-                                <div className="absolute right-2 top-2 opacity-0 group-hover:opacity-100 transition-opacity">
-                                  <select
-                                    value={lead.stage}
-                                    onChange={(e) => handleMoveLead(lead.id, e.target.value as Lead["stage"])}
-                                    className="bg-white border border-slate-200 rounded text-[9px] px-1 py-0.5 font-bold text-slate-500 focus:outline-none cursor-pointer"
-                                  >
-                                    {PIPELINE_STAGES(pipelineStatus).map((s) => (
-                                      <option key={s.id} value={s.id}>{s.label}</option>
-                                    ))}
-                                  </select>
                                 </div>
                               </div>
                             );
@@ -1095,153 +1125,56 @@ export default function LeadsPipelinePage({ setActiveTab }: { setActiveTab?: (ta
 
       {/* MODAL 1: Lead Detail Sheet */}
       {detailLead && (
-        <div className="fixed inset-0 z-50 flex items-center justify-center bg-slate-900/40 backdrop-blur-sm px-4">
-          <div className="relative w-[500px] bg-white rounded-[12px] shadow-2xl flex flex-col p-6 gap-5 animate-in scale-in-95 duration-150">
-            {/* Modal Header */}
-            <div className="flex items-center justify-between border-b border-slate-100 pb-3">
-              <div>
-                <span className="text-[10px] font-bold text-slate-400 uppercase tracking-wider">Lead Information Card</span>
-                <h3 className="font-bold text-[18px] text-slate-800 mt-0.5">{detailLead.name}</h3>
-              </div>
-              <button
-                type="button"
-                onClick={() => setDetailLead(null)}
-                className="w-8 h-8 flex items-center justify-center rounded-full text-slate-400 hover:bg-slate-100 hover:text-slate-600 transition-colors"
-              >
-                <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5">
-                  <line x1="18" y1="6" x2="6" y2="18"></line>
-                  <line x1="6" y1="6" x2="18" y2="18"></line>
-                </svg>
-              </button>
-            </div>
-
-            {/* Modal Content */}
-            <div className="flex flex-col gap-4 text-xs">
-              <div className="grid grid-cols-2 gap-4">
-                <div>
-                  <span className="block text-[10px] text-slate-400 font-bold uppercase tracking-wider">Company</span>
-                  <span className="font-semibold text-slate-700 text-sm mt-0.5 block">{detailLead.company}</span>
-                </div>
-                <div>
-                  <span className="block text-[10px] text-slate-400 font-bold uppercase tracking-wider">Estimated Value</span>
-                  <span className="font-bold text-[#635BFF] text-sm mt-0.5 block">€ {detailLead.value.toLocaleString()}</span>
-                </div>
-              </div>
-
-              <div className="grid grid-cols-2 gap-4">
-                <div>
-                  <span className="block text-[10px] text-slate-400 font-bold uppercase tracking-wider">Email Address</span>
-                  <span className="font-semibold text-slate-700 mt-0.5 block">{detailLead.email}</span>
-                </div>
-                <div>
-                  <span className="block text-[10px] text-slate-400 font-bold uppercase tracking-wider">Phone Line</span>
-                  <span className="font-semibold text-slate-700 mt-0.5 block">{detailLead.phone}</span>
-                </div>
-              </div>
-
-              <div className="grid grid-cols-2 gap-4">
-                <div>
-                  <span className="block text-[10px] text-slate-400 font-bold uppercase tracking-wider">Marketing Channel</span>
-                  <span className="font-semibold text-slate-700 mt-0.5 block">{detailLead.source}</span>
-                </div>
-                <div>
-                  <span className="block text-[10px] text-slate-400 font-bold uppercase tracking-wider">Received Timeframe</span>
-                  <span className="font-semibold text-slate-700 mt-0.5 block">{detailLead.receivedDaysAgo} days ago</span>
-                </div>
-              </div>
-
-              <div className="grid grid-cols-2 gap-4">
-                <div>
-                  <span className="block text-[10px] text-slate-400 font-bold uppercase tracking-wider">Active Stage</span>
-                  <span className="font-bold text-slate-700 mt-0.5 block uppercase">{detailLead.stage.replace("_", " ")}</span>
-                </div>
-                <div>
-                  <span className="block text-[10px] text-slate-400 font-bold uppercase tracking-wider">Assigned Agent</span>
-                  <span className="font-semibold text-slate-700 mt-0.5 block">{detailLead.assignedTo || "Unassigned"}</span>
-                </div>
-              </div>
-
-              <div className="bg-slate-50 p-3 rounded-[8px] border border-slate-100">
-                <span className="block text-[10px] text-slate-400 font-bold uppercase tracking-wider">Assigned Task Task List</span>
-                {detailLead.task ? (
-                  <div className="flex items-center gap-2 mt-1.5">
-                    <span className={`font-semibold text-slate-700 ${detailLead.taskCompleted ? "line-through text-slate-400" : ""}`}>
-                      {detailLead.task}
-                    </span>
-                    {detailLead.taskCompleted && (
-                      <span className="px-1.5 py-0.5 bg-emerald-50 text-emerald-600 rounded text-[9px] font-bold">
-                        Completed
-                      </span>
-                    )}
-                  </div>
-                ) : (
-                  <span className="text-slate-350 italic mt-1 block">No active tasks logged on this lead entries.</span>
-                )}
-              </div>
-            </div>
-
-            {/* Modal Footer */}
-            <div className="flex justify-end pt-3 gap-2 border-t border-slate-100">
-              <button
-                type="button"
-                onClick={() => setDetailLead(null)}
-                className="px-4 py-2 border border-slate-200 text-slate-600 rounded-[8px] text-xs font-semibold hover:bg-slate-50 transition-colors"
-              >
-                Close View
-              </button>
-              <button
-                type="button"
-                onClick={() => {
-                  openAddTask(detailLead.id);
-                  setDetailLead(null);
-                }}
-                className="px-5 py-2 bg-[#635BFF] hover:bg-[#4d42eb] text-white rounded-[8px] text-xs font-semibold transition-all shadow-sm"
-              >
-                Manage Task
-              </button>
-            </div>
-          </div>
-        </div>
+        <ViewLeadModal
+          lead={detailLead}
+          onClose={() => setDetailLead(null)}
+          onAssign={(id) => {
+            setActiveAssigneeRowId(id);
+          }}
+        />
       )}
 
       {/* MODAL 2: Add/Edit Task Modal */}
       {addTaskLeadId !== null && (
-        <div className="fixed inset-0 z-50 flex items-center justify-center bg-slate-900/40 backdrop-blur-sm px-4">
-          <div className="relative w-[420px] bg-white rounded-[12px] shadow-2xl flex flex-col p-5 gap-4 animate-in scale-in-95 duration-100">
-            <div>
-              <h3 className="font-bold text-sm text-slate-800">Assign / Edit Lead Checklist Task</h3>
-              <p className="text-[10px] text-slate-400 mt-0.5">Input an operational task checklist for this contact card.</p>
-            </div>
+        <AddTaskModal
+          initialTask={taskTextInput}
+          onClose={() => {
+            setAddTaskLeadId(null);
+            setTaskTextInput("");
+          }}
+          onSave={(task) => {
+            handleSaveTask(task);
+          }}
+        />
+      )}
 
-            <textarea
-              rows={3}
-              value={taskTextInput}
-              onChange={(e) => setTaskTextInput(e.target.value)}
-              placeholder="e.g. Call back on Friday at 4 PM to present details..."
-              className="w-full text-xs p-2.5 rounded-[8px] border border-slate-250 focus:border-[#635BFF] focus:outline-none resize-none font-medium"
-            />
+      {/* MODAL 4: Assign To Modal */}
+      {activeAssigneeRowId !== null && (
+        <AssignToModal
+          assignees={ASSIGNEES}
+          onClose={() => setActiveAssigneeRowId(null)}
+          onAssign={(assignee) => {
+            handleMoveLead(activeAssigneeRowId, "to_contact");
+            setLeads((prev) =>
+              prev.map((l) =>
+                l.id === activeAssigneeRowId ? { ...l, assignedTo: assignee } : l
+              )
+            );
+            setActiveAssigneeRowId(null);
+          }}
+        />
+      )}
 
-            <div className="flex justify-end gap-2 text-xs">
-              <button
-                type="button"
-                onClick={() => {
-                  setAddTaskLeadId(null);
-                  setTaskTextInput("");
-                }}
-                className="px-3 py-1.5 border border-slate-200 text-slate-500 rounded-[6px] font-semibold hover:bg-slate-50"
-              >
-                Cancel
-              </button>
-              <button
-                type="button"
-                onClick={handleSaveTask}
-                className="px-4 py-1.5 bg-[#635BFF] hover:bg-[#4d42eb] text-white rounded-[6px] font-semibold transition-all shadow-sm"
-              >
-                Save Task
-              </button>
-            </div>
-          </div>
-        </div>
+      {/* MODAL 5: Delete Lead Modal */}
+      {deleteLeadId !== null && (
+        <DeleteLeadModal
+          onClose={() => setDeleteLeadId(null)}
+          onConfirm={(reason) => {
+            console.log(`Lead ${deleteLeadId} deleted. Reason: ${reason}`);
+            handleDeleteLead(deleteLeadId);
+            setDeleteLeadId(null);
+          }}
+        />
       )}
 
       {/* MODAL 3: Export Data Modal */}
