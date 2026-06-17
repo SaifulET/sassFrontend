@@ -85,8 +85,8 @@ const QRCodePlaceholder = () => (
   </svg>
 );
 
-export default function SettingsPage() {
-  const [activeTab, setActiveTab] = useState("Profile");
+export default function SettingsPage({ defaultActiveTab = "Profile" }: { defaultActiveTab?: string }) {
+  const [activeTab, setActiveTab] = useState(defaultActiveTab);
   const fileInputRef = useRef<HTMLInputElement>(null);
 
   // State for avatar image

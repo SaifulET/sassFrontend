@@ -36,7 +36,7 @@ export default function Header({ activeTab, setActiveTab, selectedSalonId, toggl
 
   return (
     <header className={`fixed top-0 right-0 left-0 h-[63px] bg-white border-b border-[#eef2f6] flex items-center justify-between px-6 md:px-8 z-40 shadow-[0_2px_10px_rgba(0,0,0,0.01)] transition-all duration-300 ${
-      selectedSalonId !== null ? "lg:left-72" : "lg:left-[280px]"
+      selectedSalonId !== null ? "lg:left-20" : "lg:left-[280px]"
     }`}>
       {/* Brand/Logo & Search Wrapper */}
       <div className="flex items-center gap-4 flex-1 max-w-xl">
@@ -50,13 +50,13 @@ export default function Header({ activeTab, setActiveTab, selectedSalonId, toggl
 
         {/* Brand/Logo Header - Desktop */}
         {selectedSalonId !== null && (
-          <div className="hidden lg:flex items-center gap-2.5 mr-6 shrink-0">
+          <div className="hidden lg:flex items-center gap-2.5 shrink-0 lg:w-44">
             <svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
               <path d="M3 12.5C6.5 12.5 7.5 7.5 11 7.5C14.5 7.5 15.5 12.5 19 12.5C21.5 12.5 22.5 10 23 9.5" stroke="#635BFF" strokeWidth="3.5" strokeLinecap="round" strokeLinejoin="round" />
               <path d="M1 16.5C4.5 16.5 5.5 11.5 9 11.5C12.5 11.5 13.5 16.5 17 16.5C19.5 16.5 20.5 14 21 13.5" stroke="#8075ff" strokeWidth="3.5" strokeLinecap="round" strokeLinejoin="round" />
             </svg>
             <span className="text-xl font-bold tracking-tight text-[#29343D]">
-              Your logo
+              MatDash
             </span>
           </div>
         )}
@@ -124,7 +124,7 @@ export default function Header({ activeTab, setActiveTab, selectedSalonId, toggl
                 <button
                   onClick={() => {
                     setIsProfileOpen(false);
-                    alert("Navigating to Profile Settings");
+                    setActiveTab("settings_Profile");
                   }}
                   className="flex items-center gap-3 w-full px-4 py-2.5 rounded-2xl text-slate-600 hover:bg-slate-50 hover:text-slate-900 transition-colors text-sm font-medium"
                 >

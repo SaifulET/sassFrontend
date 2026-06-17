@@ -255,31 +255,28 @@ export default function UsersAndStaffPage({
           <div className="flex items-center gap-2.5">
             <button
               onClick={() => setFilterTab("hired")}
-              className={`px-4 py-2 border rounded-xl text-xs font-bold transition-all ${
-                filterTab === "hired"
+              className={`px-4 py-2 border rounded-xl text-xs font-bold transition-all ${filterTab === "hired"
                   ? "border-[#5e53fc] text-[#5e53fc] bg-[#f8f7ff]"
                   : "border-slate-200 text-slate-500 hover:border-slate-300 hover:text-slate-700 bg-white"
-              }`}
+                }`}
             >
               Currently Hired
             </button>
             <button
               onClick={() => setFilterTab("out")}
-              className={`px-4 py-2 border rounded-xl text-xs font-bold transition-all ${
-                filterTab === "out"
+              className={`px-4 py-2 border rounded-xl text-xs font-bold transition-all ${filterTab === "out"
                   ? "border-[#5e53fc] text-[#5e53fc] bg-[#f8f7ff]"
                   : "border-slate-200 text-slate-500 hover:border-slate-300 hover:text-slate-700 bg-white"
-              }`}
+                }`}
             >
               Out of Team
             </button>
             <button
               onClick={() => setFilterTab("all")}
-              className={`px-4 py-2 border rounded-xl text-xs font-bold transition-all ${
-                filterTab === "all"
+              className={`px-4 py-2 border rounded-xl text-xs font-bold transition-all ${filterTab === "all"
                   ? "border-[#5e53fc] text-[#5e53fc] bg-[#f8f7ff]"
                   : "border-slate-200 text-slate-500 hover:border-slate-300 hover:text-slate-700 bg-white"
-              }`}
+                }`}
             >
               All
             </button>
@@ -334,42 +331,38 @@ export default function UsersAndStaffPage({
 
                   {/* Role Badge */}
                   <td className="px-6 py-4">
-                    <span className={`px-2.5 py-1 rounded-full text-[10px] font-extrabold uppercase ${
-                      emp.role === "Manager"
+                    <span className={`px-2.5 py-1 rounded-full text-[10px] font-extrabold uppercase ${emp.role === "Manager"
                         ? "bg-[#e2f7fc] text-[#0ea5e9]"
                         : "bg-[#fef9c3] text-[#ca8a04]"
-                    }`}>
+                      }`}>
                       {emp.role}
                     </span>
                   </td>
 
                   {/* Status Badge */}
                   <td className="px-6 py-4">
-                    <span className={`px-2.5 py-1 rounded-full text-[10px] font-extrabold uppercase flex items-center gap-1.5 w-fit ${
-                      emp.status === "Active"
+                    <span className={`px-2.5 py-1 rounded-full text-[10px] font-extrabold uppercase flex items-center gap-1.5 w-fit ${emp.status === "Active"
                         ? "bg-[#dcfce7] text-[#16a34a]"
                         : emp.status === "Pending"
-                        ? "bg-[#ffedd5] text-[#ea580c]"
-                        : "bg-[#fee2e2] text-[#dc2626]"
-                    }`}>
-                      <span className={`w-1.5 h-1.5 rounded-full ${
-                        emp.status === "Active"
+                          ? "bg-[#ffedd5] text-[#ea580c]"
+                          : "bg-[#fee2e2] text-[#dc2626]"
+                      }`}>
+                      <span className={`w-1.5 h-1.5 rounded-full ${emp.status === "Active"
                           ? "bg-[#16a34a]"
                           : emp.status === "Pending"
-                          ? "bg-[#ea580c]"
-                          : "bg-[#dc2626]"
-                      }`} />
+                            ? "bg-[#ea580c]"
+                            : "bg-[#dc2626]"
+                        }`} />
                       {emp.status}
                     </span>
                   </td>
 
                   {/* Employment Status Badge */}
                   <td className="px-6 py-4">
-                    <span className={`px-2.5 py-1 rounded-full text-[10px] font-extrabold ${
-                      emp.employmentStatus === "Currently Hired"
+                    <span className={`px-2.5 py-1 rounded-full text-[10px] font-extrabold ${emp.employmentStatus === "Currently Hired"
                         ? "bg-[#eff6ff] text-[#2563eb]"
                         : "bg-[#fce7f3] text-[#db2777]"
-                    }`}>
+                      }`}>
                       {emp.employmentStatus}
                     </span>
                   </td>

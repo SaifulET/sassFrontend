@@ -515,8 +515,25 @@ export default function Home() {
           <WaiversPage />
         );
       case "settings":
+      case "settings_Profile":
         return (
-          <SettingsPage />
+          <SettingsPage defaultActiveTab="Profile" key="Profile" />
+        );
+      case "settings_System":
+        return (
+          <SettingsPage defaultActiveTab="System" key="System" />
+        );
+      case "settings_Security":
+        return (
+          <SettingsPage defaultActiveTab="Security" key="Security" />
+        );
+      case "settings_Billing":
+        return (
+          <SettingsPage defaultActiveTab="Billing" key="Billing" />
+        );
+      case "settings_Notifications":
+        return (
+          <SettingsPage defaultActiveTab="Notifications" key="Notifications" />
         );
       case "support":
         return (

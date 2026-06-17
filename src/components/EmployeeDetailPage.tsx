@@ -352,8 +352,8 @@ export default function EmployeeDetailPage({ employee, onBack, onViewPermissions
           <button
             onClick={() => setActiveSubTab("basic")}
             className={`px-6 py-3 border-b-2 text-xs font-bold transition-all flex items-center gap-2 ${activeSubTab === "basic"
-                ? "border-[#5e53fc] text-[#5e53fc]"
-                : "border-transparent text-slate-400 hover:text-slate-700"
+              ? "border-[#5e53fc] text-[#5e53fc]"
+              : "border-transparent text-slate-400 hover:text-slate-700"
               }`}
           >
             <span>Basic Data</span>
@@ -361,8 +361,8 @@ export default function EmployeeDetailPage({ employee, onBack, onViewPermissions
           <button
             onClick={() => setActiveSubTab("remuneration")}
             className={`px-6 py-3 border-b-2 text-xs font-bold transition-all flex items-center gap-2 ${activeSubTab === "remuneration"
-                ? "border-[#5e53fc] text-[#5e53fc]"
-                : "border-transparent text-slate-400 hover:text-slate-700"
+              ? "border-[#5e53fc] text-[#5e53fc]"
+              : "border-transparent text-slate-400 hover:text-slate-700"
               }`}
           >
             <span>Remuneration</span>
@@ -370,8 +370,8 @@ export default function EmployeeDetailPage({ employee, onBack, onViewPermissions
           <button
             onClick={() => setActiveSubTab("activity")}
             className={`px-6 py-3 border-b-2 text-xs font-bold transition-all flex items-center gap-2 ${activeSubTab === "activity"
-                ? "border-[#5e53fc] text-[#5e53fc]"
-                : "border-transparent text-slate-400 hover:text-slate-700"
+              ? "border-[#5e53fc] text-[#5e53fc]"
+              : "border-transparent text-slate-400 hover:text-slate-700"
               }`}
           >
             <span>Activity in Salon</span>
@@ -379,8 +379,8 @@ export default function EmployeeDetailPage({ employee, onBack, onViewPermissions
           <button
             onClick={() => setActiveSubTab("production")}
             className={`px-6 py-3 border-b-2 text-xs font-bold transition-all flex items-center gap-2 ${activeSubTab === "production"
-                ? "border-[#5e53fc] text-[#5e53fc]"
-                : "border-transparent text-slate-400 hover:text-slate-700"
+              ? "border-[#5e53fc] text-[#5e53fc]"
+              : "border-transparent text-slate-400 hover:text-slate-700"
               }`}
           >
             <span>Production</span>
@@ -388,7 +388,7 @@ export default function EmployeeDetailPage({ employee, onBack, onViewPermissions
         </div>
 
         {/* Sub-tab content renderer */}
-        <div className="pt-8">
+      <div className="pt-2 w-full flex flex-col">
           {/* TAB 1: BASIC DATA */}
           {activeSubTab === "basic" && (
             <div className="flex flex-col gap-6 w-full">
@@ -500,10 +500,10 @@ export default function EmployeeDetailPage({ employee, onBack, onViewPermissions
                           <div key={idx} className="flex items-center gap-2">
                             <span className="text-slate-700 font-bold">{l.lang}</span>
                             <span className={`px-1.5 py-0.5 rounded text-[8px] font-extrabold uppercase ${l.level === "Native"
-                                ? "bg-purple-50 text-purple-600"
-                                : l.level === "Advanced"
-                                  ? "bg-emerald-50 text-emerald-600"
-                                  : "bg-orange-50 text-orange-600"
+                              ? "bg-purple-50 text-purple-600"
+                              : l.level === "Advanced"
+                                ? "bg-emerald-50 text-emerald-600"
+                                : "bg-orange-50 text-orange-600"
                               }`}>
                               {l.level}
                             </span>
@@ -657,57 +657,57 @@ export default function EmployeeDetailPage({ employee, onBack, onViewPermissions
                 <div className="w-full py-2 overflow-x-auto scrollbar-thin">
                   <div className="min-w-[1000px] md:min-w-0 w-full">
                     <svg className="w-full h-[300px]" viewBox="0 0 1385 300" preserveAspectRatio="none" xmlns="http://www.w3.org/2000/svg">
-                    {/* Y-axis labels */}
-                    <text x="42" y="32" textAnchor="end" fontSize="11" fill="#94a3b8" fontWeight="600">€ 4,000</text>
-                    <text x="42" y="72" textAnchor="end" fontSize="11" fill="#94a3b8" fontWeight="600">€ 3,500</text>
-                    <text x="42" y="112" textAnchor="end" fontSize="11" fill="#94a3b8" fontWeight="600">€ 3,000</text>
-                    <text x="42" y="152" textAnchor="end" fontSize="11" fill="#94a3b8" fontWeight="600">€ 2,500</text>
-                    <text x="42" y="192" textAnchor="end" fontSize="11" fill="#94a3b8" fontWeight="600">€ 2,000</text>
-                    <text x="42" y="232" textAnchor="end" fontSize="11" fill="#94a3b8" fontWeight="600">€ 1,500</text>
-                    <text x="42" y="262" textAnchor="end" fontSize="11" fill="#94a3b8" fontWeight="600">€ 1,000</text>
+                      {/* Y-axis labels */}
+                      <text x="42" y="32" textAnchor="end" fontSize="11" fill="#94a3b8" fontWeight="600">€ 4,000</text>
+                      <text x="42" y="72" textAnchor="end" fontSize="11" fill="#94a3b8" fontWeight="600">€ 3,500</text>
+                      <text x="42" y="112" textAnchor="end" fontSize="11" fill="#94a3b8" fontWeight="600">€ 3,000</text>
+                      <text x="42" y="152" textAnchor="end" fontSize="11" fill="#94a3b8" fontWeight="600">€ 2,500</text>
+                      <text x="42" y="192" textAnchor="end" fontSize="11" fill="#94a3b8" fontWeight="600">€ 2,000</text>
+                      <text x="42" y="232" textAnchor="end" fontSize="11" fill="#94a3b8" fontWeight="600">€ 1,500</text>
+                      <text x="42" y="262" textAnchor="end" fontSize="11" fill="#94a3b8" fontWeight="600">€ 1,000</text>
 
-                    {/* Horizontal gridlines */}
-                    <line x1="52" y1="28" x2="1370" y2="28" stroke="#f1f5f9" strokeWidth="1" />
-                    <line x1="52" y1="68" x2="1370" y2="68" stroke="#f1f5f9" strokeWidth="1" />
-                    <line x1="52" y1="108" x2="1370" y2="108" stroke="#f1f5f9" strokeWidth="1" />
-                    <line x1="52" y1="148" x2="1370" y2="148" stroke="#f1f5f9" strokeWidth="1" />
-                    <line x1="52" y1="188" x2="1370" y2="188" stroke="#f1f5f9" strokeWidth="1" />
-                    <line x1="52" y1="228" x2="1370" y2="228" stroke="#f1f5f9" strokeWidth="1" />
-                    <line x1="52" y1="258" x2="1370" y2="258" stroke="#f1f5f9" strokeWidth="1" />
+                      {/* Horizontal gridlines */}
+                      <line x1="52" y1="28" x2="1370" y2="28" stroke="#f1f5f9" strokeWidth="1" />
+                      <line x1="52" y1="68" x2="1370" y2="68" stroke="#f1f5f9" strokeWidth="1" />
+                      <line x1="52" y1="108" x2="1370" y2="108" stroke="#f1f5f9" strokeWidth="1" />
+                      <line x1="52" y1="148" x2="1370" y2="148" stroke="#f1f5f9" strokeWidth="1" />
+                      <line x1="52" y1="188" x2="1370" y2="188" stroke="#f1f5f9" strokeWidth="1" />
+                      <line x1="52" y1="228" x2="1370" y2="228" stroke="#f1f5f9" strokeWidth="1" />
+                      <line x1="52" y1="258" x2="1370" y2="258" stroke="#f1f5f9" strokeWidth="1" />
 
-                    {/* Bars: 140px wide, 85px gap between each */}
-                    {/* 2020 — x=60 */}
-                    <rect x="60" y="48" width="140" height="225" rx="12" fill="#f1f0ff" />
-                    <rect x="60" y="218" width="140" height="55" rx="12" fill="#5e53fc" />
-                    <text x="130" y="290" textAnchor="middle" fontSize="12" fill="#94a3b8" fontWeight="600">2020</text>
+                      {/* Bars: 140px wide, 85px gap between each */}
+                      {/* 2020 — x=60 */}
+                      <rect x="60" y="48" width="140" height="225" rx="12" fill="#f1f0ff" />
+                      <rect x="60" y="218" width="140" height="55" rx="12" fill="#5e53fc" />
+                      <text x="130" y="290" textAnchor="middle" fontSize="12" fill="#94a3b8" fontWeight="600">2020</text>
 
-                    {/* 2021 — x=285 */}
-                    <rect x="285" y="58" width="140" height="215" rx="12" fill="#f1f0ff" />
-                    <rect x="285" y="208" width="140" height="65" rx="12" fill="#5e53fc" />
-                    <text x="355" y="290" textAnchor="middle" fontSize="12" fill="#94a3b8" fontWeight="600">2021</text>
+                      {/* 2021 — x=285 */}
+                      <rect x="285" y="58" width="140" height="215" rx="12" fill="#f1f0ff" />
+                      <rect x="285" y="208" width="140" height="65" rx="12" fill="#5e53fc" />
+                      <text x="355" y="290" textAnchor="middle" fontSize="12" fill="#94a3b8" fontWeight="600">2021</text>
 
-                    {/* 2022 — x=510 */}
-                    <rect x="510" y="48" width="140" height="225" rx="12" fill="#f1f0ff" />
-                    <rect x="510" y="188" width="140" height="85" rx="12" fill="#5e53fc" />
-                    <text x="580" y="290" textAnchor="middle" fontSize="12" fill="#94a3b8" fontWeight="600">2022</text>
+                      {/* 2022 — x=510 */}
+                      <rect x="510" y="48" width="140" height="225" rx="12" fill="#f1f0ff" />
+                      <rect x="510" y="188" width="140" height="85" rx="12" fill="#5e53fc" />
+                      <text x="580" y="290" textAnchor="middle" fontSize="12" fill="#94a3b8" fontWeight="600">2022</text>
 
-                    {/* 2023 — x=735 */}
-                    <rect x="735" y="38" width="140" height="235" rx="12" fill="#f1f0ff" />
-                    <rect x="735" y="198" width="140" height="75" rx="12" fill="#5e53fc" />
-                    <text x="805" y="290" textAnchor="middle" fontSize="12" fill="#94a3b8" fontWeight="600">2023</text>
+                      {/* 2023 — x=735 */}
+                      <rect x="735" y="38" width="140" height="235" rx="12" fill="#f1f0ff" />
+                      <rect x="735" y="198" width="140" height="75" rx="12" fill="#5e53fc" />
+                      <text x="805" y="290" textAnchor="middle" fontSize="12" fill="#94a3b8" fontWeight="600">2023</text>
 
-                    {/* 2024 — x=960 */}
-                    <rect x="960" y="28" width="140" height="245" rx="12" fill="#f1f0ff" />
-                    <rect x="960" y="208" width="140" height="65" rx="12" fill="#5e53fc" />
-                    <text x="1030" y="290" textAnchor="middle" fontSize="12" fill="#94a3b8" fontWeight="600">2024</text>
+                      {/* 2024 — x=960 */}
+                      <rect x="960" y="28" width="140" height="245" rx="12" fill="#f1f0ff" />
+                      <rect x="960" y="208" width="140" height="65" rx="12" fill="#5e53fc" />
+                      <text x="1030" y="290" textAnchor="middle" fontSize="12" fill="#94a3b8" fontWeight="600">2024</text>
 
-                    {/* 2025 — x=1185 */}
-                    <rect x="1185" y="18" width="140" height="255" rx="12" fill="#f1f0ff" />
-                    <rect x="1185" y="188" width="140" height="85" rx="12" fill="#5e53fc" />
-                    <text x="1255" y="290" textAnchor="middle" fontSize="12" fill="#94a3b8" fontWeight="600">2025</text>
-                  </svg>
+                      {/* 2025 — x=1185 */}
+                      <rect x="1185" y="18" width="140" height="255" rx="12" fill="#f1f0ff" />
+                      <rect x="1185" y="188" width="140" height="85" rx="12" fill="#5e53fc" />
+                      <text x="1255" y="290" textAnchor="middle" fontSize="12" fill="#94a3b8" fontWeight="600">2025</text>
+                    </svg>
+                  </div>
                 </div>
-              </div>
 
                 {/* Chart navigation arrows — circular */}
                 <div className="flex justify-end gap-2 -mt-2">
@@ -732,41 +732,41 @@ export default function EmployeeDetailPage({ employee, onBack, onViewPermissions
                 </div>
                 <div className="overflow-x-auto w-full">
                   <table className="w-full border-collapse text-left text-xs min-w-[600px]">
-                  <thead>
-                    <tr className="bg-slate-50/50 border-b border-slate-100 text-slate-400 font-bold uppercase tracking-widest text-[9px]">
-                      <th className="px-6 py-4">Data</th>
-                      <th className="px-6 py-4">Net</th>
-                      <th className="px-6 py-4">Gross</th>
-                      <th className="px-6 py-4">Contributions</th>
-                      <th className="px-6 py-4">TFR</th>
-                      <th className="px-6 py-4">Last Login</th>
-                      <th className="px-6 py-4 text-center">Actions</th>
-                    </tr>
-                  </thead>
-                  <tbody className="divide-y divide-slate-100 text-slate-600 font-semibold">
-                    {payslips.map((ps, idx) => (
-                      <tr key={idx} className="hover:bg-slate-50/30 transition-all">
-                        <td className="px-6 py-4 text-slate-800 font-bold">{ps.date}</td>
-                        <td className="px-6 py-4 text-slate-800 font-extrabold">{ps.net}</td>
-                        <td className="px-6 py-4">{ps.gross}</td>
-                        <td className="px-6 py-4">{ps.contributions}</td>
-                        <td className="px-6 py-4">{ps.tfr}</td>
-                        <td className="px-6 py-4 text-slate-400 font-medium">{ps.login}</td>
-                        <td className="px-6 py-4 text-center">
-                          <button
-                            onClick={() => alert(`Downloading payslip for ${ps.date}`)}
-                            className="p-2 bg-indigo-50/60 hover:bg-indigo-100 text-[#5e53fc] rounded-xl transition-all inline-flex"
-                          >
-                            <DownloadIcon />
-                          </button>
-                        </td>
+                    <thead>
+                      <tr className="bg-slate-50/50 border-b border-slate-100 text-slate-400 font-bold uppercase tracking-widest text-[9px]">
+                        <th className="px-6 py-4">Data</th>
+                        <th className="px-6 py-4">Net</th>
+                        <th className="px-6 py-4">Gross</th>
+                        <th className="px-6 py-4">Contributions</th>
+                        <th className="px-6 py-4">TFR</th>
+                        <th className="px-6 py-4">Last Login</th>
+                        <th className="px-6 py-4 text-center">Actions</th>
                       </tr>
-                    ))}
-                  </tbody>
-                </table>
-              </div>
+                    </thead>
+                    <tbody className="divide-y divide-slate-100 text-slate-600 font-semibold">
+                      {payslips.map((ps, idx) => (
+                        <tr key={idx} className="hover:bg-slate-50/30 transition-all">
+                          <td className="px-6 py-4 text-slate-800 font-bold">{ps.date}</td>
+                          <td className="px-6 py-4 text-slate-800 font-extrabold">{ps.net}</td>
+                          <td className="px-6 py-4">{ps.gross}</td>
+                          <td className="px-6 py-4">{ps.contributions}</td>
+                          <td className="px-6 py-4">{ps.tfr}</td>
+                          <td className="px-6 py-4 text-slate-400 font-medium">{ps.login}</td>
+                          <td className="px-6 py-4 text-center">
+                            <button
+                              onClick={() => alert(`Downloading payslip for ${ps.date}`)}
+                              className="p-2 bg-indigo-50/60 hover:bg-indigo-100 text-[#5e53fc] rounded-xl transition-all inline-flex"
+                            >
+                              <DownloadIcon />
+                            </button>
+                          </td>
+                        </tr>
+                      ))}
+                    </tbody>
+                  </table>
+                </div>
 
-              {/* Table Footer with pagination */}
+                {/* Table Footer with pagination */}
                 <div className="px-6 py-4 flex items-center justify-end gap-4 border-t border-slate-100 text-slate-400 text-xs font-semibold">
                   <div className="flex items-center gap-1.5">
                     <span>Items per page:</span>
@@ -802,171 +802,181 @@ export default function EmployeeDetailPage({ employee, onBack, onViewPermissions
           {/* TAB 3: ACTIVITY IN SALON */}
           {activeSubTab === "activity" && (
             <div className="flex flex-col gap-6 w-full text-left">
-              {/* Metric grid */}
-              <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-                <div className="border border-slate-100 rounded-3xl p-5 bg-gradient-to-tr from-slate-50/40 to-slate-50 flex flex-col gap-1">
-                  <span className="text-[#5e53fc] text-[9px] font-extrabold uppercase">Appointments Completed (Last 30 days)</span>
-                  <span className="text-3xl font-black text-slate-800 mt-1">45</span>
+              
+              {/* Analytics Container Box */}
+              <div className="bg-white rounded-3xl p-6 border border-[#eef2f6] shadow-[0_4px_20px_rgba(0,0,0,0.01)] flex flex-col gap-6 w-full">
+                {/* Header */}
+                <div className="flex items-center justify-between border-b border-slate-100 pb-3">
+                  <h3 className="text-sm font-bold text-slate-800">Analytics</h3>
                 </div>
-                <div className="border border-slate-100 rounded-3xl p-5 bg-gradient-to-tr from-slate-50/40 to-slate-50 flex flex-col gap-1">
-                  <span className="text-teal-600 text-[9px] font-extrabold uppercase">Appointments Booked Now (Last 30 days)</span>
-                  <span className="text-3xl font-black text-slate-800 mt-1">52</span>
+
+                {/* Metric grid */}
+                <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+                  <div className="border border-[#e2dfff] rounded-3xl p-5 bg-[#f5f3ff] flex flex-col gap-1.5">
+                    <span className="text-[#5e53fc] text-[9px] font-extrabold uppercase tracking-wider">Appointments Completed (Last 30 days)</span>
+                    <span className="text-3xl font-black text-[#5e53fc] mt-1">45</span>
+                  </div>
+                  <div className="border border-[#ccfbf1] rounded-3xl p-5 bg-[#f0fdfa] flex flex-col gap-1.5">
+                    <span className="text-teal-600 text-[9px] font-extrabold uppercase tracking-wider">Appointments Booked Now (Last 30 days)</span>
+                    <span className="text-3xl font-black text-teal-600 mt-1">52</span>
+                  </div>
                 </div>
-              </div>
 
-              {/* Weekly Appointments Line Chart */}
-              <div className="border border-slate-100 rounded-3xl p-6 bg-white flex flex-col gap-4">
-                <h4 className="text-sm font-bold text-slate-800">Weekly Appointments</h4>
+                {/* Weekly Appointments Line Chart */}
+                <div className="flex flex-col gap-4 pt-6 border-t border-slate-100">
+                  <h4 className="text-sm font-bold text-slate-800">Weekly Appointments</h4>
 
-                {/* SVG Line Chart — full width, interactive */}
-                <div className="w-full py-2 overflow-x-auto scrollbar-thin">
-                  <div className="min-w-[800px] md:min-w-0 w-full">
-                    <svg 
-                      className="w-full h-[250px]" 
-                      viewBox="0 0 1000 250" 
-                      preserveAspectRatio="none" 
-                      xmlns="http://www.w3.org/2000/svg" 
-                      onMouseLeave={() => setHoveredPoint(null)}
-                      onTouchMove={handleActivityTouch}
-                      onTouchStart={handleActivityTouch}
-                      style={{ touchAction: "none" }}
-                    >
-                    {/* Y-axis labels */}
-                    <text x="30" y="22" textAnchor="end" fontSize="11" fill="#94a3b8" fontWeight="600">140</text>
-                    <text x="30" y="62" textAnchor="end" fontSize="11" fill="#94a3b8" fontWeight="600">105</text>
-                    <text x="30" y="102" textAnchor="end" fontSize="11" fill="#94a3b8" fontWeight="600">70</text>
-                    <text x="30" y="142" textAnchor="end" fontSize="11" fill="#94a3b8" fontWeight="600">35</text>
-                    <text x="30" y="182" textAnchor="end" fontSize="11" fill="#94a3b8" fontWeight="600">0</text>
-
-                    {/* Horizontal gridlines */}
-                    <line x1="40" y1="18" x2="980" y2="18" stroke="#f1f5f9" strokeWidth="1" />
-                    <line x1="40" y1="58" x2="980" y2="58" stroke="#f1f5f9" strokeWidth="1" />
-                    <line x1="40" y1="98" x2="980" y2="98" stroke="#f1f5f9" strokeWidth="1" />
-                    <line x1="40" y1="138" x2="980" y2="138" stroke="#f1f5f9" strokeWidth="1" />
-                    <line x1="40" y1="178" x2="980" y2="178" stroke="#f1f5f9" strokeWidth="1" />
-
-                    {/* Green gradient fill */}
-                    <defs>
-                      <linearGradient id="greenGradient" x1="0" y1="0" x2="0" y2="1">
-                        <stop offset="0%" stopColor="#10b981" />
-                        <stop offset="100%" stopColor="#10b981" stopOpacity="0" />
-                      </linearGradient>
-                    </defs>
-
-                    {/* Green area fill under curve */}
-                    <path
-                      d="M 40 128 C 80 120, 140 115, 250 118 C 320 120, 350 125, 390 102 C 430 80, 480 88, 530 92 C 580 96, 620 112, 670 108 C 720 104, 760 48, 810 32 C 860 16, 900 28, 950 38 L 950 178 L 40 178 Z"
-                      fill="url(#greenGradient)"
-                      opacity="0.12"
-                    />
-
-                    {/* Green smooth curve line */}
-                    <path
-                      d="M 40 128 C 80 120, 140 115, 250 118 C 320 120, 350 125, 390 102 C 430 80, 480 88, 530 92 C 580 96, 620 112, 670 108 C 720 104, 760 48, 810 32 C 860 16, 900 28, 950 38"
-                      fill="none"
-                      stroke="#10b981"
-                      strokeWidth="2.5"
-                      strokeLinecap="round"
-                    />
-
-                    {/* Interactive data points — invisible hit areas + visible dots */}
-                    {weeklyData.map((d, i) => (
-                      <g key={`pt-${i}`}>
-                        {/* Invisible hit area for hover/click */}
-                        <rect
-                          x={d.x - 50}
-                          y="0"
-                          width="100"
-                          height="200"
-                          fill="transparent"
-                          style={{ cursor: "pointer" }}
-                          onMouseEnter={() => setHoveredPoint(i)}
-                          onClick={() => setHoveredPoint(i)}
-                        />
-                        {/* Visible dot */}
-                        <circle
-                          cx={d.x}
-                          cy={d.y}
-                          r={hoveredPoint === i ? 6 : 0}
-                          fill="#10b981"
-                          stroke="white"
-                          strokeWidth="2.5"
-                          style={{ transition: "r 0.15s ease" }}
-                        />
-                        {/* Vertical indicator line */}
-                        {hoveredPoint === i && (
-                          <line x1={d.x} y1={d.y + 8} x2={d.x} y2="178" stroke="#10b981" strokeWidth="1" strokeDasharray="3 3" opacity="0.3" />
-                        )}
-                      </g>
-                    ))}
-
-                    {/* Tooltip Card (using transform translation) */}
-                    {(() => {
-                      if (hoveredPoint === null) return null;
-                      const activePoint = weeklyData[hoveredPoint];
-                      const tooltipX = activePoint.x - 65;
-                      const tooltipY = activePoint.y - 45;
-                      return (
-                        <g 
-                          style={{ 
-                            transform: `translate(${tooltipX}px, ${tooltipY}px)`, 
-                            transition: "transform 0.2s cubic-bezier(0.4, 0, 0.2, 1)",
-                            pointerEvents: "none"
-                          }}
-                        >
-                          <rect x="0" y="0" width="130" height="36" rx="8" fill="white" stroke="#e2e8f0" strokeWidth="1" filter="drop-shadow(0 2px 4px rgba(0,0,0,0.02))" />
-                          <text x="65" y="14" textAnchor="middle" fontSize="9" fill="#64748b" fontWeight="bold">{activePoint.day}</text>
-                          <text x="65" y="27" textAnchor="middle" fontSize="10" fill="#10b981" fontWeight="extrabold">{activePoint.value} Appointments</text>
-                        </g>
-                      );
-                    })()}
-
-                    {/* Day labels */}
-                    {weeklyData.map((d, i) => (
-                      <text 
-                        key={`dl-${i}`} 
-                        x={d.x} 
-                        y="198" 
-                        textAnchor="middle" 
-                        fontSize="11" 
-                        fill={hoveredPoint === i ? "#10b981" : "#94a3b8"} 
-                        fontWeight={hoveredPoint === i ? "700" : "600"}
-                        style={{ transition: "fill 0.2s ease" }}
+                  {/* SVG Line Chart — full width, interactive */}
+                  <div className="w-full py-2 overflow-x-auto scrollbar-thin">
+                    <div className="min-w-[800px] md:min-w-0 w-full">
+                      <svg
+                        className="w-full h-[250px]"
+                        viewBox="0 0 1000 250"
+                        preserveAspectRatio="none"
+                        xmlns="http://www.w3.org/2000/svg"
+                        onMouseLeave={() => setHoveredPoint(null)}
+                        onTouchMove={handleActivityTouch}
+                        onTouchStart={handleActivityTouch}
+                        style={{ touchAction: "none" }}
                       >
-                        {d.day}
-                      </text>
-                    ))}
-                  </svg>
-                </div>
-              </div>
-              </div>
+                        {/* Y-axis labels */}
+                        <text x="30" y="22" textAnchor="end" fontSize="11" fill="#94a3b8" fontWeight="600">140</text>
+                        <text x="30" y="62" textAnchor="end" fontSize="11" fill="#94a3b8" fontWeight="600">105</text>
+                        <text x="30" y="102" textAnchor="end" fontSize="11" fill="#94a3b8" fontWeight="600">70</text>
+                        <text x="30" y="142" textAnchor="end" fontSize="11" fill="#94a3b8" fontWeight="600">35</text>
+                        <text x="30" y="182" textAnchor="end" fontSize="11" fill="#94a3b8" fontWeight="600">0</text>
 
-              {/* Top 3 Services */}
-              <div className="border border-slate-100 rounded-3xl p-6 bg-white flex flex-col gap-4">
-                <h4 className="text-xs font-extrabold text-slate-800 uppercase tracking-wider">Top 3 Services</h4>
-                <div className="flex flex-col gap-3">
-                  <div className="flex items-center gap-3 justify-between p-3.5 border border-slate-50 rounded-2xl bg-slate-50/20">
-                    <span className="flex items-center gap-3">
-                      <span className="w-6 h-6 rounded-lg bg-indigo-50 text-[#5e53fc] font-bold text-xs flex items-center justify-center">1</span>
-                      <span className="text-xs font-bold text-slate-700">Cut and Fold</span>
-                    </span>
-                    <span className="text-xs font-extrabold text-[#5e53fc]">35 sales</span>
-                  </div>
-                  <div className="flex items-center gap-3 justify-between p-3.5 border border-slate-50 rounded-2xl bg-slate-50/20">
-                    <span className="flex items-center gap-3">
-                      <span className="w-6 h-6 rounded-lg bg-indigo-50 text-[#5e53fc] font-bold text-xs flex items-center justify-center">2</span>
-                      <span className="text-xs font-bold text-slate-700">Shampoo Treatment</span>
-                    </span>
-                    <span className="text-xs font-extrabold text-[#5e53fc]">25 sales</span>
-                  </div>
-                  <div className="flex items-center gap-3 justify-between p-3.5 border border-slate-50 rounded-2xl bg-slate-50/20">
-                    <span className="flex items-center gap-3">
-                      <span className="w-6 h-6 rounded-lg bg-indigo-50 text-[#5e53fc] font-bold text-xs flex items-center justify-center">3</span>
-                      <span className="text-xs font-bold text-slate-700">Hair Coloring</span>
-                    </span>
-                    <span className="text-xs font-extrabold text-[#5e53fc]">15 sales</span>
+                        {/* Horizontal gridlines */}
+                        <line x1="40" y1="18" x2="980" y2="18" stroke="#f1f5f9" strokeWidth="1" />
+                        <line x1="40" y1="58" x2="980" y2="58" stroke="#f1f5f9" strokeWidth="1" />
+                        <line x1="40" y1="98" x2="980" y2="98" stroke="#f1f5f9" strokeWidth="1" />
+                        <line x1="40" y1="138" x2="980" y2="138" stroke="#f1f5f9" strokeWidth="1" />
+                        <line x1="40" y1="178" x2="980" y2="178" stroke="#f1f5f9" strokeWidth="1" />
+
+                        {/* Green gradient fill */}
+                        <defs>
+                          <linearGradient id="greenGradient" x1="0" y1="0" x2="0" y2="1">
+                            <stop offset="0%" stopColor="#10b981" />
+                            <stop offset="100%" stopColor="#10b981" stopOpacity="0" />
+                          </linearGradient>
+                        </defs>
+
+                        {/* Green area fill under curve */}
+                        <path
+                          d="M 40 128 C 80 120, 140 115, 250 118 C 320 120, 350 125, 390 102 C 430 80, 480 88, 530 92 C 580 96, 620 112, 670 108 C 720 104, 760 48, 810 32 C 860 16, 900 28, 950 38 L 950 178 L 40 178 Z"
+                          fill="url(#greenGradient)"
+                          opacity="0.12"
+                        />
+
+                        {/* Green smooth curve line */}
+                        <path
+                          d="M 40 128 C 80 120, 140 115, 250 118 C 320 120, 350 125, 390 102 C 430 80, 480 88, 530 92 C 580 96, 620 112, 670 108 C 720 104, 760 48, 810 32 C 860 16, 900 28, 950 38"
+                          fill="none"
+                          stroke="#10b981"
+                          strokeWidth="2.5"
+                          strokeLinecap="round"
+                        />
+
+                        {/* Interactive data points — invisible hit areas + visible dots */}
+                        {weeklyData.map((d, i) => (
+                          <g key={`pt-${i}`}>
+                            {/* Invisible hit area for hover/click */}
+                            <rect
+                              x={d.x - 50}
+                              y="0"
+                              width="100"
+                              height="200"
+                              fill="transparent"
+                              style={{ cursor: "pointer" }}
+                              onMouseEnter={() => setHoveredPoint(i)}
+                              onClick={() => setHoveredPoint(i)}
+                            />
+                            {/* Visible dot */}
+                            <circle
+                              cx={d.x}
+                              cy={d.y}
+                              r={hoveredPoint === i ? 6 : 0}
+                              fill="#10b981"
+                              stroke="white"
+                              strokeWidth="2.5"
+                              style={{ transition: "r 0.15s ease" }}
+                            />
+                            {/* Vertical indicator line */}
+                            {hoveredPoint === i && (
+                              <line x1={d.x} y1={d.y + 8} x2={d.x} y2="178" stroke="#10b981" strokeWidth="1" strokeDasharray="3 3" opacity="0.3" />
+                            )}
+                          </g>
+                        ))}
+
+                        {/* Tooltip Card (using transform translation) */}
+                        {(() => {
+                          if (hoveredPoint === null) return null;
+                          const activePoint = weeklyData[hoveredPoint];
+                          const tooltipX = activePoint.x - 65;
+                          const tooltipY = activePoint.y - 45;
+                          return (
+                            <g
+                              style={{
+                                transform: `translate(${tooltipX}px, ${tooltipY}px)`,
+                                transition: "transform 0.2s cubic-bezier(0.4, 0, 0.2, 1)",
+                                pointerEvents: "none"
+                              }}
+                            >
+                              <rect x="0" y="0" width="130" height="36" rx="8" fill="white" stroke="#e2e8f0" strokeWidth="1" filter="drop-shadow(0 2px 4px rgba(0,0,0,0.02))" />
+                              <text x="65" y="14" textAnchor="middle" fontSize="9" fill="#64748b" fontWeight="bold">{activePoint.day}</text>
+                              <text x="65" y="27" textAnchor="middle" fontSize="10" fill="#10b981" fontWeight="extrabold">{activePoint.value} Appointments</text>
+                            </g>
+                          );
+                        })()}
+
+                        {/* Day labels */}
+                        {weeklyData.map((d, i) => (
+                          <text
+                            key={`dl-${i}`}
+                            x={d.x}
+                            y="198"
+                            textAnchor="middle"
+                            fontSize="11"
+                            fill={hoveredPoint === i ? "#10b981" : "#94a3b8"}
+                            fontWeight={hoveredPoint === i ? "700" : "600"}
+                            style={{ transition: "fill 0.2s ease" }}
+                          >
+                            {d.day}
+                          </text>
+                        ))}
+                      </svg>
+                    </div>
                   </div>
                 </div>
+
+                {/* Top 3 Services */}
+                <div className="flex flex-col gap-4 pt-6 border-t border-slate-100">
+                  <h4 className="text-xs font-extrabold text-slate-800 uppercase tracking-wider">Top 3 Services</h4>
+                  <div className="flex flex-col gap-3">
+                    <div className="flex items-center gap-3 justify-between p-3.5 border border-slate-50 rounded-2xl bg-slate-50/20">
+                      <span className="flex items-center gap-3">
+                        <span className="w-6 h-6 rounded-lg bg-indigo-50 text-[#5e53fc] font-bold text-xs flex items-center justify-center">1</span>
+                        <span className="text-xs font-bold text-slate-700">Cut and Fold</span>
+                      </span>
+                      <span className="text-xs font-extrabold text-[#5e53fc]">35 sales</span>
+                    </div>
+                    <div className="flex items-center gap-3 justify-between p-3.5 border border-slate-50 rounded-2xl bg-slate-50/20">
+                      <span className="flex items-center gap-3">
+                        <span className="w-6 h-6 rounded-lg bg-indigo-50 text-[#5e53fc] font-bold text-xs flex items-center justify-center">2</span>
+                        <span className="text-xs font-bold text-slate-700">Shampoo Treatment</span>
+                      </span>
+                      <span className="text-xs font-extrabold text-[#5e53fc]">25 sales</span>
+                    </div>
+                    <div className="flex items-center gap-3 justify-between p-3.5 border border-slate-50 rounded-2xl bg-slate-50/20">
+                      <span className="flex items-center gap-3">
+                        <span className="w-6 h-6 rounded-lg bg-indigo-50 text-[#5e53fc] font-bold text-xs flex items-center justify-center">3</span>
+                        <span className="text-xs font-bold text-slate-700">Hair Coloring</span>
+                      </span>
+                      <span className="text-xs font-extrabold text-[#5e53fc]">15 sales</span>
+                    </div>
+                  </div>
+                </div>
+
               </div>
 
               {/* Recent Stamps */}
@@ -979,33 +989,33 @@ export default function EmployeeDetailPage({ employee, onBack, onViewPermissions
                 </div>
                 <div className="overflow-x-auto w-full">
                   <table className="w-full border-collapse text-left text-xs min-w-[600px]">
-                  <thead>
-                    <tr className="bg-slate-50/50 border-b border-slate-100 text-slate-400 font-bold uppercase tracking-widest text-[9px]">
-                      <th className="px-6 py-4">Data</th>
-                      <th className="px-6 py-4">Time-Range</th>
-                      <th className="px-6 py-4">Total Time</th>
-                      <th className="px-6 py-4">Added</th>
-                    </tr>
-                  </thead>
-                  <tbody className="divide-y divide-slate-100 text-slate-600 font-semibold">
-                    {stamps.map((st, idx) => (
-                      <tr key={idx} className="hover:bg-slate-50/30 transition-all">
-                        <td className="px-6 py-4 text-slate-800 font-bold">{st.date}</td>
-                        <td className="px-6 py-4">{st.time}</td>
-                        <td className="px-6 py-4 text-slate-800 font-extrabold">{st.total}</td>
-                        <td className="px-6 py-4 text-slate-400 font-medium">{st.added}</td>
+                    <thead>
+                      <tr className="bg-slate-50/50 border-b border-slate-100 text-slate-400 font-bold uppercase tracking-widest text-[9px]">
+                        <th className="px-6 py-4">Data</th>
+                        <th className="px-6 py-4">Time-Range</th>
+                        <th className="px-6 py-4">Total Time</th>
+                        <th className="px-6 py-4">Added</th>
                       </tr>
-                    ))}
-                    {/* Total hours summary row */}
-                    <tr className="bg-slate-50/20">
-                      <td colSpan={2} className="px-6 py-4"></td>
-                      <td colSpan={2} className="px-6 py-4 text-slate-800 font-black">
-                        30h <span className="text-[10px] text-slate-400 font-bold uppercase ml-1">Total of the hours</span>
-                      </td>
-                    </tr>
-                  </tbody>
-                </table>
-              </div>
+                    </thead>
+                    <tbody className="divide-y divide-slate-100 text-slate-600 font-semibold">
+                      {stamps.map((st, idx) => (
+                        <tr key={idx} className="hover:bg-slate-50/30 transition-all">
+                          <td className="px-6 py-4 text-slate-800 font-bold">{st.date}</td>
+                          <td className="px-6 py-4">{st.time}</td>
+                          <td className="px-6 py-4 text-slate-800 font-extrabold">{st.total}</td>
+                          <td className="px-6 py-4 text-slate-400 font-medium">{st.added}</td>
+                        </tr>
+                      ))}
+                      {/* Total hours summary row */}
+                      <tr className="bg-slate-50/20">
+                        <td colSpan={2} className="px-6 py-4"></td>
+                        <td colSpan={2} className="px-6 py-4 text-slate-800 font-black">
+                          30h <span className="text-[10px] text-slate-400 font-bold uppercase ml-1">Total of the hours</span>
+                        </td>
+                      </tr>
+                    </tbody>
+                  </table>
+                </div>
               </div>
 
               {/* Most Loyal Customers */}
@@ -1072,7 +1082,7 @@ export default function EmployeeDetailPage({ employee, onBack, onViewPermissions
                   <h4 className="text-sm font-bold text-slate-800">Daily Production (Monthly)</h4>
                   {/* Daily Production Period Selector */}
                   <div className="relative">
-                    <button 
+                    <button
                       onClick={() => setIsProdPeriodDropdownOpen(!isProdPeriodDropdownOpen)}
                       className="px-3 py-1.5 border border-slate-200 rounded-xl text-[10px] font-bold text-slate-600 bg-white flex items-center gap-1.5 hover:bg-slate-50 transition-colors"
                     >
@@ -1102,127 +1112,127 @@ export default function EmployeeDetailPage({ employee, onBack, onViewPermissions
 
                 <div className="w-full py-2 overflow-x-auto scrollbar-thin">
                   <div className="min-w-[800px] md:min-w-0 w-full">
-                    <svg 
-                      className="w-full h-[280px]" 
-                      viewBox="0 0 1000 280" 
-                      preserveAspectRatio="none" 
+                    <svg
+                      className="w-full h-[280px]"
+                      viewBox="0 0 1000 280"
+                      preserveAspectRatio="none"
                       xmlns="http://www.w3.org/2000/svg"
                       onMouseLeave={() => setHoveredBarMonth(null)}
                       onTouchStart={handleBarTouch}
                       onTouchMove={handleBarTouch}
                       style={{ touchAction: "none" }}
                     >
-                    {/* Y-axis */}
-                    <text x="32" y="30" textAnchor="end" fontSize="10" fill="#94a3b8" fontWeight="600">€ 3k</text>
-                    <text x="32" y="80" textAnchor="end" fontSize="10" fill="#94a3b8" fontWeight="600">€ 2.5k</text>
-                    <text x="32" y="130" textAnchor="end" fontSize="10" fill="#94a3b8" fontWeight="600">€ 2k</text>
-                    <text x="32" y="180" textAnchor="end" fontSize="10" fill="#94a3b8" fontWeight="600">€ 1.5k</text>
-                    <text x="32" y="230" textAnchor="end" fontSize="10" fill="#94a3b8" fontWeight="600">€ 1k</text>
+                      {/* Y-axis */}
+                      <text x="32" y="30" textAnchor="end" fontSize="10" fill="#94a3b8" fontWeight="600">€ 3k</text>
+                      <text x="32" y="80" textAnchor="end" fontSize="10" fill="#94a3b8" fontWeight="600">€ 2.5k</text>
+                      <text x="32" y="130" textAnchor="end" fontSize="10" fill="#94a3b8" fontWeight="600">€ 2k</text>
+                      <text x="32" y="180" textAnchor="end" fontSize="10" fill="#94a3b8" fontWeight="600">€ 1.5k</text>
+                      <text x="32" y="230" textAnchor="end" fontSize="10" fill="#94a3b8" fontWeight="600">€ 1k</text>
 
-                    {/* Gridlines */}
-                    <line x1="42" y1="26" x2="980" y2="26" stroke="#f1f5f9" strokeWidth="1" />
-                    <line x1="42" y1="76" x2="980" y2="76" stroke="#f1f5f9" strokeWidth="1" />
-                    <line x1="42" y1="126" x2="980" y2="126" stroke="#f1f5f9" strokeWidth="1" />
-                    <line x1="42" y1="176" x2="980" y2="176" stroke="#f1f5f9" strokeWidth="1" />
-                    <line x1="42" y1="226" x2="980" y2="226" stroke="#f1f5f9" strokeWidth="1" />
+                      {/* Gridlines */}
+                      <line x1="42" y1="26" x2="980" y2="26" stroke="#f1f5f9" strokeWidth="1" />
+                      <line x1="42" y1="76" x2="980" y2="76" stroke="#f1f5f9" strokeWidth="1" />
+                      <line x1="42" y1="126" x2="980" y2="126" stroke="#f1f5f9" strokeWidth="1" />
+                      <line x1="42" y1="176" x2="980" y2="176" stroke="#f1f5f9" strokeWidth="1" />
+                      <line x1="42" y1="226" x2="980" y2="226" stroke="#f1f5f9" strokeWidth="1" />
 
-                    {/* Bar groups */}
-                    {prodBarData.map((d, i) => {
-                      const isActive = hoveredBarMonth === i;
-                      const isAnyActive = hoveredBarMonth !== null;
-                      const opacity = isActive ? 1 : (isAnyActive ? 0.3 : 1);
+                      {/* Bar groups */}
+                      {prodBarData.map((d, i) => {
+                        const isActive = hoveredBarMonth === i;
+                        const isAnyActive = hoveredBarMonth !== null;
+                        const opacity = isActive ? 1 : (isAnyActive ? 0.3 : 1);
 
-                      // Center axis is at y = 140
-                      // Teal top bar grows upward (y decreases)
-                      const tealY = 134 - d.tealH;
-                      // Pink bottom bar grows downward (y increases)
-                      const pinkY = 146;
+                        // Center axis is at y = 140
+                        // Teal top bar grows upward (y decreases)
+                        const tealY = 134 - d.tealH;
+                        // Pink bottom bar grows downward (y increases)
+                        const pinkY = 146;
 
-                      return (
-                        <g key={`bar-${i}`} style={{ opacity, transition: "opacity 0.2s ease" }}>
-                          {/* Hit area */}
-                          <rect 
-                            x={d.cx - 60} 
-                            y="0" 
-                            width="120" 
-                            height="260" 
-                            fill="transparent" 
-                            style={{ cursor: "pointer" }} 
-                            onMouseEnter={() => setHoveredBarMonth(i)} 
-                            onClick={() => setHoveredBarMonth(i)} 
-                          />
-                          {/* Teal top bar */}
-                          {d.tealH > 0 && (
-                            <rect 
-                              x={d.cx - 12} 
-                              y={tealY} 
-                              width="24" 
-                              height={d.tealH} 
-                              rx="5" 
-                              fill="#14b8a6" 
-                              style={{ transition: "fill 0.2s ease" }}
+                        return (
+                          <g key={`bar-${i}`} style={{ opacity, transition: "opacity 0.2s ease" }}>
+                            {/* Hit area */}
+                            <rect
+                              x={d.cx - 60}
+                              y="0"
+                              width="120"
+                              height="260"
+                              fill="transparent"
+                              style={{ cursor: "pointer" }}
+                              onMouseEnter={() => setHoveredBarMonth(i)}
+                              onClick={() => setHoveredBarMonth(i)}
                             />
-                          )}
-                          {/* Pink bottom bar */}
-                          {d.pinkH > 0 && (
-                            <rect 
-                              x={d.cx - 12} 
-                              y={pinkY} 
-                              width="24" 
-                              height={d.pinkH} 
-                              rx="5" 
-                              fill="#ff6289" 
-                              style={{ transition: "fill 0.2s ease" }}
-                            />
-                          )}
-                        </g>
-                      );
-                    })}
+                            {/* Teal top bar */}
+                            {d.tealH > 0 && (
+                              <rect
+                                x={d.cx - 12}
+                                y={tealY}
+                                width="24"
+                                height={d.tealH}
+                                rx="5"
+                                fill="#14b8a6"
+                                style={{ transition: "fill 0.2s ease" }}
+                              />
+                            )}
+                            {/* Pink bottom bar */}
+                            {d.pinkH > 0 && (
+                              <rect
+                                x={d.cx - 12}
+                                y={pinkY}
+                                width="24"
+                                height={d.pinkH}
+                                rx="5"
+                                fill="#ff6289"
+                                style={{ transition: "fill 0.2s ease" }}
+                              />
+                            )}
+                          </g>
+                        );
+                      })}
 
-                    {/* Sliding Tooltip */}
-                    {(() => {
-                      if (hoveredBarMonth === null) return null;
-                      const activeBar = prodBarData[hoveredBarMonth];
-                      const tooltipX = activeBar.cx - 72;
-                      const tooltipY = 15;
-                      return (
-                        <g
-                          style={{
-                            transform: `translate(${tooltipX}px, ${tooltipY}px)`,
-                            transition: "transform 0.2s cubic-bezier(0.4, 0, 0.2, 1)",
-                            pointerEvents: "none"
-                          }}
+                      {/* Sliding Tooltip */}
+                      {(() => {
+                        if (hoveredBarMonth === null) return null;
+                        const activeBar = prodBarData[hoveredBarMonth];
+                        const tooltipX = activeBar.cx - 72;
+                        const tooltipY = 15;
+                        return (
+                          <g
+                            style={{
+                              transform: `translate(${tooltipX}px, ${tooltipY}px)`,
+                              transition: "transform 0.2s cubic-bezier(0.4, 0, 0.2, 1)",
+                              pointerEvents: "none"
+                            }}
+                          >
+                            <rect x="0" y="0" width="145" height="72" rx="8" fill="white" stroke="#e5e7eb" strokeWidth="1" filter="drop-shadow(0 4px 6px rgba(0,0,0,0.05))" />
+                            <text x="10" y="18" fontSize="9" fill="#94a3b8" fontWeight="bold">{activeBar.date}</text>
+                            <text x="10" y="33" fontSize="8" fill="#374151" fontWeight="650">Total Production</text>
+                            <text x="135" y="33" textAnchor="end" fontSize="8" fill="#94a3b8" fontWeight="600">{activeBar.total}</text>
+                            <text x="10" y="46" fontSize="8" fill="#14b8a6" fontWeight="650">Threshold</text>
+                            <text x="135" y="46" textAnchor="end" fontSize="8" fill="#94a3b8" fontWeight="600">{activeBar.threshold}</text>
+                            <text x="10" y="59" fontSize="8" fill="#ff6289" fontWeight="650">Above Threshold</text>
+                            <text x="135" y="59" textAnchor="end" fontSize="8" fill="#94a3b8" fontWeight="600">{activeBar.above}</text>
+                          </g>
+                        );
+                      })()}
+
+                      {/* X-axis Month labels */}
+                      {prodBarData.map((d, i) => (
+                        <text
+                          key={`lbl-${i}`}
+                          x={d.cx}
+                          y="262"
+                          textAnchor="middle"
+                          fontSize="11"
+                          fill={hoveredBarMonth === i ? "#374151" : "#94a3b8"}
+                          fontWeight={hoveredBarMonth === i ? "700" : "600"}
+                          style={{ transition: "fill 0.2s ease" }}
                         >
-                          <rect x="0" y="0" width="145" height="72" rx="8" fill="white" stroke="#e5e7eb" strokeWidth="1" filter="drop-shadow(0 4px 6px rgba(0,0,0,0.05))" />
-                          <text x="10" y="18" fontSize="9" fill="#94a3b8" fontWeight="bold">{activeBar.date}</text>
-                          <text x="10" y="33" fontSize="8" fill="#374151" fontWeight="650">Total Production</text>
-                          <text x="135" y="33" textAnchor="end" fontSize="8" fill="#94a3b8" fontWeight="600">{activeBar.total}</text>
-                          <text x="10" y="46" fontSize="8" fill="#14b8a6" fontWeight="650">Threshold</text>
-                          <text x="135" y="46" textAnchor="end" fontSize="8" fill="#94a3b8" fontWeight="600">{activeBar.threshold}</text>
-                          <text x="10" y="59" fontSize="8" fill="#ff6289" fontWeight="650">Above Threshold</text>
-                          <text x="135" y="59" textAnchor="end" fontSize="8" fill="#94a3b8" fontWeight="600">{activeBar.above}</text>
-                        </g>
-                      );
-                    })()}
-
-                    {/* X-axis Month labels */}
-                    {prodBarData.map((d, i) => (
-                      <text 
-                        key={`lbl-${i}`} 
-                        x={d.cx} 
-                        y="262" 
-                        textAnchor="middle" 
-                        fontSize="11" 
-                        fill={hoveredBarMonth === i ? "#374151" : "#94a3b8"} 
-                        fontWeight={hoveredBarMonth === i ? "700" : "600"}
-                        style={{ transition: "fill 0.2s ease" }}
-                      >
-                        {d.month}
-                      </text>
-                    ))}
-                  </svg>
+                          {d.month}
+                        </text>
+                      ))}
+                    </svg>
+                  </div>
                 </div>
-              </div>
               </div>
 
               {/* Production Details Metrics */}
@@ -1250,7 +1260,7 @@ export default function EmployeeDetailPage({ employee, onBack, onViewPermissions
                   <h4 className="text-xs font-extrabold text-slate-800 uppercase tracking-wider">Production Trends (Yearly)</h4>
                   {/* Trends Period Selector */}
                   <div className="relative">
-                    <button 
+                    <button
                       onClick={() => setIsTrendsPeriodDropdownOpen(!isTrendsPeriodDropdownOpen)}
                       className="px-3 py-1.5 border border-slate-200 rounded-xl text-[10px] font-bold text-slate-600 bg-white flex items-center gap-1.5 hover:bg-slate-50 transition-colors"
                     >
@@ -1280,119 +1290,119 @@ export default function EmployeeDetailPage({ employee, onBack, onViewPermissions
 
                 <div className="w-full py-2 overflow-x-auto scrollbar-thin">
                   <div className="min-w-[800px] md:min-w-0 w-full">
-                    <svg 
-                      className="w-full h-[250px]" 
-                      viewBox="0 0 1000 250" 
-                      preserveAspectRatio="none" 
-                      xmlns="http://www.w3.org/2000/svg" 
+                    <svg
+                      className="w-full h-[250px]"
+                      viewBox="0 0 1000 250"
+                      preserveAspectRatio="none"
+                      xmlns="http://www.w3.org/2000/svg"
                       onMouseLeave={() => setHoveredTrendYear(null)}
                       onTouchStart={handleTrendTouch}
                       onTouchMove={handleTrendTouch}
                       style={{ touchAction: "none" }}
                     >
-                    <defs>
-                      <linearGradient id="trendGradient" x1="0" y1="0" x2="1" y2="0">
-                        <stop offset="0%" stopColor="#10b981" />
-                        <stop offset="50%" stopColor="#10b981" />
-                        <stop offset="58%" stopColor="#10b981" />
-                        <stop offset="66%" stopColor="#f43f5e" />
-                        <stop offset="75%" stopColor="#10b981" />
-                        <stop offset="100%" stopColor="#10b981" />
-                      </linearGradient>
-                    </defs>
+                      <defs>
+                        <linearGradient id="trendGradient" x1="0" y1="0" x2="1" y2="0">
+                          <stop offset="0%" stopColor="#10b981" />
+                          <stop offset="50%" stopColor="#10b981" />
+                          <stop offset="58%" stopColor="#10b981" />
+                          <stop offset="66%" stopColor="#f43f5e" />
+                          <stop offset="75%" stopColor="#10b981" />
+                          <stop offset="100%" stopColor="#10b981" />
+                        </linearGradient>
+                      </defs>
 
-                    {/* Y-axis labels */}
-                    <text x="32" y="32" textAnchor="end" fontSize="11" fill="#94a3b8" fontWeight="600">€ 3.0k</text>
-                    <text x="32" y="72" textAnchor="end" fontSize="11" fill="#94a3b8" fontWeight="600">€ 2.5k</text>
-                    <text x="32" y="112" textAnchor="end" fontSize="11" fill="#94a3b8" fontWeight="600">€ 2.0k</text>
-                    <text x="32" y="152" textAnchor="end" fontSize="11" fill="#94a3b8" fontWeight="600">€ 1.5k</text>
-                    <text x="32" y="192" textAnchor="end" fontSize="11" fill="#94a3b8" fontWeight="600">€ 1.0k</text>
-                    <text x="32" y="232" textAnchor="end" fontSize="11" fill="#94a3b8" fontWeight="600">€ 0.5k</text>
+                      {/* Y-axis labels */}
+                      <text x="32" y="32" textAnchor="end" fontSize="11" fill="#94a3b8" fontWeight="600">€ 3.0k</text>
+                      <text x="32" y="72" textAnchor="end" fontSize="11" fill="#94a3b8" fontWeight="600">€ 2.5k</text>
+                      <text x="32" y="112" textAnchor="end" fontSize="11" fill="#94a3b8" fontWeight="600">€ 2.0k</text>
+                      <text x="32" y="152" textAnchor="end" fontSize="11" fill="#94a3b8" fontWeight="600">€ 1.5k</text>
+                      <text x="32" y="192" textAnchor="end" fontSize="11" fill="#94a3b8" fontWeight="600">€ 1.0k</text>
+                      <text x="32" y="232" textAnchor="end" fontSize="11" fill="#94a3b8" fontWeight="600">€ 0.5k</text>
 
-                    {/* Gridlines */}
-                    <line x1="42" y1="28" x2="980" y2="28" stroke="#f1f5f9" strokeWidth="1" />
-                    <line x1="42" y1="68" x2="980" y2="68" stroke="#f1f5f9" strokeWidth="1" />
-                    <line x1="42" y1="108" x2="980" y2="108" stroke="#f1f5f9" strokeWidth="1" />
-                    <line x1="42" y1="148" x2="980" y2="148" stroke="#f1f5f9" strokeWidth="1" />
-                    <line x1="42" y1="188" x2="980" y2="188" stroke="#f1f5f9" strokeWidth="1" />
-                    <line x1="42" y1="228" x2="980" y2="228" stroke="#f1f5f9" strokeWidth="1" />
+                      {/* Gridlines */}
+                      <line x1="42" y1="28" x2="980" y2="28" stroke="#f1f5f9" strokeWidth="1" />
+                      <line x1="42" y1="68" x2="980" y2="68" stroke="#f1f5f9" strokeWidth="1" />
+                      <line x1="42" y1="108" x2="980" y2="108" stroke="#f1f5f9" strokeWidth="1" />
+                      <line x1="42" y1="148" x2="980" y2="148" stroke="#f1f5f9" strokeWidth="1" />
+                      <line x1="42" y1="188" x2="980" y2="188" stroke="#f1f5f9" strokeWidth="1" />
+                      <line x1="42" y1="228" x2="980" y2="228" stroke="#f1f5f9" strokeWidth="1" />
 
-                    {/* Trend spline line */}
-                    <path
-                      d="M 100 68 C 170 65, 170 62, 240 62 C 310 62, 310 70, 380 70 C 450 70, 450 78, 520 78 C 590 78, 590 124, 660 124 C 730 124, 730 48, 800 48 C 870 48, 870 54, 940 54"
-                      fill="none"
-                      stroke="url(#trendGradient)"
-                      strokeWidth="3.5"
-                      strokeLinecap="round"
-                    />
+                      {/* Trend spline line */}
+                      <path
+                        d="M 100 68 C 170 65, 170 62, 240 62 C 310 62, 310 70, 380 70 C 450 70, 450 78, 520 78 C 590 78, 590 124, 660 124 C 730 124, 730 48, 800 48 C 870 48, 870 54, 940 54"
+                        fill="none"
+                        stroke="url(#trendGradient)"
+                        strokeWidth="3.5"
+                        strokeLinecap="round"
+                      />
 
-                    {/* Dots and hit areas */}
-                    {trendPoints.map((p, i) => (
-                      <g key={`trend-${i}`}>
-                        {/* Hit area */}
-                        <rect
-                          x={p.x - 50}
-                          y="0"
-                          width="100"
-                          height="240"
-                          fill="transparent"
-                          style={{ cursor: "pointer" }}
-                          onMouseEnter={() => setHoveredTrendYear(i)}
-                          onClick={() => setHoveredTrendYear(i)}
-                        />
-                        {/* Dot */}
-                        <circle
-                          cx={p.x}
-                          cy={p.y}
-                          r={hoveredTrendYear === i ? 6 : 4}
-                          fill={p.color}
-                          stroke="white"
-                          strokeWidth="2"
-                          style={{ transition: "r 0.2s cubic-bezier(0.4, 0, 0.2, 1)" }}
-                        />
-                      </g>
-                    ))}
-
-                    {/* Sliding Tooltip */}
-                    {(() => {
-                      if (hoveredTrendYear === null) return null;
-                      const activeTrend = trendPoints[hoveredTrendYear];
-                      const tooltipX = activeTrend.x - 75;
-                      const tooltipY = activeTrend.y - 45;
-                      return (
-                        <g
-                          style={{
-                            transform: `translate(${tooltipX}px, ${tooltipY}px)`,
-                            transition: "transform 0.2s cubic-bezier(0.4, 0, 0.2, 1)",
-                            pointerEvents: "none"
-                          }}
-                        >
-                          <rect x="0" y="0" width="150" height="32" rx="6" fill="white" stroke="#e5e7eb" strokeWidth="1" filter="drop-shadow(0 2px 4px rgba(0,0,0,0.02))" />
-                          <text x="75" y="12" textAnchor="middle" fontSize="8" fill="#94a3b8" fontWeight="bold">August 24, {activeTrend.year}</text>
-                          <text x="8" y="24" textAnchor="start" fontSize="8" fill={activeTrend.color} fontWeight="bold">{activeTrend.status}</text>
-                          <text x="142" y="24" textAnchor="end" fontSize="9" fill="#374151" fontWeight="extrabold">{activeTrend.value}</text>
+                      {/* Dots and hit areas */}
+                      {trendPoints.map((p, i) => (
+                        <g key={`trend-${i}`}>
+                          {/* Hit area */}
+                          <rect
+                            x={p.x - 50}
+                            y="0"
+                            width="100"
+                            height="240"
+                            fill="transparent"
+                            style={{ cursor: "pointer" }}
+                            onMouseEnter={() => setHoveredTrendYear(i)}
+                            onClick={() => setHoveredTrendYear(i)}
+                          />
+                          {/* Dot */}
+                          <circle
+                            cx={p.x}
+                            cy={p.y}
+                            r={hoveredTrendYear === i ? 6 : 4}
+                            fill={p.color}
+                            stroke="white"
+                            strokeWidth="2"
+                            style={{ transition: "r 0.2s cubic-bezier(0.4, 0, 0.2, 1)" }}
+                          />
                         </g>
-                      );
-                    })()}
+                      ))}
 
-                    {/* X-axis labels */}
-                    {trendPoints.map((p, i) => (
-                      <text 
-                        key={`xl-${i}`} 
-                        x={p.x} 
-                        y="245" 
-                        textAnchor="middle" 
-                        fontSize="11" 
-                        fill={hoveredTrendYear === i ? "#374151" : "#94a3b8"} 
-                        fontWeight={hoveredTrendYear === i ? "700" : "600"}
-                        style={{ transition: "fill 0.2s ease" }}
-                      >
-                        {p.year}
-                      </text>
-                    ))}
-                  </svg>
+                      {/* Sliding Tooltip */}
+                      {(() => {
+                        if (hoveredTrendYear === null) return null;
+                        const activeTrend = trendPoints[hoveredTrendYear];
+                        const tooltipX = activeTrend.x - 75;
+                        const tooltipY = activeTrend.y - 45;
+                        return (
+                          <g
+                            style={{
+                              transform: `translate(${tooltipX}px, ${tooltipY}px)`,
+                              transition: "transform 0.2s cubic-bezier(0.4, 0, 0.2, 1)",
+                              pointerEvents: "none"
+                            }}
+                          >
+                            <rect x="0" y="0" width="150" height="32" rx="6" fill="white" stroke="#e5e7eb" strokeWidth="1" filter="drop-shadow(0 2px 4px rgba(0,0,0,0.02))" />
+                            <text x="75" y="12" textAnchor="middle" fontSize="8" fill="#94a3b8" fontWeight="bold">August 24, {activeTrend.year}</text>
+                            <text x="8" y="24" textAnchor="start" fontSize="8" fill={activeTrend.color} fontWeight="bold">{activeTrend.status}</text>
+                            <text x="142" y="24" textAnchor="end" fontSize="9" fill="#374151" fontWeight="extrabold">{activeTrend.value}</text>
+                          </g>
+                        );
+                      })()}
+
+                      {/* X-axis labels */}
+                      {trendPoints.map((p, i) => (
+                        <text
+                          key={`xl-${i}`}
+                          x={p.x}
+                          y="245"
+                          textAnchor="middle"
+                          fontSize="11"
+                          fill={hoveredTrendYear === i ? "#374151" : "#94a3b8"}
+                          fontWeight={hoveredTrendYear === i ? "700" : "600"}
+                          style={{ transition: "fill 0.2s ease" }}
+                        >
+                          {p.year}
+                        </text>
+                      ))}
+                    </svg>
+                  </div>
                 </div>
-              </div>
               </div>
 
               {/* Performance Metrics & Operation Statistics */}
@@ -1436,16 +1446,16 @@ export default function EmployeeDetailPage({ employee, onBack, onViewPermissions
                                 <div className="flex flex-col gap-2">
                                   {/* Year navigation row */}
                                   <div className="flex items-center justify-between border-b border-slate-50 pb-1.5">
-                                    <button 
-                                      type="button" 
+                                    <button
+                                      type="button"
                                       onClick={() => setPerfSelectedYear(prev => prev - 1)}
                                       className="p-1 hover:bg-slate-50 rounded text-slate-400 hover:text-slate-650"
                                     >
                                       <svg width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="3"><polyline points="15 18 9 12 15 6" /></svg>
                                     </button>
                                     <span className="text-[10px] font-bold text-slate-705">{perfSelectedYear}</span>
-                                    <button 
-                                      type="button" 
+                                    <button
+                                      type="button"
                                       onClick={() => setPerfSelectedYear(prev => prev + 1)}
                                       className="p-1 hover:bg-slate-50 rounded text-slate-400 hover:text-slate-650"
                                     >
@@ -1807,7 +1817,7 @@ export default function EmployeeDetailPage({ employee, onBack, onViewPermissions
             </div>
 
             {/* Form fields */}
-            <form 
+            <form
               onSubmit={(e) => {
                 e.preventDefault();
                 alert(`Contract terminated! End Date: ${terminateEndDate}, Access Date: ${terminateAccessDate}`);
@@ -1837,10 +1847,10 @@ export default function EmployeeDetailPage({ employee, onBack, onViewPermissions
                   />
                   <div className="absolute right-4 pointer-events-none text-slate-500">
                     <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round">
-                      <rect x="3" y="4" width="18" height="18" rx="2" ry="2"/>
-                      <line x1="16" y1="2" x2="16" y2="6"/>
-                      <line x1="8" y1="2" x2="8" y2="6"/>
-                      <line x1="3" y1="10" x2="21" y2="10"/>
+                      <rect x="3" y="4" width="18" height="18" rx="2" ry="2" />
+                      <line x1="16" y1="2" x2="16" y2="6" />
+                      <line x1="8" y1="2" x2="8" y2="6" />
+                      <line x1="3" y1="10" x2="21" y2="10" />
                     </svg>
                   </div>
                 </div>
@@ -1878,10 +1888,10 @@ export default function EmployeeDetailPage({ employee, onBack, onViewPermissions
                   />
                   <div className="absolute right-4 pointer-events-none text-slate-500">
                     <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round">
-                      <rect x="3" y="4" width="18" height="18" rx="2" ry="2"/>
-                      <line x1="16" y1="2" x2="16" y2="6"/>
-                      <line x1="8" y1="2" x2="8" y2="6"/>
-                      <line x1="3" y1="10" x2="21" y2="10"/>
+                      <rect x="3" y="4" width="18" height="18" rx="2" ry="2" />
+                      <line x1="16" y1="2" x2="16" y2="6" />
+                      <line x1="8" y1="2" x2="8" y2="6" />
+                      <line x1="3" y1="10" x2="21" y2="10" />
                     </svg>
                   </div>
                 </div>

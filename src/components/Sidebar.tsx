@@ -563,7 +563,7 @@ export default function Sidebar({
         </div>
 
         {/* Column 2: Extended text menu bar */}
-        <div className="w-52 bg-[#f8fafc] border-r border-[#eef2f6] flex flex-col py-6 px-3.5 overflow-y-auto">
+        <div className="w-52 bg-[#f8fafc] border-r border-[#eef2f6] flex flex-col pt-[87px] pb-6 px-3.5 overflow-y-auto">
           <div className="flex flex-col gap-6 w-full text-left">
             <div>
               <span className="px-4 text-[10px] font-extrabold uppercase tracking-wider text-[#b0bac9]">

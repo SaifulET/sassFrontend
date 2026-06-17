@@ -265,94 +265,39 @@ export default function SalonDetailPage({ salon, onBack, onImpersonate }: SalonD
   };
 
   return (
-    <div className="flex flex-col gap-6 animate-in fade-in duration-300">
+    <div className="flex w-full flex-col gap-5 text-left text-[#283442] animate-in fade-in duration-300">
       
-      {/* Top Breadcrumbs / Header Bar */}
-      <div className="flex items-center justify-between">
-        <div className="flex items-center gap-2">
-          <h1 className="text-2xl font-bold tracking-tight text-slate-800">{salon.name}</h1>
+      {/* Top Header Breadcrumbs Card */}
+      <div className="rounded-2xl bg-white px-5 py-4 shadow-[0_4px_18px_rgba(17,31,56,0.06)] flex items-center justify-between w-full">
+        <div className="text-sm font-extrabold text-[#1f2937]">
+          {salon.name}
         </div>
-
-        {/* Breadcrumb Scheme */}
         <div className="flex items-center gap-2 text-xs font-semibold">
-          <button onClick={onBack} className="p-1.5 hover:bg-slate-100 rounded-xl transition-colors inline-flex">
+          <button onClick={onBack} className="p-1.5 border border-slate-200 rounded-lg hover:bg-slate-50 transition-colors inline-flex">
             <HomeIcon />
           </button>
           <span className="text-slate-300">/</span>
-          <button onClick={onBack} className="text-[#5e53fc] hover:underline">
+          <button onClick={onBack} className="bg-[#e4e2ff] text-[#5e53fc] px-3 py-1 rounded-full text-[10px] font-extrabold transition-all hover:bg-[#d8d5ff]">
             Salon Beauty
           </button>
         </div>
-      </div>      {/* Main Profile Cover Card */}
-      <div className="bg-white rounded-xl border border-[#eef2f6] shadow-[0px_2px_4px_-1px_rgba(175,182,201,0.2)] flex flex-col p-6 w-full">
+      </div>
+
+      {/* Main Profile Cover Card */}
+      <div className="bg-white rounded-2xl shadow-[0_4px_18px_rgba(17,31,56,0.06)] flex flex-col w-full overflow-hidden">
         
         {/* Cover Picture */}
         <div 
-          className="h-[330px] relative bg-cover bg-center rounded-2xl" 
+          className="h-[330px] relative bg-cover bg-center w-full" 
           style={{ backgroundImage: "url('/bg-main.png')" }}
         />
 
-        {/* Profile Overlay Details */}
-        <div className="flex flex-col items-center -mt-12 relative z-10">
-          {/* Avatar container with red ball.png */}
-          <div className="w-[102px] h-[102px] rounded-full border-4 border-white shadow-md overflow-hidden bg-white flex items-center justify-center">
-            <img 
-              src="/ball.png" 
-              alt="Salon Avatar Ball" 
-              className="w-[94px] h-[94px] object-contain p-2" 
-            />
-          </div>
-
-          {/* Centered Salon Details */}
-          <h2 className="text-xl font-bold mt-4 tracking-tight text-[#29343D]">{salon.name}</h2>
-          <p className="text-xs font-semibold text-[#98A4AE] mt-1">Member Since: Aug 22, 2025</p>
-          <p className="text-xs font-semibold text-[#98A4AE] mt-0.5">{salon.city}, Italy</p>
+        {/* Profile Details Row: Stats (Left), Avatar & Name (Middle), Button (Right) */}
+        <div className="flex flex-col lg:flex-row items-center lg:items-start justify-between px-6 pb-6 gap-6 w-full mt-6">
           
-          <div className="flex items-center gap-2 mt-3">
-            {/* Dynamic Status Badge */}
-            {salonStatus === "Active" && (
-              <span className="inline-flex px-3 py-1 text-[10px] font-bold rounded-full bg-[#EBFAF0] text-[#36C76C] uppercase tracking-wide">
-                Active
-              </span>
-            )}
-            {salonStatus === "Trial" && (
-              <span className="inline-flex px-3 py-1 text-[10px] font-bold rounded-full bg-[#e6fcf9] text-[#14b8a6] uppercase tracking-wide">
-                Trial
-              </span>
-            )}
-            {salonStatus === "Cancelled" && (
-              <span className="inline-flex px-3 py-1 text-[10px] font-bold rounded-full bg-[#f1f5f9] text-[#64748b] uppercase tracking-wide">
-                Cancelled
-              </span>
-            )}
-            {salonStatus === "Leads" && (
-              <span className="inline-flex px-3 py-1 text-[10px] font-bold rounded-full bg-[#f2f1ff] text-[#5e53fc] uppercase tracking-wide">
-                Leads
-              </span>
-            )}
-            {salonStatus === "Past Due" && (
-              <span className="inline-flex px-3 py-1 text-[10px] font-bold rounded-full bg-[#fff0f3] text-[#f43f5e] uppercase tracking-wide">
-                Past Due
-              </span>
-            )}
-            {salonStatus === "Expired" && (
-              <span className="inline-flex px-3 py-1 text-[10px] font-bold rounded-full bg-slate-100 text-slate-400 uppercase tracking-wide">
-                Expired
-              </span>
-            )}
-            {/* Premium Plan badge */}
-            <span className="inline-flex px-3 py-1 text-[10px] font-bold rounded-full bg-[#D2F4F2] text-[#29343D] uppercase tracking-wide">
-              {salon.plan}
-            </span>
-          </div>
-        </div>
-
-        {/* Stats Grid & Impersonate Row */}
-        <div className="flex flex-col md:flex-row items-center md:items-end justify-between mt-8 border-t border-slate-100 pt-6 gap-6 px-2">
-          
-          {/* Stats columns */}
-          <div className="flex items-center gap-10 text-center md:text-left">
-            <div className="flex flex-col items-center md:items-start">
+          {/* Left Column: Stats */}
+          <div className="flex-1 flex flex-row items-center justify-center lg:justify-start gap-10">
+            <div className="flex flex-col items-center">
               {/* Group icon */}
               <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round" className="text-slate-500 mb-1">
                 <path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2" />
@@ -364,17 +309,17 @@ export default function SalonDetailPage({ salon, onBack, onImpersonate }: SalonD
               <span className="text-[10px] font-bold text-[#98A4AE] uppercase tracking-wider mt-0.5">Staff Members</span>
             </div>
 
-            <div className="flex flex-col items-center md:items-start">
+            <div className="flex flex-col items-center">
               {/* Payment card icon */}
               <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round" className="text-slate-500 mb-1">
                 <rect x="2" y="5" width="20" height="14" rx="2" />
                 <line x1="2" y1="10" x2="22" y2="10" />
               </svg>
-              <span className="text-xl font-bold text-[#29343D] mt-0.5">€ 299,00</span>
+              <span className="text-xl font-bold text-[#29343D] mt-0.5">€ 299</span>
               <span className="text-[10px] font-bold text-[#98A4AE] uppercase tracking-wider mt-0.5">Monthly Payment</span>
             </div>
 
-            <div className="flex flex-col items-center md:items-start">
+            <div className="flex flex-col items-center">
               {/* Clock/Last Active Icon */}
               <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round" className="text-slate-500 mb-1">
                 <circle cx="12" cy="12" r="10" />
@@ -385,48 +330,105 @@ export default function SalonDetailPage({ salon, onBack, onImpersonate }: SalonD
             </div>
           </div>
 
-          {/* Action Button */}
-          <button 
-            onClick={() => {
-              setIsReactivateModalOpen(true);
-            }}
-            className="w-[155px] h-11 bg-[#DDDBFF] hover:bg-[#c9c5ff] text-[#635BFF] font-bold rounded-lg text-xs transition-all shadow-sm flex items-center justify-center"
-          >
-            Impersonate Salon
-          </button>
+          {/* Middle Column: Avatar & Details (centered) */}
+          <div className="flex flex-col items-center -mt-[67px] relative z-10 text-center px-4">
+            {/* Avatar container with red ball.png */}
+            <div className="w-[102px] h-[102px] rounded-full border-4 border-white shadow-md overflow-hidden bg-white flex items-center justify-center">
+              <img 
+                src="/ball.png" 
+                alt="Salon Avatar Ball" 
+                className="w-[94px] h-[94px] object-contain p-2" 
+              />
+            </div>
+
+            {/* Centered Salon Details */}
+            <h2 className="text-base font-bold mt-4 tracking-tight text-[#29343D]">{salon.name}</h2>
+            <p className="text-[10px] font-bold text-[#98A4AE] mt-1">Member Since: Aug 22, 2025</p>
+            <p className="text-[10px] font-bold text-[#98A4AE] mt-0.5">{salon.city}, Italy</p>
+            
+            <div className="flex items-center gap-2 mt-3 justify-center">
+              {/* Dynamic Status Badge */}
+              {salonStatus === "Active" && (
+                <span className="inline-flex px-2 py-0.5 text-[9px] font-extrabold rounded-full bg-[#EBFAF0] text-[#36C76C] uppercase tracking-wide">
+                  Active
+                </span>
+              )}
+              {salonStatus === "Trial" && (
+                <span className="inline-flex px-2 py-0.5 text-[9px] font-extrabold rounded-full bg-[#e6fcf9] text-[#14b8a6] uppercase tracking-wide">
+                  Trial
+                </span>
+              )}
+              {salonStatus === "Cancelled" && (
+                <span className="inline-flex px-2 py-0.5 text-[9px] font-extrabold rounded-full bg-[#f1f5f9] text-[#64748b] uppercase tracking-wide">
+                  Cancelled
+                </span>
+              )}
+              {salonStatus === "Leads" && (
+                <span className="inline-flex px-2 py-0.5 text-[9px] font-extrabold rounded-full bg-[#f2f1ff] text-[#5e53fc] uppercase tracking-wide">
+                  Leads
+                </span>
+              )}
+              {salonStatus === "Past Due" && (
+                <span className="inline-flex px-2 py-0.5 text-[9px] font-extrabold rounded-full bg-[#fff0f3] text-[#f43f5e] uppercase tracking-wide">
+                  Past Due
+                </span>
+              )}
+              {salonStatus === "Expired" && (
+                <span className="inline-flex px-2 py-0.5 text-[9px] font-extrabold rounded-full bg-slate-100 text-slate-400 uppercase tracking-wide">
+                  Expired
+                </span>
+              )}
+              {/* Premium Plan badge */}
+              <span className="inline-flex px-2 py-0.5 text-[9px] font-extrabold rounded-full bg-[#D2F4F2] text-[#29343D] uppercase tracking-wide">
+                {salon.plan}
+              </span>
+            </div>
+          </div>
+
+          {/* Right Column: Button */}
+          <div className="flex-1 flex items-center justify-center lg:justify-end">
+            <button 
+              onClick={() => {
+                setIsReactivateModalOpen(true);
+              }}
+              className="px-5 py-2.5 bg-[#e4e2ff] hover:bg-[#d8d5ff] text-[#5e53fc] font-bold rounded-lg text-xs transition-all shadow-sm"
+            >
+              Impersonate Salon
+            </button>
+          </div>
 
         </div>
 
-      </div>
+        {/* Navigation tabs row */}
+        <div 
+          className="bg-[#edeaff] h-12 flex items-center justify-center gap-4 px-4 w-full rounded-none overflow-x-auto"
+        >
+          {[
+            { id: "basic", label: "Basic Data", icon: <BasicDataIcon /> },
+            { id: "locations", label: "Locations", icon: <LocationsIcon /> },
+            { id: "contacts", label: "Contacts", icon: <ContactsIcon /> },
+            { id: "tax", label: "Tax and Banking", icon: <TaxIcon /> },
+            { id: "documents", label: "Documents", icon: <DocumentsIcon /> },
+            { id: "members", label: "Members", icon: <MembersIcon /> }
+          ].map((tab) => {
+            const isActive = activeTab === tab.id;
+            return (
+              <button
+                key={tab.id}
+                onClick={() => setActiveTab(tab.id as any)}
+                className={`h-full flex items-center gap-2 px-4 text-xs font-bold transition-all border-b-2 rounded-none ${
+                  isActive
+                    ? "border-[#5e53fc] text-[#5e53fc] bg-white/10"
+                    : "border-transparent text-[#29343D] hover:bg-white/20"
+                }`}
+              >
+                {tab.icon}
+                <span>{tab.label}</span>
+              </button>
+            );
+          })}
+        </div>
 
-      {/* Navigation tabs row */}
-      <div 
-        className="bg-[#DDDBFF] h-12 flex items-center justify-center gap-4 px-4 w-full rounded-none overflow-x-auto"
-      >
-        {[
-          { id: "basic", label: "Basic Data", icon: <BasicDataIcon /> },
-          { id: "locations", label: "Locations", icon: <LocationsIcon /> },
-          { id: "contacts", label: "Contacts", icon: <ContactsIcon /> },
-          { id: "tax", label: "Tax and Banking", icon: <TaxIcon /> },
-          { id: "documents", label: "Documents", icon: <DocumentsIcon /> },
-          { id: "members", label: "Members", icon: <MembersIcon /> }
-        ].map((tab) => {
-          const isActive = activeTab === tab.id;
-          return (
-            <button
-              key={tab.id}
-              onClick={() => setActiveTab(tab.id as any)}
-              className={`h-full flex items-center gap-2 px-4 text-xs font-semibold transition-all border-b-2 rounded-none ${
-                isActive
-                  ? "border-[#635BFF] text-[#635BFF] font-bold bg-white/10"
-                  : "border-transparent text-[#29343D] hover:bg-white/20"
-              }`}
-            >
-              {tab.icon}
-              <span>{tab.label}</span>
-            </button>
-          );
-        })}
       </div>
 
       {/* Conditional Panels */}
@@ -434,10 +436,11 @@ export default function SalonDetailPage({ salon, onBack, onImpersonate }: SalonD
 
         {/* Panel 1: Basic Data */}
         {activeTab === "basic" && (
-          <div className="grid grid-cols-1 lg:grid-cols-2 gap-6 animate-in fade-in duration-200">
+          <div className="flex flex-col gap-6 w-full animate-in fade-in duration-200">
             
-            {/* Column Left */}
-            <div className="flex flex-col gap-6">
+            {/* Row 1: Identification Data (Left) & Share Capital (Right) */}
+            <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
+              
               {/* Identification Data Box */}
               <div className="bg-white rounded-3xl p-6 border border-[#eef2f6] shadow-[0_4px_20px_rgba(0,0,0,0.01)] flex flex-col gap-5">
                 <div className="flex items-center justify-between border-b border-slate-100 pb-3">
@@ -535,90 +538,108 @@ export default function SalonDetailPage({ salon, onBack, onImpersonate }: SalonD
                   </div>
                 </div>
               </div>
+
             </div>
 
-            {/* Column Right */}
-            <div className="flex flex-col gap-6">
-              {/* Subscription Payment Method Box */}
-              <div className="bg-white rounded-3xl p-6 border border-[#eef2f6] shadow-[0_4px_20px_rgba(0,0,0,0.01)] flex flex-col gap-5">
-                <div className="flex items-center justify-between border-b border-slate-100 pb-3">
-                  <h3 className="text-sm font-bold text-slate-800">Subscription Payment Method</h3>
-                  
-                  <div className="flex items-center gap-2">
-                    {/* Add Button */}
-                    <button 
-                      onClick={() => setIsPaymentModalOpen(true)}
-                      className="p-1.5 bg-indigo-50 text-[#5e53fc] hover:bg-indigo-100 rounded-lg transition-colors inline-flex"
-                      title="Add Payment Method"
-                    >
-                      <PlusIcon />
-                    </button>
-                  </div>
-                </div>
-
-                <div className="flex flex-col gap-3">
-                  {paymentMethods.map((method) => (
-                    <div key={method.id} className="border border-slate-100 p-4 rounded-2xl flex items-center justify-between bg-slate-50/20">
-                      <div className="flex items-center gap-3">
-                        {/* Visa/Card Logo placeholder */}
-                        <div className="w-10 h-6 bg-slate-800 rounded-md flex items-center justify-center text-[8px] font-bold text-white uppercase tracking-wider">
-                          {method.provider}
-                        </div>
-                        <div className="flex flex-col">
-                          <span className="text-xs font-bold text-slate-700">{method.type}</span>
-                          <span className="text-[9px] font-semibold text-slate-400">Payment provider being used: {method.provider}</span>
-                        </div>
-                      </div>
-
-                      <div className="flex items-center gap-2">
-                        {method.isDefault && (
-                          <span className="bg-emerald-50 text-emerald-600 text-[9px] font-extrabold px-2 py-0.5 rounded-md uppercase tracking-wider">
-                            Default
+            {/* Row 2: Subscription Payment Method Box (Full width) */}
+            {(() => {
+              const defaultMethod = paymentMethods.find(m => m.isDefault) || paymentMethods[0];
+              return (
+                <div className="bg-white rounded-3xl p-6 border border-[#eef2f6] shadow-[0_4px_20px_rgba(0,0,0,0.01)] flex flex-col gap-5 relative">
+                  <div className="flex items-center justify-between border-b border-slate-100 pb-3">
+                    <h3 className="text-sm font-bold text-slate-800">Subscription Payment Method</h3>
+                    
+                    <div className="flex items-center gap-2">
+                      {/* Plus Button */}
+                      <button 
+                        onClick={() => setIsPaymentModalOpen(true)}
+                        className="w-8 h-8 flex items-center justify-center bg-indigo-50 hover:bg-indigo-100 text-[#5e53fc] rounded-lg transition-all"
+                        title="Add Payment Method"
+                      >
+                        <PlusIcon />
+                      </button>
+                      {/* Trash Button */}
+                      <button 
+                        onClick={() => {
+                          if (paymentMethods.length > 1) {
+                            const activeMethod = paymentMethods.find(m => m.isDefault) || paymentMethods[0];
+                            setPaymentMethods(prev => prev.filter(p => p.id !== activeMethod.id));
+                          } else {
+                            alert("Cannot delete the only payment method.");
+                          }
+                        }}
+                        className="w-8 h-8 flex items-center justify-center bg-rose-50 hover:bg-rose-100 text-rose-500 rounded-lg transition-all"
+                        title="Delete Payment Method"
+                      >
+                        <TrashIcon />
+                      </button>
+                      {/* Mark as Default Button with Tooltip */}
+                      <div className="relative group">
+                        <div className="absolute bottom-full mb-2 left-1/2 -translate-x-1/2 hidden group-hover:flex flex-col items-center z-20">
+                          <span className="bg-[#00c9db] text-white text-[9px] font-extrabold px-2 py-1 rounded-md whitespace-nowrap shadow-sm">
+                            Mark as default
                           </span>
-                        )}
-                        <button
-                          onClick={() => {
-                            if (paymentMethods.length > 1) {
-                              setPaymentMethods(prev => prev.filter(p => p.id !== method.id));
-                            } else {
-                              alert("Cannot delete the only payment method.");
-                            }
-                          }}
-                          className="p-2 text-slate-400 hover:text-rose-500 rounded-lg hover:bg-rose-50 transition-colors"
+                          <span className="w-2.5 h-2.5 bg-[#00c9db] rotate-45 -mt-1.5" />
+                        </div>
+                        <button 
+                          className="w-8 h-8 flex items-center justify-center bg-[#e6fcf9] hover:bg-[#d0faf4] text-[#0d9488] rounded-lg transition-all"
                         >
-                          <TrashIcon />
+                          <CheckIcon />
                         </button>
                       </div>
                     </div>
-                  ))}
+                  </div>
+
+                  {/* Content grid */}
+                  <div className="grid grid-cols-1 md:grid-cols-2 gap-y-4 gap-x-6">
+                    <div className="flex flex-col gap-4">
+                      <div className="flex flex-col">
+                        <span className="text-[10px] font-bold text-slate-400 uppercase tracking-wider">Default payment method</span>
+                        <span className="text-xs font-semibold text-slate-700 mt-1">{defaultMethod?.type || "Visa ending in ****1234"}</span>
+                      </div>
+                      <div className="flex flex-col">
+                        <span className="text-[10px] font-bold text-slate-400 uppercase tracking-wider">Billing currency</span>
+                        <span className="text-xs font-semibold text-slate-700 mt-1">Euro €</span>
+                      </div>
+                    </div>
+
+                    <div className="flex flex-col">
+                      <span className="text-[10px] font-bold text-slate-400 uppercase tracking-wider">Payment provider being used</span>
+                      <div className="mt-2.5">
+                        <div className="w-[50px] h-[30px] bg-[#0f172a] rounded-md flex flex-col items-center justify-center p-1 shadow-sm border border-slate-700">
+                          <span className="text-[10px] font-extrabold text-blue-400 italic tracking-wider uppercase">{defaultMethod?.provider || "visa"}</span>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
                 </div>
+              );
+            })()}
+
+            {/* Row 3: Activity Box (Full width) */}
+            <div className="bg-white rounded-3xl p-6 border border-[#eef2f6] shadow-[0_4px_20px_rgba(0,0,0,0.01)] flex flex-col gap-5">
+              <div className="flex items-center justify-between border-b border-slate-100 pb-3">
+                <h3 className="text-sm font-bold text-slate-800">Activity</h3>
+                <button className="text-[#5e53fc] hover:underline text-xs font-bold flex items-center gap-1">
+                  <EditIcon />
+                  <span>Edit</span>
+                </button>
               </div>
 
-              {/* Activity Box */}
-              <div className="bg-white rounded-3xl p-6 border border-[#eef2f6] shadow-[0_4px_20px_rgba(0,0,0,0.01)] flex flex-col gap-5">
-                <div className="flex items-center justify-between border-b border-slate-100 pb-3">
-                  <h3 className="text-sm font-bold text-slate-800">Activity</h3>
-                  <button className="text-[#5e53fc] hover:underline text-xs font-bold flex items-center gap-1">
-                    <EditIcon />
-                    <span>Edit</span>
-                  </button>
+              <div className="grid grid-cols-1 md:grid-cols-2 gap-y-4 gap-x-6">
+                <div className="flex flex-col">
+                  <span className="text-[10px] font-bold text-slate-400 uppercase tracking-wider">Primary ATECO Code</span>
+                  <span className="text-xs font-semibold text-slate-700 mt-1">96.02.01 - Barber and hairdressing services</span>
                 </div>
-
-                <div className="flex flex-col gap-4">
-                  <div className="flex flex-col">
-                    <span className="text-[10px] font-bold text-slate-400 uppercase tracking-wider">Primary ATECO Code</span>
-                    <span className="text-xs font-semibold text-slate-700 mt-1">96.02.01 - Barber and hairdressing services</span>
-                  </div>
-                  <div className="flex flex-col">
-                    <span className="text-[10px] font-bold text-slate-400 uppercase tracking-wider">Secondary ATECO Codes</span>
-                    <span className="text-xs font-semibold text-slate-700 mt-1">96.02.02 - Beauty salon services</span>
-                  </div>
-                  <div className="flex flex-col">
-                    <span className="text-[10px] font-bold text-slate-400 uppercase tracking-wider">Description of Corporate Object</span>
-                    <span className="text-xs font-semibold text-slate-600 mt-1 leading-relaxed">
-                      Beauty and wellness activities with hairdressing and beauty center services
-                    </span>
-                  </div>
+                <div className="flex flex-col">
+                  <span className="text-[10px] font-bold text-slate-400 uppercase tracking-wider">Secondary ATECO Codes</span>
+                  <span className="text-xs font-semibold text-slate-700 mt-1">96.02.02 - Beauty salon services</span>
+                </div>
+                <div className="flex flex-col col-span-1 md:col-span-2">
+                  <span className="text-[10px] font-bold text-slate-400 uppercase tracking-wider">Description of Corporate Object</span>
+                  <span className="text-xs font-semibold text-slate-600 mt-1 leading-relaxed">
+                    Beauty and wellness activities with hairdressing and beauty center services
+                  </span>
                 </div>
               </div>
             </div>
