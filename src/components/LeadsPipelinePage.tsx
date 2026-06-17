@@ -2201,11 +2201,11 @@ export default function LeadsPipelinePage({ setActiveTab }: { setActiveTab?: (ta
                   </h3>
                 </div>
 
-                <div className="box-sizing-border-box flex flex-col items-start p-[30px] gap-[30px] bg-white border border-[#E0E6EB] shadow-[0px_2px_4px_-1px_rgba(175,182,201,0.2)] rounded-[12px] w-full">
+                <div className="box-sizing-border-box flex flex-col items-start p-4 sm:p-[30px] gap-6 sm:gap-[30px] bg-white border border-[#E0E6EB] shadow-[0px_2px_4px_-1px_rgba(175,182,201,0.2)] rounded-[12px] w-full">
                   
                   {/* Open Pipeline Section */}
                   <div className="flex flex-col gap-6 w-full">
-                    <div className="flex flex-row justify-between items-center w-full">
+                    <div className="flex flex-col sm:flex-row justify-between sm:items-center w-full gap-2">
                       <div className="flex flex-row items-center gap-2">
                         <div className="w-6 h-6 flex items-center justify-center rounded-full bg-[#EBFAF0] text-[#36C76C]">
                           <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="3" strokeLinecap="round" strokeLinejoin="round">
@@ -2257,7 +2257,7 @@ export default function LeadsPipelinePage({ setActiveTab }: { setActiveTab?: (ta
 
                   {/* Pipeline Completed Section */}
                   <div className="flex flex-col gap-6 w-full">
-                    <div className="flex flex-row justify-between items-center w-full">
+                    <div className="flex flex-col sm:flex-row justify-between sm:items-center w-full gap-2">
                       <div className="flex flex-row items-center gap-2">
                         <div className="w-6 h-6 flex items-center justify-center rounded-full bg-[#FFE5ED] text-[#FF6692]">
                           <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="3" strokeLinecap="round" strokeLinejoin="round">
