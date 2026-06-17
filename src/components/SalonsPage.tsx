@@ -395,7 +395,7 @@ export default function SalonsPage({
   // Rendering of details is now handled by page.tsx switcher
 
   return (
-    <div className="flex flex-col gap-6 animate-in fade-in slide-in-from-bottom-4 duration-300">
+    <div className="flex w-full flex-col gap-5 text-left text-[#283442] animate-in fade-in slide-in-from-bottom-4 duration-300">
 
       {/* Impersonation Banner */}
       {impersonatingSalon && (
@@ -418,61 +418,63 @@ export default function SalonsPage({
       )}
 
       {/* Header toolbar */}
-      <div className="flex flex-col md:flex-row md:items-center justify-between gap-4">
-        <div>
-          <h1 className="text-2xl font-bold tracking-tight text-slate-800">Salon Management</h1>
-        </div>
+      <div className="rounded-2xl bg-white px-5 py-4 shadow-[0_4px_18px_rgba(17,31,56,0.06)]">
+        <div className="flex flex-col lg:flex-row lg:items-center lg:justify-between gap-4">
+          <div>
+            <div className="text-sm font-extrabold text-[#1f2937]">Salon Management</div>
+          </div>
 
-        <div className="flex items-center gap-3 self-end md:self-auto">
-          {/* Refresh Data */}
-          <button
-            onClick={handleRefresh}
-            className={`flex items-center gap-2 px-4 py-2.5 bg-white border border-[#eef2f6] hover:bg-slate-50 rounded-2xl text-xs font-semibold text-slate-600 transition-all shadow-sm ${isRefreshing ? "opacity-75" : ""
-              }`}
-          >
-            <HugeiconsIcon
-              icon={GlobalRefreshIcon}
-              size={14}
-              className={`text-[#7e8b9b] ${isRefreshing ? "animate-spin" : ""}`}
-            />
-            Refresh Data
-          </button>
+          <div className="flex items-center gap-3 self-end lg:self-auto">
+            {/* Refresh Data */}
+            <button
+              onClick={handleRefresh}
+              className={`flex items-center gap-2 px-4 py-2.5 bg-white border border-[#eef2f6] hover:bg-slate-50 rounded-2xl text-xs font-semibold text-slate-600 transition-all shadow-sm ${isRefreshing ? "opacity-75" : ""
+                }`}
+            >
+              <HugeiconsIcon
+                icon={GlobalRefreshIcon}
+                size={14}
+                className={`text-[#7e8b9b] ${isRefreshing ? "animate-spin" : ""}`}
+              />
+              Refresh Data
+            </button>
 
-          {/* Export Data */}
-          <button
-            onClick={handleExport}
-            className="px-4 py-2.5 bg-[#f2f1ff] hover:bg-[#e4e2ff] text-[#5e53fc] border border-[#e2dfff] rounded-2xl text-xs font-semibold transition-all shadow-sm flex items-center gap-2"
-          >
-            {/* Export/download SVG Icon */}
-            <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round">
-              <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4" />
-              <polyline points="7 10 12 15 17 10" />
-              <line x1="12" y1="15" x2="12" y2="3" />
-            </svg>
-            Export Data
-          </button>
+            {/* Export Data */}
+            <button
+              onClick={handleExport}
+              className="px-4 py-2.5 bg-[#f2f1ff] hover:bg-[#e4e2ff] text-[#5e53fc] border border-[#e2dfff] rounded-2xl text-xs font-semibold transition-all shadow-sm flex items-center gap-2"
+            >
+              {/* Export/download SVG Icon */}
+              <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round">
+                <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4" />
+                <polyline points="7 10 12 15 17 10" />
+                <line x1="12" y1="15" x2="12" y2="3" />
+              </svg>
+              Export Data
+            </button>
 
-          {/* Add Salon */}
-          <button
-            onClick={() => {
-              setAddModalStep(1);
-              setAddModalType(null);
-              setIsAddModalOpen(true);
-            }}
-            className="px-5 py-2.5 bg-[#5e53fc] hover:bg-indigo-700 text-white rounded-2xl text-xs font-semibold tracking-wide shadow-lg shadow-indigo-150 transition-all flex items-center gap-2"
-          >
-            {/* Plus Icon */}
-            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="3" strokeLinecap="round" strokeLinejoin="round">
-              <line x1="12" y1="5" x2="12" y2="19" />
-              <line x1="5" y1="12" x2="19" y2="12" />
-            </svg>
-            Add Salon
-          </button>
+            {/* Add Salon */}
+            <button
+              onClick={() => {
+                setAddModalStep(1);
+                setAddModalType(null);
+                setIsAddModalOpen(true);
+              }}
+              className="px-5 py-2.5 bg-[#5e53fc] hover:bg-indigo-700 text-white rounded-2xl text-xs font-semibold tracking-wide shadow-lg shadow-indigo-150 transition-all flex items-center gap-2"
+            >
+              {/* Plus Icon */}
+              <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="3" strokeLinecap="round" strokeLinejoin="round">
+                <line x1="12" y1="5" x2="12" y2="19" />
+                <line x1="5" y1="12" x2="19" y2="12" />
+              </svg>
+              Add Salon
+            </button>
+          </div>
         </div>
       </div>
 
       {/* Filters card */}
-      <div className="bg-white rounded-3xl p-6 border border-[#eef2f6] shadow-[0_4px_20px_rgba(0,0,0,0.01)] flex flex-col gap-6">
+      <div className="bg-white rounded-xl p-6 shadow-[0_4px_18px_rgba(17,31,56,0.06)] flex flex-col gap-6">
 
         {/* Buttons filters */}
         <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
@@ -667,7 +669,7 @@ export default function SalonsPage({
       )}
 
       {/* Main Table Card */}
-      <div className="bg-white rounded-3xl border border-[#eef2f6] shadow-[0_4px_20px_rgba(0,0,0,0.01)] overflow-hidden">
+      <div className="bg-white rounded-xl shadow-[0_4px_18px_rgba(17,31,56,0.06)] overflow-hidden">
         <div className="overflow-x-auto">
           <table className="w-full text-left border-collapse">
             <thead>

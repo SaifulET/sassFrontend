@@ -34,7 +34,7 @@ export default function RecentActivitySection({
   };
 
   return (
-    <div className="bg-white rounded-3xl p-6 border border-[#eef2f6] shadow-[0_4px_20px_rgba(0,0,0,0.01)] h-full flex flex-col justify-between">
+    <div className="bg-white rounded-xl p-6 shadow-[0_4px_18px_rgba(17,31,56,0.06)] h-full flex flex-col justify-between">
       {/* Header */}
       <div className="flex items-center justify-between mb-6">
         <h3 className="text-base font-bold text-slate-800">Recent Activity</h3>

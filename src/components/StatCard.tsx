@@ -27,7 +27,7 @@ export default function StatCard({
   onViewClick
 }: StatCardProps) {
   return (
-    <div className="bg-white rounded-3xl p-6 border border-[#eef2f6] shadow-[0_4px_20px_rgba(0,0,0,0.01)] flex flex-col justify-between min-h-[200px] transition-transform duration-200 hover:-translate-y-1 hover:shadow-md">
+    <div className="bg-white rounded-xl p-6 shadow-[0_4px_18px_rgba(17,31,56,0.06)] flex flex-col justify-between min-h-[200px] transition-transform duration-200 hover:-translate-y-1 hover:shadow-md">
       {/* Top Header Section */}
       <div className="flex items-start gap-4">
         {/* Icon Container */}

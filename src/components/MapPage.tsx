@@ -148,10 +148,11 @@ export default function MapPage({ setActiveTab }: { setActiveTab?: (tab: string)
 
   return (
     <div className="w-full min-w-0">
-      <div className="flex flex-col gap-6 animate-in fade-in slide-in-from-bottom-4 duration-300">
+      <div className="flex w-full flex-col gap-5 text-left text-[#283442] animate-in fade-in slide-in-from-bottom-4 duration-300">
         
         {/* Header toolbar */}
-      <div className="flex flex-col md:flex-row md:items-center justify-between gap-4">
+      <div className="rounded-2xl bg-white px-5 py-4 shadow-[0_4px_18px_rgba(17,31,56,0.06)]">
+        <div className="flex flex-col md:flex-row md:items-center justify-between gap-4">
           <div className="flex items-center gap-3">
           <button
             type="button"
@@ -163,7 +164,7 @@ export default function MapPage({ setActiveTab }: { setActiveTab?: (tab: string)
               <polyline points="12 19 5 12 12 5" />
             </svg>
           </button>
-          <h1 className="text-2xl font-bold tracking-tight text-slate-800">Analytics</h1>
+          <h1 className="text-sm font-extrabold text-[#1f2937]">Analytics</h1>
         </div>
 
           <button
@@ -183,9 +184,10 @@ export default function MapPage({ setActiveTab }: { setActiveTab?: (tab: string)
             Resync
           </button>
         </div>
+      </div>
 
         {/* Map Panel Card */}
-        <section className="relative w-full rounded-[12px] bg-white p-6 shadow-[0px_2px_4px_-1px_rgba(175,182,201,0.2)]">
+        <section className="relative w-full rounded-xl bg-white p-6 shadow-[0_4px_18px_rgba(17,31,56,0.06)]">
           <div className="mb-5 flex flex-col gap-4 xl:flex-row xl:items-center xl:justify-between">
             <div className="flex items-center gap-2.5">
               <h2 className="text-[16px] font-bold leading-[22px] text-[#29343D]">
@@ -399,7 +401,7 @@ export default function MapPage({ setActiveTab }: { setActiveTab?: (tab: string)
         </section>
 
         {/* Detailed Region Breakdown Table */}
-        <section className="w-full rounded-[12px] bg-white p-6 shadow-[0px_2px_4px_-1px_rgba(175,182,201,0.2)]">
+        <section className="w-full rounded-xl bg-white p-6 shadow-[0_4px_18px_rgba(17,31,56,0.06)]">
           <div className="mb-4">
             <h3 className="text-base font-bold text-[#29343D]">Regions Breakdown</h3>
             <p className="text-xs text-slate-400">Analysis breakdown of key performance indicators grouped by active geographical boundaries.</p>

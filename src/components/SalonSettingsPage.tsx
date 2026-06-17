@@ -82,12 +82,12 @@ export default function SalonSettingsPage({ salon, onBack }: SalonSettingsPagePr
   };
 
   return (
-    <div className="flex flex-col gap-6 animate-in fade-in duration-300 w-full text-left">
+    <div className="flex w-full flex-col gap-5 text-left text-[#283442] animate-in fade-in duration-300">
       {/* Top Header Breadcrumbs Card */}
-      <div className="bg-white rounded-2xl border border-[#eef2f6] shadow-sm px-6 py-4 flex items-center justify-between w-full">
-        <h1 className="text-sm font-bold text-slate-800">
+      <div className="rounded-2xl bg-white px-5 py-4 shadow-[0_4px_18px_rgba(17,31,56,0.06)] flex items-center justify-between w-full">
+        <div className="text-sm font-extrabold text-[#1f2937]">
           {salon.name}
-        </h1>
+        </div>
         <div className="flex items-center gap-2 text-xs font-semibold">
           <button onClick={onBack} className="p-1.5 border border-slate-200 rounded-lg hover:bg-slate-50 transition-colors inline-flex">
             <HomeIcon />
@@ -100,12 +100,12 @@ export default function SalonSettingsPage({ salon, onBack }: SalonSettingsPagePr
       </div>
 
       {/* Main Settings Card */}
-      <div className="bg-white rounded-3xl border border-[#eef2f6] shadow-[0_2px_4px_-1px_rgba(175,182,201,0.08)] flex flex-col p-8 w-full">
+      <div className="bg-white rounded-xl shadow-[0_4px_18px_rgba(17,31,56,0.06)] flex flex-col p-6 w-full">
         {/* Title */}
-        <h2 className="text-xl font-bold text-slate-800 mb-8">Settings</h2>
+        <h2 className="text-base font-bold text-[#1f2937] mb-6">Settings</h2>
 
         {/* Inner Bordered Settings Container Card */}
-        <div className="border border-[#eef2f6] rounded-3xl p-8 flex flex-col gap-8 w-full bg-white">
+        <div className="border border-[#eef2f6] rounded-xl p-6 flex flex-col gap-6 w-full bg-white">
           
           {/* Section 1: Salon-Specific Settings */}
           <div className="flex flex-col gap-6 w-full">

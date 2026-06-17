@@ -117,12 +117,13 @@ export default function DashboardPage({ onViewAllActivities }: DashboardPageProp
   };
 
   return (
-    <div className="flex flex-col gap-8 animate-in fade-in slide-in-from-bottom-4 duration-300">
+    <div className="flex w-full flex-col gap-5 text-left text-[#283442] animate-in fade-in slide-in-from-bottom-4 duration-300">
       {/* Title section */}
-      <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
-        <div>
-          <h1 className="text-2xl font-bold tracking-tight text-slate-800">Dashboard</h1>
-        </div>
+      <div className="rounded-2xl bg-white px-5 py-4 shadow-[0_4px_18px_rgba(17,31,56,0.06)]">
+        <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
+          <div>
+            <div className="text-sm font-extrabold text-[#1f2937]">Dashboard</div>
+          </div>
 
         <div className="flex items-center gap-3">
           <button
@@ -146,6 +147,7 @@ export default function DashboardPage({ onViewAllActivities }: DashboardPageProp
             View All Salons
           </button>
         </div>
+      </div>
       </div>
 
       {/* StatCards grid */}
@@ -214,7 +216,7 @@ export default function DashboardPage({ onViewAllActivities }: DashboardPageProp
             height: "374px",
             padding: "24px",
             gap: "24px",
-            boxShadow: "0px 2px 4px -1px rgba(175, 182, 201, 0.2)",
+            boxShadow: "0 4px 18px rgba(17, 31, 56, 0.06)",
             borderRadius: "12px"
           }}
         >
@@ -625,7 +627,7 @@ export default function DashboardPage({ onViewAllActivities }: DashboardPageProp
       {/* Bottom sections: Critical Alerts and Tickets */}
       <div className="grid grid-cols-1 xl:grid-cols-2 gap-6">
         {/* Critical Alerts */}
-        <div className="bg-white rounded-3xl p-6 border border-[#eef2f6] shadow-[0_4px_20px_rgba(0,0,0,0.01)] flex flex-col justify-between">
+        <div className="bg-white rounded-xl p-6 shadow-[0_4px_18px_rgba(17,31,56,0.06)] flex flex-col justify-between">
           <div className="flex items-center justify-between mb-6">
             <h3 className="text-base font-bold text-slate-800">Critical Alerts</h3>
             <button
@@ -708,7 +710,7 @@ export default function DashboardPage({ onViewAllActivities }: DashboardPageProp
         </div>
 
         {/* Tickets Section */}
-        <div className="bg-white rounded-3xl p-6 border border-[#eef2f6] shadow-[0_4px_20px_rgba(0,0,0,0.01)] flex flex-col justify-between">
+        <div className="bg-white rounded-xl p-6 shadow-[0_4px_18px_rgba(17,31,56,0.06)] flex flex-col justify-between">
           <div className="flex items-center justify-between mb-6">
             <h3 className="text-base font-bold text-slate-800">Tickets</h3>
             <button

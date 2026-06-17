@@ -704,7 +704,7 @@ const NotificationEditPanel = ({
   const settings = stage.emailSettings;
 
   return (
-    <section className="relative w-full rounded-[12px] bg-white p-[30px] shadow-[0px_2px_4px_-1px_rgba(175,182,201,0.2)] font-sans">
+    <section className="relative w-full rounded-xl bg-white p-6 shadow-[0_4px_18px_rgba(17,31,56,0.06)] font-sans">
       <div className="grid grid-cols-1 lg:grid-cols-12 gap-8 w-full text-left">
         <div className="lg:col-span-6 flex flex-col gap-6">
           <div className="flex border-b border-[#E0E6EB] h-[40px] items-center gap-6">
@@ -1419,76 +1419,80 @@ export default function LeadsPipelinePage({ setActiveTab }: { setActiveTab?: (ta
 
   return (
     <div className="w-full min-w-0">
-      <div className="flex flex-col gap-6 animate-in fade-in slide-in-from-bottom-4 duration-300">
+      <div className="flex w-full flex-col gap-5 text-left text-[#283442] animate-in fade-in slide-in-from-bottom-4 duration-300">
 
         {/* Header toolbar */}
         {viewingNotificationStage ? (
-          <div className="flex flex-col md:flex-row md:items-center justify-between gap-4">
-            <div className="flex items-center gap-3 text-[#29343D]">
-              <button
-                type="button"
-                onClick={() => setViewingNotificationStage(null)}
-                className="w-10 h-10 rounded-2xl bg-white border border-[#eef2f6] flex items-center justify-center text-slate-500 hover:bg-slate-50 hover:text-slate-800 transition-colors shadow-sm"
-              >
-                <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round">
-                  <line x1="19" y1="12" x2="5" y2="12" />
-                  <polyline points="12 19 5 12 12 5" />
-                </svg>
-              </button>
-              <h1 className="text-2xl font-bold tracking-tight text-slate-800">Edit/View Notification</h1>
-            </div>
+          <div className="rounded-2xl bg-white px-5 py-4 shadow-[0_4px_18px_rgba(17,31,56,0.06)]">
+            <div className="flex flex-col md:flex-row md:items-center justify-between gap-4">
+              <div className="flex items-center gap-3 text-[#29343D]">
+                <button
+                  type="button"
+                  onClick={() => setViewingNotificationStage(null)}
+                  className="w-10 h-10 rounded-2xl bg-white border border-[#eef2f6] flex items-center justify-center text-slate-500 hover:bg-slate-50 hover:text-slate-800 transition-colors shadow-sm"
+                >
+                  <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round">
+                    <line x1="19" y1="12" x2="5" y2="12" />
+                    <polyline points="12 19 5 12 12 5" />
+                  </svg>
+                </button>
+                <h1 className="text-sm font-extrabold text-[#1f2937]">Edit/View Notification</h1>
+              </div>
 
-            <div className="flex items-center gap-2">
-              <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#29343D" strokeWidth="2.0" strokeLinecap="round" strokeLinejoin="round" className="opacity-80">
-                <path d="m3 9 9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z" />
-                <polyline points="9 22 9 12 15 12 15 22" />
-              </svg>
-              <span className="text-[#29343D] font-bold text-[16px] leading-[22px] font-sans opacity-85">/</span>
-              <div className="bg-[#DDDBFF] text-[#635BFF] rounded-lg px-2.5 py-1 flex items-center justify-center font-bold text-[12px] leading-[20px] font-sans h-[28px]">
-                Leads
+              <div className="flex items-center gap-2">
+                <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#29343D" strokeWidth="2.0" strokeLinecap="round" strokeLinejoin="round" className="opacity-80">
+                  <path d="m3 9 9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z" />
+                  <polyline points="9 22 9 12 15 12 15 22" />
+                </svg>
+                <span className="text-[#29343D] font-bold text-[16px] leading-[22px] font-sans opacity-85">/</span>
+                <div className="bg-[#DDDBFF] text-[#635BFF] rounded-lg px-2.5 py-1 flex items-center justify-center font-bold text-[12px] leading-[20px] font-sans h-[28px]">
+                  Leads
+                </div>
               </div>
             </div>
           </div>
         ) : (
-          <div className="flex flex-col md:flex-row md:items-center justify-between gap-4">
-            <div className="flex items-center text-[#29343D]">
-              <h1 className="text-2xl font-bold tracking-tight text-slate-800">Leads Management</h1>
-            </div>
+          <div className="rounded-2xl bg-white px-5 py-4 shadow-[0_4px_18px_rgba(17,31,56,0.06)]">
+            <div className="flex flex-col md:flex-row md:items-center justify-between gap-4">
+              <div className="flex items-center text-[#29343D]">
+                <h1 className="text-sm font-extrabold text-[#1f2937]">Leads Management</h1>
+              </div>
 
-            <div className="flex flex-wrap items-center gap-3 w-full sm:w-auto justify-start sm:justify-end">
-              {/* Trash button */}
-              <button
-                type="button"
-                onClick={() => {
-                  if (window.confirm("Are you sure you want to delete all Lost leads?")) {
-                    setLeads((prev) => prev.filter((l) => l.stage !== "lost"));
-                  }
-                }}
-                className="w-[95px] h-[44px] flex flex-row justify-center items-center py-[10px] px-4 gap-2.5 border border-[#FF6692] rounded-lg text-[#FF6692] hover:bg-red-50/30 transition-colors"
-              >
-                <TrashIconMini color="#FF6692" />
-                <span className="text-[14px] font-medium leading-[24px] text-center font-sans">Trash</span>
-              </button>
+              <div className="flex flex-wrap items-center gap-3 w-full sm:w-auto justify-start sm:justify-end">
+                {/* Trash button */}
+                <button
+                  type="button"
+                  onClick={() => {
+                    if (window.confirm("Are you sure you want to delete all Lost leads?")) {
+                      setLeads((prev) => prev.filter((l) => l.stage !== "lost"));
+                    }
+                  }}
+                  className="w-[95px] h-[44px] flex flex-row justify-center items-center py-[10px] px-4 gap-2.5 border border-[#FF6692] rounded-lg text-[#FF6692] hover:bg-red-50/30 transition-colors"
+                >
+                  <TrashIconMini color="#FF6692" />
+                  <span className="text-[14px] font-medium leading-[24px] text-center font-sans">Trash</span>
+                </button>
 
-              {/* Refresh Data button */}
-              <button
-                type="button"
-                onClick={handleResync}
-                className="w-[144px] h-[44px] flex flex-row justify-center items-center py-[10px] px-4 gap-2.5 bg-[#EFF4FA] rounded-lg text-[#0A2540] hover:bg-slate-200 transition-colors"
-              >
-                <RefreshIcon color="#0A2540" />
-                <span className="text-[14px] font-medium leading-[24px] text-center font-sans">Refresh Data</span>
-              </button>
+                {/* Refresh Data button */}
+                <button
+                  type="button"
+                  onClick={handleResync}
+                  className="w-[144px] h-[44px] flex flex-row justify-center items-center py-[10px] px-4 gap-2.5 bg-[#EFF4FA] rounded-lg text-[#0A2540] hover:bg-slate-200 transition-colors"
+                >
+                  <RefreshIcon color="#0A2540" />
+                  <span className="text-[14px] font-medium leading-[24px] text-center font-sans">Refresh Data</span>
+                </button>
 
-              {/* Export button */}
-              <button
-                type="button"
-                onClick={() => setExportModalOpen(true)}
-                className="w-[149px] h-[44px] flex flex-row justify-center items-center py-[10px] px-4 gap-2.5 bg-[#635BFF] rounded-lg text-white hover:bg-[#4d42eb] transition-colors"
-              >
-                <DownloadIcon color="#FFFFFF" />
-                <span className="text-[14px] font-medium leading-[24px] text-center font-sans">Export Report</span>
-              </button>
+                {/* Export button */}
+                <button
+                  type="button"
+                  onClick={() => setExportModalOpen(true)}
+                  className="w-[149px] h-[44px] flex flex-row justify-center items-center py-[10px] px-4 gap-2.5 bg-[#635BFF] rounded-lg text-white hover:bg-[#4d42eb] transition-colors"
+                >
+                  <DownloadIcon color="#FFFFFF" />
+                  <span className="text-[14px] font-medium leading-[24px] text-center font-sans">Export Report</span>
+                </button>
+              </div>
             </div>
           </div>
         )}
@@ -2197,7 +2201,7 @@ export default function LeadsPipelinePage({ setActiveTab }: { setActiveTab?: (ta
                   </h3>
                 </div>
 
-                <div className="box-sizing-border-box flex flex-col items-start p-4 sm:p-[30px] gap-6 sm:gap-[30px] bg-white border border-[#E0E6EB] shadow-[0px_2px_4px_-1px_rgba(175,182,201,0.2)] rounded-[12px] w-full">
+                <div className="box-sizing-border-box flex flex-col items-start p-4 sm:p-[30px] gap-6 sm:gap-[30px] bg-white rounded-xl bg-white shadow-[0_4px_18px_rgba(17,31,56,0.06)] w-full">
                   
                   {/* Open Pipeline Section */}
                   <div className="flex flex-col gap-6 w-full">

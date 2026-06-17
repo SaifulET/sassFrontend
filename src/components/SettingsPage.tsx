@@ -468,7 +468,7 @@ export default function SettingsPage() {
   const tabs = ["Profile", "System", "Security", "Billing", "Notifications"];
 
   return (
-    <div className="flex flex-col p-6 gap-6 bg-[#F4F7FB] rounded-[20px] w-full text-left">
+    <div className="flex w-full flex-col gap-5 text-left text-[#283442] animate-in fade-in slide-in-from-bottom-4 duration-300">
       
       {/* Hidden File Input for Avatar Upload */}
       <input
@@ -486,17 +486,15 @@ export default function SettingsPage() {
         </div>
       )}
 
-      {/* 1. System Settings Header Card (title) */}
-      <div className="flex flex-col py-4 px-6 gap-6 bg-white shadow-[0px_2px_4px_-1px_rgba(175,182,201,0.2)] rounded-xl w-full flex-none order-0 self-stretch grow-0">
-        
-        {/* Frame 1000003724: Title and Top Action Buttons */}
-        <div className="flex flex-row justify-between items-center p-0 w-full h-[44px] flex-none order-1 self-stretch grow-0">
-          <h1 className="font-['Manrope'] font-bold text-[16px] leading-[22px] text-[#29343D] h-[22px] flex-none order-0 grow-0">
-            System Settings
-          </h1>
+      {/* Heading Card */}
+      <div className="rounded-2xl bg-white px-5 py-4 shadow-[0_4px_18px_rgba(17,31,56,0.06)]">
+        <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
+          <div>
+            <div className="text-sm font-extrabold text-[#1f2937]">System Settings</div>
+          </div>
           
-          {/* Frame 1000003715: Action buttons */}
-          <div className="flex flex-row items-center p-0 gap-6 h-[44px] flex-none order-1 grow-0">
+          {/* Action buttons */}
+          <div className="flex items-center gap-3">
             {/* Btn: Export Settings */}
             <button
               type="button"
@@ -504,12 +502,10 @@ export default function SettingsPage() {
                 setToastMessage("Exporting settings...");
                 setTimeout(() => setToastMessage(null), 2000);
               }}
-              className="flex flex-row justify-center items-center py-2.5 px-4 gap-2.5 h-[44px] bg-[#EFF4FA] rounded-lg font-['Manrope'] font-medium text-[14px] leading-[24px] text-[#0A2540] transition-colors cursor-pointer border-none flex-none order-0 grow-0"
+              className="flex items-center gap-2 px-4 py-2.5 bg-white border border-[#eef2f6] hover:bg-slate-50 rounded-2xl text-xs font-semibold text-slate-600 transition-all shadow-sm"
             >
               <ExportIcon />
-              <span className="font-['Manrope'] font-medium text-[14px] leading-[24px] text-center text-[#0A2540] flex-none order-1 grow-0">
-                Export Settings
-              </span>
+              <span>Export Settings</span>
             </button>
             {/* Btn: Import Settings */}
             <button
@@ -518,18 +514,18 @@ export default function SettingsPage() {
                 setToastMessage("Importing settings...");
                 setTimeout(() => setToastMessage(null), 2000);
               }}
-              className="flex flex-row justify-center items-center py-2.5 px-4 gap-2.5 h-[44px] bg-[#635BFF] rounded-lg font-['Manrope'] font-medium text-[14px] leading-[24px] text-white transition-colors cursor-pointer border-none flex-none order-1 grow-0"
+              className="px-5 py-2.5 bg-[#5e53fc] hover:bg-indigo-700 text-white rounded-2xl text-xs font-semibold tracking-wide shadow-lg shadow-indigo-150 transition-all"
             >
               <ImportIcon />
-              <span className="font-['Manrope'] font-medium text-[14px] leading-[24px] text-center text-white flex-none order-1 grow-0">
-                Import Settings
-              </span>
+              <span>Import Settings</span>
             </button>
           </div>
         </div>
+      </div>
 
-        {/* Tab strip navigation (title border-bottom) */}
-        <div className="box-border flex flex-row items-center p-0 gap-2.5 border-b border-[#E0E6EB] w-full h-[53px] flex-none order-2 self-stretch grow-0">
+      {/* Tab Navigation Card */}
+      <div className="rounded-xl bg-white p-4 shadow-[0_4px_18px_rgba(17,31,56,0.06)]">
+        <div className="flex flex-row items-center gap-2 overflow-x-auto">
           {tabs.map((tab) => {
             const isActive = activeTab === tab;
             return (
@@ -541,10 +537,10 @@ export default function SettingsPage() {
                   setToastMessage(`${tab} view loaded`);
                   setTimeout(() => setToastMessage(null), 1500);
                 }}
-                className={`box-border flex flex-row items-center justify-center py-[14px] px-4 gap-2.5 h-[53px] rounded-none flex-grow font-['Manrope'] font-semibold text-[18px] leading-[25px] cursor-pointer border-t-none border-x-none transition-all ${
+                className={`px-5 py-2 text-sm font-bold rounded-lg transition-all ${
                   isActive
-                    ? "border-b border-[#635BFF] text-[#635BFF] bg-transparent"
-                    : "border-b border-transparent text-[#29343D] hover:text-[#635BFF] bg-transparent"
+                    ? "bg-[#eeedff] text-[#635bff]"
+                    : "text-slate-500 hover:bg-slate-50 hover:text-slate-800"
                 }`}
               >
                 {tab}
@@ -556,12 +552,12 @@ export default function SettingsPage() {
 
       {/* Frame 1000003774: Active Tab Panel Card */}
       {activeTab === "Profile" ? (
-        <form onSubmit={handleSave} className="flex flex-col items-start p-6 gap-6 bg-white shadow-[0px_2px_4px_-1px_rgba(175,182,201,0.2)] rounded-xl w-full min-h-[904px] flex-none order-1 self-stretch grow-0">
+        <form onSubmit={handleSave} className="flex flex-col items-start p-6 gap-6 bg-white rounded-xl shadow-[0_4px_18px_rgba(17,31,56,0.06)] w-full min-h-[904px] flex-none order-1 self-stretch grow-0">
           
           {/* Frame 1000003804: Change avatar card wrapper */}
           <div className="flex flex-col lg:flex-row items-center p-0 gap-[30px] w-full h-auto lg:h-[382px] flex-none order-0 self-stretch grow-0">
             {/* change profile pic */}
-            <div className="box-border flex flex-col items-start p-[30px] gap-[30px] bg-white border border-[#E0E6EB] shadow-[0px_2px_4px_-1px_rgba(175,182,201,0.2)] rounded-xl w-full h-full flex-grow">
+            <div className="box-border flex flex-col items-start p-[30px] gap-[30px] bg-white rounded-xl shadow-[0_4px_18px_rgba(17,31,56,0.06)] w-full h-full flex-grow">
               <h2 className="font-['Manrope'] font-semibold text-[18px] leading-[25px] text-[#29343D] w-full h-[25px] flex-none order-0 self-stretch grow-0">
                 Change profile
               </h2>
@@ -612,7 +608,7 @@ export default function SettingsPage() {
           </div>
 
           {/* Frame 1000003805: Personal Details card */}
-          <div className="box-border flex flex-col items-start p-[30px] gap-[30px] bg-white border border-[#E0E6EB] shadow-[0px_2px_4px_-1px_rgba(175,182,201,0.2)] rounded-xl w-full h-auto lg:h-[382px] flex-none order-1 self-stretch grow-0">
+          <div className="box-border flex flex-col items-start p-[30px] gap-[30px] bg-white rounded-xl shadow-[0_4px_18px_rgba(17,31,56,0.06)] w-full h-auto lg:h-[382px] flex-none order-1 self-stretch grow-0">
             <h2 className="font-['Manrope'] font-semibold text-[18px] leading-[25px] text-[#29343D] w-full min-w-0 h-[25px] flex-none order-0 self-stretch grow-0">
               Personal Details
             </h2>
@@ -768,33 +764,33 @@ export default function SettingsPage() {
           </div>
         </form>
       ) : activeTab === "System" ? (
-        <form onSubmit={handleSystemSave} className="flex flex-col items-start p-6 gap-6 bg-white shadow-[0px_2px_4px_-1px_rgba(175,182,201,0.2)] rounded-xl w-full min-h-[818px] flex-none order-1 self-stretch grow-0">
+        <form onSubmit={handleSystemSave} className="flex flex-col items-start p-6 gap-6 bg-white rounded-xl shadow-[0_4px_18px_rgba(17,31,56,0.06)] w-full min-h-[818px] flex-none order-1 self-stretch grow-0">
           
           {/* Cards: Stat Cards container */}
           <div className="flex flex-row flex-wrap items-center p-0 gap-6 w-full flex-none order-0 self-stretch grow-0">
             {/* Stat 1: Uptime */}
-            <div className="box-border flex flex-col justify-center items-center p-6 gap-[30px] flex-1 min-w-[200px] h-[108px] bg-white border border-[#E0E6EB] shadow-[0px_2px_4px_-1px_rgba(175,182,201,0.2)] rounded-xl flex-none order-0">
+            <div className="box-border flex flex-col justify-center items-center p-6 gap-[30px] flex-1 min-w-[200px] h-[108px] bg-white rounded-xl shadow-[0_4px_18px_rgba(17,31,56,0.06)] flex-none order-0">
               <div className="flex flex-col items-center p-0 gap-2 w-full h-[60px] flex-none order-0 grow-0">
                 <span className="font-['Manrope'] font-semibold text-[28px] leading-[34px] text-center text-[#36C76C] h-[34px] flex-none order-0 grow-0">99.9%</span>
                 <span className="font-['Manrope'] font-semibold text-[13px] leading-[18px] text-[#29343D] h-[18px] flex-none order-0 grow-0">Uptime</span>
               </div>
             </div>
             {/* Stat 2: Avg Response */}
-            <div className="box-border flex flex-col justify-center items-center p-6 gap-[30px] flex-1 min-w-[200px] h-[108px] bg-white border border-[#E0E6EB] shadow-[0px_2px_4px_-1px_rgba(175,182,201,0.2)] rounded-xl flex-none order-1">
+            <div className="box-border flex flex-col justify-center items-center p-6 gap-[30px] flex-1 min-w-[200px] h-[108px] bg-white rounded-xl shadow-[0_4px_18px_rgba(17,31,56,0.06)] flex-none order-1">
               <div className="flex flex-col items-center p-0 gap-2 w-full h-[60px] flex-none order-0 grow-0">
                 <span className="font-['Manrope'] font-semibold text-[28px] leading-[34px] text-center text-[#46CAEB] h-[34px] flex-none order-0 grow-0">156ms</span>
                 <span className="font-['Manrope'] font-semibold text-[13px] leading-[18px] text-[#29343D] h-[18px] flex-none order-0 grow-0">Avg Response</span>
               </div>
             </div>
             {/* Stat 3: Active Salons */}
-            <div className="box-border flex flex-col justify-center items-center p-6 gap-[30px] flex-1 min-w-[200px] h-[108px] bg-white border border-[#E0E6EB] shadow-[0px_2px_4px_-1px_rgba(175,182,201,0.2)] rounded-xl flex-none order-2">
+            <div className="box-border flex flex-col justify-center items-center p-6 gap-[30px] flex-1 min-w-[200px] h-[108px] bg-white rounded-xl shadow-[0_4px_18px_rgba(17,31,56,0.06)] flex-none order-2">
               <div className="flex flex-col items-center p-0 gap-2 w-full h-[60px] flex-none order-0 grow-0">
                 <span className="font-['Manrope'] font-semibold text-[28px] leading-[34px] text-center text-[#635BFF] h-[34px] flex-none order-0 grow-0">47</span>
                 <span className="font-['Manrope'] font-semibold text-[13px] leading-[18px] text-[#29343D] h-[18px] flex-none order-0 grow-0">Active Salons</span>
               </div>
             </div>
             {/* Stat 4: Database */}
-            <div className="box-border flex flex-col justify-center items-center p-6 gap-[30px] flex-1 min-w-[200px] h-[108px] bg-white border border-[#E0E6EB] shadow-[0px_2px_4px_-1px_rgba(175,182,201,0.2)] rounded-xl flex-none order-3">
+            <div className="box-border flex flex-col justify-center items-center p-6 gap-[30px] flex-1 min-w-[200px] h-[108px] bg-white rounded-xl shadow-[0_4px_18px_rgba(17,31,56,0.06)] flex-none order-3">
               <div className="flex flex-col items-center p-0 gap-2 w-full h-[60px] flex-none order-0 grow-0">
                 <span className="font-['Manrope'] font-semibold text-[28px] leading-[34px] text-center text-[#36C76C] h-[34px] flex-none order-0 grow-0">Healthy</span>
                 <span className="font-['Manrope'] font-semibold text-[13px] leading-[18px] text-[#29343D] h-[18px] flex-none order-0 grow-0">Database</span>
@@ -803,7 +799,7 @@ export default function SettingsPage() {
           </div>
 
           {/* Platform Configuration Card */}
-          <div className="box-border flex flex-col items-start p-[30px] gap-[30px] bg-white border border-[#E0E6EB] shadow-[0px_2px_4px_-1px_rgba(175,182,201,0.2)] rounded-xl w-full flex-none order-1 self-stretch grow-0">
+          <div className="box-border flex flex-col items-start p-[30px] gap-[30px] bg-white rounded-xl shadow-[0_4px_18px_rgba(17,31,56,0.06)] w-full flex-none order-1 self-stretch grow-0">
             <h2 className="font-['Manrope'] font-semibold text-[18px] leading-[25px] text-[#29343D] w-full h-[25px] flex-none order-0 self-stretch grow-0 text-left">
               Platform Configuration
             </h2>
@@ -855,7 +851,7 @@ export default function SettingsPage() {
           </div>
 
           {/* Registration & Trials Card */}
-          <div className="box-border flex flex-col items-start p-[30px] gap-[30px] bg-white border border-[#E0E6EB] shadow-[0px_2px_4px_-1px_rgba(175,182,201,0.2)] rounded-xl w-full flex-none order-2 self-stretch grow-0">
+          <div className="box-border flex flex-col items-start p-[30px] gap-[30px] bg-white rounded-xl shadow-[0_4px_18px_rgba(17,31,56,0.06)] w-full flex-none order-2 self-stretch grow-0">
             <h2 className="font-['Manrope'] font-semibold text-[18px] leading-[25px] text-[#29343D] w-full h-[25px] flex-none order-0 self-stretch grow-0 text-left">
               Registration & Trials
             </h2>
@@ -946,7 +942,7 @@ export default function SettingsPage() {
           </div>
 
           {/* System Controls Card */}
-          <div className="box-border flex flex-col justify-center items-start p-[30px] gap-[30px] bg-white border border-[#E0E6EB] shadow-[0px_2px_4px_-1px_rgba(175,182,201,0.2)] rounded-xl w-full h-auto lg:h-[154px] flex-none order-3 self-stretch grow-0">
+          <div className="box-border flex flex-col justify-center items-start p-[30px] gap-[30px] bg-white rounded-xl shadow-[0_4px_18px_rgba(17,31,56,0.06)] w-full h-auto lg:h-[154px] flex-none order-3 self-stretch grow-0">
             <h2 className="font-['Manrope'] font-semibold text-[18px] leading-[25px] text-[#29343D] w-full h-[25px] flex-none order-0 self-stretch grow-0 text-left">
               System Controls
             </h2>
@@ -1057,10 +1053,10 @@ export default function SettingsPage() {
 
         </form>
       ) : activeTab === "Security" ? (
-        <form onSubmit={handleSecuritySave} className="flex flex-col items-start p-6 gap-6 bg-white shadow-[0px_2px_4px_-1px_rgba(175,182,201,0.2)] rounded-xl w-full min-h-[818px] flex-none order-1 self-stretch grow-0">
+        <form onSubmit={handleSecuritySave} className="flex flex-col items-start p-6 gap-6 bg-white rounded-xl shadow-[0_4px_18px_rgba(17,31,56,0.06)] w-full min-h-[818px] flex-none order-1 self-stretch grow-0">
           
           {/* Security Configuration Card */}
-          <div className="box-border flex flex-col items-start p-[30px] gap-[30px] bg-white border border-[#E0E6EB] shadow-[0px_2px_4px_-1px_rgba(175,182,201,0.2)] rounded-xl w-full flex-none order-0 self-stretch grow-0">
+          <div className="box-border flex flex-col items-start p-[30px] gap-[30px] bg-white rounded-xl shadow-[0_4px_18px_rgba(17,31,56,0.06)] w-full flex-none order-0 self-stretch grow-0">
             <h2 className="font-['Manrope'] font-semibold text-[18px] leading-[25px] text-[#29343D] w-full h-[25px] flex-none order-0 self-stretch grow-0 text-left">
               Security Configuration
             </h2>
@@ -1158,7 +1154,7 @@ export default function SettingsPage() {
           {/* Two-column bottom layout */}
           <div className="flex flex-col lg:flex-row items-start py-4 px-0 gap-[30px] w-full flex-none order-1 self-stretch grow-0">
             {/* Column 1: Left larger list (2/3 width) */}
-            <div className="box-border flex flex-col items-start p-[30px] bg-white border border-[#E0E6EB] shadow-[0px_2px_4px_-1px_rgba(175,182,201,0.2)] rounded-xl w-full lg:w-[calc(66.66%-15px)] flex-grow h-auto lg:h-[455px] flex-none">
+            <div className="box-border flex flex-col items-start p-[30px] bg-white rounded-xl shadow-[0_4px_18px_rgba(17,31,56,0.06)] w-full lg:w-[calc(66.66%-15px)] flex-grow h-auto lg:h-[455px] flex-none">
               <div className="flex flex-col w-full divide-y divide-[#E0E6EB]">
                 {/* Item 1: Two-factor Authentication */}
                 <div className="flex flex-row justify-between items-center w-full py-4 first:pt-0">
@@ -1287,7 +1283,7 @@ export default function SettingsPage() {
             </div>
 
             {/* Column 2: Right Devices list (1/3 width) */}
-            <div className="box-border flex flex-col items-start p-[30px] bg-white border border-[#E0E6EB] shadow-[0px_2px_4px_-1px_rgba(175,182,201,0.2)] rounded-xl w-full lg:w-[calc(33.33%-15px)] flex-none h-auto lg:h-[468px]">
+            <div className="box-border flex flex-col items-start p-[30px] bg-white rounded-xl shadow-[0_4px_18px_rgba(17,31,56,0.06)] w-full lg:w-[calc(33.33%-15px)] flex-none h-auto lg:h-[468px]">
               
               <div className="flex flex-col items-start gap-4 w-full text-left">
                 <div className="w-12 h-12 rounded-lg bg-[#DDDBFF] flex items-center justify-center text-[#635BFF] flex-none">
@@ -1367,10 +1363,10 @@ export default function SettingsPage() {
 
         </form>
       ) : activeTab === "Billing" ? (
-        <form onSubmit={handleBillingSave} className="flex flex-col items-start p-6 gap-6 bg-white shadow-[0px_2px_4px_-1px_rgba(175,182,201,0.2)] rounded-xl w-full min-h-[614px] flex-none order-1 self-stretch grow-0">
+        <form onSubmit={handleBillingSave} className="flex flex-col items-start p-6 gap-6 bg-white rounded-xl shadow-[0_4px_18px_rgba(17,31,56,0.06)] w-full min-h-[614px] flex-none order-1 self-stretch grow-0">
           
           {/* Payment Configuration Card */}
-          <div className="box-border flex flex-col items-start p-[30px] gap-[30px] bg-white border border-[#E0E6EB] shadow-[0px_2px_4px_-1px_rgba(175,182,201,0.2)] rounded-xl w-full flex-none order-0 self-stretch grow-0">
+          <div className="box-border flex flex-col items-start p-[30px] gap-[30px] bg-white rounded-xl shadow-[0_4px_18px_rgba(17,31,56,0.06)] w-full flex-none order-0 self-stretch grow-0">
             <h2 className="font-['Manrope'] font-semibold text-[18px] leading-[25px] text-[#29343D] w-full h-[25px] flex-none order-0 self-stretch grow-0 text-left">
               Payment Configuration
             </h2>
@@ -1600,10 +1596,10 @@ export default function SettingsPage() {
 
         </form>
       ) : activeTab === "Notifications" ? (
-        <form onSubmit={handleNotificationSave} className="flex flex-col items-start p-6 gap-6 bg-white shadow-[0px_2px_4px_-1px_rgba(175,182,201,0.2)] rounded-xl w-full min-h-[603px] flex-none order-1 self-stretch grow-0">
+        <form onSubmit={handleNotificationSave} className="flex flex-col items-start p-6 gap-6 bg-white rounded-xl shadow-[0_4px_18px_rgba(17,31,56,0.06)] w-full min-h-[603px] flex-none order-1 self-stretch grow-0">
           
           {/* Notification Preferences Card */}
-          <div className="box-border flex flex-col items-start p-[30px] gap-[30px] bg-white border border-[#E0E6EB] shadow-[0px_2px_4px_-1px_rgba(175,182,201,0.2)] rounded-xl w-full flex-none order-0 self-stretch grow-0">
+          <div className="box-border flex flex-col items-start p-[30px] gap-[30px] bg-white rounded-xl shadow-[0_4px_18px_rgba(17,31,56,0.06)] w-full flex-none order-0 self-stretch grow-0">
             <h2 className="font-['Manrope'] font-semibold text-[18px] leading-[25px] text-[#29343D] w-full h-[25px] flex-none order-0 self-stretch grow-0 text-left">
               Notification Preferences
             </h2>
@@ -1832,7 +1828,7 @@ export default function SettingsPage() {
         </form>
       ) : (
         /* Empty tab state */
-        <div className="flex flex-col p-12 gap-4 bg-white border border-[#E0E6EB] shadow-[0px_2px_4px_-1px_rgba(175,182,201,0.2)] rounded-xl w-full justify-center items-center">
+        <div className="flex flex-col p-12 gap-4 bg-white rounded-xl shadow-[0_4px_18px_rgba(17,31,56,0.06)] w-full justify-center items-center">
           <div className="w-12 h-12 rounded-full bg-[#EFF4FA] flex items-center justify-center text-[#635BFF]">
             <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5">
               <circle cx="12" cy="12" r="10" />
