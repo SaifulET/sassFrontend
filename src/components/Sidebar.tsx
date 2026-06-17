@@ -550,8 +550,8 @@ export default function Sidebar({
         />
       )}
 
-      {/* DESKTOP SIDEBAR: Double column fixed structure starting below header (top-[63px]) */}
-      <aside className="hidden lg:flex fixed top-[63px] bottom-0 left-0 w-72 bg-white z-30">
+      {/* DESKTOP SIDEBAR: Double column fixed structure starting at top (top-0) */}
+      <aside className="hidden lg:flex fixed top-0 bottom-0 left-0 w-72 bg-white z-30">
         {/* Column 1: Narrow vertical icon bar */}
         <div className="w-20 bg-white border-r border-[#eef2f6] flex flex-col items-center py-6 justify-between shrink-0">
           <div className="flex flex-col items-center gap-4.5 w-full">

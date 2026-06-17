@@ -578,17 +578,14 @@ export default function LeadsPage({ setActiveTab }: { setActiveTab?: (tab: strin
 
   return (
     <div className="w-full min-w-0">
-      <div className="flex w-full flex-col gap-6 rounded-[20px] bg-[#F4F7FB] p-6">
+      <div className="flex flex-col gap-6 animate-in fade-in slide-in-from-bottom-4 duration-300">
         
-        {/* Top Header Bar */}
-        <section className="flex flex-col sm:flex-row w-full sm:items-center justify-between rounded-[12px] bg-white px-6 py-4 shadow-[0px_2px_4px_-1px_rgba(175,182,201,0.2)] sm:h-[76px] gap-4 shrink-0">
-          <div className="flex items-center text-[#29343D]">
-            <span className="text-[16px] font-bold tracking-tight text-[#29343D] font-sans">
-              Leads Management
-            </span>
-          </div>
-
-          <div className="flex flex-wrap items-center gap-3 w-full sm:w-auto justify-start sm:justify-end">
+        {/* Header toolbar */}
+      <div className="flex flex-col md:flex-row md:items-center justify-between gap-4">
+        <div>
+          <h1 className="text-2xl font-bold tracking-tight text-slate-800">Leads Management</h1>
+        </div>
+        <div className="flex flex-wrap items-center gap-3 w-full sm:w-auto justify-start sm:justify-end">
             {/* Trash button */}
             <button
               type="button"
@@ -618,7 +615,7 @@ export default function LeadsPage({ setActiveTab }: { setActiveTab?: (tab: strin
               <span className="text-[14px] font-medium leading-[24px] text-center font-sans">Export Report</span>
             </button>
           </div>
-        </section>
+        </div>
 
         {/* Chart card panel */}
         <section className="relative w-full rounded-[12px] bg-white p-6 shadow-[0px_2px_4px_-1px_rgba(175,182,201,0.2)]">

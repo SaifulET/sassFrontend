@@ -36,7 +36,7 @@ export default function Header({ activeTab, setActiveTab, selectedSalonId, toggl
 
   return (
     <header className={`fixed top-0 right-0 left-0 h-[63px] bg-white border-b border-[#eef2f6] flex items-center justify-between px-6 md:px-8 z-40 shadow-[0_2px_10px_rgba(0,0,0,0.01)] transition-all duration-300 ${
-      selectedSalonId !== null ? "lg:left-0" : "lg:left-[280px]"
+      selectedSalonId !== null ? "lg:left-72" : "lg:left-[280px]"
     }`}>
       {/* Brand/Logo & Search Wrapper */}
       <div className="flex items-center gap-4 flex-1 max-w-xl">
@@ -68,7 +68,7 @@ export default function Header({ activeTab, setActiveTab, selectedSalonId, toggl
           </div>
           <input
             type="text"
-            placeholder="Search"
+            placeholder="Search in salons"
             className="w-full bg-[#f8fafc] text-slate-700 placeholder-[#a0aec0] text-sm rounded-2xl pl-11 pr-4 py-2.5 border border-transparent focus:bg-white focus:border-[#5e53fc] focus:outline-none transition-all duration-200"
           />
         </div>

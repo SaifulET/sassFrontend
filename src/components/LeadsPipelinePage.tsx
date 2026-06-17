@@ -1419,25 +1419,23 @@ export default function LeadsPipelinePage({ setActiveTab }: { setActiveTab?: (ta
 
   return (
     <div className="w-full min-w-0">
-      <div className="flex w-full flex-col gap-6 rounded-[20px] bg-[#F4F7FB] p-6">
+      <div className="flex flex-col gap-6 animate-in fade-in slide-in-from-bottom-4 duration-300">
 
-        {/* Top Header Bar */}
+        {/* Header toolbar */}
         {viewingNotificationStage ? (
-          <section className="flex flex-col sm:flex-row w-full sm:items-center justify-between rounded-[12px] bg-white px-6 py-4 shadow-[0px_2px_4px_-1px_rgba(175,182,201,0.2)] sm:h-[76px] gap-4 shrink-0">
+          <div className="flex flex-col md:flex-row md:items-center justify-between gap-4">
             <div className="flex items-center gap-3 text-[#29343D]">
               <button
                 type="button"
                 onClick={() => setViewingNotificationStage(null)}
-                className="w-8 h-8 flex items-center justify-center rounded-full hover:bg-slate-100 text-[#29343D] transition-colors"
+                className="w-10 h-10 rounded-2xl bg-white border border-[#eef2f6] flex items-center justify-center text-slate-500 hover:bg-slate-50 hover:text-slate-800 transition-colors shadow-sm"
               >
                 <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round">
                   <line x1="19" y1="12" x2="5" y2="12" />
                   <polyline points="12 19 5 12 12 5" />
                 </svg>
               </button>
-              <span className="text-[18px] font-semibold tracking-tight text-[#29343D] font-sans">
-                Edit/View Notification
-              </span>
+              <h1 className="text-2xl font-bold tracking-tight text-slate-800">Edit/View Notification</h1>
             </div>
 
             <div className="flex items-center gap-2">
@@ -1450,13 +1448,11 @@ export default function LeadsPipelinePage({ setActiveTab }: { setActiveTab?: (ta
                 Leads
               </div>
             </div>
-          </section>
+          </div>
         ) : (
-          <section className="flex flex-col sm:flex-row w-full sm:items-center justify-between rounded-[12px] bg-white px-6 py-4 shadow-[0px_2px_4px_-1px_rgba(175,182,201,0.2)] sm:h-[76px] gap-4 shrink-0">
+          <div className="flex flex-col md:flex-row md:items-center justify-between gap-4">
             <div className="flex items-center text-[#29343D]">
-              <span className="text-[16px] font-bold tracking-tight text-[#29343D] font-sans">
-                Leads Management
-              </span>
+              <h1 className="text-2xl font-bold tracking-tight text-slate-800">Leads Management</h1>
             </div>
 
             <div className="flex flex-wrap items-center gap-3 w-full sm:w-auto justify-start sm:justify-end">
@@ -1494,7 +1490,7 @@ export default function LeadsPipelinePage({ setActiveTab }: { setActiveTab?: (ta
                 <span className="text-[14px] font-medium leading-[24px] text-center font-sans">Export Report</span>
               </button>
             </div>
-          </section>
+          </div>
         )}
 
         {/* Content Card Wrapper */}

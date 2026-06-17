@@ -1063,22 +1063,23 @@ export default function AnalyticsPage({ setActiveTab }: { setActiveTab?: (tab: s
 
   return (
     <div className="w-full min-w-0">
-      <div className="flex w-full flex-col gap-6 rounded-[20px] bg-[#F4F7FB] p-6">
+      <div className="flex flex-col gap-6 animate-in fade-in slide-in-from-bottom-4 duration-300">
 
-        {/* Top Header Bar */}
-        <section className="flex w-full items-center justify-between rounded-[12px] bg-white px-6 py-4 shadow-[0px_2px_4px_-1px_rgba(175,182,201,0.2)]">
+        {/* Header toolbar */}
+      <div className="flex flex-col md:flex-row md:items-center justify-between gap-4">
+          <div className="flex items-center gap-3">
           <button
             type="button"
             onClick={() => setActiveTab && setActiveTab("dashboard")}
-            className="flex items-center text-[#29343D] hover:opacity-80 transition-opacity"
+            className="w-10 h-10 rounded-2xl bg-white border border-[#eef2f6] flex items-center justify-center text-slate-500 hover:bg-slate-50 hover:text-slate-800 transition-colors shadow-sm"
           >
-            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round" className="mr-2">
-              <path d="m15 18-6-6 6-6" />
+            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round">
+              <line x1="19" y1="12" x2="5" y2="12" />
+              <polyline points="12 19 5 12 12 5" />
             </svg>
-            <span className="text-[18px] font-bold tracking-tight text-[#29343D]">
-              Analytics
-            </span>
           </button>
+          <h1 className="text-2xl font-bold tracking-tight text-slate-800">Analytics</h1>
+        </div>
 
           <button
             type="button"
@@ -1091,7 +1092,7 @@ export default function AnalyticsPage({ setActiveTab }: { setActiveTab?: (tab: s
           >
             <RefreshIcon /> Resync
           </button>
-        </section>
+        </div>
 
         {/* Chart section */}
         <section className="relative w-full rounded-[12px] bg-white p-6 shadow-[0px_2px_4px_-1px_rgba(175,182,201,0.2)]">

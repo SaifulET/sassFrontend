@@ -52,8 +52,8 @@ export default function Layout({
         selectedSalonId !== null ? "lg:pl-72" : "lg:pl-[280px]"
       }`}>
         {/* Page Content - scrolls under header */}
-        <main className={`flex-1 px-4 md:px-8 pb-12 overflow-y-auto transition-all duration-300 ${
-          selectedSalonId !== null ? "pt-[63px]" : "pt-[63px]"
+        <main className={`flex-1 px-6 pb-12 overflow-y-auto transition-all duration-300 ${
+          selectedSalonId !== null ? "pt-[87px]" : "pt-[87px]"
         }`}>
           <div className="max-w-[1600px] mx-auto w-full">
             {children}
