@@ -116,7 +116,7 @@ interface Salon {
 interface SalonDetailPageProps {
   salon: Salon;
   onBack: () => void;
-  onImpersonate: (name: string) => void;
+  onImpersonate: (name: string, silent?: boolean) => void;
 }
 
 export default function SalonDetailPage({ salon, onBack, onImpersonate }: SalonDetailPageProps) {
@@ -127,7 +127,54 @@ export default function SalonDetailPage({ salon, onBack, onImpersonate }: SalonD
   const [isPaymentModalOpen, setIsPaymentModalOpen] = useState(false);
   const [isLocationModalOpen, setIsLocationModalOpen] = useState(false);
   const [isReactivateModalOpen, setIsReactivateModalOpen] = useState(false);
+  const [isShareCapitalModalOpen, setIsShareCapitalModalOpen] = useState(false);
+  const [isContactModalOpen, setIsContactModalOpen] = useState(false);
+  const [isBankModalOpen, setIsBankModalOpen] = useState(false);
+  const [isFinancialModalOpen, setIsFinancialModalOpen] = useState(false);
+  const [isOtherDataModalOpen, setIsOtherDataModalOpen] = useState(false);
+  const [isActivityModalOpen, setIsActivityModalOpen] = useState(false);
+  const [isAddMemberModalOpen, setIsAddMemberModalOpen] = useState(false);
+  const [editingMemberId, setEditingMemberId] = useState<string | null>(null);
   const [salonStatus, setSalonStatus] = useState(salon.status);
+
+  // Add Member form state
+  const [memberFormName, setMemberFormName] = useState("");
+  const [memberFormType, setMemberFormType] = useState("Natural Person");
+  const [memberFormRole, setMemberFormRole] = useState("Sole Director");
+  const [memberFormPossession, setMemberFormPossession] = useState("100%");
+  const [memberFormCfPiva, setMemberFormCfPiva] = useState("");
+  const [memberFormDob, setMemberFormDob] = useState("");
+  const [memberFormPob, setMemberFormPob] = useState("");
+  const [memberFormResidence, setMemberFormResidence] = useState("");
+
+  // Share Capital state
+  const [subscribedCapital, setSubscribedCapital] = useState("€ 10.000");
+  const [paidUpCapital, setPaidUpCapital] = useState("€ 10.000");
+  const [companyDuration, setCompanyDuration] = useState("Indefinite period");
+  const [shareDivision, setShareDivision] = useState("Quote ordinarie");
+
+  // Main Contacts state
+  const [contactPec, setContactPec] = useState("info@beautywellnesscenter.pec.it");
+  const [contactEmail, setContactEmail] = useState(salon.email);
+  const [contactLandline, setContactLandline] = useState("+39 051 3333 4444");
+  const [contactMobile, setContactMobile] = useState("+39 339 3333 4444");
+  const [contactWebsite, setContactWebsite] = useState("https://beautywellnesscenter.com");
+
+  // Bank Details state
+  const [bankIban, setBankIban] = useState("IT60 X054 2811 1010 0000 0123 456");
+  const [bankName, setBankName] = useState("Intesa Sanpaolo Bank");
+  const [bankBic, setBankBic] = useState("BCITITMM");
+
+  // Financial Indicators state
+  const [turnover, setTurnover] = useState("€ 450,000");
+
+  // Other Data state
+  const [investedCapital, setInvestedCapital] = useState("€ 15,000");
+
+  // Activity state
+  const [primaryAteco, setPrimaryAteco] = useState("96.02.01 - Barber and hairdressing services");
+  const [secondaryAteco, setSecondaryAteco] = useState("96.02.02 - Beauty salon services");
+  const [corporateObject, setCorporateObject] = useState("Beauty and wellness activities with hairdressing and beauty center services");
 
   // Edit form state
   const [editName, setEditName] = useState(salon.name);
@@ -193,7 +240,16 @@ export default function SalonDetailPage({ salon, onBack, onImpersonate }: SalonD
   ]);
 
   // Documents state
-  const [documentsList, setDocumentsList] = useState([
+  interface DocumentItem {
+    id: string;
+    title: string;
+    size: string;
+    type: string;
+    updated: string;
+    fileUrl?: string;
+  }
+
+  const [documentsList, setDocumentsList] = useState<DocumentItem[]>([
     { id: "doc-1", title: "Articles of Association", size: "2.1 MB", type: "PDF", updated: "March 15, 2020" },
     { id: "doc-2", title: "Chamber of Commerce Certificate", size: "2.1 MB", type: "PDF", updated: "March 15, 2020" },
     { id: "doc-3", title: "2023 Budget", size: "2.1 MB", type: "PDF", updated: "March 15, 2020" },
@@ -530,7 +586,10 @@ export default function SalonDetailPage({ salon, onBack, onImpersonate }: SalonD
               <div className="bg-white rounded-3xl p-6 border border-[#eef2f6] shadow-[0_4px_20px_rgba(0,0,0,0.01)] flex flex-col gap-5">
                 <div className="flex items-center justify-between border-b border-slate-100 pb-3">
                   <h3 className="text-sm font-bold text-slate-800">Share Capital</h3>
-                  <button className="text-[#5e53fc] hover:underline text-xs font-bold flex items-center gap-1">
+                  <button 
+                    onClick={() => setIsShareCapitalModalOpen(true)}
+                    className="text-[#5e53fc] hover:underline text-xs font-bold flex items-center gap-1"
+                  >
                     <EditIcon />
                     <span>Edit</span>
                   </button>
@@ -539,19 +598,19 @@ export default function SalonDetailPage({ salon, onBack, onImpersonate }: SalonD
                 <div className="grid grid-cols-2 gap-y-4 gap-x-6">
                   <div className="flex flex-col">
                     <span className="text-[10px] font-bold text-slate-400 uppercase tracking-wider">Subscribed Capital</span>
-                    <span className="text-xs font-semibold text-slate-700 mt-1">€ 10.000</span>
+                    <span className="text-xs font-semibold text-slate-700 mt-1">{subscribedCapital}</span>
                   </div>
                   <div className="flex flex-col">
                     <span className="text-[10px] font-bold text-slate-400 uppercase tracking-wider">Paid-up Capital</span>
-                    <span className="text-xs font-semibold text-slate-700 mt-1">€ 10.000</span>
+                    <span className="text-xs font-semibold text-slate-700 mt-1">{paidUpCapital}</span>
                   </div>
                   <div className="flex flex-col">
                     <span className="text-[10px] font-bold text-slate-400 uppercase tracking-wider">Company Duration</span>
-                    <span className="text-xs font-semibold text-slate-700 mt-1">Indefinite period</span>
+                    <span className="text-xs font-semibold text-slate-700 mt-1">{companyDuration}</span>
                   </div>
                   <div className="flex flex-col">
                     <span className="text-[10px] font-bold text-slate-400 uppercase tracking-wider">Share Division</span>
-                    <span className="text-xs font-semibold text-slate-700 mt-1">Quote ordinarie</span>
+                    <span className="text-xs font-semibold text-slate-700 mt-1">{shareDivision}</span>
                   </div>
                 </div>
               </div>
@@ -637,7 +696,10 @@ export default function SalonDetailPage({ salon, onBack, onImpersonate }: SalonD
             <div className="bg-white rounded-3xl p-6 border border-[#eef2f6] shadow-[0_4px_20px_rgba(0,0,0,0.01)] flex flex-col gap-5">
               <div className="flex items-center justify-between border-b border-slate-100 pb-3">
                 <h3 className="text-sm font-bold text-slate-800">Activity</h3>
-                <button className="text-[#5e53fc] hover:underline text-xs font-bold flex items-center gap-1">
+                <button 
+                  onClick={() => setIsActivityModalOpen(true)}
+                  className="text-[#5e53fc] hover:underline text-xs font-bold flex items-center gap-1"
+                >
                   <EditIcon />
                   <span>Edit</span>
                 </button>
@@ -646,16 +708,16 @@ export default function SalonDetailPage({ salon, onBack, onImpersonate }: SalonD
               <div className="grid grid-cols-1 md:grid-cols-2 gap-y-4 gap-x-6">
                 <div className="flex flex-col">
                   <span className="text-[10px] font-bold text-slate-400 uppercase tracking-wider">Primary ATECO Code</span>
-                  <span className="text-xs font-semibold text-slate-700 mt-1">96.02.01 - Barber and hairdressing services</span>
+                  <span className="text-xs font-semibold text-slate-700 mt-1">{primaryAteco}</span>
                 </div>
                 <div className="flex flex-col">
                   <span className="text-[10px] font-bold text-slate-400 uppercase tracking-wider">Secondary ATECO Codes</span>
-                  <span className="text-xs font-semibold text-slate-700 mt-1">96.02.02 - Beauty salon services</span>
+                  <span className="text-xs font-semibold text-slate-700 mt-1">{secondaryAteco}</span>
                 </div>
                 <div className="flex flex-col col-span-1 md:col-span-2">
                   <span className="text-[10px] font-bold text-slate-400 uppercase tracking-wider">Description of Corporate Object</span>
                   <span className="text-xs font-semibold text-slate-600 mt-1 leading-relaxed">
-                    Beauty and wellness activities with hairdressing and beauty center services
+                    {corporateObject}
                   </span>
                 </div>
               </div>
@@ -799,7 +861,10 @@ export default function SalonDetailPage({ salon, onBack, onImpersonate }: SalonD
             <div className="bg-white rounded-3xl p-6 border border-[#eef2f6] shadow-[0_4px_20px_rgba(0,0,0,0.01)] flex flex-col gap-5">
               <div className="flex items-center justify-between border-b border-slate-100 pb-3">
                 <h3 className="text-sm font-bold text-slate-800">Main Contacts</h3>
-                <button className="text-[#5e53fc] hover:underline text-xs font-bold flex items-center gap-1">
+                <button 
+                  onClick={() => setIsContactModalOpen(true)}
+                  className="text-[#5e53fc] hover:underline text-xs font-bold flex items-center gap-1"
+                >
                   <EditIcon />
                   <span>Edit</span>
                 </button>
@@ -808,29 +873,29 @@ export default function SalonDetailPage({ salon, onBack, onImpersonate }: SalonD
               <div className="flex flex-col gap-4">
                 <div className="flex flex-col">
                   <span className="text-[10px] font-bold text-slate-400 uppercase tracking-wider">PEC</span>
-                  <span className="text-xs font-semibold text-slate-700 mt-1">info@beautywellnesscenter.pec.it</span>
+                  <span className="text-xs font-semibold text-slate-700 mt-1">{contactPec}</span>
                 </div>
                 <div className="flex flex-col">
                   <span className="text-[10px] font-bold text-slate-400 uppercase tracking-wider">Ordinary Email</span>
-                  <span className="text-xs font-semibold text-slate-700 mt-1">{salon.email}</span>
+                  <span className="text-xs font-semibold text-slate-700 mt-1">{contactEmail}</span>
                 </div>
                 <div className="flex flex-col">
                   <span className="text-[10px] font-bold text-slate-400 uppercase tracking-wider">Landline Phone</span>
-                  <span className="text-xs font-semibold text-slate-700 mt-1">+39 051 3333 4444</span>
+                  <span className="text-xs font-semibold text-slate-700 mt-1">{contactLandline}</span>
                 </div>
                 <div className="flex flex-col">
                   <span className="text-[10px] font-bold text-slate-400 uppercase tracking-wider">Mobile Phone</span>
-                  <span className="text-xs font-semibold text-slate-700 mt-1">+39 339 3333 4444</span>
+                  <span className="text-xs font-semibold text-slate-700 mt-1">{contactMobile}</span>
                 </div>
                 <div className="flex flex-col">
                   <span className="text-[10px] font-bold text-slate-400 uppercase tracking-wider">Website</span>
                   <a 
-                    href="https://beautywellnesscenter.com" 
+                    href={contactWebsite} 
                     target="_blank" 
                     rel="noreferrer" 
                     className="text-xs font-bold text-[#5e53fc] hover:underline mt-1 inline-flex items-center gap-1"
                   >
-                    https://beautywellnesscenter.com
+                    {contactWebsite}
                   </a>
                 </div>
               </div>
@@ -868,7 +933,10 @@ export default function SalonDetailPage({ salon, onBack, onImpersonate }: SalonD
               <div className="bg-white rounded-3xl p-6 border border-[#eef2f6] shadow-[0_4px_20px_rgba(0,0,0,0.01)] flex flex-col gap-5">
                 <div className="flex items-center justify-between border-b border-slate-100 pb-3">
                   <h3 className="text-sm font-bold text-slate-800">Bank Details</h3>
-                  <button className="text-[#5e53fc] hover:underline text-xs font-bold flex items-center gap-1">
+                  <button 
+                    onClick={() => setIsBankModalOpen(true)}
+                    className="text-[#5e53fc] hover:underline text-xs font-bold flex items-center gap-1"
+                  >
                     <EditIcon />
                     <span>Edit</span>
                   </button>
@@ -877,15 +945,15 @@ export default function SalonDetailPage({ salon, onBack, onImpersonate }: SalonD
                 <div className="flex flex-col gap-4">
                   <div className="flex flex-col">
                     <span className="text-[10px] font-bold text-slate-400 uppercase tracking-wider">Company IBAN</span>
-                    <span className="text-xs font-semibold text-slate-700 mt-1 tracking-wider">IT60 X054 2811 1010 0000 0123 456</span>
+                    <span className="text-xs font-semibold text-slate-700 mt-1 tracking-wider">{bankIban}</span>
                   </div>
                   <div className="flex flex-col">
                     <span className="text-[10px] font-bold text-slate-400 uppercase tracking-wider">Supporting Bank</span>
-                    <span className="text-xs font-semibold text-slate-700 mt-1">Intesa Sanpaolo Bank</span>
+                    <span className="text-xs font-semibold text-slate-700 mt-1">{bankName}</span>
                   </div>
                   <div className="flex flex-col">
                     <span className="text-[10px] font-bold text-slate-400 uppercase tracking-wider">BIC/SWIFT</span>
-                    <span className="text-xs font-semibold text-slate-700 mt-1">BCITITMM</span>
+                    <span className="text-xs font-semibold text-slate-700 mt-1">{bankBic}</span>
                   </div>
                 </div>
               </div>
@@ -894,7 +962,10 @@ export default function SalonDetailPage({ salon, onBack, onImpersonate }: SalonD
               <div className="bg-white rounded-3xl p-6 border border-[#eef2f6] shadow-[0_4px_20px_rgba(0,0,0,0.01)] flex flex-col gap-5">
                 <div className="flex items-center justify-between border-b border-slate-100 pb-3">
                   <h3 className="text-sm font-bold text-slate-800">Financial Indicators</h3>
-                  <button className="text-[#5e53fc] hover:underline text-xs font-bold flex items-center gap-1">
+                  <button 
+                    onClick={() => setIsFinancialModalOpen(true)}
+                    className="text-[#5e53fc] hover:underline text-xs font-bold flex items-center gap-1"
+                  >
                     <EditIcon />
                     <span>Edit</span>
                   </button>
@@ -903,7 +974,7 @@ export default function SalonDetailPage({ salon, onBack, onImpersonate }: SalonD
                 <div className="flex flex-col gap-4">
                   <div className="flex flex-col">
                     <span className="text-[10px] font-bold text-slate-400 uppercase tracking-wider">Last Year's Turnover</span>
-                    <span className="text-xs font-semibold text-slate-700 mt-1">€ 450,000</span>
+                    <span className="text-xs font-semibold text-slate-700 mt-1">{turnover}</span>
                   </div>
                   <div className="flex flex-col">
                     <span className="text-[10px] font-bold text-slate-400 uppercase tracking-wider">Number of Employees</span>
@@ -923,7 +994,10 @@ export default function SalonDetailPage({ salon, onBack, onImpersonate }: SalonD
             <div className="bg-white rounded-3xl p-6 border border-[#eef2f6] shadow-[0_4px_20px_rgba(0,0,0,0.01)] flex flex-col gap-5 w-full">
               <div className="flex items-center justify-between border-b border-slate-100 pb-3">
                 <h3 className="text-sm font-bold text-slate-800">Other Data</h3>
-                <button className="text-[#5e53fc] hover:underline text-xs font-bold flex items-center gap-1">
+                <button 
+                  onClick={() => setIsOtherDataModalOpen(true)}
+                  className="text-[#5e53fc] hover:underline text-xs font-bold flex items-center gap-1"
+                >
                   <EditIcon />
                   <span>Edit</span>
                 </button>
@@ -932,7 +1006,7 @@ export default function SalonDetailPage({ salon, onBack, onImpersonate }: SalonD
               <div className="flex flex-col gap-4">
                 <div className="flex flex-col">
                   <span className="text-[10px] font-bold text-slate-400 uppercase tracking-wider">Invested Capital</span>
-                  <span className="text-xs font-semibold text-slate-700 mt-1">€ 15,000</span>
+                  <span className="text-xs font-semibold text-slate-700 mt-1">{investedCapital}</span>
                 </div>
                 <div className="flex flex-col">
                   <span className="text-[10px] font-bold text-slate-400 uppercase tracking-wider">Certifications</span>
@@ -960,21 +1034,33 @@ export default function SalonDetailPage({ salon, onBack, onImpersonate }: SalonD
             <div className="flex items-center justify-between border-b border-slate-100 pb-3">
               <h3 className="text-sm font-bold text-slate-800">Company Documentation</h3>
               
-              <button 
-                onClick={() => {
-                  const titles = ["Board Resolutions", "Lease Agreement", "Compliance Report", "Tax Audits"];
-                  const mockTitle = titles[Math.floor(Math.random() * titles.length)] + ` (${new Date().getFullYear()})`;
-                  setDocumentsList(prev => [
-                    ...prev,
-                    {
-                      id: `doc-${Date.now()}`,
-                      title: mockTitle,
-                      size: "1.8 MB",
-                      type: "PDF",
-                      updated: new Date().toLocaleDateString("en-US", { month: "short", day: "numeric", year: "numeric" })
-                    }
-                  ]);
+              <input 
+                type="file" 
+                id="file-upload-input" 
+                style={{ display: "none" }} 
+                onChange={(e) => {
+                  const file = e.target.files?.[0];
+                  if (file) {
+                    const sizeInMB = (file.size / (1024 * 1024)).toFixed(1) + " MB";
+                    const ext = file.name.split(".").pop()?.toUpperCase() || "PDF";
+                    const fileUrl = URL.createObjectURL(file);
+                    setDocumentsList(prev => [
+                      ...prev,
+                      {
+                        id: `doc-${Date.now()}`,
+                        title: file.name,
+                        size: sizeInMB,
+                        type: ext,
+                        updated: new Date().toLocaleDateString("en-US", { month: "short", day: "numeric", year: "numeric" }),
+                        fileUrl: fileUrl
+                      }
+                    ]);
+                  }
                 }}
+              />
+
+              <button 
+                onClick={() => document.getElementById("file-upload-input")?.click()}
                 className="px-4 py-2 bg-[#5e53fc] hover:bg-indigo-700 text-white rounded-xl text-xs font-bold transition-all shadow-sm flex items-center gap-1.5"
               >
                 <PlusIcon />
@@ -1000,7 +1086,7 @@ export default function SalonDetailPage({ salon, onBack, onImpersonate }: SalonD
                   {/* Actions row */}
                   <div className="flex items-center gap-3">
                     <button 
-                      onClick={() => alert(`Viewing document: ${doc.title}`)}
+                      onClick={() => window.open(doc.fileUrl || "https://www.w3.org/WAI/ER/tests/xhtml/testfiles/resources/pdf/dummy.pdf", "_blank")}
                       className="w-8 h-8 rounded-full bg-indigo-50 text-[#5e53fc] hover:bg-indigo-100 transition-colors flex items-center justify-center"
                       title="View"
                     >
@@ -1017,7 +1103,14 @@ export default function SalonDetailPage({ salon, onBack, onImpersonate }: SalonD
                       <TrashIcon />
                     </button>
                     <button 
-                      onClick={() => alert(`Downloading document: ${doc.title}`)}
+                      onClick={() => {
+                        const link = document.createElement("a");
+                        link.href = doc.fileUrl || "https://www.w3.org/WAI/ER/tests/xhtml/testfiles/resources/pdf/dummy.pdf";
+                        link.download = doc.title;
+                        document.body.appendChild(link);
+                        link.click();
+                        document.body.removeChild(link);
+                      }}
                       className="w-8 h-8 rounded-full bg-slate-50 text-slate-500 hover:bg-slate-100 transition-colors flex items-center justify-center"
                       title="Download"
                     >
@@ -1054,25 +1147,16 @@ export default function SalonDetailPage({ salon, onBack, onImpersonate }: SalonD
 
                   <button 
                     onClick={() => {
-                      const newNames = ["Sophia Loren", "Alessandro Rossi", "Giulia Bianchi", "Marco Bruno"];
-                      const selectedName = newNames[Math.floor(Math.random() * newNames.length)];
-                      const id = `mem-${Date.now()}`;
-                      setMembersList(prev => [
-                        ...prev,
-                        {
-                          id,
-                          name: selectedName,
-                          company: salon.name,
-                          cfPiva: "RSSMRA" + Math.floor(100000 + Math.random() * 900000) + "H501Z",
-                          type: "Natural Person",
-                          possession: "0%",
-                          role: "Stylist",
-                          dob: "12/05/1990",
-                          pob: "Bologna (BO)",
-                          residence: "Via Indipendenza 45, 40126 Bologna (BO)",
-                          appointmentDate: new Date().toLocaleDateString("it-IT")
-                        }
-                      ]);
+                      setEditingMemberId(null);
+                      setMemberFormName("");
+                      setMemberFormType("Natural Person");
+                      setMemberFormRole("Sole Director");
+                      setMemberFormPossession("100%");
+                      setMemberFormCfPiva("");
+                      setMemberFormDob("");
+                      setMemberFormPob("");
+                      setMemberFormResidence("");
+                      setIsAddMemberModalOpen(true);
                     }}
                     className="px-4 py-2 bg-[#5e53fc] hover:bg-indigo-700 text-white rounded-xl text-xs font-bold transition-all shadow-sm flex items-center gap-1.5"
                   >
@@ -1084,7 +1168,7 @@ export default function SalonDetailPage({ salon, onBack, onImpersonate }: SalonD
 
               {/* Table */}
               <div className="overflow-x-auto">
-                <table className="w-full text-left border-collapse">
+                <table className="w-full min-w-[800px] text-left border-collapse">
                   <thead>
                     <tr className="border-b border-slate-100 text-[10px] font-bold text-slate-400 uppercase tracking-wider">
                       <th className="pb-3 pt-1 pl-2">Name and Surname</th>
@@ -1776,7 +1860,25 @@ export default function SalonDetailPage({ salon, onBack, onImpersonate }: SalonD
             <div className="px-6 py-4 border-t border-slate-100 bg-slate-50/50 flex justify-between items-center gap-3">
               <button
                 onClick={() => {
-                  alert(`Editing member: ${selectedMember.name}`);
+                  setMemberFormName(selectedMember.name);
+                  setMemberFormType(selectedMember.type);
+                  setMemberFormRole(selectedMember.role);
+                  setMemberFormPossession(selectedMember.possession);
+                  setMemberFormCfPiva(selectedMember.cfPiva);
+                  if (selectedMember.dob && selectedMember.dob.includes("/")) {
+                    const parts = selectedMember.dob.split("/");
+                    if (parts.length === 3) {
+                      setMemberFormDob(`${parts[2]}-${parts[1].padStart(2, '0')}-${parts[0].padStart(2, '0')}`);
+                    } else {
+                      setMemberFormDob("");
+                    }
+                  } else {
+                    setMemberFormDob(selectedMember.dob || "");
+                  }
+                  setMemberFormPob(selectedMember.pob || "");
+                  setMemberFormResidence(selectedMember.residence || "");
+                  setEditingMemberId(selectedMember.id);
+                  setIsAddMemberModalOpen(true);
                   setSelectedMember(null);
                 }}
                 className="px-5 py-2.5 bg-indigo-50 text-[#5e53fc] hover:bg-indigo-100 rounded-xl text-xs font-bold transition-all"
@@ -1785,7 +1887,6 @@ export default function SalonDetailPage({ salon, onBack, onImpersonate }: SalonD
               </button>
               <button
                 onClick={() => {
-                  alert(`Viewing permissions for: ${selectedMember.name}`);
                   setSelectedMember(null);
                 }}
                 className="px-6 py-2.5 bg-[#5e53fc] hover:bg-indigo-700 text-white rounded-xl text-xs font-bold shadow-md shadow-indigo-100 transition-all"
@@ -1793,6 +1894,673 @@ export default function SalonDetailPage({ salon, onBack, onImpersonate }: SalonD
                 View Permissions
               </button>
             </div>
+          </div>
+        </div>
+      )}
+      {/* Add Member Modal */}
+      {isAddMemberModalOpen && (
+        <div className="fixed inset-0 bg-slate-900/60 backdrop-blur-sm z-50 flex items-center justify-center p-4">
+          <div className="bg-white rounded-3xl w-full max-w-xl shadow-2xl flex flex-col relative overflow-hidden animate-in zoom-in-95 duration-200">
+            <div className="px-6 py-5 border-b border-slate-100 flex items-center justify-between">
+              <h3 className="text-base font-bold text-slate-800">{editingMemberId ? "Edit Member" : "Add Member"}</h3>
+              <button 
+                onClick={() => {
+                  setIsAddMemberModalOpen(false);
+                }} 
+                className="text-slate-400 hover:text-slate-600"
+              >
+                <HugeiconsIcon icon={Cancel01Icon} size={20} />
+              </button>
+            </div>
+
+            <form 
+              onSubmit={(e) => {
+                e.preventDefault();
+                const formattedDob = memberFormDob && memberFormDob.includes("-") 
+                  ? memberFormDob.split("-").reverse().join("/") 
+                  : memberFormDob || "01/01/1990";
+
+                if (editingMemberId) {
+                  setMembersList(prev => prev.map(m => m.id === editingMemberId ? {
+                    ...m,
+                    name: memberFormName,
+                    cfPiva: memberFormCfPiva,
+                    type: memberFormType,
+                    possession: memberFormPossession,
+                    role: memberFormRole,
+                    dob: formattedDob,
+                    pob: memberFormPob,
+                    residence: memberFormResidence
+                  } : m));
+                } else {
+                  const id = `mem-${Date.now()}`;
+                  setMembersList(prev => [
+                    ...prev,
+                    {
+                      id,
+                      name: memberFormName,
+                      company: salon.name,
+                      cfPiva: memberFormCfPiva || ("RSSMRA" + Math.floor(100000 + Math.random() * 900000) + "H501Z"),
+                      type: memberFormType,
+                      possession: memberFormPossession,
+                      role: memberFormRole,
+                      dob: formattedDob,
+                      pob: memberFormPob || "Milan (MI)",
+                      residence: memberFormResidence || "Via Giuseppe Verdi 12, Milan",
+                      appointmentDate: new Date().toLocaleDateString("it-IT")
+                    }
+                  ]);
+                }
+                setIsAddMemberModalOpen(false);
+                setEditingMemberId(null);
+                // Reset form values
+                setMemberFormName("");
+                setMemberFormType("Natural Person");
+                setMemberFormRole("Sole Director");
+                setMemberFormPossession("100%");
+                setMemberFormCfPiva("");
+                setMemberFormDob("");
+                setMemberFormPob("");
+                setMemberFormResidence("");
+              }} 
+              className="p-6 flex flex-col gap-4 max-h-[75vh] overflow-y-auto"
+            >
+              <div className="grid grid-cols-2 gap-4">
+                <div className="flex flex-col gap-1.5">
+                  <label className="text-xs font-bold text-slate-600">Full Name *</label>
+                  <input
+                    type="text"
+                    required
+                    value={memberFormName}
+                    onChange={e => setMemberFormName(e.target.value)}
+                    placeholder="e.g. Roberto Marini"
+                    className="border border-slate-200 focus:border-[#5e53fc] focus:outline-none rounded-xl px-4 py-2.5 text-xs font-semibold text-slate-700"
+                  />
+                </div>
+
+                <div className="flex flex-col gap-1.5">
+                  <label className="text-xs font-bold text-slate-600">Type *</label>
+                  <div className="relative">
+                    <select
+                      value={memberFormType}
+                      onChange={e => setMemberFormType(e.target.value)}
+                      className="w-full border border-slate-200 focus:border-[#5e53fc] focus:outline-none rounded-xl px-4 py-2.5 pr-10 text-xs font-semibold text-slate-700 bg-white appearance-none cursor-pointer"
+                    >
+                      <option value="Natural Person">Natural Person</option>
+                      <option value="Legal Entity">Legal Entity</option>
+                    </select>
+                    <div className="absolute right-4 top-1/2 -translate-y-1/2 pointer-events-none text-slate-400">
+                      <HugeiconsIcon icon={ArrowDown01Icon} size={14} />
+                    </div>
+                  </div>
+                </div>
+              </div>
+
+              <div className="grid grid-cols-2 gap-4">
+                <div className="flex flex-col gap-1.5">
+                  <label className="text-xs font-bold text-slate-600">Role *</label>
+                  <input
+                    type="text"
+                    required
+                    value={memberFormRole}
+                    onChange={e => setMemberFormRole(e.target.value)}
+                    placeholder="e.g. Stylist / Sole Director"
+                    className="border border-slate-200 focus:border-[#5e53fc] focus:outline-none rounded-xl px-4 py-2.5 text-xs font-semibold text-slate-700"
+                  />
+                </div>
+
+                <div className="flex flex-col gap-1.5">
+                  <label className="text-xs font-bold text-slate-600">Ownership % *</label>
+                  <input
+                    type="text"
+                    required
+                    value={memberFormPossession}
+                    onChange={e => setMemberFormPossession(e.target.value)}
+                    placeholder="e.g. 100% or 50%"
+                    className="border border-slate-200 focus:border-[#5e53fc] focus:outline-none rounded-xl px-4 py-2.5 text-xs font-semibold text-slate-700"
+                  />
+                </div>
+              </div>
+
+              <div className="grid grid-cols-2 gap-4">
+                <div className="flex flex-col gap-1.5">
+                  <label className="text-xs font-bold text-slate-600">CF/P.IVA *</label>
+                  <input
+                    type="text"
+                    required
+                    value={memberFormCfPiva}
+                    onChange={e => setMemberFormCfPiva(e.target.value)}
+                    placeholder="CF/P.IVA code"
+                    className="border border-slate-200 focus:border-[#5e53fc] focus:outline-none rounded-xl px-4 py-2.5 text-xs font-semibold text-slate-700"
+                  />
+                </div>
+
+                <div className="flex flex-col gap-1.5">
+                  <label className="text-xs font-bold text-slate-600">Date of Birth *</label>
+                  <input
+                    type="date"
+                    required
+                    value={memberFormDob}
+                    onChange={e => setMemberFormDob(e.target.value)}
+                    className="border border-slate-200 focus:border-[#5e53fc] focus:outline-none rounded-xl px-4 py-2.5 text-xs font-semibold text-slate-700"
+                  />
+                </div>
+              </div>
+
+              <div className="grid grid-cols-2 gap-4">
+                <div className="flex flex-col gap-1.5">
+                  <label className="text-xs font-bold text-slate-600">Place of Birth *</label>
+                  <input
+                    type="text"
+                    required
+                    value={memberFormPob}
+                    onChange={e => setMemberFormPob(e.target.value)}
+                    placeholder="Place of birth"
+                    className="border border-slate-200 focus:border-[#5e53fc] focus:outline-none rounded-xl px-4 py-2.5 text-xs font-semibold text-slate-700"
+                  />
+                </div>
+
+                <div className="flex flex-col gap-1.5">
+                  <label className="text-xs font-bold text-slate-600">Residence Address *</label>
+                  <input
+                    type="text"
+                    required
+                    value={memberFormResidence}
+                    onChange={e => setMemberFormResidence(e.target.value)}
+                    placeholder="Full residence address"
+                    className="border border-slate-200 focus:border-[#5e53fc] focus:outline-none rounded-xl px-4 py-2.5 text-xs font-semibold text-slate-700"
+                  />
+                </div>
+              </div>
+
+              <div className="flex justify-end gap-3 border-t border-slate-100 pt-4 mt-2">
+                <button
+                  type="button"
+                  onClick={() => setIsAddMemberModalOpen(false)}
+                  className="px-5 py-2.5 bg-slate-50 hover:bg-slate-100 text-slate-600 rounded-xl text-xs font-semibold transition-all"
+                >
+                  Cancel
+                </button>
+                <button
+                  type="submit"
+                  className="px-6 py-2.5 bg-[#5e53fc] hover:bg-indigo-700 text-white rounded-xl text-xs font-semibold shadow-md shadow-indigo-100 transition-all"
+                >
+                  {editingMemberId ? "Save Changes" : "Add Member"}
+                </button>
+              </div>
+            </form>
+          </div>
+        </div>
+      )}
+      {/* Edit Contacts Modal */}
+      {isContactModalOpen && (
+        <div className="fixed inset-0 bg-slate-900/60 backdrop-blur-sm z-50 flex items-center justify-center p-4">
+          <div className="bg-white rounded-3xl w-full max-w-xl shadow-2xl flex flex-col relative overflow-hidden animate-in zoom-in-95 duration-200">
+            <div className="px-6 py-5 border-b border-slate-100 flex items-center justify-between">
+              <h3 className="text-base font-bold text-slate-800">Edit Main Contacts</h3>
+              <button onClick={() => setIsContactModalOpen(false)} className="text-slate-400 hover:text-slate-600">
+                <HugeiconsIcon icon={Cancel01Icon} size={20} />
+              </button>
+            </div>
+
+            <form 
+              onSubmit={(e) => {
+                e.preventDefault();
+                setIsContactModalOpen(false);
+              }} 
+              className="p-6 flex flex-col gap-4"
+            >
+              <div className="grid grid-cols-2 gap-4">
+                <div className="flex flex-col gap-1.5">
+                  <label className="text-xs font-bold text-slate-600">PEC *</label>
+                  <input
+                    type="text"
+                    required
+                    value={contactPec}
+                    onChange={e => setContactPec(e.target.value)}
+                    className="border border-slate-200 focus:border-[#5e53fc] focus:outline-none rounded-xl px-4 py-2.5 text-xs font-semibold text-slate-700"
+                  />
+                </div>
+
+                <div className="flex flex-col gap-1.5">
+                  <label className="text-xs font-bold text-slate-600">Ordinary Email *</label>
+                  <input
+                    type="email"
+                    required
+                    value={contactEmail}
+                    onChange={e => setContactEmail(e.target.value)}
+                    className="border border-slate-200 focus:border-[#5e53fc] focus:outline-none rounded-xl px-4 py-2.5 text-xs font-semibold text-slate-700"
+                  />
+                </div>
+              </div>
+
+              <div className="grid grid-cols-2 gap-4">
+                <div className="flex flex-col gap-1.5">
+                  <label className="text-xs font-bold text-slate-600">Landline Phone *</label>
+                  <input
+                    type="text"
+                    required
+                    value={contactLandline}
+                    onChange={e => setContactLandline(e.target.value)}
+                    className="border border-slate-200 focus:border-[#5e53fc] focus:outline-none rounded-xl px-4 py-2.5 text-xs font-semibold text-slate-700"
+                  />
+                </div>
+
+                <div className="flex flex-col gap-1.5">
+                  <label className="text-xs font-bold text-slate-600">Mobile Phone *</label>
+                  <input
+                    type="text"
+                    required
+                    value={contactMobile}
+                    onChange={e => setContactMobile(e.target.value)}
+                    className="border border-slate-200 focus:border-[#5e53fc] focus:outline-none rounded-xl px-4 py-2.5 text-xs font-semibold text-slate-700"
+                  />
+                </div>
+              </div>
+
+              <div className="flex flex-col gap-1.5">
+                <label className="text-xs font-bold text-slate-600">Website *</label>
+                <input
+                  type="text"
+                  required
+                  value={contactWebsite}
+                  onChange={e => setContactWebsite(e.target.value)}
+                  className="border border-slate-200 focus:border-[#5e53fc] focus:outline-none rounded-xl px-4 py-2.5 text-xs font-semibold text-slate-700 w-full"
+                />
+              </div>
+
+              <div className="flex justify-end gap-3 border-t border-slate-100 pt-4 mt-2">
+                <button
+                  type="button"
+                  onClick={() => setIsContactModalOpen(false)}
+                  className="px-5 py-2.5 bg-slate-50 hover:bg-slate-100 text-slate-600 rounded-xl text-xs font-semibold transition-all"
+                >
+                  Cancel
+                </button>
+                <button
+                  type="submit"
+                  className="px-6 py-2.5 bg-[#5e53fc] hover:bg-indigo-700 text-white rounded-xl text-xs font-semibold shadow-md shadow-indigo-100 transition-all"
+                >
+                  Save Changes
+                </button>
+              </div>
+            </form>
+          </div>
+        </div>
+      )}
+
+      {/* Edit Bank Details Modal */}
+      {isBankModalOpen && (
+        <div className="fixed inset-0 bg-slate-900/60 backdrop-blur-sm z-50 flex items-center justify-center p-4">
+          <div className="bg-white rounded-3xl w-full max-w-xl shadow-2xl flex flex-col relative overflow-hidden animate-in zoom-in-95 duration-200">
+            <div className="px-6 py-5 border-b border-slate-100 flex items-center justify-between">
+              <h3 className="text-base font-bold text-slate-800">Edit Bank Details</h3>
+              <button onClick={() => setIsBankModalOpen(false)} className="text-slate-400 hover:text-slate-600">
+                <HugeiconsIcon icon={Cancel01Icon} size={20} />
+              </button>
+            </div>
+
+            <form 
+              onSubmit={(e) => {
+                e.preventDefault();
+                setIsBankModalOpen(false);
+              }} 
+              className="p-6 flex flex-col gap-4"
+            >
+              <div className="flex flex-col gap-1.5">
+                <label className="text-xs font-bold text-slate-600">Company IBAN *</label>
+                <input
+                  type="text"
+                  required
+                  value={bankIban}
+                  onChange={e => setBankIban(e.target.value)}
+                  className="border border-slate-200 focus:border-[#5e53fc] focus:outline-none rounded-xl px-4 py-2.5 text-xs font-semibold text-slate-700 w-full"
+                />
+              </div>
+
+              <div className="grid grid-cols-2 gap-4">
+                <div className="flex flex-col gap-1.5">
+                  <label className="text-xs font-bold text-slate-600">Supporting Bank *</label>
+                  <input
+                    type="text"
+                    required
+                    value={bankName}
+                    onChange={e => setBankName(e.target.value)}
+                    className="border border-slate-200 focus:border-[#5e53fc] focus:outline-none rounded-xl px-4 py-2.5 text-xs font-semibold text-slate-700"
+                  />
+                </div>
+
+                <div className="flex flex-col gap-1.5">
+                  <label className="text-xs font-bold text-slate-600">BIC/SWIFT *</label>
+                  <input
+                    type="text"
+                    required
+                    value={bankBic}
+                    onChange={e => setBankBic(e.target.value)}
+                    className="border border-slate-200 focus:border-[#5e53fc] focus:outline-none rounded-xl px-4 py-2.5 text-xs font-semibold text-slate-700"
+                  />
+                </div>
+              </div>
+
+              <div className="flex justify-end gap-3 border-t border-slate-100 pt-4 mt-2">
+                <button
+                  type="button"
+                  onClick={() => setIsBankModalOpen(false)}
+                  className="px-5 py-2.5 bg-slate-50 hover:bg-slate-100 text-slate-600 rounded-xl text-xs font-semibold transition-all"
+                >
+                  Cancel
+                </button>
+                <button
+                  type="submit"
+                  className="px-6 py-2.5 bg-[#5e53fc] hover:bg-indigo-700 text-white rounded-xl text-xs font-semibold shadow-md shadow-indigo-100 transition-all"
+                >
+                  Save Changes
+                </button>
+              </div>
+            </form>
+          </div>
+        </div>
+      )}
+
+      {/* Edit Financial Indicators Modal */}
+      {isFinancialModalOpen && (
+        <div className="fixed inset-0 bg-slate-900/60 backdrop-blur-sm z-50 flex items-center justify-center p-4">
+          <div className="bg-white rounded-3xl w-full max-w-xl shadow-2xl flex flex-col relative overflow-hidden animate-in zoom-in-95 duration-200">
+            <div className="px-6 py-5 border-b border-slate-100 flex items-center justify-between">
+              <h3 className="text-base font-bold text-slate-800">Edit Financial Indicators</h3>
+              <button onClick={() => setIsFinancialModalOpen(false)} className="text-slate-400 hover:text-slate-600">
+                <HugeiconsIcon icon={Cancel01Icon} size={20} />
+              </button>
+            </div>
+
+            <form 
+              onSubmit={(e) => {
+                e.preventDefault();
+                setIsFinancialModalOpen(false);
+              }} 
+              className="p-6 flex flex-col gap-4"
+            >
+              <div className="flex flex-col gap-1.5">
+                <label className="text-xs font-bold text-slate-600">Last Year's Turnover *</label>
+                <input
+                  type="text"
+                  required
+                  value={turnover}
+                  onChange={e => setTurnover(e.target.value)}
+                  className="border border-slate-200 focus:border-[#5e53fc] focus:outline-none rounded-xl px-4 py-2.5 text-xs font-semibold text-slate-700 w-full"
+                />
+              </div>
+
+              <div className="grid grid-cols-2 gap-4">
+                <div className="flex flex-col gap-1.5">
+                  <label className="text-xs font-bold text-slate-600">Number of Employees</label>
+                  <div className="relative">
+                    <select
+                      value={editEmployees}
+                      onChange={e => setEditEmployees(e.target.value)}
+                      className="w-full border border-slate-200 focus:border-[#5e53fc] focus:outline-none rounded-xl px-4 py-2.5 pr-10 text-xs font-semibold text-slate-700 bg-white appearance-none cursor-pointer"
+                    >
+                      <option value="1-5">1-5</option>
+                      <option value="6-10">6-10</option>
+                      <option value="12">12</option>
+                      <option value="20+">20+</option>
+                    </select>
+                    <div className="absolute right-4 top-1/2 -translate-y-1/2 pointer-events-none text-slate-400">
+                      <HugeiconsIcon icon={ArrowDown01Icon} size={14} />
+                    </div>
+                  </div>
+                </div>
+
+                <div className="flex flex-col gap-1.5">
+                  <label className="text-xs font-bold text-slate-600">Current Plan</label>
+                  <div className="relative">
+                    <select
+                      value={editPlan}
+                      onChange={e => setEditPlan(e.target.value as any)}
+                      className="w-full border border-slate-200 focus:border-[#5e53fc] focus:outline-none rounded-xl px-4 py-2.5 pr-10 text-xs font-semibold text-slate-700 bg-white appearance-none cursor-pointer"
+                    >
+                      <option value="Basic">Basic</option>
+                      <option value="Premium">Premium</option>
+                      <option value="Enterprise">Enterprise</option>
+                    </select>
+                    <div className="absolute right-4 top-1/2 -translate-y-1/2 pointer-events-none text-slate-400">
+                      <HugeiconsIcon icon={ArrowDown01Icon} size={14} />
+                    </div>
+                  </div>
+                </div>
+              </div>
+
+              <div className="flex justify-end gap-3 border-t border-slate-100 pt-4 mt-2">
+                <button
+                  type="button"
+                  onClick={() => setIsFinancialModalOpen(false)}
+                  className="px-5 py-2.5 bg-slate-50 hover:bg-slate-100 text-slate-600 rounded-xl text-xs font-semibold transition-all"
+                >
+                  Cancel
+                </button>
+                <button
+                  type="submit"
+                  className="px-6 py-2.5 bg-[#5e53fc] hover:bg-indigo-700 text-white rounded-xl text-xs font-semibold shadow-md shadow-indigo-100 transition-all"
+                >
+                  Save Changes
+                </button>
+              </div>
+            </form>
+          </div>
+        </div>
+      )}
+
+      {/* Edit Other Data Modal */}
+      {isOtherDataModalOpen && (
+        <div className="fixed inset-0 bg-slate-900/60 backdrop-blur-sm z-50 flex items-center justify-center p-4">
+          <div className="bg-white rounded-3xl w-full max-w-xl shadow-2xl flex flex-col relative overflow-hidden animate-in zoom-in-95 duration-200">
+            <div className="px-6 py-5 border-b border-slate-100 flex items-center justify-between">
+              <h3 className="text-base font-bold text-slate-800">Edit Other Data</h3>
+              <button onClick={() => setIsOtherDataModalOpen(false)} className="text-slate-400 hover:text-slate-600">
+                <HugeiconsIcon icon={Cancel01Icon} size={20} />
+              </button>
+            </div>
+
+            <form 
+              onSubmit={(e) => {
+                e.preventDefault();
+                setIsOtherDataModalOpen(false);
+              }} 
+              className="p-6 flex flex-col gap-4"
+            >
+              <div className="flex flex-col gap-1.5">
+                <label className="text-xs font-bold text-slate-600">Invested Capital *</label>
+                <input
+                  type="text"
+                  required
+                  value={investedCapital}
+                  onChange={e => setInvestedCapital(e.target.value)}
+                  className="border border-slate-200 focus:border-[#5e53fc] focus:outline-none rounded-xl px-4 py-2.5 text-xs font-semibold text-slate-700 w-full"
+                />
+              </div>
+
+              <div className="flex flex-col gap-1.5">
+                <label className="text-xs font-bold text-slate-600">Free Notes</label>
+                <textarea
+                  value={editNotes}
+                  onChange={e => setEditNotes(e.target.value)}
+                  rows={3}
+                  className="border border-slate-200 focus:border-[#5e53fc] focus:outline-none rounded-xl px-4 py-2.5 text-xs font-semibold text-slate-700 w-full"
+                />
+              </div>
+
+              <div className="flex justify-end gap-3 border-t border-slate-100 pt-4 mt-2">
+                <button
+                  type="button"
+                  onClick={() => setIsOtherDataModalOpen(false)}
+                  className="px-5 py-2.5 bg-slate-50 hover:bg-slate-100 text-slate-600 rounded-xl text-xs font-semibold transition-all"
+                >
+                  Cancel
+                </button>
+                <button
+                  type="submit"
+                  className="px-6 py-2.5 bg-[#5e53fc] hover:bg-indigo-700 text-white rounded-xl text-xs font-semibold shadow-md shadow-indigo-100 transition-all"
+                >
+                  Save Changes
+                </button>
+              </div>
+            </form>
+          </div>
+        </div>
+      )}
+
+      {/* Edit Activity Modal */}
+      {isActivityModalOpen && (
+        <div className="fixed inset-0 bg-slate-900/60 backdrop-blur-sm z-50 flex items-center justify-center p-4">
+          <div className="bg-white rounded-3xl w-full max-w-xl shadow-2xl flex flex-col relative overflow-hidden animate-in zoom-in-95 duration-200">
+            <div className="px-6 py-5 border-b border-slate-100 flex items-center justify-between">
+              <h3 className="text-base font-bold text-slate-800">Edit Activity</h3>
+              <button onClick={() => setIsActivityModalOpen(false)} className="text-slate-400 hover:text-slate-600">
+                <HugeiconsIcon icon={Cancel01Icon} size={20} />
+              </button>
+            </div>
+
+            <form 
+              onSubmit={(e) => {
+                e.preventDefault();
+                setIsActivityModalOpen(false);
+              }} 
+              className="p-6 flex flex-col gap-4"
+            >
+              <div className="flex flex-col gap-1.5">
+                <label className="text-xs font-bold text-slate-600">Primary ATECO Code *</label>
+                <input
+                  type="text"
+                  required
+                  value={primaryAteco}
+                  onChange={e => setPrimaryAteco(e.target.value)}
+                  className="border border-slate-200 focus:border-[#5e53fc] focus:outline-none rounded-xl px-4 py-2.5 text-xs font-semibold text-slate-700 w-full"
+                />
+              </div>
+
+              <div className="flex flex-col gap-1.5">
+                <label className="text-xs font-bold text-slate-600">Secondary ATECO Codes *</label>
+                <input
+                  type="text"
+                  required
+                  value={secondaryAteco}
+                  onChange={e => setSecondaryAteco(e.target.value)}
+                  className="border border-slate-200 focus:border-[#5e53fc] focus:outline-none rounded-xl px-4 py-2.5 text-xs font-semibold text-slate-700 w-full"
+                />
+              </div>
+
+              <div className="flex flex-col gap-1.5">
+                <label className="text-xs font-bold text-slate-600">Description of Corporate Object *</label>
+                <textarea
+                  required
+                  value={corporateObject}
+                  onChange={e => setCorporateObject(e.target.value)}
+                  rows={3}
+                  className="border border-slate-200 focus:border-[#5e53fc] focus:outline-none rounded-xl px-4 py-2.5 text-xs font-semibold text-slate-700 w-full"
+                />
+              </div>
+
+              <div className="flex justify-end gap-3 border-t border-slate-100 pt-4 mt-2">
+                <button
+                  type="button"
+                  onClick={() => setIsActivityModalOpen(false)}
+                  className="px-5 py-2.5 bg-slate-50 hover:bg-slate-100 text-slate-600 rounded-xl text-xs font-semibold transition-all"
+                >
+                  Cancel
+                </button>
+                <button
+                  type="submit"
+                  className="px-6 py-2.5 bg-[#5e53fc] hover:bg-indigo-700 text-white rounded-xl text-xs font-semibold shadow-md shadow-indigo-100 transition-all"
+                >
+                  Save Changes
+                </button>
+              </div>
+            </form>
+          </div>
+        </div>
+      )}
+      {/* Edit Share Capital Modal */}
+      {isShareCapitalModalOpen && (
+        <div className="fixed inset-0 bg-slate-900/60 backdrop-blur-sm z-50 flex items-center justify-center p-4">
+          <div className="bg-white rounded-3xl w-full max-w-xl shadow-2xl flex flex-col relative overflow-hidden animate-in zoom-in-95 duration-200">
+            <div className="px-6 py-5 border-b border-slate-100 flex items-center justify-between">
+              <h3 className="text-base font-bold text-slate-800">Edit Share Capital</h3>
+              <button onClick={() => setIsShareCapitalModalOpen(false)} className="text-slate-400 hover:text-slate-600">
+                <HugeiconsIcon icon={Cancel01Icon} size={20} />
+              </button>
+            </div>
+
+            <form 
+              onSubmit={(e) => {
+                e.preventDefault();
+                setIsShareCapitalModalOpen(false);
+              }} 
+              className="p-6 flex flex-col gap-4"
+            >
+              <div className="grid grid-cols-2 gap-4">
+                <div className="flex flex-col gap-1.5">
+                  <label className="text-xs font-bold text-slate-600">Subscribed Capital *</label>
+                  <input
+                    type="text"
+                    required
+                    value={subscribedCapital}
+                    onChange={e => setSubscribedCapital(e.target.value)}
+                    className="border border-slate-200 focus:border-[#5e53fc] focus:outline-none rounded-xl px-4 py-2.5 text-xs font-semibold text-slate-700"
+                  />
+                </div>
+
+                <div className="flex flex-col gap-1.5">
+                  <label className="text-xs font-bold text-slate-600">Paid-up Capital *</label>
+                  <input
+                    type="text"
+                    required
+                    value={paidUpCapital}
+                    onChange={e => setPaidUpCapital(e.target.value)}
+                    className="border border-slate-200 focus:border-[#5e53fc] focus:outline-none rounded-xl px-4 py-2.5 text-xs font-semibold text-slate-700"
+                  />
+                </div>
+              </div>
+
+              <div className="grid grid-cols-2 gap-4">
+                <div className="flex flex-col gap-1.5">
+                  <label className="text-xs font-bold text-slate-600">Company Duration *</label>
+                  <input
+                    type="text"
+                    required
+                    value={companyDuration}
+                    onChange={e => setCompanyDuration(e.target.value)}
+                    className="border border-slate-200 focus:border-[#5e53fc] focus:outline-none rounded-xl px-4 py-2.5 text-xs font-semibold text-slate-700"
+                  />
+                </div>
+
+                <div className="flex flex-col gap-1.5">
+                  <label className="text-xs font-bold text-slate-600">Share Division *</label>
+                  <input
+                    type="text"
+                    required
+                    value={shareDivision}
+                    onChange={e => setShareDivision(e.target.value)}
+                    className="border border-slate-200 focus:border-[#5e53fc] focus:outline-none rounded-xl px-4 py-2.5 text-xs font-semibold text-slate-700"
+                  />
+                </div>
+              </div>
+
+              <div className="flex justify-end gap-3 border-t border-slate-100 pt-4 mt-2">
+                <button
+                  type="button"
+                  onClick={() => setIsShareCapitalModalOpen(false)}
+                  className="px-5 py-2.5 bg-slate-50 hover:bg-slate-100 text-slate-600 rounded-xl text-xs font-semibold transition-all"
+                >
+                  Cancel
+                </button>
+                <button
+                  type="submit"
+                  className="px-6 py-2.5 bg-[#5e53fc] hover:bg-indigo-700 text-white rounded-xl text-xs font-semibold shadow-md shadow-indigo-100 transition-all"
+                >
+                  Save Changes
+                </button>
+              </div>
+            </form>
           </div>
         </div>
       )}
@@ -1822,7 +2590,7 @@ export default function SalonDetailPage({ salon, onBack, onImpersonate }: SalonD
                   salon.status = "Active";
                   setIsReactivateModalOpen(false);
                   // Trigger impersonation
-                  onImpersonate(salon.name);
+                  onImpersonate(salon.name, true);
                 }}
                 className="px-6 py-2.5 bg-[#ecfeff] hover:bg-[#cffafe] text-[#0891b2] rounded-lg text-sm font-semibold transition-all"
               >

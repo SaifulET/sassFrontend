@@ -77,11 +77,23 @@ export default function UsersAndStaffPage({
 
   // Modals state
   const [isAddModalOpen, setIsAddModalOpen] = useState(false);
+  const [editingEmployeeId, setEditingEmployeeId] = useState<string | null>(null);
   const [selectedEmployee, setSelectedEmployee] = useState<Employee | null>(null);
 
   // Actions menu state
   const [activeMenuId, setActiveMenuId] = useState<string | null>(null);
+  const [menuCoords, setMenuCoords] = useState<{ top: number; left: number } | null>(null);
   const menuRef = useRef<HTMLDivElement>(null);
+
+  const convertToInputDate = (dateStr: string) => {
+    if (dateStr && dateStr.includes("/")) {
+      const parts = dateStr.split("/");
+      if (parts.length === 3) {
+        return `${parts[2]}-${parts[1].padStart(2, '0')}-${parts[0].padStart(2, '0')}`;
+      }
+    }
+    return dateStr || "";
+  };
 
   // Form states for Add User
   const [formFirstName, setFormFirstName] = useState("");
@@ -101,15 +113,22 @@ export default function UsersAndStaffPage({
   const [formEmergencyName, setFormEmergencyName] = useState("");
   const [formEmergencyPhone, setFormEmergencyPhone] = useState("");
 
-  // Close dropdowns on outside click
+  // Close dropdowns on outside click and scroll
   useEffect(() => {
     function handleClickOutside(event: MouseEvent) {
       if (menuRef.current && !menuRef.current.contains(event.target as Node)) {
         setActiveMenuId(null);
       }
     }
+    const handleScroll = () => {
+      setActiveMenuId(null);
+    };
     document.addEventListener("mousedown", handleClickOutside);
-    return () => document.removeEventListener("mousedown", handleClickOutside);
+    window.addEventListener("scroll", handleScroll, true);
+    return () => {
+      document.removeEventListener("mousedown", handleClickOutside);
+      window.removeEventListener("scroll", handleScroll, true);
+    };
   }, []);
 
   // Filter logic
@@ -134,31 +153,55 @@ export default function UsersAndStaffPage({
       return;
     }
 
-    const newEmp: Employee = {
-      id: `emp-${Date.now()}`,
-      firstName: formFirstName,
-      lastName: formLastName,
-      email: formEmail,
-      role: "Staff",
-      status: "Pending",
-      employmentStatus: "Currently Hired",
-      lastLogin: "Never",
-      dob: formDob,
-      pob: formPob,
-      address: formAddress,
-      contractType: formContractType,
-      taxCode: formTaxCode,
-      iban: formIban,
-      startDate: formStartDate,
-      endDate: formEndDate || undefined,
-      occupation: formOccupation,
-      remuneration: formRemuneration,
-      phone: formPhone,
-      emergencyName: formEmergencyName,
-      emergencyPhone: formEmergencyPhone
-    };
+    const formattedDob = formDob && formDob.includes("-") ? formDob.split("-").reverse().join("/") : formDob;
+    const formattedStartDate = formStartDate && formStartDate.includes("-") ? formStartDate.split("-").reverse().join("/") : formStartDate;
 
-    setEmployees((prev) => [newEmp, ...prev]);
+    if (editingEmployeeId) {
+      setEmployees((prev) => prev.map(emp => emp.id === editingEmployeeId ? {
+        ...emp,
+        firstName: formFirstName,
+        lastName: formLastName,
+        email: formEmail,
+        dob: formattedDob,
+        pob: formPob,
+        address: formAddress,
+        contractType: formContractType,
+        taxCode: formTaxCode,
+        iban: formIban,
+        startDate: formattedStartDate,
+        endDate: formEndDate || undefined,
+        occupation: formOccupation,
+        remuneration: formRemuneration,
+        phone: formPhone,
+        emergencyName: formEmergencyName,
+        emergencyPhone: formEmergencyPhone
+      } : emp));
+    } else {
+      const newEmp: Employee = {
+        id: `emp-${Date.now()}`,
+        firstName: formFirstName,
+        lastName: formLastName,
+        email: formEmail,
+        role: "Staff",
+        status: "Pending",
+        employmentStatus: "Currently Hired",
+        lastLogin: "Never",
+        dob: formattedDob,
+        pob: formPob,
+        address: formAddress,
+        contractType: formContractType,
+        taxCode: formTaxCode,
+        iban: formIban,
+        startDate: formattedStartDate,
+        endDate: formEndDate || undefined,
+        occupation: formOccupation,
+        remuneration: formRemuneration,
+        phone: formPhone,
+        emergencyName: formEmergencyName,
+        emergencyPhone: formEmergencyPhone
+      };
+      setEmployees((prev) => [newEmp, ...prev]);
+    }
 
     // Reset Form
     setFormFirstName("");
@@ -179,6 +222,7 @@ export default function UsersAndStaffPage({
     setFormEmergencyPhone("");
 
     setIsAddModalOpen(false);
+    setEditingEmployeeId(null);
   };
 
   const handleDeleteEmployee = (id: string) => {
@@ -242,7 +286,26 @@ export default function UsersAndStaffPage({
         <div className="flex items-center justify-between mb-6">
           <h2 className="text-xl font-bold text-slate-800">Users & Staff</h2>
           <button
-            onClick={() => setIsAddModalOpen(true)}
+            onClick={() => {
+              setEditingEmployeeId(null);
+              setFormFirstName("");
+              setFormLastName("");
+              setFormDob("");
+              setFormPob("Select city");
+              setFormAddress("");
+              setFormContractType("Permanent");
+              setFormTaxCode("");
+              setFormIban("");
+              setFormStartDate("");
+              setFormEndDate("");
+              setFormOccupation("Barber");
+              setFormRemuneration("");
+              setFormPhone("");
+              setFormEmail("");
+              setFormEmergencyName("");
+              setFormEmergencyPhone("");
+              setIsAddModalOpen(true);
+            }}
             className="px-6 py-2.5 bg-[#5e53fc] hover:bg-[#4d42eb] text-white rounded-xl text-xs font-bold transition-all shadow-md shadow-indigo-100 flex items-center gap-1.5"
           >
             Add User
@@ -298,10 +361,10 @@ export default function UsersAndStaffPage({
         </div>
 
         {/* Data Table */}
-        <div className="border border-slate-100 rounded-2xl overflow-hidden w-full">
-          <table className="w-full border-collapse text-left text-xs">
+        <div className="border border-slate-100 rounded-2xl overflow-x-auto w-full min-h-[350px]">
+          <table className="w-full min-w-[800px] border-collapse text-left text-xs">
             <thead>
-              <tr className="bg-slate-50 border-b border-slate-100 text-slate-500 font-bold uppercase tracking-wider">
+              <tr className="bg-slate-50 border-b border-slate-100 text-slate-500 font-bold uppercase tracking-wider whitespace-nowrap">
                 <th className="px-6 py-4">Name</th>
                 <th className="px-6 py-4">Email</th>
                 <th className="px-6 py-4">Role</th>
@@ -315,7 +378,7 @@ export default function UsersAndStaffPage({
               {filteredEmployees.map((emp) => (
                 <tr key={emp.id} className="hover:bg-slate-50/50 transition-colors">
                   {/* Name with Avatar */}
-                  <td className="px-6 py-4">
+                  <td className="px-6 py-4 whitespace-nowrap">
                     <div className="flex items-center gap-3">
                       <div className="w-8 h-8 rounded-full bg-indigo-50 text-[#5e53fc] flex items-center justify-center font-bold text-xs">
                         {emp.firstName[0]}{emp.lastName[0]}
@@ -327,11 +390,11 @@ export default function UsersAndStaffPage({
                   </td>
 
                   {/* Email */}
-                  <td className="px-6 py-4 text-slate-500 font-medium">{emp.email}</td>
+                  <td className="px-6 py-4 text-slate-500 font-medium whitespace-nowrap">{emp.email}</td>
 
                   {/* Role Badge */}
-                  <td className="px-6 py-4">
-                    <span className={`px-2.5 py-1 rounded-full text-[10px] font-extrabold uppercase ${emp.role === "Manager"
+                  <td className="px-6 py-4 whitespace-nowrap">
+                    <span className={`px-2.5 py-1 rounded-full text-[10px] font-extrabold uppercase whitespace-nowrap ${emp.role === "Manager"
                         ? "bg-[#e2f7fc] text-[#0ea5e9]"
                         : "bg-[#fef9c3] text-[#ca8a04]"
                       }`}>
@@ -340,8 +403,8 @@ export default function UsersAndStaffPage({
                   </td>
 
                   {/* Status Badge */}
-                  <td className="px-6 py-4">
-                    <span className={`px-2.5 py-1 rounded-full text-[10px] font-extrabold uppercase flex items-center gap-1.5 w-fit ${emp.status === "Active"
+                  <td className="px-6 py-4 whitespace-nowrap">
+                    <span className={`px-2.5 py-1 rounded-full text-[10px] font-extrabold uppercase flex items-center gap-1.5 w-fit whitespace-nowrap ${emp.status === "Active"
                         ? "bg-[#dcfce7] text-[#16a34a]"
                         : emp.status === "Pending"
                           ? "bg-[#ffedd5] text-[#ea580c]"
@@ -358,8 +421,8 @@ export default function UsersAndStaffPage({
                   </td>
 
                   {/* Employment Status Badge */}
-                  <td className="px-6 py-4">
-                    <span className={`px-2.5 py-1 rounded-full text-[10px] font-extrabold ${emp.employmentStatus === "Currently Hired"
+                  <td className="px-6 py-4 whitespace-nowrap">
+                    <span className={`px-2.5 py-1 rounded-full text-[10px] font-extrabold whitespace-nowrap ${emp.employmentStatus === "Currently Hired"
                         ? "bg-[#eff6ff] text-[#2563eb]"
                         : "bg-[#fce7f3] text-[#db2777]"
                       }`}>
@@ -368,22 +431,34 @@ export default function UsersAndStaffPage({
                   </td>
 
                   {/* Last Login */}
-                  <td className="px-6 py-4 text-slate-400 font-medium">{emp.lastLogin}</td>
+                  <td className="px-6 py-4 text-slate-400 font-medium whitespace-nowrap">{emp.lastLogin}</td>
 
                   {/* Action Dots & Menu */}
-                  <td className="px-6 py-4 text-center relative">
+                  <td className="px-6 py-4 text-center relative whitespace-nowrap">
                     <button
-                      onClick={() => setActiveMenuId(activeMenuId === emp.id ? null : emp.id)}
+                      onClick={(e) => {
+                        const rect = e.currentTarget.getBoundingClientRect();
+                        setMenuCoords({
+                          top: rect.bottom + 4,
+                          left: rect.right - 176
+                        });
+                        setActiveMenuId(activeMenuId === emp.id ? null : emp.id);
+                      }}
                       className="p-1.5 hover:bg-slate-100 rounded-xl transition-all"
                     >
                       <VerticalDotsIcon />
                     </button>
 
                     {/* Popover actions menu */}
-                    {activeMenuId === emp.id && (
+                    {activeMenuId === emp.id && menuCoords && (
                       <div
                         ref={menuRef}
-                        className="absolute right-6 mt-1 w-44 bg-white rounded-2xl border border-slate-100 shadow-xl py-2 z-30 text-left animate-in fade-in zoom-in-95 duration-100"
+                        style={{
+                          position: "fixed",
+                          top: `${menuCoords.top}px`,
+                          left: `${menuCoords.left}px`,
+                        }}
+                        className="w-44 bg-white rounded-2xl border border-slate-100 shadow-xl py-2 z-50 text-left animate-in fade-in zoom-in-95 duration-100"
                       >
                         <button
                           onClick={() => {
@@ -413,7 +488,24 @@ export default function UsersAndStaffPage({
                         </button>
                         <button
                           onClick={() => {
-                            alert(`Editing employee profile: ${emp.firstName}`);
+                            setFormFirstName(emp.firstName);
+                            setFormLastName(emp.lastName);
+                            setFormDob(convertToInputDate(emp.dob));
+                            setFormPob(emp.pob || "Select city");
+                            setFormAddress(emp.address || "");
+                            setFormContractType(emp.contractType || "Permanent");
+                            setFormTaxCode(emp.taxCode);
+                            setFormIban(emp.iban || "");
+                            setFormStartDate(convertToInputDate(emp.startDate));
+                            setFormEndDate(emp.endDate || "");
+                            setFormOccupation(emp.occupation || "Barber");
+                            setFormRemuneration(emp.remuneration || "");
+                            setFormPhone(emp.phone || "");
+                            setFormEmail(emp.email);
+                            setFormEmergencyName(emp.emergencyName || "");
+                            setFormEmergencyPhone(emp.emergencyPhone || "");
+                            setEditingEmployeeId(emp.id);
+                            setIsAddModalOpen(true);
                             setActiveMenuId(null);
                           }}
                           className="flex items-center gap-2.5 w-full px-4 py-2.5 hover:bg-slate-50 text-slate-600 font-semibold text-xs"
@@ -477,8 +569,8 @@ export default function UsersAndStaffPage({
               >
                 <HugeiconsIcon icon={Cancel01Icon} size={20} />
               </button>
-              <h3 className="text-lg font-bold text-slate-800">Add User</h3>
-              <p className="text-xs font-semibold text-slate-400 mt-1">Create a new employee profile in the system</p>
+              <h3 className="text-lg font-bold text-slate-800">{editingEmployeeId ? "Edit User" : "Add User"}</h3>
+              <p className="text-xs font-semibold text-slate-400 mt-1">{editingEmployeeId ? "Update the employee profile details in the system" : "Create a new employee profile in the system"}</p>
             </div>
 
             {/* Scrollable Form */}
@@ -514,9 +606,8 @@ export default function UsersAndStaffPage({
                 <div className="flex flex-col gap-1.5">
                   <label className="text-[11px] font-extrabold uppercase tracking-wider text-slate-500">Date of birth *</label>
                   <input
-                    type="text"
+                    type="date"
                     required
-                    placeholder="Enter date of birth (e.g. DD/MM/YYYY)"
                     value={formDob}
                     onChange={(e) => setFormDob(e.target.value)}
                     className="border border-slate-200 focus:border-[#5e53fc] focus:outline-none rounded-xl px-4 py-2.5 text-xs font-semibold text-slate-700"
@@ -603,9 +694,8 @@ export default function UsersAndStaffPage({
                 <div className="flex flex-col gap-1.5">
                   <label className="text-[11px] font-extrabold uppercase tracking-wider text-slate-500">Appointment Date *</label>
                   <input
-                    type="text"
+                    type="date"
                     required
-                    placeholder="Enter start date (e.g. DD/MM/YYYY)"
                     value={formStartDate}
                     onChange={(e) => setFormStartDate(e.target.value)}
                     className="border border-slate-200 focus:border-[#5e53fc] focus:outline-none rounded-xl px-4 py-2.5 text-xs font-semibold text-slate-700"
@@ -719,10 +809,10 @@ export default function UsersAndStaffPage({
                     setFormLastName("Marini");
                     setFormEmail("roberto@beautywellness.com");
                     setFormTaxCode("RSSMRA85M01H501Z");
-                    setFormDob("01/03/1985");
+                    setFormDob("1985-03-01");
                     setFormPob("Milano (MI)");
                     setFormAddress("Via Giuseppe Verdi 123, 20121 Milan (MI)");
-                    setFormStartDate("15/03/2020");
+                    setFormStartDate("2020-03-15");
                     setFormEndDate("100%");
                     setFormOccupation("Sole Director");
                     setFormPhone("+39 02 1234 5678");
@@ -737,7 +827,7 @@ export default function UsersAndStaffPage({
                   type="submit"
                   className="px-6 py-2.5 bg-[#5e53fc] hover:bg-[#4d42eb] text-white rounded-xl text-xs font-bold transition-all shadow-md shadow-indigo-100"
                 >
-                  Add Member
+                  {editingEmployeeId ? "Save Changes" : "Add User"}
                 </button>
               </div>
             </form>
@@ -824,7 +914,24 @@ export default function UsersAndStaffPage({
               <div className="flex justify-between items-center border-t border-slate-100 pt-5">
                 <button
                   onClick={() => {
-                    alert(`Editing profile details for: ${selectedEmployee.firstName}`);
+                    setFormFirstName(selectedEmployee.firstName);
+                    setFormLastName(selectedEmployee.lastName);
+                    setFormDob(convertToInputDate(selectedEmployee.dob));
+                    setFormPob(selectedEmployee.pob || "Select city");
+                    setFormAddress(selectedEmployee.address || "");
+                    setFormContractType(selectedEmployee.contractType || "Permanent");
+                    setFormTaxCode(selectedEmployee.taxCode);
+                    setFormIban(selectedEmployee.iban || "");
+                    setFormStartDate(convertToInputDate(selectedEmployee.startDate));
+                    setFormEndDate(selectedEmployee.endDate || "");
+                    setFormOccupation(selectedEmployee.occupation || "Barber");
+                    setFormRemuneration(selectedEmployee.remuneration || "");
+                    setFormPhone(selectedEmployee.phone || "");
+                    setFormEmail(selectedEmployee.email);
+                    setFormEmergencyName(selectedEmployee.emergencyName || "");
+                    setFormEmergencyPhone(selectedEmployee.emergencyPhone || "");
+                    setEditingEmployeeId(selectedEmployee.id);
+                    setIsAddModalOpen(true);
                     setSelectedEmployee(null);
                   }}
                   className="px-5 py-2.5 bg-slate-50 hover:bg-slate-100 text-slate-600 rounded-xl text-xs font-bold transition-all"

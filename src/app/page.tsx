@@ -312,8 +312,10 @@ export default function Home() {
                   setSelectedSalonId(null);
                   setSalonSubTab("overview");
                 }}
-                onImpersonate={(name) => {
-                  alert(`Currently Impersonating: ${name}`);
+                onImpersonate={(name, silent) => {
+                  if (!silent) {
+                    alert(`Currently Impersonating: ${name}`);
+                  }
                 }}
               />
             );
