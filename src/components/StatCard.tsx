@@ -13,6 +13,7 @@ interface StatCardProps {
   iconBgClass: string;
   iconColor: string;
   onViewClick?: () => void;
+  bgGradient?: string;
 }
 
 export default function StatCard({
@@ -24,52 +25,109 @@ export default function StatCard({
   icon,
   iconBgClass,
   iconColor,
-  onViewClick
+  onViewClick,
+  bgGradient
 }: StatCardProps) {
   return (
-    <div className="bg-white rounded-xl p-6 shadow-[0_4px_18px_rgba(17,31,56,0.06)] flex flex-col justify-between min-h-[200px] transition-transform duration-200 hover:-translate-y-1 hover:shadow-md">
-      {/* Top Header Section */}
-      <div className="flex items-start gap-4">
-        {/* Icon Container */}
-        <div className={`w-12 h-12 rounded-2xl flex items-center justify-center ${iconBgClass}`}>
-          <HugeiconsIcon icon={icon} size={22} color={iconColor} />
-        </div>
-        <div className="flex flex-col min-w-0">
-          <span className="text-sm font-semibold text-slate-500 truncate leading-tight mb-1">
+    <div 
+      className="transition-transform duration-200 hover:-translate-y-1 hover:shadow-md border border-slate-100/50 flex flex-col justify-between"
+      style={{
+        height: "224px",
+        padding: "24px",
+        gap: "12px",
+        background: bgGradient || "#FFFFFF",
+        borderRadius: "12px",
+        boxSizing: "border-box"
+      }}
+    >
+      {/* Frame 1000003732 */}
+      <div className="flex flex-col justify-center items-start p-0 gap-4 w-full">
+        {/* Frame 1000003729 */}
+        <div className="flex flex-row items-center p-0 gap-2 w-full">
+          {/* Icon */}
+          {typeof icon === "string" ? (
+            <img src={icon} alt="" className="w-10 h-10 object-contain shrink-0" />
+          ) : (
+            <div className={`w-10 h-10 rounded-xl flex items-center justify-center shrink-0 ${iconBgClass}`}>
+              <HugeiconsIcon icon={icon} size={20} color={iconColor} />
+            </div>
+          )}
+          
+          {/* Title */}
+          <span 
+            className="text-left font-sans"
+            style={{
+              width: "124.6px",
+              fontFamily: "'Manrope', sans-serif",
+              fontWeight: 600,
+              fontSize: "13px",
+              lineHeight: "18px",
+              color: "#29343D",
+              display: "-webkit-box",
+              WebkitLineClamp: 2,
+              WebkitBoxOrient: "vertical",
+              overflow: "hidden"
+            }}
+          >
             {title}
           </span>
-          <span className="text-3xl font-bold text-slate-800 tracking-tight leading-none py-1">
+        </div>
+
+        {/* Frame 1000003730 */}
+        <div className="flex flex-col justify-center items-start p-0 gap-2 w-full">
+          {/* Value */}
+          <span 
+            style={{
+              fontFamily: "'Manrope', sans-serif",
+              fontWeight: 600,
+              fontSize: "28px",
+              lineHeight: "120%",
+              color: "#29343D"
+            }}
+          >
             {value}
+          </span>
+
+          {/* Subtext */}
+          <span 
+            style={{
+              fontFamily: "'Manrope', sans-serif",
+              fontWeight: 600,
+              fontSize: "12px",
+              lineHeight: "16px",
+              color: "#29343D"
+            }}
+          >
+            {trendValue ? `${trendValue} ` : ""}{subtext}
           </span>
         </div>
       </div>
 
-      {/* Middle Trend Section */}
-      <div className="my-4 flex items-center gap-1.5">
-        {trendType === "up" && (
-          <span className="text-xs font-bold text-emerald-600 flex items-center bg-emerald-50 px-2 py-0.5 rounded-full">
-            {trendValue}
-          </span>
-        )}
-        {trendType === "down" && (
-          <span className="text-xs font-bold text-rose-600 flex items-center bg-rose-50 px-2 py-0.5 rounded-full">
-            {trendValue}
-          </span>
-        )}
-        <span className="text-xs font-medium text-slate-400">
-          {subtext}
-        </span>
-      </div>
-
-      {/* Bottom Button Action */}
-      <div className="mt-auto">
-        <button
-          onClick={onViewClick}
-          className="text-xs font-semibold text-[#5e53fc] bg-[#f2f1ff] hover:bg-[#5e53fc] hover:text-white px-4 py-2 rounded-2xl transition-all duration-200"
+      {/* Button */}
+      <button
+        onClick={onViewClick}
+        className="flex flex-row justify-center items-center px-4 gap-1 bg-white hover:bg-slate-50 transition-colors"
+        style={{
+          width: "117px",
+          height: "36px",
+          boxShadow: "0px 6px 24.2px -10px rgba(41, 52, 61, 0.22)",
+          borderRadius: "6px",
+          border: "none",
+          cursor: "pointer"
+        }}
+      >
+        <span
+          style={{
+            fontFamily: "'Plus Jakarta Sans', sans-serif",
+            fontWeight: 600,
+            fontSize: "12px",
+            lineHeight: "20px",
+            color: "#29343D"
+          }}
         >
           View Analytics
-        </button>
-      </div>
+        </span>
+      </button>
     </div>
   );
 }

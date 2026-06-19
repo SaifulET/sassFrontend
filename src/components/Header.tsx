@@ -50,14 +50,8 @@ export default function Header({ activeTab, setActiveTab, selectedSalonId, toggl
 
         {/* Brand/Logo Header - Desktop */}
         {selectedSalonId !== null && (
-          <div className="hidden lg:flex items-center gap-2.5 shrink-0 lg:w-44">
-            <svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
-              <path d="M3 12.5C6.5 12.5 7.5 7.5 11 7.5C14.5 7.5 15.5 12.5 19 12.5C21.5 12.5 22.5 10 23 9.5" stroke="#635BFF" strokeWidth="3.5" strokeLinecap="round" strokeLinejoin="round" />
-              <path d="M1 16.5C4.5 16.5 5.5 11.5 9 11.5C12.5 11.5 13.5 16.5 17 16.5C19.5 16.5 20.5 14 21 13.5" stroke="#8075ff" strokeWidth="3.5" strokeLinecap="round" strokeLinejoin="round" />
-            </svg>
-            <span className="text-xl font-bold tracking-tight text-[#29343D]">
-              MatDash
-            </span>
+          <div className="hidden lg:flex items-center shrink-0 lg:w-44">
+            <img src="/logo.svg" alt="MatDash" className="w-[135px] h-[80px] object-contain" />
           </div>
         )}
 

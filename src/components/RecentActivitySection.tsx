@@ -40,7 +40,7 @@ export default function RecentActivitySection({
         <h3 className="text-base font-bold text-slate-800">Recent Activity</h3>
         <button
           onClick={onViewAllClick}
-          className="text-xs font-semibold text-[#5e53fc] bg-[#f2f1ff] border border-[#d9d5ff] hover:bg-[#5e53fc] hover:text-white px-3.5 py-1.5 rounded-xl transition-all duration-200"
+          className="text-xs font-semibold text-[#635BFF] bg-white border border-[#635BFF] hover:bg-[#635BFF]/5 px-4 py-1.5 rounded-[8px] transition-all duration-200"
         >
           View All
         </button>

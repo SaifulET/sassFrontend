@@ -203,7 +203,7 @@ const mapToPipelineStage = (s: typeof ONGOING_STAGES_RAW[number]): PipelineStage
     content: "Abbiamo ricevuto la tua richiesta e ti ricontatteremo a breve per confermare il tuo appuntamento.",
     ctaEnabled: true,
     ctaText: "Prenota Ora",
-    signature: "Best regards,\nThe Your logo Team",
+    signature: "Best regards,\nThe MatDash Team",
     disclaimer: "Ricevi questa email in quanto ti sei registrato sul nostro sito.",
     showImage: true,
   },
@@ -888,13 +888,8 @@ const NotificationEditPanel = ({
 
           <div className="w-full max-w-[420px] bg-white shadow-[0px_4px_20px_rgba(0,0,0,0.05)] rounded-xl overflow-hidden flex flex-col font-sans text-left">
             <div className="bg-[#635BFF] px-6 py-4 flex items-center justify-between text-white">
-              <div className="flex items-center gap-2">
-                <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round">
-                  <path d="M21 16V8a2 2 0 0 0-1-1.73l-7-4a2 2 0 0 0-2 0l-7 4A2 2 0 0 0 3 8v8a2 2 0 0 0 1 1.73l7 4a2 2 0 0 0 2 0l7-4A2 2 0 0 0 21 16z" />
-                  <polyline points="3.27 6.96 12 12.01 20.73 6.96" />
-                  <line x1="12" y1="22.08" x2="12" y2="12" />
-                </svg>
-                <span className="text-[14px] font-bold tracking-tight">Your logo</span>
+              <div className="flex items-center">
+                <img src="/logo.svg" alt="MatDash" className="w-[135px] h-[80px] object-contain brightness-0 invert" />
               </div>
             </div>
 
@@ -1168,7 +1163,7 @@ export default function LeadsPipelinePage({ setActiveTab }: { setActiveTab?: (ta
         content: "Text text text text text text text text text text text text text text text.",
         ctaEnabled: true,
         ctaText: "CTA Button Content",
-        signature: "Best regards,\nThe Your logo Team",
+        signature: "Best regards,\nThe MatDash Team",
         disclaimer: "Enter disclaimer",
         showImage: true,
       },

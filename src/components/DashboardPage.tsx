@@ -20,12 +20,36 @@ import AnalyticsModals from "./AnalyticsModals";
 
 interface DashboardPageProps {
   onViewAllActivities: () => void;
+  onNavigate?: (tab: string) => void;
+  onViewSalon?: (id: string) => void;
 }
 
-export default function DashboardPage({ onViewAllActivities }: DashboardPageProps) {
+const DashboardIcon = ({ src, size = 16, className = "" }: { src: string; size?: number; className?: string }) => {
+  return (
+    <span
+      className={`inline-block bg-current transition-all duration-200 ${className}`}
+      style={{
+        width: `${size}px`,
+        height: `${size}px`,
+        maskImage: `url(${src})`,
+        WebkitMaskImage: `url(${src})`,
+        maskSize: 'contain',
+        WebkitMaskSize: 'contain',
+        maskRepeat: 'no-repeat',
+        WebkitMaskRepeat: 'no-repeat',
+      }}
+    />
+  );
+};
+
+export default function DashboardPage({ onViewAllActivities, onNavigate, onViewSalon }: DashboardPageProps) {
   const [hoveredIndex, setHoveredIndex] = useState<number | null>(4); // Default to Mar point (index 4) for matching Figma/mockup
   const [isRefreshing, setIsRefreshing] = useState(false);
-  const [activeModal, setActiveModal] = useState<"sales" | "subscriptions" | "leads" | "salons" | null>(null);
+  const [activeModal, setActiveModal] = useState<"sales" | "subscriptions" | "leads" | "salons" | "churn" | null>(null);
+  const [loadingSync, setLoadingSync] = useState(false);
+  const [alert1Resolved, setAlert1Resolved] = useState(false);
+  const [loadingSend, setLoadingSend] = useState(false);
+  const [reminderSent, setReminderSent] = useState(false);
 
   // Mock data for activities
   const mockActivities = [
@@ -116,6 +140,31 @@ export default function DashboardPage({ onViewAllActivities }: DashboardPageProp
     }, 1000);
   };
 
+  const handleExport = () => {
+    const headers = ["Month", "Value (EUR)"];
+    const rows = [
+      ["Jan", 30000],
+      ["Feb", 42000],
+      ["Feb", 40000],
+      ["Feb", 35000],
+      ["Mar", 34324],
+      ["Apr", 38000],
+      ["Jun", 40000],
+      ["Jul", 43000],
+      ["Sep", 40000]
+    ];
+    const csvContent = [headers, ...rows].map(e => e.join(",")).join("\n");
+    const blob = new Blob([csvContent], { type: "text/csv;charset=utf-8;" });
+    const url = URL.createObjectURL(blob);
+    const link = document.createElement("a");
+    link.setAttribute("href", url);
+    link.setAttribute("download", "revenue_trend_data.csv");
+    link.style.visibility = "hidden";
+    document.body.appendChild(link);
+    link.click();
+    document.body.removeChild(link);
+  };
+
   return (
     <div className="flex w-full flex-col gap-5 text-left text-[#283442] animate-in fade-in slide-in-from-bottom-4 duration-300">
       {/* Title section */}
@@ -125,29 +174,28 @@ export default function DashboardPage({ onViewAllActivities }: DashboardPageProp
             <div className="text-sm font-extrabold text-[#1f2937]">Dashboard</div>
           </div>
 
-        <div className="flex items-center gap-3">
-          <button
-            onClick={handleRefresh}
-            className={`flex items-center gap-2 px-4 py-2.5 bg-white border border-[#eef2f6] hover:bg-slate-50 rounded-2xl text-xs font-semibold text-slate-600 transition-all shadow-sm ${
-              isRefreshing ? "opacity-75" : ""
-            }`}
-          >
-            <HugeiconsIcon
-              icon={GlobalRefreshIcon}
-              size={14}
-              className={`text-[#7e8b9b] ${isRefreshing ? "animate-spin" : ""}`}
-            />
-            Refresh Data
-          </button>
+          <div className="flex items-center gap-3">
+            <button
+              onClick={handleRefresh}
+              className={`flex items-center gap-2 px-4 py-2.5 bg-white border border-[#eef2f6] hover:bg-slate-50 rounded-2xl text-xs font-semibold text-slate-600 transition-all shadow-sm ${isRefreshing ? "opacity-75" : ""
+                }`}
+            >
+              <DashboardIcon
+                src="/syncIcon.svg"
+                size={14}
+                className={`${isRefreshing ? "animate-spin" : ""}`}
+              />
+              Refresh Data
+            </button>
 
-          <button
-            onClick={() => alert("Viewing All Salons")}
-            className="px-5 py-2.5 bg-[#5e53fc] hover:bg-indigo-700 text-white rounded-2xl text-xs font-semibold tracking-wide shadow-lg shadow-indigo-150 transition-all duration-150"
-          >
-            View All Salons
-          </button>
+            <button
+              onClick={() => onNavigate && onNavigate("salons")}
+              className="px-5 py-2.5 bg-[#5e53fc] hover:bg-indigo-700 text-white rounded-2xl text-xs font-semibold tracking-wide shadow-lg shadow-indigo-150 transition-all duration-150"
+            >
+              View All Salons
+            </button>
+          </div>
         </div>
-      </div>
       </div>
 
       {/* StatCards grid */}
@@ -158,10 +206,11 @@ export default function DashboardPage({ onViewAllActivities }: DashboardPageProp
           subtext="from last month"
           trendType="up"
           trendValue="+12.5%"
-          icon={CreditCardIcon}
+          icon="/monthlyProcessedSalesIcon.svg"
           iconBgClass="bg-[#f0efff]"
           iconColor="#5e53fc"
           onViewClick={() => setActiveModal("sales")}
+          bgGradient="linear-gradient(180deg, rgba(99, 91, 255, 0.12) 0%, rgba(99, 91, 255, 0.03) 100%), #FFFFFF"
         />
         <StatCard
           title="Total Active Subscriptions"
@@ -169,20 +218,22 @@ export default function DashboardPage({ onViewAllActivities }: DashboardPageProp
           subtext="from last month"
           trendType="up"
           trendValue="+10%"
-          icon={ChartAreaIcon}
+          icon="/TotalActiveSubscriptions.svg"
           iconBgClass="bg-[#e6fcf9]"
           iconColor="#10b981"
           onViewClick={() => setActiveModal("subscriptions")}
+          bgGradient="linear-gradient(180deg, rgba(22, 205, 199, 0.13) 0%, rgba(22, 205, 199, 0.03) 100%), #FFFFFF"
         />
         <StatCard
           title="New Saas Leads"
           value="10"
           subtext="14 total leads in pipeline"
           trendType="neutral"
-          icon={UserGroupIcon}
+          icon="/NewSaasLeads.svg"
           iconBgClass="bg-[#eefcf2]"
           iconColor="#059669"
           onViewClick={() => setActiveModal("leads")}
+          bgGradient="linear-gradient(180deg, rgba(54, 199, 108, 0.13) 0%, rgba(54, 199, 108, 0.03) 100%), #FFFFFF"
         />
         <StatCard
           title="New Salons"
@@ -190,27 +241,29 @@ export default function DashboardPage({ onViewAllActivities }: DashboardPageProp
           subtext="from last month"
           trendType="up"
           trendValue="+18.5%"
-          icon={Shop}
+          icon="/NewSalons.svg"
           iconBgClass="bg-[#fff9eb]"
           iconColor="#f59e0b"
           onViewClick={() => setActiveModal("salons")}
+          bgGradient="linear-gradient(180deg, rgba(248, 194, 9, 0.13) 0%, rgba(248, 194, 9, 0.03) 100%), #FFFFFF"
         />
         <StatCard
           title="Monthly Churn Rate"
           value="7%"
           subtext="Last month Churn Rate: 5%"
           trendType="neutral"
-          icon={Mail01Icon}
+          icon="/MonthlyChumRate.svg"
           iconBgClass="bg-[#fff0f3]"
           iconColor="#f43f5e"
-          onViewClick={() => alert("Monthly Churn Rate analytics details coming soon!")}
+          onViewClick={() => setActiveModal("churn")}
+          bgGradient="linear-gradient(180deg, rgba(255, 102, 146, 0.13) 0%, rgba(255, 102, 146, 0.03) 100%), #FFFFFF"
         />
       </div>
 
       {/* Mid sections: Chart and Recent Activity */}
       <div className="grid grid-cols-1 xl:grid-cols-3 gap-6">
         {/* Revenue Trend Area Chart */}
-        <div 
+        <div
           className="xl:col-span-2 bg-white flex flex-col transition-all w-full"
           style={{
             height: "374px",
@@ -222,7 +275,7 @@ export default function DashboardPage({ onViewAllActivities }: DashboardPageProp
         >
           <div className="flex items-center justify-between w-full h-[36px] gap-4">
             <div>
-              <h3 
+              <h3
                 className="font-semibold"
                 style={{
                   fontFamily: "'Manrope', sans-serif",
@@ -235,16 +288,17 @@ export default function DashboardPage({ onViewAllActivities }: DashboardPageProp
               </h3>
             </div>
             <button
-              onClick={() => alert("Exporting data...")}
-              className="font-medium transition-all duration-200 border border-[#635BFF] text-[#635BFF] hover:bg-[#635BFF]/5 flex items-center justify-center"
+              onClick={handleExport}
+              className="font-medium transition-all duration-200 border border-[#635BFF] text-[#635BFF] hover:bg-[#635BFF]/5 flex items-center justify-center whitespace-nowrap"
               style={{
                 fontFamily: "'Manrope', sans-serif",
                 fontSize: "12px",
                 lineHeight: "16px",
                 borderRadius: "8px",
-                padding: "10px 16px",
+                padding: "10px 12px",
                 width: "99px",
-                height: "36px"
+                height: "36px",
+                cursor: "pointer"
               }}
             >
               Export Data
@@ -256,30 +310,30 @@ export default function DashboardPage({ onViewAllActivities }: DashboardPageProp
             {/* Tooltip Overlay */}
             {hoveredIndex !== null && (() => {
               const p = chartPoints[hoveredIndex];
-              
+
               // Calculate tooltip values based on scale factor
               // index 4 corresponds to Mar (val: 34324) which should display € 96K total
               const scaleFactor = 96000 / 34324;
               const displayVal = p.val * scaleFactor;
-              
+
               const formatK = (val: number, precision: number = 0) => {
                 const kVal = val / 1000;
                 return kVal.toFixed(precision).replace(".", ",");
               };
-              
+
               const totalRevenueK = formatK(displayVal, 0);
               const basicValK = formatK(displayVal * 0.20, 1);
               const premiumValK = formatK(displayVal * 0.32, 1);
               const enterpriseValK = formatK(displayVal * 0.48, 0);
-              
+
               const tooltipWidth = 190.58;
               const tooltipHeight = 180.37;
-              
+
               // Center the tooltip on the point's X coordinate as percentage of 568 viewBox
               const leftPercent = (p.x / 568) * 100;
               let leftStyle = `${leftPercent}%`;
               let transformStyle = "translateX(-50%)";
-              
+
               if (hoveredIndex === 0) {
                 leftStyle = "35.13px";
                 transformStyle = "translateX(0)";
@@ -287,9 +341,9 @@ export default function DashboardPage({ onViewAllActivities }: DashboardPageProp
                 leftStyle = "100%";
                 transformStyle = "translateX(-100%)";
               }
-              
+
               const topPos = p.y - tooltipHeight - 12; // 12px above the dot
-              
+
               return (
                 <div
                   className="absolute z-20 bg-white pointer-events-none transition-all duration-150 ease-out flex flex-col justify-between"
@@ -309,7 +363,7 @@ export default function DashboardPage({ onViewAllActivities }: DashboardPageProp
                   <div className="flex items-center justify-between" style={{ height: "27.4px" }}>
                     <div className="flex items-center gap-[7.6px]">
                       <div className="w-[7.6px] h-[7.6px] bg-[#16CDC7] rounded-full shrink-0" />
-                      <span 
+                      <span
                         className="text-[#29343D] font-semibold"
                         style={{
                           fontFamily: "'Manrope', sans-serif",
@@ -320,7 +374,7 @@ export default function DashboardPage({ onViewAllActivities }: DashboardPageProp
                         Total gross revenue
                       </span>
                     </div>
-                    <span 
+                    <span
                       className="text-[#98A4AE] font-semibold text-right"
                       style={{
                         fontFamily: "'Manrope', sans-serif",
@@ -335,7 +389,7 @@ export default function DashboardPage({ onViewAllActivities }: DashboardPageProp
                   {/* row 3: Basic (20%) */}
                   <div className="flex flex-col justify-center gap-[7.6px]" style={{ height: "50.99px" }}>
                     <div className="flex items-center justify-between">
-                      <span 
+                      <span
                         className="text-[#29343D] font-semibold"
                         style={{
                           fontFamily: "'Manrope', sans-serif",
@@ -345,7 +399,7 @@ export default function DashboardPage({ onViewAllActivities }: DashboardPageProp
                       >
                         Basic
                       </span>
-                      <span 
+                      <span
                         className="text-[#29343D] font-semibold"
                         style={{
                           fontFamily: "'Manrope', sans-serif",
@@ -361,7 +415,7 @@ export default function DashboardPage({ onViewAllActivities }: DashboardPageProp
                       <div className="relative flex-1 bg-[#F6F7F9] rounded-full" style={{ height: "6px" }}>
                         <div className="absolute left-0 top-0 bottom-0 bg-[#DAD8FF] rounded-full" style={{ width: "72.2%" }} />
                       </div>
-                      <span 
+                      <span
                         className="text-[#98A4AE] font-semibold text-right shrink-0"
                         style={{
                           fontFamily: "'Manrope', sans-serif",
@@ -378,7 +432,7 @@ export default function DashboardPage({ onViewAllActivities }: DashboardPageProp
                   {/* row 7: Basic (32%) */}
                   <div className="flex flex-col justify-center gap-[7.6px]" style={{ height: "50.99px" }}>
                     <div className="flex items-center justify-between">
-                      <span 
+                      <span
                         className="text-[#29343D] font-semibold"
                         style={{
                           fontFamily: "'Manrope', sans-serif",
@@ -388,7 +442,7 @@ export default function DashboardPage({ onViewAllActivities }: DashboardPageProp
                       >
                         Basic
                       </span>
-                      <span 
+                      <span
                         className="text-[#29343D] font-semibold"
                         style={{
                           fontFamily: "'Manrope', sans-serif",
@@ -404,7 +458,7 @@ export default function DashboardPage({ onViewAllActivities }: DashboardPageProp
                       <div className="relative flex-1 bg-[#F6F7F9] rounded-full" style={{ height: "6px" }}>
                         <div className="absolute left-0 top-0 bottom-0 bg-[#D2F4F2] rounded-full" style={{ width: "72.2%" }} />
                       </div>
-                      <span 
+                      <span
                         className="text-[#98A4AE] font-semibold text-right shrink-0"
                         style={{
                           fontFamily: "'Manrope', sans-serif",
@@ -421,7 +475,7 @@ export default function DashboardPage({ onViewAllActivities }: DashboardPageProp
                   {/* row 8: Basic (48%) */}
                   <div className="flex flex-col justify-center gap-[7.6px]" style={{ height: "50.99px" }}>
                     <div className="flex items-center justify-between">
-                      <span 
+                      <span
                         className="text-[#29343D] font-semibold"
                         style={{
                           fontFamily: "'Manrope', sans-serif",
@@ -431,7 +485,7 @@ export default function DashboardPage({ onViewAllActivities }: DashboardPageProp
                       >
                         Basic
                       </span>
-                      <span 
+                      <span
                         className="text-[#29343D] font-semibold"
                         style={{
                           fontFamily: "'Manrope', sans-serif",
@@ -447,7 +501,7 @@ export default function DashboardPage({ onViewAllActivities }: DashboardPageProp
                       <div className="relative flex-1 bg-[#F6F7F9] rounded-full" style={{ height: "6px" }}>
                         <div className="absolute left-0 top-0 bottom-0 bg-[#6C63FF] rounded-full" style={{ width: "72.2%" }} />
                       </div>
-                      <span 
+                      <span
                         className="text-[#98A4AE] font-semibold text-right shrink-0"
                         style={{
                           fontFamily: "'Manrope', sans-serif",
@@ -529,9 +583,9 @@ export default function DashboardPage({ onViewAllActivities }: DashboardPageProp
             })()}
 
             {/* Custom Responsive SVG Chart */}
-            <svg 
-              viewBox="0 0 568 264" 
-              className="w-full h-full" 
+            <svg
+              viewBox="0 0 568 264"
+              className="w-full h-full"
               style={{ overflow: "visible" }}
               preserveAspectRatio="none"
               onMouseLeave={() => setHoveredIndex(4)}
@@ -569,7 +623,7 @@ export default function DashboardPage({ onViewAllActivities }: DashboardPageProp
                   <stop offset="100%" stopColor="#16CDC7" stopOpacity="0.00" />
                 </linearGradient>
               </defs>
-              
+
               <path
                 d={`${getSplinePath(chartPoints)} L 568 227.31 L 35.13 227.31 Z`}
                 fill="url(#chartGradient)"
@@ -631,8 +685,8 @@ export default function DashboardPage({ onViewAllActivities }: DashboardPageProp
           <div className="flex items-center justify-between mb-6">
             <h3 className="text-base font-bold text-slate-800">Critical Alerts</h3>
             <button
-              onClick={() => alert("Viewing all alerts...")}
-              className="text-xs font-semibold text-[#5e53fc] bg-[#f2f1ff] border border-[#d9d5ff] hover:bg-[#5e53fc] hover:text-white px-3.5 py-1.5 rounded-xl transition-all duration-200"
+              onClick={() => onNavigate && onNavigate("support")}
+              className="text-xs font-semibold text-[#635BFF] bg-white border border-[#635BFF] hover:bg-[#635BFF]/5 px-4 py-1.5 rounded-[8px] transition-all duration-200"
             >
               View All
             </button>
@@ -640,69 +694,131 @@ export default function DashboardPage({ onViewAllActivities }: DashboardPageProp
 
           <div className="flex flex-col gap-4">
             {/* Alert Row 1 */}
-            <div className="flex flex-col sm:flex-row sm:items-center justify-between p-4 rounded-2xl bg-rose-50/20 border border-rose-100/30 group gap-4">
-              <div className="flex items-center gap-3">
-                <div className="w-10 h-10 rounded-xl bg-rose-50 flex items-center justify-center text-rose-500">
-                  <HugeiconsIcon icon={Alert01Icon} size={20} />
+            {!alert1Resolved && (
+              <div className="flex flex-col sm:flex-row sm:items-center justify-between p-4 rounded-2xl bg-rose-50/20 border border-rose-100/30 group gap-4 min-h-[72px] transition-all duration-300">
+                <div className="flex flex-col justify-center items-start gap-1 min-h-[52px]">
+                  <div className="flex items-center gap-2">
+                    <img src="/BellaVistaSalonBellIcon.svg" className="w-7 h-7 object-contain shrink-0" alt="Bella Vista Salon" />
+                    <span className="text-sm font-semibold text-[#29343D] leading-[19px]">Bella Vista Salon</span>
+                  </div>
+                  <span className="text-[11.3951px] font-normal text-[#526B7A] leading-[15px] pl-9">
+                    Subscription failed - Card declined
+                  </span>
                 </div>
-                <div className="flex flex-col text-left">
-                  <span className="text-sm font-bold text-slate-800">Bella Vista Salon</span>
-                  <span className="text-xs text-slate-400">Subscription failed - Card declined</span>
-                </div>
-              </div>
 
-              <div className="flex flex-wrap items-center gap-3 sm:gap-4 justify-between sm:justify-end w-full sm:w-auto">
-                <span className="text-[10px] font-bold text-rose-600 bg-rose-100/60 px-2 py-0.5 rounded-full uppercase">
-                  High
-                </span>
-                <span className="text-xs text-slate-400">2h ago</span>
-                <div className="flex items-center gap-2">
-                  <button
-                    onClick={() => alert("Retrying payment for Bella Vista...")}
-                    className="flex items-center gap-1.5 px-3.5 py-1.5 bg-[#f2f1ff] hover:bg-[#5e53fc] hover:text-white rounded-xl text-xs font-semibold text-[#5e53fc] transition-all"
-                  >
-                    <HugeiconsIcon icon={Refresh01Icon} size={12} />
-                    Retry Payment
-                  </button>
-                  <button className="p-2 bg-slate-50 text-slate-400 hover:bg-slate-200 hover:text-slate-700 rounded-xl transition-colors">
-                    <HugeiconsIcon icon={ViewIcon} size={14} />
-                  </button>
+                <div className="flex flex-wrap items-center gap-3 sm:gap-4 justify-between sm:justify-end w-full sm:w-auto">
+                  <div className="w-[45px] h-[22px] flex items-center justify-center bg-[#FFE5ED] rounded-[6px] shrink-0">
+                    <span className="text-[13px] font-semibold text-[#FF6692] leading-[18px]">High</span>
+                  </div>
+                  <span className="text-[11.3951px] font-normal text-[#526B7A] leading-[15px] w-[38px] text-center">2h ago</span>
+                  <div className="flex items-center gap-[16px] w-[112px] h-[36px] shrink-0">
+                    <div className="relative group/tooltip">
+                      <button
+                        onClick={() => {
+                          if (loadingSync || alert1Resolved) return;
+                          setLoadingSync(true);
+                          setTimeout(() => {
+                            setLoadingSync(false);
+                            setAlert1Resolved(true);
+                          }, 1200);
+                        }}
+                        className="w-[48px] h-[36px] rounded-[8px] bg-[#DDDBFF] text-[#635BFF] hover:opacity-90 flex items-center justify-center transition-opacity shrink-0"
+                        title="Retry Payment"
+                      >
+                        <DashboardIcon src="/syncIcon.svg" size={16} className={loadingSync ? "animate-spin" : ""} />
+                      </button>
+                      <div className="absolute bottom-full mb-2.5 left-1/2 -translate-x-1/2 hidden group-hover/tooltip:flex flex-col items-center pointer-events-none select-none z-30 animate-in fade-in slide-in-from-bottom-1 duration-150">
+                        <div className="bg-[#635BFF] text-white text-xs font-semibold px-3.5 py-1.5 rounded-[12px] whitespace-nowrap shadow-[0_4px_12px_rgba(99,91,255,0.25)]">
+                          {loadingSync ? "Processing..." : "Retry Payment"}
+                        </div>
+                        <div className="w-2 h-2 bg-[#635BFF] rotate-45 -mt-1" />
+                      </div>
+                    </div>
+
+                    <div className="relative group/tooltip">
+                      <button 
+                        onClick={() => onViewSalon && onViewSalon("salon-2")}
+                        className="w-[48px] h-[36px] rounded-[8px] bg-[#F1F2FE] text-[#635BFF] hover:opacity-90 flex items-center justify-center transition-opacity shrink-0"
+                      >
+                        <DashboardIcon src="/viewIcon.svg" size={16} />
+                      </button>
+                      <div className="absolute bottom-full mb-2.5 left-1/2 -translate-x-1/2 hidden group-hover/tooltip:flex flex-col items-center pointer-events-none select-none z-30 animate-in fade-in slide-in-from-bottom-1 duration-150">
+                        <div className="bg-[#635BFF] text-white text-xs font-semibold px-3.5 py-1.5 rounded-[12px] whitespace-nowrap shadow-[0_4px_12px_rgba(99,91,255,0.25)]">
+                          View Details
+                        </div>
+                        <div className="w-2 h-2 bg-[#635BFF] rotate-45 -mt-1" />
+                      </div>
+                    </div>
+                  </div>
                 </div>
               </div>
-            </div>
+            )}
 
             {/* Alert Row 2 */}
-            <div className="flex flex-col sm:flex-row sm:items-center justify-between p-4 rounded-2xl bg-amber-50/20 border border-amber-100/30 group gap-4">
-              <div className="flex items-center gap-3">
-                <div className="w-10 h-10 rounded-xl bg-amber-50 flex items-center justify-center text-amber-500">
-                  <HugeiconsIcon icon={Alert01Icon} size={20} />
+            <div className="flex flex-col sm:flex-row sm:items-center justify-between p-4 rounded-2xl bg-amber-50/20 border border-amber-100/30 group gap-4 min-h-[72px]">
+              <div className="flex flex-col justify-center items-start gap-1 min-h-[52px]">
+                <div className="flex items-center gap-2">
+                  <img src="/UrbanHairStudio.svg" className="w-7 h-7 object-contain shrink-0" alt="Urban Hair Studio" />
+                  <span className="text-sm font-semibold text-[#29343D] leading-[19px]">Urban Hair Studio</span>
                 </div>
-                <div className="flex flex-col text-left">
-                  <span className="text-sm font-bold text-slate-800">Urban Hair Studio</span>
-                  <span className="text-xs text-slate-400">Subscription expires in 3 days</span>
-                </div>
+                <span className="text-[11.3951px] font-normal text-[#526B7A] leading-[15px] pl-9">
+                  Subscription expires in 3 days
+                </span>
               </div>
 
               <div className="flex flex-wrap items-center gap-3 sm:gap-4 justify-between sm:justify-end w-full sm:w-auto">
-                <span className="text-[10px] font-bold text-amber-600 bg-amber-100/60 px-2 py-0.5 rounded-full uppercase">
-                  Medium
-                </span>
-                <span className="text-xs text-slate-400">4h ago</span>
-                <div className="flex items-center gap-2">
-                  <button
-                    onClick={() => alert("Sending reminder to Urban Hair Studio...")}
-                    className="flex items-center gap-1.5 px-3.5 py-1.5 bg-[#f2f1ff] hover:bg-[#5e53fc] hover:text-white rounded-xl text-xs font-semibold text-[#5e53fc] transition-all"
-                  >
-                    {/* Paper Plane Send Icon */}
-                    <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round">
-                      <line x1="22" y1="2" x2="11" y2="13" />
-                      <polygon points="22 2 15 22 11 13 2 9 22 2" />
-                    </svg>
-                    Send Reminder
-                  </button>
-                  <button className="p-2 bg-slate-50 text-slate-400 hover:bg-slate-200 hover:text-slate-700 rounded-xl transition-colors">
-                    <HugeiconsIcon icon={ViewIcon} size={14} />
-                  </button>
+                <div className="w-[60px] h-[22px] flex items-center justify-center bg-[#FFF2D6] rounded-[6px] shrink-0">
+                  <span className="text-[13px] font-semibold text-[#FFAB00] leading-[18px]">Medium</span>
+                </div>
+                <span className="text-[11.3951px] font-normal text-[#526B7A] leading-[15px] w-[38px] text-center">4h ago</span>
+                <div className="flex items-center gap-[16px] w-[112px] h-[36px] shrink-0">
+                  <div className="relative group/tooltip">
+                    <button
+                      onClick={() => {
+                        if (loadingSend || reminderSent) return;
+                        setLoadingSend(true);
+                        setTimeout(() => {
+                          setLoadingSend(false);
+                          setReminderSent(true);
+                        }, 1200);
+                      }}
+                      className={`w-[48px] h-[36px] rounded-[8px] text-[#635BFF] flex items-center justify-center shrink-0 transition-all ${
+                        reminderSent ? "bg-emerald-100 text-emerald-600" : "bg-[#DDDBFF] hover:opacity-90"
+                      }`}
+                      title="Send Reminder"
+                    >
+                      {loadingSend ? (
+                        <DashboardIcon src="/syncIcon.svg" size={16} className="animate-spin" />
+                      ) : reminderSent ? (
+                        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="3" strokeLinecap="round" strokeLinejoin="round">
+                          <polyline points="20 6 9 17 4 12" />
+                        </svg>
+                      ) : (
+                        <DashboardIcon src="/shareIcon.svg" size={16} />
+                      )}
+                    </button>
+                    <div className="absolute bottom-full mb-2.5 left-1/2 -translate-x-1/2 hidden group-hover/tooltip:flex flex-col items-center pointer-events-none select-none z-30 animate-in fade-in slide-in-from-bottom-1 duration-150">
+                      <div className="bg-[#635BFF] text-white text-xs font-semibold px-3.5 py-1.5 rounded-[12px] whitespace-nowrap shadow-[0_4px_12px_rgba(99,91,255,0.25)]">
+                        {loadingSend ? "Sending..." : reminderSent ? "Sent Successfully" : "Send Reminder"}
+                      </div>
+                      <div className="w-2 h-2 bg-[#635BFF] rotate-45 -mt-1" />
+                    </div>
+                  </div>
+
+                  <div className="relative group/tooltip">
+                    <button 
+                      onClick={() => onViewSalon && onViewSalon("salon-5")}
+                      className="w-[48px] h-[36px] rounded-[8px] bg-[#F1F2FE] text-[#635BFF] hover:opacity-90 flex items-center justify-center transition-opacity shrink-0"
+                    >
+                      <DashboardIcon src="/viewIcon.svg" size={16} />
+                    </button>
+                    <div className="absolute bottom-full mb-2.5 left-1/2 -translate-x-1/2 hidden group-hover/tooltip:flex flex-col items-center pointer-events-none select-none z-30 animate-in fade-in slide-in-from-bottom-1 duration-150">
+                      <div className="bg-[#635BFF] text-white text-xs font-semibold px-3.5 py-1.5 rounded-[12px] whitespace-nowrap shadow-[0_4px_12px_rgba(99,91,255,0.25)]">
+                        View Details
+                      </div>
+                      <div className="w-2 h-2 bg-[#635BFF] rotate-45 -mt-1" />
+                    </div>
+                  </div>
                 </div>
               </div>
             </div>
@@ -714,8 +830,8 @@ export default function DashboardPage({ onViewAllActivities }: DashboardPageProp
           <div className="flex items-center justify-between mb-6">
             <h3 className="text-base font-bold text-slate-800">Tickets</h3>
             <button
-              onClick={() => alert("Viewing all tickets...")}
-              className="text-xs font-semibold text-[#5e53fc] bg-[#f2f1ff] border border-[#d9d5ff] hover:bg-[#5e53fc] hover:text-white px-3.5 py-1.5 rounded-xl transition-all duration-200"
+              onClick={() => onNavigate && onNavigate("support")}
+              className="text-xs font-semibold text-[#635BFF] bg-white border border-[#635BFF] hover:bg-[#635BFF]/5 px-4 py-1.5 rounded-[8px] transition-all duration-200"
             >
               View All
             </button>
@@ -723,63 +839,69 @@ export default function DashboardPage({ onViewAllActivities }: DashboardPageProp
 
           <div className="flex flex-col gap-4">
             {/* Ticket Row 1 */}
-            <div className="flex flex-col sm:flex-row sm:items-center justify-between p-4 rounded-2xl bg-slate-50/30 border border-slate-100 group gap-4">
-              <div className="flex items-center gap-3">
-                <div className="w-10 h-10 rounded-full bg-amber-50 flex items-center justify-center text-amber-500">
-                  <HugeiconsIcon icon={Ticket01Icon} size={18} />
+            <div className="flex flex-col sm:flex-row sm:items-center justify-between p-4 rounded-2xl bg-slate-50/30 border border-slate-100 group gap-4 min-h-[72px]">
+              <div className="flex flex-col justify-center items-start gap-1 min-h-[52px]">
+                <div className="flex items-center gap-2">
+                  <img src="/BellaVistaSalon.svg" className="w-7 h-7 object-contain shrink-0" alt="Bella Vista Salon" />
+                  <span className="text-sm font-semibold text-[#29343D] leading-[19px]">Bella Vista Salon</span>
                 </div>
-                <div className="flex flex-col text-left">
-                  <span className="text-sm font-bold text-slate-800">Bella Vista Salon</span>
-                  <span className="text-xs text-slate-400">Employee access issues</span>
-                </div>
+                <span className="text-[11.3951px] font-normal text-[#526B7A] leading-[15px] pl-9">
+                  Employee access issues
+                </span>
               </div>
 
               <div className="flex flex-wrap items-center gap-3 sm:gap-4 justify-between sm:justify-end w-full sm:w-auto">
-                <span className="text-[10px] font-bold text-rose-600 bg-rose-50 px-2.5 py-0.5 rounded-full uppercase">
-                  High
-                </span>
-                <span className="text-xs text-slate-400">08/08/2025</span>
-                <div className="flex items-center gap-2">
-                  <button
-                    onClick={() => alert("Viewing ticket details...")}
-                    className="flex items-center gap-1.5 px-3.5 py-1.5 bg-[#f2f1ff] hover:bg-[#5e53fc] hover:text-white rounded-xl text-xs font-semibold text-[#5e53fc] transition-all"
+                <div className="w-[45px] h-[22px] flex items-center justify-center bg-[#FFE5ED] rounded-[6px] shrink-0">
+                  <span className="text-[13px] font-semibold text-[#FF6692] leading-[18px]">High</span>
+                </div>
+                <span className="text-[11.3951px] font-normal text-[#526B7A] leading-[15px] w-[70px] text-center">08/08/2025</span>
+                <div className="relative group/tooltip">
+                  <button 
+                    onClick={() => onViewSalon && onViewSalon("salon-2")}
+                    className="w-[48px] h-[36px] rounded-[8px] bg-[#F1F2FE] text-[#635BFF] hover:opacity-90 flex items-center justify-center transition-opacity shrink-0"
                   >
-                    View Details
+                    <DashboardIcon src="/viewIcon.svg" size={16} />
                   </button>
-                  <button className="p-2 bg-slate-50 text-slate-400 hover:bg-slate-200 hover:text-slate-700 rounded-xl transition-colors">
-                    <HugeiconsIcon icon={ViewIcon} size={14} />
-                  </button>
+                  <div className="absolute bottom-full mb-2.5 left-1/2 -translate-x-1/2 hidden group-hover/tooltip:flex flex-col items-center pointer-events-none select-none z-30 animate-in fade-in slide-in-from-bottom-1 duration-150">
+                    <div className="bg-[#635BFF] text-white text-xs font-semibold px-3.5 py-1.5 rounded-[12px] whitespace-nowrap shadow-[0_4px_12px_rgba(99,91,255,0.25)]">
+                      View Details
+                    </div>
+                    <div className="w-2 h-2 bg-[#635BFF] rotate-45 -mt-1" />
+                  </div>
                 </div>
               </div>
             </div>
 
             {/* Ticket Row 2 */}
-            <div className="flex flex-col sm:flex-row sm:items-center justify-between p-4 rounded-2xl bg-slate-50/30 border border-slate-100 group gap-4">
-              <div className="flex items-center gap-3">
-                <div className="w-10 h-10 rounded-full bg-amber-50 flex items-center justify-center text-amber-500">
-                  <HugeiconsIcon icon={Ticket01Icon} size={18} />
+            <div className="flex flex-col sm:flex-row sm:items-center justify-between p-4 rounded-2xl bg-slate-50/30 border border-slate-100 group gap-4 min-h-[72px]">
+              <div className="flex flex-col justify-center items-start gap-1 min-h-[52px]">
+                <div className="flex items-center gap-2">
+                  <img src="/BellaVistaSalon.svg" className="w-7 h-7 object-contain shrink-0" alt="Bella Vista Salon" />
+                  <span className="text-sm font-semibold text-[#29343D] leading-[19px]">Bella Vista Salon</span>
                 </div>
-                <div className="flex flex-col text-left">
-                  <span className="text-sm font-bold text-slate-800">Bella Vista Salon</span>
-                  <span className="text-xs text-slate-400">Employee access issues</span>
-                </div>
+                <span className="text-[11.3951px] font-normal text-[#526B7A] leading-[15px] pl-9">
+                  Employee access issues
+                </span>
               </div>
 
               <div className="flex flex-wrap items-center gap-3 sm:gap-4 justify-between sm:justify-end w-full sm:w-auto">
-                <span className="text-[10px] font-bold text-rose-600 bg-rose-50 px-2.5 py-0.5 rounded-full uppercase">
-                  High
-                </span>
-                <span className="text-xs text-slate-400">08/08/2025</span>
-                <div className="flex items-center gap-2">
-                  <button
-                    onClick={() => alert("Viewing ticket details...")}
-                    className="flex items-center gap-1.5 px-3.5 py-1.5 bg-[#f2f1ff] hover:bg-[#5e53fc] hover:text-white rounded-xl text-xs font-semibold text-[#5e53fc] transition-all"
+                <div className="w-[45px] h-[22px] flex items-center justify-center bg-[#FFE5ED] rounded-[6px] shrink-0">
+                  <span className="text-[13px] font-semibold text-[#FF6692] leading-[18px]">High</span>
+                </div>
+                <span className="text-[11.3951px] font-normal text-[#526B7A] leading-[15px] w-[70px] text-center">08/08/2025</span>
+                <div className="relative group/tooltip">
+                  <button 
+                    onClick={() => onViewSalon && onViewSalon("salon-2")}
+                    className="w-[48px] h-[36px] rounded-[8px] bg-[#F1F2FE] text-[#635BFF] hover:opacity-90 flex items-center justify-center transition-opacity shrink-0"
                   >
-                    View Details
+                    <DashboardIcon src="/viewIcon.svg" size={16} />
                   </button>
-                  <button className="p-2 bg-slate-50 text-slate-400 hover:bg-slate-200 hover:text-slate-700 rounded-xl transition-colors">
-                    <HugeiconsIcon icon={ViewIcon} size={14} />
-                  </button>
+                  <div className="absolute bottom-full mb-2.5 left-1/2 -translate-x-1/2 hidden group-hover/tooltip:flex flex-col items-center pointer-events-none select-none z-30 animate-in fade-in slide-in-from-bottom-1 duration-150">
+                    <div className="bg-[#635BFF] text-white text-xs font-semibold px-3.5 py-1.5 rounded-[12px] whitespace-nowrap shadow-[0_4px_12px_rgba(99,91,255,0.25)]">
+                      View Details
+                    </div>
+                    <div className="w-2 h-2 bg-[#635BFF] rotate-45 -mt-1" />
+                  </div>
                 </div>
               </div>
             </div>
@@ -792,6 +914,7 @@ export default function DashboardPage({ onViewAllActivities }: DashboardPageProp
         isOpen={activeModal !== null}
         type={activeModal}
         onClose={() => setActiveModal(null)}
+        onNavigate={onNavigate || (() => {})}
       />
     </div>
   );

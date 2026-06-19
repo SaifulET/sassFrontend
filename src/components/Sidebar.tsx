@@ -14,16 +14,23 @@ import {
   Cancel01Icon
 } from "@hugeicons/core-free-icons";
 
-// Custom SVG Icon for Waivers to match design perfectly
-const WaiversIcon = ({ color }: { color?: string }) => (
-  <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke={color || "currentColor"} strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round">
-    <path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z" />
-    <polyline points="14 2 14 8 20 8" />
-    <line x1="16" y1="13" x2="8" y2="13" />
-    <line x1="16" y1="17" x2="8" y2="17" />
-    <circle cx="9" cy="9" r="1.2" fill={color || "currentColor"} />
-  </svg>
-);
+const SidebarIcon = ({ src, size = 20, className = "" }: { src: string; size?: number; className?: string }) => {
+  return (
+    <span
+      className={`inline-block bg-current transition-all duration-200 ${className}`}
+      style={{
+        width: `${size}px`,
+        height: `${size}px`,
+        maskImage: `url(${src})`,
+        WebkitMaskImage: `url(${src})`,
+        maskSize: 'contain',
+        WebkitMaskSize: 'contain',
+        maskRepeat: 'no-repeat',
+        WebkitMaskRepeat: 'no-repeat',
+      }}
+    />
+  );
+};
 
 const ChevronDownIcon = () => (
   <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round">
@@ -60,18 +67,18 @@ export default function Sidebar({
 
   // Main menu item mappings (added Waivers)
   const mainNavigation = [
-    { id: "dashboard", label: "Dashboard", icon: DashboardCircleIcon },
-    { id: "salons", label: "Salons", icon: Shop },
-    { id: "leads", label: "Leads", icon: UserGroupIcon },
-    { id: "billing", label: "Billing", icon: CreditCardIcon },
-    { id: "analytics", label: "Analytics", icon: ChartAreaIcon },
-    { id: "automations", label: "Automations & Mail", icon: Mail01Icon },
-    { id: "waivers", label: "Waivers", icon: WaiversIcon }
+    { id: "dashboard", label: "Dashboard", icon: "/dashboard.svg" },
+    { id: "salons", label: "Salons", icon: "/salon.svg" },
+    { id: "leads", label: "Leads", icon: "/leads.svg" },
+    { id: "billing", label: "Billing", icon: "/billing.svg" },
+    { id: "analytics", label: "Analytics", icon: "/analytics.svg" },
+    { id: "automations", label: "Automations & Mail", icon: "/automationAndMails.svg" },
+    { id: "waivers", label: "Waivers", icon: "/file.svg" }
   ];
 
   const secondaryNavigation = [
-    { id: "support", label: "Support", icon: CustomerSupportIcon },
-    { id: "settings", label: "Settings", icon: Settings01Icon }
+    { id: "support", label: "Support", icon: "/supports.svg" },
+    { id: "settings", label: "Settings", icon: "/settings.svg" }
   ];
 
   // Salon specific sub-navigation links
@@ -117,18 +124,7 @@ export default function Sidebar({
         }`}
         title={item.label}
       >
-        {typeof item.icon === "function" ? (
-          (() => {
-            const IconComp = item.icon as any;
-            return <IconComp color={isHighlighted ? "#ffffff" : "currentColor"} />;
-          })()
-        ) : (
-          <HugeiconsIcon
-            icon={item.icon}
-            size={22}
-            color={isHighlighted ? "#ffffff" : "currentColor"}
-          />
-        )}
+        <SidebarIcon src={item.icon} size={22} />
         {isHighlighted && (
           <span className="absolute right-0 w-1.5 h-1.5 rounded-full bg-white mr-1" />
         )}
@@ -156,14 +152,8 @@ export default function Sidebar({
         >
           {/* Brand/Logo Header */}
           <div className="h-[63px] px-6 border-b border-[#eef2f6] flex items-center justify-between shrink-0">
-            <div className="flex items-center gap-2.5">
-              <svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
-                <path d="M3 12.5C6.5 12.5 7.5 7.5 11 7.5C14.5 7.5 15.5 12.5 19 12.5C21.5 12.5 22.5 10 23 9.5" stroke="#635BFF" strokeWidth="3.5" strokeLinecap="round" strokeLinejoin="round" />
-                <path d="M1 16.5C4.5 16.5 5.5 11.5 9 11.5C12.5 11.5 13.5 16.5 17 16.5C19.5 16.5 20.5 14 21 13.5" stroke="#8075ff" strokeWidth="3.5" strokeLinecap="round" strokeLinejoin="round" />
-              </svg>
-              <span className="text-xl font-bold tracking-tight text-[#29343D]">
-                Your logo
-              </span>
+            <div className="flex items-center">
+              <img src="/logo.svg" alt="MatDash" className="w-[135px] h-[80px] object-contain" />
             </div>
 
             {/* Mobile Close Button */}
@@ -204,15 +194,7 @@ export default function Sidebar({
                         }`}
                       >
                         <div className="flex items-center gap-3">
-                          {typeof item.icon === "function" ? (
-                            <item.icon color={isLeadsActive ? "#635BFF" : "currentColor"} />
-                          ) : (
-                            <HugeiconsIcon
-                              icon={item.icon}
-                              size={20}
-                              color={isLeadsActive ? "#635BFF" : "currentColor"}
-                            />
-                          )}
+                          <SidebarIcon src={item.icon} size={20} />
                           <span className="text-xs font-semibold tracking-wide">{item.label}</span>
                         </div>
                         <span className={`text-[#b0bac9] transition-transform duration-200 ${leadsExpanded ? "rotate-180" : ""}`}>
@@ -226,27 +208,15 @@ export default function Sidebar({
                             {
                               id: "leads_pipeline",
                               label: "Pipeline",
-                              icon: (color: string) => (
-                                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke={color} strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round">
-                                  <circle cx="6" cy="6" r="3" />
-                                  <circle cx="18" cy="18" r="3" />
-                                  <path d="M6 9v7a3 3 0 0 0 3 3h6" />
-                                </svg>
-                              )
+                              icon: "/pipeline.svg"
                             },
                             {
                               id: "analytics_customers_leads",
                               label: "Data Analysis",
-                              icon: (color: string) => (
-                                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke={color} strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round">
-                                  <path d="M3 3v18h18" />
-                                  <path d="m18.7 8-5.1 5.2-2.8-2.7L7 14.3" />
-                                </svg>
-                              )
+                              icon: "/dataAnalysis.svg"
                             }
                           ].map((sub) => {
                             const isSubActive = activeTab === sub.id;
-                            const colorClass = isSubActive ? "#635BFF" : "#7e8b9b";
                             return (
                               <button
                                 key={sub.id}
@@ -258,7 +228,7 @@ export default function Sidebar({
                                     : "bg-transparent text-[#7e8b9b] hover:bg-white/40 hover:text-slate-950"
                                 }`}
                               >
-                                {sub.icon(colorClass)}
+                                <SidebarIcon src={sub.icon} size={16} />
                                 <span>{sub.label}</span>
                               </button>
                             );
@@ -289,15 +259,7 @@ export default function Sidebar({
                         }`}
                       >
                         <div className="flex items-center gap-3">
-                          {typeof item.icon === "function" ? (
-                            <item.icon color={isAnalyticsActive ? "#635BFF" : "currentColor"} />
-                          ) : (
-                            <HugeiconsIcon
-                              icon={item.icon}
-                              size={20}
-                              color={isAnalyticsActive ? "#635BFF" : "currentColor"}
-                            />
-                          )}
+                          <SidebarIcon src={item.icon} size={20} />
                           <span className="text-xs font-semibold tracking-wide">{item.label}</span>
                         </div>
                         <span className={`text-[#b0bac9] transition-transform duration-200 ${analyticsExpanded ? "rotate-180" : ""}`}>
@@ -322,9 +284,7 @@ export default function Sidebar({
                               className="w-full flex items-center justify-between py-1.5 px-2 rounded-xl text-[#29343D] hover:bg-[#EFF4FA] transition-colors"
                             >
                               <div className="flex items-center gap-2">
-                                <span className="text-[14px] leading-none select-none font-bold text-[#29343D]">
-                                  €
-                                </span>
+                                <SidebarIcon src="/revenue.svg" size={14} className="text-[#29343D]" />
                                 <span className="text-xs font-bold text-[#29343D]">Revenue</span>
                               </div>
                               <span className={`text-[#b0bac9] transition-transform duration-200 ${revenueExpanded ? "rotate-180" : ""}`}>
@@ -375,12 +335,7 @@ export default function Sidebar({
                               className="w-full flex items-center justify-between py-1.5 px-2 rounded-xl text-[#29343D] hover:bg-[#EFF4FA] transition-colors"
                             >
                               <div className="flex items-center gap-2">
-                                <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round">
-                                  <path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2" />
-                                  <circle cx="9" cy="7" r="4" />
-                                  <path d="M23 21v-2a4 4 0 0 0-3-3.87" />
-                                  <path d="M16 3.13a4 4 0 0 1 0 7.75" />
-                                </svg>
+                                <SidebarIcon src="/customers.svg" size={14} className="text-[#29343D]" />
                                 <span className="text-xs font-bold text-[#29343D]">Customers</span>
                               </div>
                               <span className={`text-[#b0bac9] transition-transform duration-200 ${customersExpanded ? "rotate-180" : ""}`}>
@@ -429,11 +384,7 @@ export default function Sidebar({
                               className="w-full flex items-center justify-between py-1.5 px-2 rounded-xl text-[#29343D] hover:bg-[#EFF4FA] transition-colors"
                             >
                               <div className="flex items-center gap-2">
-                                <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round">
-                                  <line x1="18" y1="20" x2="18" y2="10" />
-                                  <line x1="12" y1="20" x2="12" y2="4" />
-                                  <line x1="6" y1="20" x2="6" y2="14" />
-                                </svg>
+                                <SidebarIcon src="/performance.svg" size={14} className="text-[#29343D]" />
                                 <span className="text-xs font-bold text-[#29343D]">Performance</span>
                               </div>
                               <span className={`text-[#b0bac9] transition-transform duration-200 ${performanceExpanded ? "rotate-180" : ""}`}>
@@ -484,15 +435,7 @@ export default function Sidebar({
                         : "text-[#7e8b9b] hover:bg-slate-50 hover:text-slate-900"
                     }`}
                   >
-                    {typeof item.icon === "function" ? (
-                      <item.icon color={isActive ? "#ffffff" : "currentColor"} />
-                    ) : (
-                      <HugeiconsIcon
-                        icon={item.icon}
-                        size={20}
-                        color={isActive ? "#ffffff" : "currentColor"}
-                      />
-                    )}
+                    <SidebarIcon src={item.icon} size={20} />
                     <span className="text-xs font-semibold tracking-wide">{item.label}</span>
                   </button>
                 );
@@ -516,18 +459,7 @@ export default function Sidebar({
                         : "text-[#7e8b9b] hover:bg-slate-50 hover:text-slate-900"
                     }`}
                   >
-                    {typeof item.icon === "function" ? (
-                      (() => {
-                        const IconComp = item.icon as any;
-                        return <IconComp color={isActive ? "#ffffff" : "currentColor"} />;
-                      })()
-                    ) : (
-                      <HugeiconsIcon
-                        icon={item.icon}
-                        size={20}
-                        color={isActive ? "#ffffff" : "currentColor"}
-                      />
-                    )}
+                    <SidebarIcon src={item.icon} size={20} />
                     <span className="text-xs font-semibold tracking-wide">{item.label}</span>
                   </button>
                 );

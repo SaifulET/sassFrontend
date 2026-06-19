@@ -431,6 +431,12 @@ export default function Home() {
         return (
           <DashboardPage
             onViewAllActivities={() => setActiveTab("recent_activity")}
+            onNavigate={setActiveTab}
+            onViewSalon={(id) => {
+              setSelectedSalonId(id);
+              setSalonSubTab("overview");
+              setActiveTab("salons");
+            }}
           />
         );
       case "salons":

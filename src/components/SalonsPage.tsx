@@ -261,7 +261,31 @@ export default function SalonsPage({
   };
 
   const handleExport = () => {
-    alert("Exporting " + filteredSalons.length + " salons to CSV...");
+    // Generate CSV content
+    const headers = ["Name", "Type", "Manager", "City", "Email", "Status", "Plan", "Revenue", "Last Active", "Has Ticket"];
+    const rows = filteredSalons.map((salon) => [
+      `"${salon.name.replace(/"/g, '""')}"`,
+      `"${salon.tag.replace(/"/g, '""')}"`,
+      `"${salon.manager.replace(/"/g, '""')}"`,
+      `"${salon.city.replace(/"/g, '""')}"`,
+      `"${salon.email.replace(/"/g, '""')}"`,
+      `"${salon.status}"`,
+      `"${salon.plan}"`,
+      `"${salon.revenue.replace(/"/g, '""')}"`,
+      `"${salon.lastActive.replace(/"/g, '""')}"`,
+      salon.hasTicket ? "Yes" : "No"
+    ]);
+
+    const csvContent = [headers.join(","), ...rows.map(row => row.join(","))].join("\n");
+    const blob = new Blob([csvContent], { type: "text/csv;charset=utf-8;" });
+    const url = URL.createObjectURL(blob);
+    const link = document.createElement("a");
+    link.setAttribute("href", url);
+    link.setAttribute("download", "salons_export.csv");
+    link.style.visibility = "hidden";
+    document.body.appendChild(link);
+    link.click();
+    document.body.removeChild(link);
   };
 
   // Row Selection logic
@@ -363,7 +387,6 @@ export default function SalonsPage({
       alert("Please fill in all required fields.");
       return;
     }
-    alert(`Invitation successfully sent to ${inviteSalonName} (${inviteEmail}) by ${inviteInviter}`);
     setInviteSalonName("");
     setInviteEmail("");
     setIsAddModalOpen(false);
@@ -423,51 +446,59 @@ export default function SalonsPage({
           <div>
             <div className="text-sm font-extrabold text-[#1f2937]">Salon Management</div>
           </div>
-
-          <div className="flex items-center gap-3 self-end lg:self-auto">
+          <div className="flex flex-row flex-nowrap items-center p-0 gap-1.5 xs:gap-2.5 sm:gap-6 w-full sm:w-auto h-auto min-h-[44px] flex-none order-1 grow-0 justify-between sm:justify-end self-center sm:self-auto overflow-x-auto no-scrollbar">
             {/* Refresh Data */}
             <button
+              type="button"
               onClick={handleRefresh}
-              className={`flex items-center gap-2 px-4 py-2.5 bg-white border border-[#eef2f6] hover:bg-slate-50 rounded-2xl text-xs font-semibold text-slate-600 transition-all shadow-sm ${isRefreshing ? "opacity-75" : ""
+              className={`box-border flex flex-row justify-center items-center py-2 px-1.5 sm:py-2.5 sm:px-4 gap-1.5 sm:gap-2.5 w-[115px] xs:w-[125px] sm:w-[144px] h-[38px] sm:h-[44px] bg-[#EFF4FA] rounded-[8px] flex-none order-0 grow-0 transition-all font-['Manrope'] font-medium text-[11px] sm:text-[14px] text-center text-[#0A2540] hover:bg-slate-200 transition-colors shadow-sm shrink-0 ${isRefreshing ? "opacity-75" : ""
                 }`}
             >
-              <HugeiconsIcon
-                icon={GlobalRefreshIcon}
-                size={14}
-                className={`text-[#7e8b9b] ${isRefreshing ? "animate-spin" : ""}`}
+              <img
+                src="/syncIcon.svg"
+                alt="Refresh"
+                className={`w-3.5 h-3.5 sm:w-4 sm:h-4 flex-none order-0 grow-0 ${isRefreshing ? "animate-spin" : ""}`}
               />
-              Refresh Data
+              <span className="w-auto sm:w-[86px] h-[16px] sm:h-[24px] font-['Manrope'] font-medium text-[11px] sm:text-[14px] leading-[16px] sm:leading-[24px] text-center text-[#0A2540] flex-none order-1 grow-0">
+                Refresh Data
+              </span>
             </button>
 
             {/* Export Data */}
             <button
+              type="button"
               onClick={handleExport}
-              className="px-4 py-2.5 bg-[#f2f1ff] hover:bg-[#e4e2ff] text-[#5e53fc] border border-[#e2dfff] rounded-2xl text-xs font-semibold transition-all shadow-sm flex items-center gap-2"
+              className="box-border flex flex-row justify-center items-center py-2 px-1.5 sm:py-2.5 sm:px-4 gap-1.5 sm:gap-2.5 w-[110px] xs:w-[120px] sm:w-[136px] h-[38px] sm:h-[44px] bg-[#DDDBFF] rounded-[8px] flex-none order-1 grow-0 transition-all font-['Manrope'] font-medium text-[11px] sm:text-[14px] text-center text-[#635BFF] hover:bg-[#c9c6ff] transition-colors shadow-sm shrink-0"
             >
               {/* Export/download SVG Icon */}
-              <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round">
+              <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#635BFF" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round" className="w-3.5 h-3.5 sm:w-4 sm:h-4 flex-none order-0 grow-0">
                 <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4" />
                 <polyline points="7 10 12 15 17 10" />
                 <line x1="12" y1="15" x2="12" y2="3" />
               </svg>
-              Export Data
+              <span className="w-auto sm:w-[78px] h-[16px] sm:h-[24px] font-['Manrope'] font-medium text-[11px] sm:text-[14px] leading-[16px] sm:leading-[24px] text-center text-[#635BFF] flex-none order-1 grow-0">
+                Export Data
+              </span>
             </button>
 
             {/* Add Salon */}
             <button
+              type="button"
               onClick={() => {
                 setAddModalStep(1);
                 setAddModalType(null);
                 setIsAddModalOpen(true);
               }}
-              className="px-5 py-2.5 bg-[#5e53fc] hover:bg-indigo-700 text-white rounded-2xl text-xs font-semibold tracking-wide shadow-lg shadow-indigo-150 transition-all flex items-center gap-2"
+              className="box-border flex flex-row justify-center items-center py-2 px-1.5 sm:py-2.5 sm:px-4 gap-1.5 sm:gap-2.5 w-[100px] xs:w-[110px] sm:w-[124px] h-[38px] sm:h-[44px] bg-[#635BFF] rounded-[8px] flex-none order-2 grow-0 transition-all font-['Manrope'] font-medium text-[11px] sm:text-[14px] text-center text-white hover:bg-indigo-700 transition-colors shadow-lg shadow-indigo-150 shrink-0"
             >
               {/* Plus Icon */}
-              <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="3" strokeLinecap="round" strokeLinejoin="round">
+              <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#FFFFFF" strokeWidth="3" strokeLinecap="round" strokeLinejoin="round" className="w-3.5 h-3.5 sm:w-4 sm:h-4 flex-none order-0 grow-0">
                 <line x1="12" y1="5" x2="12" y2="19" />
                 <line x1="5" y1="12" x2="19" y2="12" />
               </svg>
-              Add Salon
+              <span className="w-auto sm:w-[66px] h-[16px] sm:h-[24px] font-['Manrope'] font-medium text-[11px] sm:text-[14px] leading-[16px] sm:leading-[24px] text-center text-white flex-none order-1 grow-0">
+                Add Salon
+              </span>
             </button>
           </div>
         </div>
@@ -476,175 +507,237 @@ export default function SalonsPage({
       {/* Filters card */}
       <div className="bg-white rounded-xl p-6 shadow-[0_4px_18px_rgba(17,31,56,0.06)] flex flex-col gap-6">
 
-        {/* Buttons filters */}
-        <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
+        {/* Filters Single Auto Layout Row */}
+        <div className="flex flex-row items-end p-0 gap-6 w-full max-w-[1151px] h-auto min-h-[60px] pb-1 flex-none order-0 self-stretch grow-0 overflow-x-auto no-scrollbar">
 
-          {/* Status Buttons */}
-          <div className="flex flex-col gap-2">
-            <div className="flex items-center gap-1.5 text-xs font-semibold text-slate-400">
-              <span>Status</span>
-              {/* Filter icon tooltip info */}
-              <div className="relative group cursor-pointer">
-                <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" className="text-slate-300 hover:text-slate-500">
-                  <polygon points="22 3 2 3 10 12.46 10 19 14 21 14 12.46 22 3" />
+          {/* Status Buttons (Frame 1000003720) */}
+          <div className="flex flex-col items-start p-0 gap-2 w-[219px] h-[60px] flex-none order-0 grow-0 shrink-0">
+            {/* Label wrapper (Frame 1000004002) */}
+            <div className="flex flex-row items-center p-0 gap-2 w-[63px] h-[16px] flex-none order-0 grow-0">
+              <span className="w-[39px] h-[16px] font-['Manrope'] font-semibold text-[12px] leading-[16px] text-[#98A4AE] flex-none order-0 grow-0">Status</span>
+              <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#526B7A" strokeWidth="2.5" className="flex-none order-1 grow-0">
+                <polygon points="22 3 2 3 10 12.46 10 19 14 21 14 12.46 22 3" />
+              </svg>
+            </div>
+            {/* Buttons wrapper (Frame 1000003716) */}
+            <div className="flex flex-row items-center p-0 gap-2 w-[219px] h-[36px] flex-none order-1 grow-0">
+              {/* All */}
+              <button
+                type="button"
+                onClick={() => {
+                  setSelectedStatus("All");
+                  setCurrentPage(1);
+                }}
+                className={`box-border flex flex-row justify-center items-center py-2.5 px-4 gap-2.5 w-[46px] h-[36px] rounded-[8px] flex-none order-0 grow-0 transition-all font-['Manrope'] font-medium text-[12px] leading-[16px] text-center ${selectedStatus === "All"
+                    ? "border border-[#635BFF] text-[#635BFF]"
+                    : "border border-[#EFF4FA] text-[#0A2540] hover:bg-slate-50"
+                  }`}
+              >
+                All
+              </button>
+              {/* Active */}
+              <button
+                type="button"
+                onClick={() => {
+                  setSelectedStatus("Active");
+                  setCurrentPage(1);
+                }}
+                className={`box-border flex flex-row justify-center items-center py-2.5 px-4 gap-2.5 w-[68px] h-[36px] rounded-[8px] flex-none order-1 grow-0 transition-all font-['Manrope'] font-medium text-[12px] leading-[16px] text-center ${selectedStatus === "Active"
+                    ? "border border-[#635BFF] text-[#635BFF]"
+                    : "border border-[#EFF4FA] text-[#0A2540] hover:bg-slate-50"
+                  }`}
+              >
+                Active
+              </button>
+              {/* Cancelled */}
+              <button
+                type="button"
+                onClick={() => {
+                  setSelectedStatus("Cancelled");
+                  setCurrentPage(1);
+                }}
+                className={`box-border flex flex-row justify-center items-center py-2.5 px-4 gap-2.5 w-[89px] h-[36px] rounded-[8px] flex-none order-2 grow-0 transition-all font-['Manrope'] font-medium text-[12px] leading-[16px] text-center ${selectedStatus === "Cancelled"
+                    ? "border border-[#635BFF] text-[#635BFF]"
+                    : "border border-[#EFF4FA] text-[#0A2540] hover:bg-slate-50"
+                  }`}
+              >
+                Cancelled
+              </button>
+            </div>
+          </div>
+
+          {/* Plan Buttons (Frame 1000003721) */}
+          <div className="flex flex-col items-start p-0 gap-2 w-[306px] h-[60px] flex-none order-1 grow-0 shrink-0">
+            <span className="w-[25px] h-[16px] font-['Manrope'] font-semibold text-[12px] leading-[16px] text-[#98A4AE] flex-none order-0 grow-0">Plan</span>
+            {/* Buttons wrapper (Frame 1000003716) */}
+            <div className="flex flex-row items-center p-0 gap-2 w-[306px] h-[36px] flex-none order-1 grow-0">
+              {/* All */}
+              <button
+                type="button"
+                onClick={() => {
+                  setSelectedPlan("All");
+                  setCurrentPage(1);
+                }}
+                className={`box-border flex flex-row justify-center items-center py-2.5 px-4 gap-2.5 w-[46px] h-[36px] rounded-[8px] flex-none order-0 grow-0 transition-all font-['Manrope'] font-medium text-[12px] leading-[16px] text-center ${selectedPlan === "All"
+                    ? "border border-[#635BFF] text-[#635BFF]"
+                    : "border border-[#EFF4FA] text-[#0A2540] hover:bg-slate-50"
+                  }`}
+              >
+                All
+              </button>
+              {/* Basic */}
+              <button
+                type="button"
+                onClick={() => {
+                  setSelectedPlan("Basic");
+                  setCurrentPage(1);
+                }}
+                className={`box-border flex flex-row justify-center items-center py-2.5 px-4 gap-2.5 w-[63px] h-[36px] rounded-[8px] flex-none order-1 grow-0 transition-all font-['Manrope'] font-medium text-[12px] leading-[16px] text-center ${selectedPlan === "Basic"
+                    ? "border border-[#635BFF] text-[#635BFF]"
+                    : "border border-[#EFF4FA] text-[#0A2540] hover:bg-slate-50"
+                  }`}
+              >
+                Basic
+              </button>
+              {/* Premium */}
+              <button
+                type="button"
+                onClick={() => {
+                  setSelectedPlan("Premium");
+                  setCurrentPage(1);
+                }}
+                className={`box-border flex flex-row justify-center items-center py-2.5 px-4 gap-2.5 w-[82px] h-[36px] rounded-[8px] flex-none order-2 grow-0 transition-all font-['Manrope'] font-medium text-[12px] leading-[16px] text-center ${selectedPlan === "Premium"
+                    ? "border border-[#635BFF] text-[#635BFF]"
+                    : "border border-[#EFF4FA] text-[#0A2540] hover:bg-slate-50"
+                  }`}
+              >
+                Premium
+              </button>
+              {/* Enterprise */}
+              <button
+                type="button"
+                onClick={() => {
+                  setSelectedPlan("Enterprise");
+                  setCurrentPage(1);
+                }}
+                className={`box-border flex flex-row justify-center items-center py-2.5 px-4 gap-2.5 w-[91px] h-[36px] rounded-[8px] flex-none order-3 grow-0 transition-all font-['Manrope'] font-medium text-[12px] leading-[16px] text-center ${selectedPlan === "Enterprise"
+                    ? "border border-[#635BFF] text-[#635BFF]"
+                    : "border border-[#EFF4FA] text-[#0A2540] hover:bg-slate-50"
+                  }`}
+              >
+                Enterprise
+              </button>
+            </div>
+          </div>
+
+          {/* Region Dropdown (Frame 1000003722) */}
+          <div className="flex flex-col items-start p-0 gap-2 w-[150px] h-[60px] flex-none order-2 grow-0 shrink-0 relative" ref={regionRef}>
+            <span className="w-[41px] h-[16px] font-['Manrope'] font-semibold text-[12px] leading-[16px] text-[#98A4AE] flex-none order-0 grow-0">Region</span>
+            <button
+              type="button"
+              onClick={() => setIsRegionDropdownOpen(!isRegionDropdownOpen)}
+              className="box-border flex flex-col justify-center items-center p-[10px_16px] gap-2.5 w-[150px] h-[36px] border border-[#EFF4FA] rounded-[8px] bg-white cursor-pointer select-none flex-none order-1 grow-0"
+            >
+              {/* txt */}
+              <div className="flex flex-row justify-between items-center p-0 gap-3 w-[118px] h-[16px] flex-none order-0 grow-0">
+                <span className="font-['Manrope'] font-medium text-[12px] leading-[16px] text-center text-[#29343D] flex-none order-0 grow-0 truncate max-w-[85px]">{selectedRegion}</span>
+                <svg width="12.06" height="7" viewBox="0 0 12.06 7" fill="none" className="flex-none order-1 grow-0">
+                  <path d="M1 1L6.03 6L11.06 1" stroke="#29343D" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" />
                 </svg>
-                <div className="absolute bottom-full left-1/2 transform -translate-x-1/2 mb-2 hidden group-hover:block bg-slate-900 text-white text-[10px] py-1 px-2.5 rounded-lg whitespace-nowrap shadow-md z-30 font-medium">
-                  Advanced Filters
+              </div>
+            </button>
+
+            {isRegionDropdownOpen && (
+              <div className="absolute top-[64px] left-0 right-0 bg-white border border-[#eef2f6] rounded-[8px] shadow-xl z-30 p-2 flex flex-col gap-1 animate-in fade-in slide-in-from-top-2 duration-150">
+                <div className="relative mb-1">
+                  <input
+                    type="text"
+                    placeholder="Search"
+                    value={regionSearch}
+                    onChange={(e) => setRegionSearch(e.target.value)}
+                    className="w-full border border-slate-100 focus:border-[#5e53fc] focus:outline-none rounded-[8px] px-3 py-2 text-xs font-semibold text-slate-700"
+                  />
+                </div>
+                <div className="max-h-40 overflow-y-auto flex flex-col">
+                  {filteredRegions.map((reg) => (
+                    <button
+                      key={reg}
+                      type="button"
+                      onClick={() => {
+                        setSelectedRegion(reg);
+                        setIsRegionDropdownOpen(false);
+                        setRegionSearch("");
+                        setCurrentPage(1);
+                      }}
+                      className={`text-left w-full px-3 py-2 text-xs font-semibold rounded-xl hover:bg-slate-50 transition-colors ${selectedRegion === reg ? "text-[#5e53fc] bg-indigo-50/40" : "text-slate-600"
+                        }`}
+                    >
+                      {reg}
+                    </button>
+                  ))}
+                  {filteredRegions.length === 0 && (
+                    <span className="text-[10px] text-slate-400 text-center py-2 font-semibold">
+                      No matches found
+                    </span>
+                  )}
                 </div>
               </div>
-            </div>
-            <div className="flex flex-wrap gap-2">
-              {["All", "Active", "Cancelled", "Trial", "Leads", "Expired"].map((status) => {
-                const isActive = selectedStatus === status;
-                return (
-                  <button
-                    key={status}
-                    onClick={() => {
-                      setSelectedStatus(status);
-                      setCurrentPage(1);
-                    }}
-                    className={`px-4 py-2 text-xs font-semibold rounded-2xl border transition-all ${isActive
-                        ? "border-[#5e53fc] bg-[#f9f8ff] text-[#5e53fc] shadow-sm"
-                        : "border-slate-100 hover:bg-slate-50 text-slate-500"
-                      }`}
-                  >
-                    {status}
-                  </button>
-                );
-              })}
-            </div>
+            )}
           </div>
 
-          {/* Plan Buttons */}
-          <div className="flex flex-col gap-2">
-            <span className="text-xs font-semibold text-slate-400">Plan</span>
-            <div className="flex flex-wrap gap-2">
-              {["All", "Basic", "Premium", "Enterprise"].map((plan) => {
-                const isActive = selectedPlan === plan;
-                return (
-                  <button
-                    key={plan}
-                    onClick={() => {
-                      setSelectedPlan(plan);
-                      setCurrentPage(1);
-                    }}
-                    className={`px-4 py-2 text-xs font-semibold rounded-2xl border transition-all ${isActive
-                        ? "border-[#5e53fc] bg-[#f9f8ff] text-[#5e53fc] shadow-sm"
-                        : "border-slate-100 hover:bg-slate-50 text-slate-500"
-                      }`}
-                  >
-                    {plan}
-                  </button>
-                );
-              })}
-            </div>
-          </div>
+          {/* City Dropdown (Frame 1000003724) */}
+          <div className="flex flex-col items-start p-0 gap-2 w-[150px] h-[60px] flex-none order-3 grow-0 shrink-0 relative" ref={cityRef}>
+            <span className="w-[24px] h-[16px] font-['Manrope'] font-semibold text-[12px] leading-[16px] text-[#98A4AE] flex-none order-0 grow-0">City</span>
+            <button
+              type="button"
+              onClick={() => setIsCityDropdownOpen(!isCityDropdownOpen)}
+              className="box-border flex flex-col justify-center items-center p-[10px_16px] gap-2.5 w-[150px] h-[36px] border border-[#EFF4FA] rounded-[8px] bg-white cursor-pointer select-none flex-none order-1 grow-0"
+            >
+              {/* txt */}
+              <div className="flex flex-row justify-between items-center p-0 gap-3 w-[118px] h-[16px] flex-none order-0 grow-0">
+                <span className="font-['Manrope'] font-medium text-[12px] leading-[16px] text-center text-[#29343D] flex-none order-0 grow-0 truncate max-w-[85px]">{selectedCity === "All cities" ? "All cities" : selectedCity}</span>
+                <svg width="12.06" height="7" viewBox="0 0 12.06 7" fill="none" className="flex-none order-1 grow-0">
+                  <path d="M1 1L6.03 6L11.06 1" stroke="#29343D" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" />
+                </svg>
+              </div>
+            </button>
 
-        </div>
-
-        {/* Dropdowns Row */}
-        <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-4 gap-4">
-
-          {/* Region Dropdown */}
-          <div className="flex flex-col gap-1.5" ref={regionRef}>
-            <span className="text-xs font-semibold text-slate-400">Region</span>
-            <div className="relative">
-              <button
-                onClick={() => setIsRegionDropdownOpen(!isRegionDropdownOpen)}
-                className="w-full flex items-center justify-between bg-white border border-[#eef2f6] hover:border-slate-300 rounded-2xl px-4 py-3 text-xs font-semibold text-slate-700 shadow-sm transition-all"
-              >
-                <span>{selectedRegion}</span>
-                <HugeiconsIcon icon={ArrowDown01Icon} size={14} className="text-slate-400" />
-              </button>
-
-              {isRegionDropdownOpen && (
-                <div className="absolute left-0 right-0 mt-2 bg-white border border-[#eef2f6] rounded-2xl shadow-xl z-30 p-2 flex flex-col gap-1 animate-in fade-in slide-in-from-top-2 duration-150">
-                  {/* Search box input inside */}
-                  <div className="relative mb-1">
-                    <input
-                      type="text"
-                      placeholder="Search"
-                      value={regionSearch}
-                      onChange={(e) => setRegionSearch(e.target.value)}
-                      className="w-full border border-slate-100 focus:border-[#5e53fc] focus:outline-none rounded-xl px-3 py-2 text-xs font-semibold text-slate-700"
-                    />
-                  </div>
-                  <div className="max-h-40 overflow-y-auto flex flex-col">
-                    {filteredRegions.map((reg) => (
-                      <button
-                        key={reg}
-                        onClick={() => {
-                          setSelectedRegion(reg);
-                          setIsRegionDropdownOpen(false);
-                          setRegionSearch("");
-                          setCurrentPage(1);
-                        }}
-                        className={`text-left w-full px-3 py-2 text-xs font-semibold rounded-xl hover:bg-slate-50 transition-colors ${selectedRegion === reg ? "text-[#5e53fc] bg-indigo-50/40" : "text-slate-600"
-                          }`}
-                      >
-                        {reg}
-                      </button>
-                    ))}
-                    {filteredRegions.length === 0 && (
-                      <span className="text-[10px] text-slate-400 text-center py-2 font-semibold">
-                        No matches found
-                      </span>
-                    )}
-                  </div>
+            {isCityDropdownOpen && (
+              <div className="absolute top-[64px] left-0 right-0 bg-white border border-[#eef2f6] rounded-[8px] shadow-xl z-30 p-2 flex flex-col gap-1 animate-in fade-in slide-in-from-top-2 duration-150">
+                <div className="relative mb-1">
+                  <input
+                    type="text"
+                    placeholder="Search"
+                    value={citySearch}
+                    onChange={(e) => setCitySearch(e.target.value)}
+                    className="w-full border border-slate-100 focus:border-[#5e53fc] focus:outline-none rounded-[8px] px-3 py-2 text-xs font-semibold text-slate-700"
+                  />
                 </div>
-              )}
-            </div>
-          </div>
-
-          {/* City Dropdown */}
-          <div className="flex flex-col gap-1.5" ref={cityRef}>
-            <span className="text-xs font-semibold text-slate-400">City</span>
-            <div className="relative">
-              <button
-                onClick={() => setIsCityDropdownOpen(!isCityDropdownOpen)}
-                className="w-full flex items-center justify-between bg-white border border-[#eef2f6] hover:border-slate-300 rounded-2xl px-4 py-3 text-xs font-semibold text-slate-700 shadow-sm transition-all"
-              >
-                <span>{selectedCity}</span>
-                <HugeiconsIcon icon={ArrowDown01Icon} size={14} className="text-slate-400" />
-              </button>
-
-              {isCityDropdownOpen && (
-                <div className="absolute left-0 right-0 mt-2 bg-white border border-[#eef2f6] rounded-2xl shadow-xl z-30 p-2 flex flex-col gap-1 animate-in fade-in slide-in-from-top-2 duration-150">
-                  {/* Search box input inside */}
-                  <div className="relative mb-1">
-                    <input
-                      type="text"
-                      placeholder="Search"
-                      value={citySearch}
-                      onChange={(e) => setCitySearch(e.target.value)}
-                      className="w-full border border-slate-100 focus:border-[#5e53fc] focus:outline-none rounded-xl px-3 py-2 text-xs font-semibold text-slate-700"
-                    />
-                  </div>
-                  <div className="max-h-40 overflow-y-auto flex flex-col">
-                    {filteredCities.map((cit) => (
-                      <button
-                        key={cit}
-                        onClick={() => {
-                          setSelectedCity(cit);
-                          setIsCityDropdownOpen(false);
-                          setCitySearch("");
-                          setCurrentPage(1);
-                        }}
-                        className={`text-left w-full px-3 py-2 text-xs font-semibold rounded-xl hover:bg-slate-50 transition-colors ${selectedCity === cit ? "text-[#5e53fc] bg-indigo-50/40" : "text-slate-600"
-                          }`}
-                      >
-                        {cit}
-                      </button>
-                    ))}
-                    {filteredCities.length === 0 && (
-                      <span className="text-[10px] text-slate-400 text-center py-2 font-semibold">
-                        No matches found
-                      </span>
-                    )}
-                  </div>
+                <div className="max-h-40 overflow-y-auto flex flex-col">
+                  {filteredCities.map((cit) => (
+                    <button
+                      key={cit}
+                      type="button"
+                      onClick={() => {
+                        setSelectedCity(cit);
+                        setIsCityDropdownOpen(false);
+                        setCitySearch("");
+                        setCurrentPage(1);
+                      }}
+                      className={`text-left w-full px-3 py-2 text-xs font-semibold rounded-xl hover:bg-slate-50 transition-colors ${selectedCity === cit ? "text-[#5e53fc] bg-indigo-50/40" : "text-slate-600"
+                        }`}
+                    >
+                      {cit}
+                    </button>
+                  ))}
+                  {filteredCities.length === 0 && (
+                    <span className="text-[10px] text-slate-400 text-center py-2 font-semibold">
+                      No matches found
+                    </span>
+                  )}
                 </div>
-              )}
-            </div>
+              </div>
+            )}
           </div>
 
         </div>
@@ -670,7 +763,7 @@ export default function SalonsPage({
 
       {/* Main Table Card */}
       <div className="bg-white rounded-xl shadow-[0_4px_18px_rgba(17,31,56,0.06)] overflow-hidden">
-        <div className="overflow-x-auto">
+        <div className="overflow-x-auto min-h-[320px]">
           <table className="w-full text-left border-collapse">
             <thead>
               <tr className="bg-slate-50/40 border-b border-slate-100">
@@ -682,17 +775,17 @@ export default function SalonsPage({
                     className="w-4 h-4 text-[#5e53fc] border-slate-300 rounded focus:ring-[#5e53fc] cursor-pointer"
                   />
                 </th>
-                <th className="p-4 text-xs font-bold uppercase tracking-wider text-slate-400">Salon</th>
-                <th className="p-4 text-xs font-bold uppercase tracking-wider text-slate-400">Status</th>
-                <th className="p-4 text-xs font-bold uppercase tracking-wider text-slate-400">Plan</th>
-                <th className="p-4 text-xs font-bold uppercase tracking-wider text-slate-400">Revenue</th>
-                <th className="p-4 text-xs font-bold uppercase tracking-wider text-slate-400">Last Active</th>
-                <th className="p-4 text-xs font-bold uppercase tracking-wider text-slate-400">Support</th>
-                <th className="p-4 text-xs font-bold uppercase tracking-wider text-slate-400 w-16 text-center">Actions</th>
+                <th className="p-4 text-xs font-bold uppercase tracking-wider text-slate-400 whitespace-nowrap">Salon</th>
+                <th className="p-4 text-xs font-bold uppercase tracking-wider text-slate-400 whitespace-nowrap">Status</th>
+                <th className="p-4 text-xs font-bold uppercase tracking-wider text-slate-400 whitespace-nowrap">Plan</th>
+                <th className="p-4 text-xs font-bold uppercase tracking-wider text-slate-400 whitespace-nowrap">Revenue</th>
+                <th className="p-4 text-xs font-bold uppercase tracking-wider text-slate-400 whitespace-nowrap">Last Active</th>
+                <th className="p-4 text-xs font-bold uppercase tracking-wider text-slate-400 whitespace-nowrap">Support</th>
+                <th className="p-4 text-xs font-bold uppercase tracking-wider text-slate-400 w-16 text-center whitespace-nowrap">Actions</th>
               </tr>
             </thead>
             <tbody className="divide-y divide-slate-100">
-              {paginatedSalons.map((salon) => {
+              {paginatedSalons.map((salon, index) => {
                 const isChecked = selectedSalonIds.includes(salon.id);
                 return (
                   <tr
@@ -714,7 +807,7 @@ export default function SalonsPage({
                     <td className="p-4">
                       <div className="flex items-center gap-3.5">
                         {/* Avatar */}
-                        <div 
+                        <div
                           onClick={() => setSelectedSalonId(salon.id)}
                           className="w-10 h-10 rounded-xl bg-gradient-to-tr from-slate-100 to-slate-200 flex items-center justify-center text-slate-500 font-bold text-xs uppercase flex-shrink-0 cursor-pointer hover:opacity-80 transition-opacity"
                         >
@@ -724,7 +817,7 @@ export default function SalonsPage({
                         {/* Name/Tags/Manager/City */}
                         <div className="flex flex-col">
                           <div className="flex items-center gap-2 flex-wrap">
-                            <span 
+                            <span
                               onClick={() => setSelectedSalonId(salon.id)}
                               className="text-sm font-bold text-slate-800 tracking-tight leading-tight cursor-pointer hover:text-[#5e53fc] hover:underline transition-colors"
                             >
@@ -819,7 +912,7 @@ export default function SalonsPage({
 
                     {/* Revenue */}
                     <td className="p-4">
-                      <div className="flex flex-col">
+                      <div className="flex flex-col whitespace-nowrap">
                         <span className="text-sm font-bold text-slate-800 leading-none">{salon.revenue}</span>
                         <span className="text-[10px] text-slate-400 font-semibold mt-0.5">LTV: {salon.ltv}</span>
                       </div>
@@ -827,7 +920,7 @@ export default function SalonsPage({
 
                     {/* Last Active */}
                     <td className="p-4">
-                      <div className="flex items-center gap-1.5 text-slate-500 font-semibold text-xs">
+                      <div className="flex items-center gap-1.5 text-slate-500 font-semibold text-xs whitespace-nowrap">
                         <ClockIcon />
                         <span>{salon.lastActive}</span>
                       </div>
@@ -847,7 +940,7 @@ export default function SalonsPage({
                     </td>
 
                     {/* Action trigger menu */}
-                    <td className="p-4 text-center relative">
+                    <td className={`p-4 text-center relative ${activeActionMenuId === salon.id ? "z-50" : ""}`}>
                       <button
                         onClick={() => setActiveActionMenuId(activeActionMenuId === salon.id ? null : salon.id)}
                         className="p-2 bg-slate-50 text-slate-400 hover:bg-slate-100 hover:text-slate-600 rounded-xl transition-colors inline-flex"
@@ -859,7 +952,11 @@ export default function SalonsPage({
                       {activeActionMenuId === salon.id && (
                         <div
                           ref={menuRef}
-                          className="absolute right-12 top-2 mt-1 w-44 bg-white border border-[#eef2f6] rounded-2xl shadow-xl z-20 p-2 flex flex-col gap-0.5 animate-in scale-in duration-100 origin-top-right"
+                          className={`absolute right-12 w-44 bg-white border border-[#eef2f6] rounded-2xl shadow-xl z-[100] p-2 flex flex-col gap-0.5 animate-in scale-in duration-100 ${
+                            index >= paginatedSalons.length - 2 && paginatedSalons.length > 2
+                              ? "bottom-2 mb-1 origin-bottom-right"
+                              : "top-2 mt-1 origin-top-right"
+                          }`}
                         >
                           <button
                             onClick={() => {
@@ -1040,16 +1137,14 @@ export default function SalonsPage({
                     {/* Option 1: Invite Salon */}
                     <div
                       onClick={() => setAddModalType("invite")}
-                      className={`border rounded-2xl p-6 flex flex-col items-center text-center gap-4 cursor-pointer transition-all duration-200 select-none ${
-                        addModalType === "invite"
+                      className={`border rounded-2xl p-6 flex flex-col items-center text-center gap-4 cursor-pointer transition-all duration-200 select-none ${addModalType === "invite"
                           ? "border-[#5e53fc] bg-[#f9f8ff] ring-1 ring-[#5e53fc]"
                           : "border-slate-100 hover:border-slate-200 bg-white"
-                      }`}
+                        }`}
                     >
-                      <div className={`w-12 h-12 rounded-full flex items-center justify-center ${
-                        addModalType === "invite" ? "bg-[#e2dfff] text-[#5e53fc]" : "bg-slate-50 text-slate-400"
-                      }`}>
-                        <HugeiconsIcon icon={Mail01Icon} size={20} />
+                      <div className={`w-[60px] h-[60px] rounded-full flex items-center justify-center ${addModalType === "invite" ? "bg-[#e2dfff] text-[#5e53fc]" : "bg-slate-50 text-slate-400"
+                        }`}>
+                        <HugeiconsIcon icon={Mail01Icon} size={40} />
                       </div>
                       <span className={`text-sm font-bold ${addModalType === "invite" ? "text-[#5e53fc]" : "text-slate-700"}`}>
                         Invite Salon
@@ -1059,16 +1154,14 @@ export default function SalonsPage({
                     {/* Option 2: Add Salon Manually */}
                     <div
                       onClick={() => setAddModalType("manual")}
-                      className={`border rounded-2xl p-6 flex flex-col items-center text-center gap-4 cursor-pointer transition-all duration-200 select-none ${
-                        addModalType === "manual"
+                      className={`border rounded-2xl p-6 flex flex-col items-center text-center gap-4 cursor-pointer transition-all duration-200 select-none ${addModalType === "manual"
                           ? "border-[#5e53fc] bg-[#f9f8ff] ring-1 ring-[#5e53fc]"
                           : "border-slate-100 hover:border-slate-200 bg-white"
-                      }`}
+                        }`}
                     >
-                      <div className={`w-12 h-12 rounded-full flex items-center justify-center ${
-                        addModalType === "manual" ? "bg-[#e2dfff] text-[#5e53fc]" : "bg-slate-50 text-slate-400"
-                      }`}>
-                        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5">
+                      <div className={`w-[60px] h-[60px] rounded-full flex items-center justify-center ${addModalType === "manual" ? "bg-[#e2dfff] text-[#5e53fc]" : "bg-slate-50 text-slate-400"
+                        }`}>
+                        <svg width="40" height="40" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
                           <path d="M12 20h9" />
                           <path d="M16.5 3.5a2.121 2.121 0 0 1 3 3L7 19l-4 1 1-4L16.5 3.5z" />
                         </svg>
@@ -1157,10 +1250,10 @@ export default function SalonsPage({
                   <div className="flex items-center justify-between px-2 mb-4 relative mt-4">
                     {/* Background connection track */}
                     <div className="absolute left-6 right-6 top-[15px] h-[2px] bg-slate-100 -z-0" />
-                    
+
                     {/* Filled connection track */}
-                    <div 
-                      className="absolute left-6 top-[15px] h-[2px] bg-[#5e53fc] transition-all duration-355 -z-0" 
+                    <div
+                      className="absolute left-6 top-[15px] h-[2px] bg-[#5e53fc] transition-all duration-355 -z-0"
                       style={{
                         width: `${((Math.min(manualStep, 5) - 1) / 4) * 100}%`
                       }}
@@ -1169,18 +1262,17 @@ export default function SalonsPage({
                     {[1, 2, 3, 4, 5].map((stepNum) => {
                       const isCompleted = manualStep > stepNum;
                       const isActive = manualStep === stepNum;
-                      
+
                       return (
                         <div key={stepNum} className="flex flex-col items-center relative z-10 flex-1">
                           {/* Step Circle */}
                           <div
-                            className={`w-8 h-8 rounded-full flex items-center justify-center text-xs font-bold transition-all duration-355 ${
-                              isCompleted
+                            className={`w-8 h-8 rounded-full flex items-center justify-center text-xs font-bold transition-all duration-355 ${isCompleted
                                 ? "bg-[#5e53fc] text-white"
                                 : isActive
-                                ? "bg-white border-2 border-[#5e53fc] text-[#5e53fc] shadow-[0_0_12px_rgba(94,83,252,0.15)]"
-                                : "bg-white border-2 border-slate-200 text-slate-400"
-                            }`}
+                                  ? "bg-white border-2 border-[#5e53fc] text-[#5e53fc] shadow-[0_0_12px_rgba(94,83,252,0.15)]"
+                                  : "bg-white border-2 border-slate-200 text-slate-400"
+                              }`}
                           >
                             {isCompleted ? (
                               <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="4.5" strokeLinecap="round" strokeLinejoin="round" className="text-white">
@@ -1190,12 +1282,11 @@ export default function SalonsPage({
                               stepNum
                             )}
                           </div>
-                          
+
                           {/* Step Label */}
                           <span
-                            className={`text-[10px] font-bold mt-2 whitespace-nowrap transition-colors duration-300 ${
-                              isActive ? "text-slate-800 font-extrabold" : "text-slate-450 font-semibold"
-                            }`}
+                            className={`text-[10px] font-bold mt-2 whitespace-nowrap transition-colors duration-300 ${isActive ? "text-slate-800 font-extrabold" : "text-slate-450 font-semibold"
+                              }`}
                           >
                             {stepNum === 1 && "General Info"}
                             {stepNum === 2 && "Ownership"}
@@ -1813,7 +1904,7 @@ export default function SalonsPage({
                 <line x1="6" y1="6" x2="18" y2="18" />
               </svg>
             </button>
-            
+
             <h3 className="text-xl font-bold text-[#0f172a] tracking-tight">
               Mails Sent - {salons.find(s => s.id === mailsSentSalonId)?.name || ""}
             </h3>
@@ -1882,51 +1973,50 @@ export default function SalonsPage({
                     { date: "08/08/2025 13:59", subject: "Welcome to SalonFlow", type: "Email", source: "Auto", category: "Sent" },
                     { date: "08/08/2025 13:59", subject: "Premium features update", type: "Email", source: "Auto", category: "Sent" }
                   ]
-                  .filter(item => modalMailSource === "All Sources" || item.source === modalMailSource)
-                  .map((item, idx) => (
-                    <tr key={idx} className="hover:bg-slate-50/50 transition-colors">
-                      <td className="px-6 py-4 text-slate-500">{item.date}</td>
-                      <td className="px-6 py-4 text-slate-800 font-bold">{item.subject}</td>
-                      <td className="px-6 py-4">
-                        <span className="px-2.5 py-1 rounded-full text-[9px] font-extrabold uppercase tracking-wide bg-[#ecfeff] text-[#0891b2]">
-                          {item.type}
-                        </span>
-                      </td>
-                      <td className="px-6 py-4">
-                        <span className="px-2.5 py-1 rounded-full text-[9px] font-extrabold uppercase tracking-wide bg-slate-100 text-slate-650">
-                          {item.source}
-                        </span>
-                      </td>
-                      <td className="px-6 py-4">
-                        <span className={`px-2.5 py-1 rounded-full text-[9px] font-extrabold uppercase tracking-wide ${
-                          item.category === "Opened" ? "bg-[#f0fdf4] text-[#16a34a]" : "bg-[#eff6ff] text-[#2563eb]"
-                        }`}>
-                          {item.category}
-                        </span>
-                      </td>
-                      <td className="px-6 py-4 text-center flex items-center justify-center gap-2">
-                        <button
-                          onClick={() => alert(`Viewing details of email: "${item.subject}"`)}
-                          className="p-2 bg-[#f2f1ff] text-[#5e53fc] hover:bg-[#e4e2ff] rounded-lg transition-colors inline-flex"
-                          title="View Details"
-                        >
-                          <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round">
-                            <path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z" />
-                            <circle cx="12" cy="12" r="3" />
-                          </svg>
-                        </button>
-                        <button
-                          onClick={() => alert(`Resending email: "${item.subject}"`)}
-                          className="p-2 bg-[#ecfeff] text-[#0891b2] hover:bg-[#cffafe] rounded-lg transition-colors inline-flex"
-                          title="Resend Email"
-                        >
-                          <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round">
-                            <path d="M21.5 2v6h-6M21.34 15.57a10 10 0 1 1-.57-8.38l.57.57" />
-                          </svg>
-                        </button>
-                      </td>
-                    </tr>
-                  ))}
+                    .filter(item => modalMailSource === "All Sources" || item.source === modalMailSource)
+                    .map((item, idx) => (
+                      <tr key={idx} className="hover:bg-slate-50/50 transition-colors">
+                        <td className="px-6 py-4 text-slate-500">{item.date}</td>
+                        <td className="px-6 py-4 text-slate-800 font-bold">{item.subject}</td>
+                        <td className="px-6 py-4">
+                          <span className="px-2.5 py-1 rounded-full text-[9px] font-extrabold uppercase tracking-wide bg-[#ecfeff] text-[#0891b2]">
+                            {item.type}
+                          </span>
+                        </td>
+                        <td className="px-6 py-4">
+                          <span className="px-2.5 py-1 rounded-full text-[9px] font-extrabold uppercase tracking-wide bg-slate-100 text-slate-650">
+                            {item.source}
+                          </span>
+                        </td>
+                        <td className="px-6 py-4">
+                          <span className={`px-2.5 py-1 rounded-full text-[9px] font-extrabold uppercase tracking-wide ${item.category === "Opened" ? "bg-[#f0fdf4] text-[#16a34a]" : "bg-[#eff6ff] text-[#2563eb]"
+                            }`}>
+                            {item.category}
+                          </span>
+                        </td>
+                        <td className="px-6 py-4 text-center flex items-center justify-center gap-2">
+                          <button
+                            onClick={() => alert(`Viewing details of email: "${item.subject}"`)}
+                            className="p-2 bg-[#f2f1ff] text-[#5e53fc] hover:bg-[#e4e2ff] rounded-lg transition-colors inline-flex"
+                            title="View Details"
+                          >
+                            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round">
+                              <path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z" />
+                              <circle cx="12" cy="12" r="3" />
+                            </svg>
+                          </button>
+                          <button
+                            onClick={() => alert(`Resending email: "${item.subject}"`)}
+                            className="p-2 bg-[#ecfeff] text-[#0891b2] hover:bg-[#cffafe] rounded-lg transition-colors inline-flex"
+                            title="Resend Email"
+                          >
+                            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round">
+                              <path d="M21.5 2v6h-6M21.34 15.57a10 10 0 1 1-.57-8.38l.57.57" />
+                            </svg>
+                          </button>
+                        </td>
+                      </tr>
+                    ))}
                 </tbody>
               </table>
             </div>

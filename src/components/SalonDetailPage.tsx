@@ -16,8 +16,8 @@ const HomeIcon = () => (
   </svg>
 );
 
-const BasicDataIcon = () => (
-  <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round">
+const BasicDataIcon = ({ className }: { className?: string }) => (
+  <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className={className}>
     <line x1="8" y1="6" x2="21" y2="6" />
     <line x1="8" y1="12" x2="21" y2="12" />
     <line x1="8" y1="18" x2="21" y2="18" />
@@ -27,28 +27,28 @@ const BasicDataIcon = () => (
   </svg>
 );
 
-const LocationsIcon = () => (
-  <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round">
+const LocationsIcon = ({ className }: { className?: string }) => (
+  <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className={className}>
     <path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z" />
     <circle cx="12" cy="10" r="3" />
   </svg>
 );
 
-const ContactsIcon = () => (
-  <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round">
+const ContactsIcon = ({ className }: { className?: string }) => (
+  <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className={className}>
     <path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07 19.5 19.5 0 0 1-6-6 19.79 19.79 0 0 1-3.07-8.67A2 2 0 0 1 4.11 2h3a2 2 0 0 1 2 1.72 12.84 12.84 0 0 0 .7 2.81 2 2 0 0 1-.45 2.11L8.09 9.91a16 16 0 0 0 6 6l1.27-1.27a2 2 0 0 1 2.11-.45 12.84 12.84 0 0 0 2.81.7A2 2 0 0 1 22 16.92z" />
   </svg>
 );
 
-const TaxIcon = () => (
-  <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round">
+const TaxIcon = ({ className }: { className?: string }) => (
+  <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className={className}>
     <rect x="2" y="4" width="20" height="16" rx="2" ry="2" />
     <line x1="2" y1="10" x2="22" y2="10" />
   </svg>
 );
 
-const DocumentsIcon = () => (
-  <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round">
+const DocumentsIcon = ({ className }: { className?: string }) => (
+  <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className={className}>
     <path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z" />
     <polyline points="14 2 14 8 20 8" />
     <line x1="16" y1="13" x2="8" y2="13" />
@@ -57,8 +57,8 @@ const DocumentsIcon = () => (
   </svg>
 );
 
-const MembersIcon = () => (
-  <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round">
+const MembersIcon = ({ className }: { className?: string }) => (
+  <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className={className}>
     <path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2" />
     <circle cx="9" cy="7" r="4" />
     <path d="M23 21v-2a4 4 0 0 0-3-3.87" />
@@ -284,146 +284,163 @@ export default function SalonDetailPage({ salon, onBack, onImpersonate }: SalonD
       </div>
 
       {/* Main Profile Cover Card */}
-      <div className="bg-white rounded-2xl shadow-[0_4px_18px_rgba(17,31,56,0.06)] flex flex-col w-full overflow-hidden">
+      <div className="w-full min-w-0 bg-white shadow-[0px_2px_4px_-1px_rgba(175,182,201,0.2)] rounded-[12px] flex flex-col items-start p-0 gap-[30px] z-0 relative overflow-hidden">
         
-        {/* Cover Picture */}
-        <div 
-          className="h-[330px] relative bg-cover bg-center w-full" 
-          style={{ backgroundImage: "url('/bg-main.png')" }}
-        />
-
-        {/* Profile Details Row: Stats (Left), Avatar & Name (Middle), Button (Right) */}
-        <div className="flex flex-col lg:flex-row items-center lg:items-start justify-between px-6 pb-6 gap-6 w-full mt-6">
+        {/* User Heading Container */}
+        <div className="flex flex-col items-start p-0 w-full lg:h-[533px] md:h-auto self-stretch flex-shrink-0 relative">
           
-          {/* Left Column: Stats */}
-          <div className="flex-1 flex flex-row items-center justify-center lg:justify-start gap-10">
-            <div className="flex flex-col items-center">
-              {/* Group icon */}
-              <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round" className="text-slate-500 mb-1">
-                <path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2" />
-                <circle cx="9" cy="7" r="4" />
-                <path d="M23 21v-2a4 4 0 0 0-3-3.87" />
-                <path d="M16 3.13a4 4 0 0 1 0 7.75" />
-              </svg>
-              <span className="text-xl font-bold text-[#29343D] mt-0.5">{editEmployees}</span>
-              <span className="text-[10px] font-bold text-[#98A4AE] uppercase tracking-wider mt-0.5">Staff Members</span>
-            </div>
-
-            <div className="flex flex-col items-center">
-              {/* Payment card icon */}
-              <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round" className="text-slate-500 mb-1">
-                <rect x="2" y="5" width="20" height="14" rx="2" />
-                <line x1="2" y1="10" x2="22" y2="10" />
-              </svg>
-              <span className="text-xl font-bold text-[#29343D] mt-0.5">€ 299</span>
-              <span className="text-[10px] font-bold text-[#98A4AE] uppercase tracking-wider mt-0.5">Monthly Payment</span>
-            </div>
-
-            <div className="flex flex-col items-center">
-              {/* Clock/Last Active Icon */}
-              <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round" className="text-slate-500 mb-1">
-                <circle cx="12" cy="12" r="10" />
-                <polyline points="12 6 12 12 16 14" />
-              </svg>
-              <span className="text-xl font-bold text-[#29343D] mt-0.5">{salon.lastActive}</span>
-              <span className="text-[10px] font-bold text-[#98A4AE] uppercase tracking-wider mt-0.5">Last Active</span>
-            </div>
-          </div>
-
-          {/* Middle Column: Avatar & Details (centered) */}
-          <div className="flex flex-col items-center -mt-[67px] relative z-10 text-center px-4">
-            {/* Avatar container with red ball.png */}
-            <div className="w-[102px] h-[102px] rounded-full border-4 border-white shadow-md overflow-hidden bg-white flex items-center justify-center">
-              <img 
-                src="/ball.png" 
-                alt="Salon Avatar Ball" 
-                className="w-[94px] h-[94px] object-contain p-2" 
-              />
-            </div>
-
-            {/* Centered Salon Details */}
-            <h2 className="text-base font-bold mt-4 tracking-tight text-[#29343D]">{salon.name}</h2>
-            <p className="text-[10px] font-bold text-[#98A4AE] mt-1">Member Since: Aug 22, 2025</p>
-            <p className="text-[10px] font-bold text-[#98A4AE] mt-0.5">{salon.city}, Italy</p>
+          {/* Cover Picture */}
+          <div 
+            className="h-[330px] bg-cover bg-center w-full self-stretch flex-shrink-0 mb-[-88px] relative z-0" 
+            style={{ backgroundImage: "url('/bg-main.png')" }}
+          />          {/* Profile Details Row: Stats (Left), Avatar & Name (Middle), Button (Right) */}
+          <div className="flex flex-col md:flex-row md:flex-nowrap flex-wrap items-center md:items-end justify-between p-4 md:p-[30px] gap-[20px] md:gap-[30px] w-full self-stretch flex-shrink-0 md:h-auto relative z-10 bg-transparent">
             
-            <div className="flex items-center gap-2 mt-3 justify-center">
-              {/* Dynamic Status Badge */}
-              {salonStatus === "Active" && (
-                <span className="inline-flex px-2 py-0.5 text-[9px] font-extrabold rounded-full bg-[#EBFAF0] text-[#36C76C] uppercase tracking-wide">
-                  Active
-                </span>
-              )}
-              {salonStatus === "Trial" && (
-                <span className="inline-flex px-2 py-0.5 text-[9px] font-extrabold rounded-full bg-[#e6fcf9] text-[#14b8a6] uppercase tracking-wide">
-                  Trial
-                </span>
-              )}
-              {salonStatus === "Cancelled" && (
-                <span className="inline-flex px-2 py-0.5 text-[9px] font-extrabold rounded-full bg-[#f1f5f9] text-[#64748b] uppercase tracking-wide">
-                  Cancelled
-                </span>
-              )}
-              {salonStatus === "Leads" && (
-                <span className="inline-flex px-2 py-0.5 text-[9px] font-extrabold rounded-full bg-[#f2f1ff] text-[#5e53fc] uppercase tracking-wide">
-                  Leads
-                </span>
-              )}
-              {salonStatus === "Past Due" && (
-                <span className="inline-flex px-2 py-0.5 text-[9px] font-extrabold rounded-full bg-[#fff0f3] text-[#f43f5e] uppercase tracking-wide">
-                  Past Due
-                </span>
-              )}
-              {salonStatus === "Expired" && (
-                <span className="inline-flex px-2 py-0.5 text-[9px] font-extrabold rounded-full bg-slate-100 text-slate-400 uppercase tracking-wide">
-                  Expired
-                </span>
-              )}
-              {/* Premium Plan badge */}
-              <span className="inline-flex px-2 py-0.5 text-[9px] font-extrabold rounded-full bg-[#D2F4F2] text-[#29343D] uppercase tracking-wide">
-                {salon.plan}
-              </span>
-            </div>
-          </div>
+            {/* Left Column: Stats */}
+            <div className="flex flex-row flex-nowrap items-start content-start p-0 gap-[6px] md:gap-[30px] w-full md:flex-1 min-w-[264px] h-auto md:h-auto order-2 md:order-1 justify-center md:justify-start">
+              {/* posts */}
+              <div className="flex flex-col items-center p-0 gap-[12px] w-[82px] md:w-[95.33px] flex-grow">
+                <svg viewBox="0 0 24 24" fill="none" className="w-5 h-5 md:w-6 md:h-6 text-[#29343D] flex-shrink-0">
+                  <path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" />
+                  <circle cx="9" cy="7" r="4" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" />
+                  <path d="M23 21v-2a4 4 0 0 0-3-3.87" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" />
+                  <path d="M16 3.13a4 4 0 0 1 0 7.75" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" />
+                </svg>
+                <div className="flex flex-col items-center p-0 gap-[4px] w-full max-w-[95px] h-[50px] flex-shrink-0">
+                  <span className="w-auto h-[26px] font-manrope font-semibold text-lg md:text-[22px] leading-[120%] text-center text-[#29343D] flex-shrink-0">{editEmployees}</span>
+                  <span className="w-full h-[20px] font-manrope font-normal text-[10px] md:text-[14px] leading-[20px] text-center text-[#98A4AE] flex-shrink-0">Staff Members</span>
+                </div>
+              </div>
 
-          {/* Right Column: Button */}
-          <div className="flex-1 flex items-center justify-center lg:justify-end">
-            <button 
-              onClick={() => {
-                setIsReactivateModalOpen(true);
-              }}
-              className="px-5 py-2.5 bg-[#e4e2ff] hover:bg-[#d8d5ff] text-[#5e53fc] font-bold rounded-lg text-xs transition-all shadow-sm"
-            >
-              Impersonate Salon
-            </button>
+              {/* followers */}
+              <div className="flex flex-col justify-between items-center p-0 gap-[12px] w-[82px] md:w-[95.33px] flex-grow">
+                <svg viewBox="0 0 24 24" fill="none" className="w-5 h-5 md:w-6 md:h-6 text-[#29343D] mx-auto flex-shrink-0">
+                  <rect x="2" y="5" width="20" height="14" rx="2" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" />
+                  <line x1="2" y1="10" x2="22" y2="10" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" />
+                </svg>
+                <div className="flex flex-col items-center p-0 gap-[4px] w-full max-w-[113px] h-[50px] mx-auto flex-shrink-0">
+                  <span className="w-auto h-[26px] font-manrope font-semibold text-lg md:text-[22px] leading-[120%] text-center text-[#29343D] flex-shrink-0">€ 299</span>
+                  <span className="w-full h-[20px] font-manrope font-normal text-[10px] md:text-[14px] leading-[20px] text-center text-[#98A4AE] flex-shrink-0">Monthly Payment</span>
+                </div>
+              </div>
+
+              {/* following */}
+              <div className="flex flex-col items-center p-0 gap-[12px] w-[82px] md:w-[95.33px] flex-grow">
+                <svg viewBox="0 0 24 24" fill="none" className="w-5 h-5 md:w-6 md:h-6 text-[#1C274C] flex-shrink-0">
+                  <circle cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" />
+                  <polyline points="12 6 12 12 16 14" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" />
+                </svg>
+                <div className="flex flex-col items-center p-0 gap-[4px] w-full max-w-[78px] h-[50px] flex-shrink-0">
+                  <span className="w-auto h-[26px] font-manrope font-semibold text-lg md:text-[22px] leading-[120%] text-center text-[#29343D] flex-shrink-0">{salon.lastActive}</span>
+                  <span className="w-full h-[20px] font-manrope font-normal text-[10px] md:text-[14px] leading-[20px] text-center text-[#98A4AE] flex-shrink-0">Last Active</span>
+                </div>
+              </div>
+            </div>
+
+            {/* Middle Column: Avatar & Details (centered) */}
+            <div className="flex flex-col items-center p-0 gap-[16px] w-full md:flex-1 min-w-[116px] h-auto md:h-auto relative z-10 order-1 md:order-2">
+              {/* Avatar container */}
+              <div className="flex flex-row justify-center items-center p-0 gap-[10px] w-full h-[102px] self-stretch flex-shrink-0">
+                <div className="w-[102px] h-[102px] relative flex-shrink-0 bg-white rounded-full flex items-center justify-center shadow-md">
+                  <img 
+                    src="/ball.png" 
+                    alt="Salon Avatar Ball" 
+                    className="w-[94px] h-[94px] rounded-full object-cover" 
+                  />
+                </div>
+              </div>
+
+              {/* Centered Salon Details */}
+              <div className="flex flex-col items-center p-0 gap-[8px] w-full h-auto self-stretch flex-shrink-0">
+                <h2 className="w-full h-auto font-manrope font-semibold text-[18px] leading-snug text-center text-[#29343D]">{salon.name}</h2>
+                <p className="w-[183px] h-auto font-manrope font-normal text-[14px] leading-[20px] text-center text-[#98A4AE]">Member Since: Aug 22, 2025</p>
+                <p className="w-full h-auto font-manrope font-normal text-[14px] leading-[20px] text-center text-[#98A4AE]">{salon.city}, Italy</p>
+                
+                <div className="flex flex-row justify-center items-start p-0 gap-[8px] w-auto h-[24px] flex-shrink-0">
+                  {/* Dynamic Status Badge */}
+                  {salonStatus === "Active" && (
+                    <div className="flex flex-row items-center px-[6px] py-[2px] md:px-[8px] md:py-[4px] gap-[10px] w-auto h-auto md:h-[24px] bg-[#EBFAF0] rounded-[999px] flex-shrink-0 justify-center">
+                      <span className="w-auto h-auto md:h-[16px] font-manrope font-medium text-[10px] md:text-[12px] leading-[16px] text-[#36C76C] text-center whitespace-nowrap">Active</span>
+                    </div>
+                  )}
+                  {salonStatus === "Trial" && (
+                    <div className="flex flex-row items-center px-[6px] py-[2px] md:px-[8px] md:py-[4px] gap-[10px] w-auto h-auto md:h-[24px] bg-[#e6fcf9] rounded-[999px] flex-shrink-0 justify-center">
+                      <span className="w-auto h-auto md:h-[16px] font-manrope font-medium text-[10px] md:text-[12px] leading-[16px] text-[#14b8a6] text-center whitespace-nowrap">Trial</span>
+                    </div>
+                  )}
+                  {salonStatus === "Cancelled" && (
+                    <div className="flex flex-row items-center px-[6px] py-[2px] md:px-[8px] md:py-[4px] gap-[10px] w-auto h-auto md:h-[24px] bg-[#f1f5f9] rounded-[999px] flex-shrink-0 justify-center">
+                      <span className="w-auto h-auto md:h-[16px] font-manrope font-medium text-[10px] md:text-[12px] leading-[16px] text-[#64748b] text-center whitespace-nowrap">Cancel</span>
+                    </div>
+                  )}
+                  {salonStatus === "Leads" && (
+                    <div className="flex flex-row items-center px-[6px] py-[2px] md:px-[8px] md:py-[4px] gap-[10px] w-auto h-auto md:h-[24px] bg-[#f2f1ff] rounded-[999px] flex-shrink-0 justify-center">
+                      <span className="w-auto h-auto md:h-[16px] font-manrope font-medium text-[10px] md:text-[12px] leading-[16px] text-[#5e53fc] text-center whitespace-nowrap">Leads</span>
+                    </div>
+                  )}
+                  {salonStatus === "Past Due" && (
+                    <div className="flex flex-row items-center px-[6px] py-[2px] md:px-[8px] md:py-[4px] gap-[10px] w-auto h-auto md:h-[24px] bg-[#fff0f3] rounded-[999px] flex-shrink-0 justify-center">
+                      <span className="w-auto h-auto md:h-[16px] font-manrope font-medium text-[10px] md:text-[12px] leading-[16px] text-[#f43f5e] text-center whitespace-nowrap">Due</span>
+                    </div>
+                  )}
+                  {salonStatus === "Expired" && (
+                    <div className="flex flex-row items-center px-[6px] py-[2px] md:px-[8px] md:py-[4px] gap-[10px] w-auto h-auto md:h-[24px] bg-slate-100 rounded-[999px] flex-shrink-0 justify-center">
+                      <span className="w-auto h-auto md:h-[16px] font-manrope font-medium text-[10px] md:text-[12px] leading-[16px] text-slate-400 text-center whitespace-nowrap">Exp</span>
+                    </div>
+                  )}
+                  {/* Plan Badge */}
+                  <div className="flex flex-row items-center px-[6px] py-[2px] md:px-[8px] md:py-[4px] gap-[10px] w-auto h-auto md:h-[24px] bg-[#D2F4F2] rounded-[8px] flex-shrink-0 justify-center">
+                    <span className="w-auto h-auto md:h-[16px] font-manrope font-medium text-[10px] md:text-[12px] leading-[16px] text-[#29343D] text-center whitespace-nowrap">{salon.plan}</span>
+                  </div>
+                </div>
+              </div>
+            </div>
+
+            {/* Right Column: Impersonate Button */}
+            <div className="flex flex-row flex-nowrap justify-center md:justify-end items-center content-end p-0 gap-[16px] w-full md:flex-1 min-w-[155px] h-[44px] order-3 md:order-3">
+              <button 
+                onClick={() => {
+                  setIsReactivateModalOpen(true);
+                }}
+                className="flex flex-row justify-center items-center px-[16px] py-[10px] gap-[10px] w-[155px] h-[44px] bg-[#DDDBFF] rounded-[8px] hover:bg-[#d0cdff] transition-all flex-shrink-0"
+              >
+                <span className="w-[123px] h-[24px] font-manrope font-medium text-[14px] text-center leading-[24px] text-[#635BFF] flex items-center justify-center">Impersonate Salon</span>
+              </button>
+            </div>
+
           </div>
 
         </div>
 
-        {/* Navigation tabs row */}
         <div 
-          className="bg-[#edeaff] h-12 flex items-center justify-center gap-4 px-4 w-full rounded-none overflow-x-auto"
+          className="flex flex-row flex-nowrap justify-start lg:justify-center items-center px-0 md:px-[16px] gap-0 md:gap-[16px] w-full h-[48px] bg-[#DDDBFF] rounded-none self-stretch flex-shrink-0 overflow-x-auto"
         >
           {[
-            { id: "basic", label: "Basic Data", icon: <BasicDataIcon /> },
-            { id: "locations", label: "Locations", icon: <LocationsIcon /> },
-            { id: "contacts", label: "Contacts", icon: <ContactsIcon /> },
-            { id: "tax", label: "Tax and Banking", icon: <TaxIcon /> },
-            { id: "documents", label: "Documents", icon: <DocumentsIcon /> },
-            { id: "members", label: "Members", icon: <MembersIcon /> }
+            { id: "basic", label: "Basic Data", icon: BasicDataIcon, width: "w-1/3 md:w-[126px]" },
+            { id: "locations", label: "Locations", icon: LocationsIcon, width: "w-1/3 md:w-[121px]" },
+            { id: "contacts", label: "Contacts", icon: ContactsIcon, width: "w-1/3 md:w-[118px]" },
+            { id: "tax", label: "Tax and Banking", icon: TaxIcon, width: "w-1/3 md:w-[162px]" },
+            { id: "documents", label: "Documents", icon: DocumentsIcon, width: "w-1/3 md:w-[133px]" },
+            { id: "members", label: "Members", icon: MembersIcon, width: "w-1/3 md:w-[118px]" }
           ].map((tab) => {
             const isActive = activeTab === tab.id;
+            const Icon = tab.icon;
             return (
               <button
                 key={tab.id}
                 onClick={() => setActiveTab(tab.id as any)}
-                className={`h-full flex items-center gap-2 px-4 text-xs font-bold transition-all border-b-2 rounded-none ${
+                className={`h-full flex flex-row items-center justify-center px-1.5 py-3 md:p-[12px] gap-1 md:gap-[8px] ${tab.width} flex-shrink-0 transition-all border-b-2 rounded-none ${
                   isActive
-                    ? "border-[#5e53fc] text-[#5e53fc] bg-white/10"
-                    : "border-transparent text-[#29343D] hover:bg-white/20"
+                    ? "border-[#635BFF] text-[#635BFF]"
+                    : "border-transparent text-[#29343D] hover:bg-black/5"
                 }`}
               >
-                {tab.icon}
-                <span>{tab.label}</span>
+                <Icon className={`w-4.5 h-4.5 md:w-6 md:h-6 flex-shrink-0 ${isActive ? "text-[#635BFF]" : "text-[#29343D]"}`} />
+                <span className={`font-manrope font-medium text-[11px] md:text-[14px] leading-tight md:leading-[24px] text-center whitespace-nowrap ${
+                  isActive ? "text-[#635BFF]" : "text-[#29343D]"
+                }`}>
+                  {tab.label}
+                </span>
               </button>
             );
           })}
