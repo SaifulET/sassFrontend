@@ -108,18 +108,30 @@ export default function SalonSupportPage({ salon, onBack }: SalonSupportPageProp
     }
   ]);
 
+  // Modal and custom states
+  const [isNewTicketModalOpen, setIsNewTicketModalOpen] = useState(false);
+  const [viewingTicket, setViewingTicket] = useState<typeof tickets[number] | null>(null);
+  const [deleteTicketIndex, setDeleteTicketIndex] = useState<number | null>(null);
+
+  const [newOrder, setNewOrder] = useState("");
+  const [newPriority, setNewPriority] = useState("Medium");
+  const [newCategory, setNewCategory] = useState("General");
+  const [newAssignTo, setNewAssignTo] = useState("Maria Rodriguez");
+
   const handleNewTicket = () => {
-    alert("Creating new support ticket...");
+    setNewOrder("");
+    setNewPriority("Medium");
+    setNewCategory("General");
+    setNewAssignTo("Maria Rodriguez");
+    setIsNewTicketModalOpen(true);
   };
 
   const handleViewTicket = (ticketId: string, index: number) => {
-    alert(`Viewing ticket ${ticketId} (row ${index + 1})`);
+    setViewingTicket(tickets[index]);
   };
 
   const handleDeleteTicket = (index: number) => {
-    if (confirm("Are you sure you want to delete this ticket?")) {
-      setTickets((prev) => prev.filter((_, i) => i !== index));
-    }
+    setDeleteTicketIndex(index);
   };
 
   // Badge styling helpers
@@ -200,8 +212,8 @@ export default function SalonSupportPage({ salon, onBack }: SalonSupportPageProp
         </div>
 
         {/* Tickets Table */}
-        <div className="border border-slate-100 rounded-2xl overflow-hidden w-full bg-white">
-          <table className="w-full border-collapse text-left text-xs">
+        <div className="border border-slate-100 rounded-2xl overflow-x-auto w-full bg-white">
+          <table className="w-full min-w-[800px] border-collapse text-left text-xs">
             <thead>
               <tr className="bg-[#f5f4ff] border-b border-slate-100 text-slate-600 font-bold uppercase tracking-wider">
                 <th className="px-6 py-4">ID</th>
@@ -273,6 +285,188 @@ export default function SalonSupportPage({ salon, onBack }: SalonSupportPageProp
           </table>
         </div>
       </div>
+
+      {/* New Ticket Modal */}
+      {isNewTicketModalOpen && (
+        <div className="fixed inset-0 bg-[#0f172a]/40 backdrop-blur-[6px] z-50 flex items-center justify-center p-4">
+          <div className="bg-white rounded-[20px] w-full max-w-[440px] shadow-2xl p-6 flex flex-col gap-5 relative animate-in zoom-in-95 duration-200 text-left">
+            <div className="flex flex-col gap-1">
+              <h3 className="text-lg font-bold text-[#0f172a]">Create Support Ticket</h3>
+            </div>
+
+            <form
+              onSubmit={(e) => {
+                e.preventDefault();
+                if (!newOrder) return;
+                const newT = {
+                  id: `#${String(tickets.length + 1).padStart(3, "0")}`,
+                  order: newOrder,
+                  priority: newPriority,
+                  status: "Open",
+                  category: newCategory,
+                  assignTo: newAssignTo,
+                  date: new Date().toLocaleDateString("en-GB")
+                };
+                setTickets(prev => [newT, ...prev]);
+                setIsNewTicketModalOpen(false);
+              }}
+              className="flex flex-col gap-4 text-sm"
+            >
+              <div className="flex flex-col gap-1.5">
+                <label className="text-[#334155] font-semibold text-xs">Subject / Order *</label>
+                <input
+                  type="text"
+                  required
+                  value={newOrder}
+                  onChange={(e) => setNewOrder(e.target.value)}
+                  placeholder="Employee access issues"
+                  className="h-10 border border-slate-200 rounded-lg px-3 focus:outline-none focus:border-[#5e53fc]"
+                />
+              </div>
+
+              <div className="flex flex-col gap-1.5">
+                <label className="text-[#334155] font-semibold text-xs">Priority</label>
+                <select
+                  value={newPriority}
+                  onChange={(e) => setNewPriority(e.target.value)}
+                  className="h-10 border border-slate-200 rounded-lg px-3 focus:outline-none focus:border-[#5e53fc] bg-white text-xs font-semibold"
+                >
+                  <option value="Urgent">Urgent</option>
+                  <option value="High">High</option>
+                  <option value="Medium">Medium</option>
+                  <option value="Low">Low</option>
+                </select>
+              </div>
+
+              <div className="flex flex-col gap-1.5">
+                <label className="text-[#334155] font-semibold text-xs">Category</label>
+                <select
+                  value={newCategory}
+                  onChange={(e) => setNewCategory(e.target.value)}
+                  className="h-10 border border-slate-200 rounded-lg px-3 focus:outline-none focus:border-[#5e53fc] bg-white text-xs font-semibold"
+                >
+                  <option value="Technical">Technical</option>
+                  <option value="Billing">Billing</option>
+                  <option value="Feature Request">Feature Request</option>
+                  <option value="General">General</option>
+                  <option value="Bug Report">Bug Report</option>
+                  <option value="Other">Other</option>
+                </select>
+              </div>
+
+              <div className="flex flex-col gap-1.5">
+                <label className="text-[#334155] font-semibold text-xs">Assign To</label>
+                <input
+                  type="text"
+                  value={newAssignTo}
+                  onChange={(e) => setNewAssignTo(e.target.value)}
+                  className="h-10 border border-slate-200 rounded-lg px-3 focus:outline-none focus:border-[#5e53fc]"
+                />
+              </div>
+
+              <div className="flex items-center justify-end gap-3 border-t border-slate-100 pt-4 mt-2">
+                <button
+                  type="button"
+                  onClick={() => setIsNewTicketModalOpen(false)}
+                  className="px-5 py-2.5 bg-slate-50 hover:bg-slate-100 text-slate-650 rounded-xl text-xs font-bold transition-all"
+                >
+                  Cancel
+                </button>
+                <button
+                  type="submit"
+                  className="px-5 py-2.5 bg-[#5e53fc] hover:bg-[#4d42eb] text-white rounded-xl text-xs font-bold transition-all shadow-md shadow-indigo-150"
+                >
+                  Create Ticket
+                </button>
+              </div>
+            </form>
+          </div>
+        </div>
+      )}
+
+      {/* View Ticket Details Modal */}
+      {viewingTicket && (
+        <div className="fixed inset-0 bg-[#0f172a]/40 backdrop-blur-[6px] z-50 flex items-center justify-center p-4">
+          <div className="bg-white rounded-[20px] w-full max-w-[440px] shadow-2xl p-6 flex flex-col gap-5 relative animate-in zoom-in-95 duration-200 text-left">
+            <div className="flex flex-col gap-1 pb-3 border-b border-slate-100">
+              <h3 className="text-lg font-bold text-[#0f172a]">Ticket {viewingTicket.id} Details</h3>
+              <p className="text-xs text-slate-400 font-semibold mt-1">Created on {viewingTicket.date}</p>
+            </div>
+
+            <div className="flex flex-col gap-4 text-xs font-semibold">
+              <div className="flex flex-col gap-1">
+                <span className="text-[10px] font-bold text-slate-400 uppercase">Subject / Order</span>
+                <span className="text-slate-800 text-sm font-extrabold">{viewingTicket.order}</span>
+              </div>
+              <div className="grid grid-cols-2 gap-4">
+                <div className="flex flex-col gap-1">
+                  <span className="text-[10px] font-bold text-slate-400 uppercase">Priority</span>
+                  <span className={`w-fit px-2.5 py-0.5 rounded-full text-[9px] font-bold uppercase ${getPriorityStyle(viewingTicket.priority)}`}>
+                    {viewingTicket.priority}
+                  </span>
+                </div>
+                <div className="flex flex-col gap-1">
+                  <span className="text-[10px] font-bold text-slate-400 uppercase">Status</span>
+                  <span className={`w-fit px-2.5 py-0.5 rounded-full text-[9px] font-bold uppercase ${getStatusStyle(viewingTicket.status)}`}>
+                    {viewingTicket.status}
+                  </span>
+                </div>
+                <div className="flex flex-col gap-1">
+                  <span className="text-[10px] font-bold text-slate-400 uppercase">Category</span>
+                  <span className={`w-fit px-2.5 py-0.5 rounded-full text-[9px] font-bold uppercase ${getCategoryStyle(viewingTicket.category)}`}>
+                    {viewingTicket.category}
+                  </span>
+                </div>
+                <div className="flex flex-col gap-1">
+                  <span className="text-[10px] font-bold text-slate-400 uppercase">Assigned To</span>
+                  <span className="text-slate-700">{viewingTicket.assignTo}</span>
+                </div>
+              </div>
+            </div>
+
+            <div className="flex items-center justify-end gap-3 border-t border-slate-100 pt-4 mt-2">
+              <button
+                type="button"
+                onClick={() => setViewingTicket(null)}
+                className="px-5 py-2 bg-[#5e53fc] hover:bg-[#4d42eb] text-white rounded-xl text-xs font-bold transition-all shadow-md shadow-indigo-150"
+              >
+                Close
+              </button>
+            </div>
+          </div>
+        </div>
+      )}
+
+      {/* Delete Ticket Confirmation Modal */}
+      {deleteTicketIndex !== null && (
+        <div className="fixed inset-0 bg-[#0f172a]/40 backdrop-blur-[6px] z-50 flex items-center justify-center p-4">
+          <div className="bg-white rounded-[20px] w-full max-w-[400px] shadow-2xl p-6 flex flex-col gap-6 relative animate-in zoom-in-95 duration-200 text-left">
+            <div className="flex flex-col gap-1.5">
+              <h3 className="text-lg font-bold text-[#0f172a]">Delete Ticket</h3>
+              <p className="text-sm text-[#475569]">Are you sure you want to delete this ticket? This action cannot be undone.</p>
+            </div>
+            <div className="flex items-center justify-end gap-3 border-t border-slate-100 pt-4">
+              <button
+                type="button"
+                onClick={() => setDeleteTicketIndex(null)}
+                className="px-5 py-2.5 bg-slate-50 hover:bg-slate-100 text-slate-650 rounded-xl text-xs font-bold transition-all"
+              >
+                Cancel
+              </button>
+              <button
+                type="button"
+                onClick={() => {
+                  setTickets((prev) => prev.filter((_, i) => i !== deleteTicketIndex));
+                  setDeleteTicketIndex(null);
+                }}
+                className="px-5 py-2.5 bg-rose-50 hover:bg-rose-100 text-rose-600 rounded-xl text-xs font-bold transition-all"
+              >
+                Delete
+              </button>
+            </div>
+          </div>
+        </div>
+      )}
     </div>
   );
 }

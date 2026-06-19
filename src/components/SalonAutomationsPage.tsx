@@ -1,6 +1,7 @@
 "use client";
 
 import React, { useState } from "react";
+import Image from "next/image";
 
 // HomeIcon for breadcrumbs
 const HomeIcon = () => (
@@ -128,16 +129,34 @@ export default function SalonAutomationsPage({ salon, onBack }: SalonAutomations
     }
   ];
 
+  // Dynamic state for emails
+  const [emails, setEmails] = useState(initialEmails);
+  const [isSendModalOpen, setIsSendModalOpen] = useState(false);
+  const [viewingEmail, setViewingEmail] = useState<typeof initialEmails[number] | null>(null);
+
+  // Form states for send email
+  const [emailSubject, setEmailSubject] = useState("");
+  const [emailCategory, setEmailCategory] = useState("Sent");
+  const [emailBody, setEmailBody] = useState("");
+  const [emailType, setEmailType] = useState("Email");
+
   const handleSendEmail = () => {
-    alert("Initiating Send Email modal...");
+    setEmailSubject("");
+    setEmailBody("");
+    setEmailCategory("Sent");
+    setEmailType("Email");
+    setIsSendModalOpen(true);
   };
 
   const handleViewEmail = (subject: string) => {
-    alert(`Viewing details of email: "${subject}"`);
+    const matched = emails.find(e => e.subject === subject);
+    if (matched) {
+      setViewingEmail(matched);
+    }
   };
 
   const handleResendEmail = (subject: string) => {
-    alert(`Resending email: "${subject}"`);
+    setEmails(prev => prev.map(e => e.subject === subject ? { ...e, category: "Sent", date: new Date().toLocaleDateString("en-GB") + " " + new Date().toLocaleTimeString("en-GB", { hour: '2-digit', minute: '2-digit' }) } : e));
   };
 
   return (
@@ -173,48 +192,76 @@ export default function SalonAutomationsPage({ salon, onBack }: SalonAutomations
         </div>
 
         {/* Metric Cards Grid */}
-        <div className="grid grid-cols-1 md:grid-cols-4 gap-6 mb-8">
+        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-[24px] w-full mb-8" style={{ fontFamily: "'Manrope', sans-serif" }}>
           {/* Card 1: Total Emails */}
-          <div className="bg-[#f5f3ff] rounded-3xl p-6 border border-[#e2dfff]/40 flex items-center gap-5">
-            <div className="w-11 h-11 rounded-full bg-[#5e53fc] text-white flex items-center justify-center shrink-0">
-              <MailIcon />
-            </div>
-            <div className="flex flex-col gap-0.5">
-              <span className="text-[11px] font-bold text-slate-500 uppercase tracking-wider">Total Emails</span>
-              <span className="text-2xl font-black text-slate-850">24</span>
+          <div
+            className="flex flex-col items-start p-6 h-[138px] rounded-xl w-full"
+            style={{ background: 'linear-gradient(180deg, rgba(99, 91, 255, 0.12) 0%, rgba(99, 91, 255, 0.03) 100%), #FFFFFF' }}
+          >
+            <div className="flex flex-col justify-center items-start p-0 gap-4 h-[90px] self-stretch">
+              <div className="flex flex-row items-center p-0 gap-2 w-full h-[40px] self-stretch">
+                <div>
+                  <Image src="/totalEmail.svg" alt="Total Emails" width={41} height={41} />
+                </div>
+                <span className="text-[13px] font-semibold leading-[18px] text-[#29343D] flex-1">Total Emails</span>
+              </div>
+              <div className="flex flex-col justify-center items-start p-0 gap-2 w-full h-[34px] self-stretch">
+                <span className="text-[28px] font-semibold leading-[120%] text-[#29343D]">24</span>
+              </div>
             </div>
           </div>
 
           {/* Card 2: Opened */}
-          <div className="bg-[#ecfeff] rounded-3xl p-6 border border-[#cffafe]/40 flex items-center gap-5">
-            <div className="w-11 h-11 rounded-full bg-[#0891b2] text-white flex items-center justify-center shrink-0">
-              <MailOpenIcon />
-            </div>
-            <div className="flex flex-col gap-0.5">
-              <span className="text-[11px] font-bold text-slate-500 uppercase tracking-wider">Opened</span>
-              <span className="text-2xl font-black text-slate-850">18</span>
+          <div
+            className="flex flex-col items-start p-6 h-[138px] rounded-xl w-full"
+            style={{ background: 'linear-gradient(180deg, rgba(22, 205, 199, 0.13) 0%, rgba(22, 205, 199, 0.03) 100%), #FFFFFF' }}
+          >
+            <div className="flex flex-col justify-center items-start p-0 gap-4 h-[90px] self-stretch">
+              <div className="flex flex-row items-center p-0 gap-2 w-full h-[40px] self-stretch">
+                <div>
+                  <Image src="/openedEmail.svg" alt="Opened" width={41} height={41} />
+                </div>
+                <span className="text-[13px] font-semibold leading-[18px] text-[#29343D] flex-1">Opened</span>
+              </div>
+              <div className="flex flex-col justify-center items-start p-0 gap-2 w-full h-[34px] self-stretch">
+                <span className="text-[28px] font-semibold leading-[120%] text-[#29343D]">18</span>
+              </div>
             </div>
           </div>
 
           {/* Card 3: Clicked */}
-          <div className="bg-[#f0fdf4] rounded-3xl p-6 border border-[#dcfce7]/40 flex items-center gap-5">
-            <div className="w-11 h-11 rounded-full bg-[#16a34a] text-white flex items-center justify-center shrink-0">
-              <MailCheckIcon />
-            </div>
-            <div className="flex flex-col gap-0.5">
-              <span className="text-[11px] font-bold text-slate-500 uppercase tracking-wider">Clicked</span>
-              <span className="text-2xl font-black text-slate-850">10</span>
+          <div
+            className="flex flex-col items-start p-6 h-[138px] rounded-xl w-full"
+            style={{ background: 'linear-gradient(180deg, rgba(22, 205, 199, 0.13) 0%, rgba(22, 205, 199, 0.03) 100%), #FFFFFF' }}
+          >
+            <div className="flex flex-col justify-center items-start p-0 gap-4 h-[90px] self-stretch">
+              <div className="flex flex-row items-center p-0 gap-2 w-full h-[40px] self-stretch">
+                <div>
+                  <Image src="/clickedEmail.svg" alt="Clicked" width={41} height={41} />
+                </div>
+                <span className="text-[13px] font-semibold leading-[18px] text-[#29343D] flex-1">Clicked</span>
+              </div>
+              <div className="flex flex-col justify-center items-start p-0 gap-2 w-full h-[34px] self-stretch">
+                <span className="text-[28px] font-semibold leading-[120%] text-[#29343D]">10</span>
+              </div>
             </div>
           </div>
 
           {/* Card 4: Failed */}
-          <div className="bg-[#fff1f2] rounded-3xl p-6 border border-[#ffe4e6]/40 flex items-center gap-5">
-            <div className="w-11 h-11 rounded-full bg-[#ff4d72] text-white flex items-center justify-center shrink-0">
-              <AlertCircleIcon />
-            </div>
-            <div className="flex flex-col gap-0.5">
-              <span className="text-[11px] font-bold text-slate-500 uppercase tracking-wider">Failed</span>
-              <span className="text-2xl font-black text-slate-850">1</span>
+          <div
+            className="flex flex-col items-start p-6 h-[138px] rounded-xl w-full"
+            style={{ background: 'linear-gradient(180deg, rgba(255, 102, 146, 0.13) 0%, rgba(255, 102, 146, 0.03) 100%), #FFFFFF' }}
+          >
+            <div className="flex flex-col justify-center items-start p-0 gap-4 h-[90px] self-stretch">
+              <div className="flex flex-row items-center p-0 gap-2 w-full h-[40px] self-stretch">
+                <div>
+                  <Image src="/failedEmail.svg" alt="Failed" width={41} height={41} />
+                </div>
+                <span className="text-[13px] font-semibold leading-[18px] text-[#29343D] flex-1">Failed</span>
+              </div>
+              <div className="flex flex-col justify-center items-start p-0 gap-2 w-full h-[34px] self-stretch">
+                <span className="text-[28px] font-semibold leading-[120%] text-[#29343D]">1</span>
+              </div>
             </div>
           </div>
         </div>
@@ -265,73 +312,268 @@ export default function SalonAutomationsPage({ salon, onBack }: SalonAutomations
         </div>
 
         {/* Emails Communications Table */}
-        <div className="border border-slate-100 rounded-2xl overflow-hidden w-full bg-white">
-          <table className="w-full border-collapse text-left text-xs">
-            <thead>
-              <tr className="bg-[#f5f4ff] border-b border-slate-100 text-slate-600 font-bold uppercase tracking-wider">
-                <th className="px-6 py-4">Date</th>
-                <th className="px-6 py-4">Subject</th>
-                <th className="px-6 py-4">Type</th>
-                <th className="px-6 py-4">Source</th>
-                <th className="px-6 py-4">Category</th>
-                <th className="px-6 py-4 text-center">Actions</th>
-              </tr>
-            </thead>
-            <tbody className="divide-y divide-slate-100 text-slate-700 font-semibold">
-              {initialEmails.map((item, idx) => (
-                <tr key={idx} className="hover:bg-slate-50/50 transition-colors">
-                  {/* Date */}
-                  <td className="px-6 py-4 text-slate-500">{item.date}</td>
+        <div className="overflow-x-auto w-full">
+          <div className="flex flex-row min-w-[1098px] rounded-xl" style={{ fontFamily: "'Manrope', sans-serif" }}>
+            {/* Column 1: Date */}
+            <div className="flex flex-col flex-grow select-none" style={{ width: '191.5px' }}>
+              {/* Header */}
+              <div className="flex items-center px-[14px] bg-[#F3F3FF] border border-[#E0E6EB] rounded-tl-xl text-[#29343D] font-bold text-base h-[72px]">
+                Date
+              </div>
+              {/* Cells */}
+              {emails.map((item, idx) => {
+                const isAlt = idx % 2 === 1;
+                const isLast = idx === emails.length - 1;
+                return (
+                  <div
+                    key={idx}
+                    className={`flex items-center px-[14px] text-[#29343D] text-sm h-[72px] border-l border-r border-b border-[#E0E6EB] ${isAlt ? 'bg-[#FAFAFA]' : 'bg-white'} ${isLast ? 'rounded-bl-xl' : ''}`}
+                  >
+                    {item.date}
+                  </div>
+                );
+              })}
+            </div>
 
-                  {/* Subject */}
-                  <td className="px-6 py-4 text-slate-800 font-bold">{item.subject}</td>
+            {/* Column 2: Subject */}
+            <div className="flex flex-col select-none" style={{ width: '192px' }}>
+              {/* Header */}
+              <div className="flex items-center px-[14px] bg-[#F3F3FF] border-t border-r border-b border-[#E0E6EB] text-[#29343D] font-bold text-base h-[72px]">
+                Subject
+              </div>
+              {/* Cells */}
+              {emails.map((item, idx) => {
+                const isAlt = idx % 2 === 1;
+                return (
+                  <div
+                    key={idx}
+                    className={`flex flex-col justify-center px-[14px] text-[#29343D] font-medium text-sm h-[72px] border-r border-b border-[#E0E6EB] ${isAlt ? 'bg-[#FAFAFA]' : 'bg-white'}`}
+                  >
+                    {item.subject}
+                  </div>
+                );
+              })}
+            </div>
 
-                  {/* Type */}
-                  <td className="px-6 py-4">
-                    <span className="px-2.5 py-1 rounded-full text-[9px] font-extrabold uppercase tracking-wide bg-[#ecfeff] text-[#0891b2]">
+            {/* Column 3: Type */}
+            <div className="flex flex-col flex-grow select-none" style={{ width: '191.5px' }}>
+              {/* Header */}
+              <div className="flex items-center px-[14px] bg-[#F3F3FF] border-t border-r border-b border-[#E0E6EB] text-[#29343D] font-bold text-base h-[72px]">
+                Type
+              </div>
+              {/* Cells */}
+              {emails.map((item, idx) => {
+                const isAlt = idx % 2 === 1;
+                return (
+                  <div
+                    key={idx}
+                    className={`flex items-center px-[14px] h-[72px] border-r border-b border-[#E0E6EB] ${isAlt ? 'bg-[#FAFAFA]' : 'bg-white'}`}
+                  >
+                    <div className="inline-flex items-center justify-center px-2 py-0.5 bg-[#ECFDFD] text-[#16CDC7] rounded-md text-xs font-semibold">
                       {item.type}
-                    </span>
-                  </td>
+                    </div>
+                  </div>
+                );
+              })}
+            </div>
 
-                  {/* Source */}
-                  <td className="px-6 py-4">
-                    <span className="px-2.5 py-1 rounded-full text-[9px] font-extrabold uppercase tracking-wide bg-slate-100 text-slate-650">
+            {/* Column 4: Source */}
+            <div className="flex flex-col flex-grow select-none" style={{ width: '191.5px' }}>
+              {/* Header */}
+              <div className="flex items-center px-[14px] bg-[#F3F3FF] border-t border-r border-b border-[#E0E6EB] text-[#29343D] font-bold text-base h-[72px]">
+                Source
+              </div>
+              {/* Cells */}
+              {emails.map((item, idx) => {
+                const isAlt = idx % 2 === 1;
+                return (
+                  <div
+                    key={idx}
+                    className={`flex items-center px-[14px] h-[72px] border-r border-b border-[#E0E6EB] ${isAlt ? 'bg-[#FAFAFA]' : 'bg-white'}`}
+                  >
+                    <div className="inline-flex items-center justify-center px-2.5 py-1 bg-[#EFF4FA] text-[#0A2540] rounded-lg text-xs font-medium">
                       {item.source}
-                    </span>
-                  </td>
+                    </div>
+                  </div>
+                );
+              })}
+            </div>
 
-                  {/* Category */}
-                  <td className="px-6 py-4">
-                    <span className={`px-2.5 py-1 rounded-full text-[9px] font-extrabold uppercase tracking-wide ${
-                      item.category === "Opened" ? "bg-[#f0fdf4] text-[#16a34a]" : "bg-[#eff6ff] text-[#2563eb]"
-                    }`}>
+            {/* Column 5: Category */}
+            <div className="flex flex-col flex-grow select-none" style={{ width: '191.5px' }}>
+              {/* Header */}
+              <div className="flex items-center px-[14px] bg-[#F3F3FF] border-t border-r border-b border-[#E0E6EB] text-[#29343D] font-bold text-base h-[72px]">
+                Category
+              </div>
+              {/* Cells */}
+              {emails.map((item, idx) => {
+                const isAlt = idx % 2 === 1;
+                const isSuccess = item.category === "Opened";
+                return (
+                  <div
+                    key={idx}
+                    className={`flex items-center px-[14px] h-[72px] border-r border-b border-[#E0E6EB] ${isAlt ? 'bg-[#FAFAFA]' : 'bg-white'}`}
+                  >
+                    <div className={`inline-flex items-center justify-center px-2 py-0.5 rounded-md text-xs font-semibold ${isSuccess ? 'bg-[#EBFAF0] text-[#36C76C]' : 'bg-[#ECFDFD] text-[#16CDC7]'}`}>
                       {item.category}
-                    </span>
-                  </td>
+                    </div>
+                  </div>
+                );
+              })}
+            </div>
 
-                  {/* Actions */}
-                  <td className="px-6 py-4 text-center flex items-center justify-center gap-2">
+            {/* Column 6: Actions */}
+            <div className="flex flex-col select-none" style={{ width: '140px' }}>
+              {/* Header */}
+              <div className="flex items-center px-[14px] bg-[#F3F3FF] border-t border-r border-b border-[#E0E6EB] rounded-tr-xl text-[#29343D] font-bold text-base h-[72px]">
+                Actions
+              </div>
+              {/* Cells */}
+              {emails.map((item, idx) => {
+                const isAlt = idx % 2 === 1;
+                const isLast = idx === emails.length - 1;
+                return (
+                  <div
+                    key={idx}
+                    className={`flex items-center justify-end px-[14px] gap-4 h-[72px] border-r border-b border-[#E0E6EB] ${isAlt ? 'bg-[#FAFAFA]' : 'bg-white'} ${isLast ? 'rounded-br-xl' : ''}`}
+                  >
                     <button
                       onClick={() => handleViewEmail(item.subject)}
-                      className="p-2 bg-[#f2f1ff] text-[#5e53fc] hover:bg-[#e4e2ff] rounded-lg transition-colors inline-flex"
+                      className="w-12 h-9 flex items-center justify-center bg-[#F1F2FE] hover:bg-[#e4e2ff] rounded-lg transition-colors text-[#635BFF]"
                       title="View Details"
                     >
                       <ViewIcon />
                     </button>
                     <button
                       onClick={() => handleResendEmail(item.subject)}
-                      className="p-2 bg-[#ecfeff] text-[#0891b2] hover:bg-[#cffafe] rounded-lg transition-colors inline-flex"
+                      className="w-12 h-9 flex items-center justify-center bg-[#ECFDFD] hover:bg-[#cffafe] rounded-lg transition-colors text-[#16CDC7]"
                       title="Resend Email"
                     >
                       <RefreshIcon />
                     </button>
-                  </td>
-                </tr>
-              ))}
-            </tbody>
-          </table>
+                  </div>
+                );
+              })}
+            </div>
+          </div>
         </div>
       </div>
+      {/* Send Email Modal */}
+      {isSendModalOpen && (
+        <div className="fixed inset-0 bg-[#0f172a]/40 backdrop-blur-[6px] z-50 flex items-center justify-center p-4">
+          <div className="bg-white rounded-[20px] w-full max-w-[440px] shadow-2xl p-6 flex flex-col gap-5 relative animate-in zoom-in-95 duration-200 text-left">
+            <div className="flex flex-col gap-1">
+              <h3 className="text-lg font-bold text-[#0f172a]">Compose Email</h3>
+            </div>
+
+            <form
+              onSubmit={(e) => {
+                e.preventDefault();
+                if (!emailSubject) return;
+                const newMail = {
+                  date: new Date().toLocaleDateString("en-GB") + " " + new Date().toLocaleTimeString("en-GB", { hour: '2-digit', minute: '2-digit' }),
+                  subject: emailSubject,
+                  type: emailType,
+                  source: "Manual",
+                  category: emailCategory
+                };
+                setEmails(prev => [newMail, ...prev]);
+                setIsSendModalOpen(false);
+              }}
+              className="flex flex-col gap-4 text-sm"
+            >
+              <div className="flex flex-col gap-1.5">
+                <label className="text-[#334155] font-semibold text-xs">Subject *</label>
+                <input
+                  type="text"
+                  required
+                  value={emailSubject}
+                  onChange={(e) => setEmailSubject(e.target.value)}
+                  placeholder="Invoice reminder"
+                  className="h-10 border border-slate-200 rounded-lg px-3 focus:outline-none focus:border-[#5e53fc]"
+                />
+              </div>
+
+              <div className="flex flex-col gap-1.5">
+                <label className="text-[#334155] font-semibold text-xs">Category</label>
+                <select
+                  value={emailCategory}
+                  onChange={(e) => setEmailCategory(e.target.value)}
+                  className="h-10 border border-slate-200 rounded-lg px-3 focus:outline-none focus:border-[#5e53fc] bg-white text-xs font-semibold"
+                >
+                  <option value="Sent">Sent</option>
+                  <option value="Opened">Opened</option>
+                </select>
+              </div>
+
+              <div className="flex flex-col gap-1.5">
+                <label className="text-[#334155] font-semibold text-xs">Message Body</label>
+                <textarea
+                  value={emailBody}
+                  onChange={(e) => setEmailBody(e.target.value)}
+                  placeholder="Dear customer, please find attached the details..."
+                  className="min-h-[100px] border border-slate-200 rounded-lg p-3 focus:outline-none focus:border-[#5e53fc] resize-none"
+                />
+              </div>
+
+              <div className="flex items-center justify-end gap-3 border-t border-slate-100 pt-4 mt-2">
+                <button
+                  type="button"
+                  onClick={() => setIsSendModalOpen(false)}
+                  className="px-5 py-2.5 bg-slate-50 hover:bg-slate-100 text-slate-650 rounded-xl text-xs font-bold transition-all"
+                >
+                  Cancel
+                </button>
+                <button
+                  type="submit"
+                  className="px-5 py-2.5 bg-[#5e53fc] hover:bg-[#4d42eb] text-white rounded-xl text-xs font-bold transition-all shadow-md shadow-indigo-150"
+                >
+                  Send Email
+                </button>
+              </div>
+            </form>
+          </div>
+        </div>
+      )}
+
+      {/* View Email Details Modal */}
+      {viewingEmail && (
+        <div className="fixed inset-0 bg-[#0f172a]/40 backdrop-blur-[6px] z-50 flex items-center justify-center p-4">
+          <div className="bg-white rounded-[20px] w-full max-w-[440px] shadow-2xl p-6 flex flex-col gap-5 relative animate-in zoom-in-95 duration-200 text-left">
+            <div className="flex flex-col gap-1 pb-3 border-b border-slate-100">
+              <h3 className="text-lg font-bold text-[#0f172a]">Email details</h3>
+              <p className="text-xs text-slate-400 font-semibold mt-1">Processed on {viewingEmail.date}</p>
+            </div>
+
+            <div className="flex flex-col gap-4 text-xs font-semibold">
+              <div className="flex flex-col gap-1">
+                <span className="text-[10px] font-bold text-slate-400 uppercase">Subject</span>
+                <span className="text-slate-800 text-sm font-extrabold">{viewingEmail.subject}</span>
+              </div>
+              <div className="grid grid-cols-2 gap-4">
+                <div className="flex flex-col gap-1">
+                  <span className="text-[10px] font-bold text-slate-400 uppercase">Source</span>
+                  <span className="text-slate-700">{viewingEmail.source}</span>
+                </div>
+                <div className="flex flex-col gap-1">
+                  <span className="text-[10px] font-bold text-slate-400 uppercase">Status</span>
+                  <span className="text-slate-700">{viewingEmail.category}</span>
+                </div>
+              </div>
+            </div>
+
+            <div className="flex items-center justify-end gap-3 border-t border-slate-100 pt-4 mt-2">
+              <button
+                type="button"
+                onClick={() => setViewingEmail(null)}
+                className="px-5 py-2 bg-[#5e53fc] hover:bg-[#4d42eb] text-white rounded-xl text-xs font-bold transition-all shadow-md shadow-indigo-150"
+              >
+                Close
+              </button>
+            </div>
+          </div>
+        </div>
+      )}
     </div>
   );
 }

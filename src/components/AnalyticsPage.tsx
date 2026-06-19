@@ -1089,7 +1089,7 @@ export default function AnalyticsPage({ setActiveTab }: { setActiveTab?: (tab: s
               setSalon(salonOptions[0]);
               setCity(cityOptions[0]);
             }}
-            className="inline-flex h-10 items-center gap-2 rounded-[8px] bg-[#635BFF] hover:bg-[#4d42eb] px-4 text-[14px] font-semibold text-white shadow-[0_8px_18px_rgba(94,83,252,0.22)] transition-all duration-150"
+            className="inline-flex h-10 items-center gap-2 rounded-[8px] bg-[#635BFF] hover:bg-[#4d42eb] px-4 text-[14px] font-semibold text-white shadow-[0_8px_18px_rgba(94,83,252,0.22)] transition-all duration-150 self-start"
           >
             <RefreshIcon /> Resync
           </button>

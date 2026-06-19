@@ -335,7 +335,7 @@ export default function CohortsPage({ setActiveTab }: { setActiveTab?: (tab: str
               setPlanFilter("All");
               setCityFilter("All cities");
             }}
-            className="inline-flex h-11 items-center gap-2 rounded-[8px] bg-[#635BFF] hover:bg-[#4d42eb] px-4 text-[14px] font-medium text-white shadow-[0px_2px_4px_-1px_rgba(175,182,201,0.2)] transition-all duration-150"
+            className="inline-flex h-11 items-center gap-2 rounded-[8px] bg-[#635BFF] hover:bg-[#4d42eb] px-4 text-[14px] font-medium text-white shadow-[0px_2px_4px_-1px_rgba(175,182,201,0.2)] transition-all duration-150 self-start"
           >
             <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round">
               <path d="M20 11a8 8 0 1 0 2 5" /><path d="M20 5v6h-6" />
@@ -505,12 +505,12 @@ export default function CohortsPage({ setActiveTab }: { setActiveTab?: (tab: str
             <table className="w-full border-collapse text-left text-[14px] min-w-[900px]">
               <thead>
                 <tr className="bg-[#F3F3FF] border-b border-[#E0E6EB] text-[#29343D]">
-                  <th className="px-6 py-[14px] font-bold border-r border-[#E0E6EB] w-[150px]">
+                  <th className="px-6 py-[14px] font-bold border-r border-[#E0E6EB] w-[150px] whitespace-nowrap">
                     {timeRange === "Monthly" ? "Subscribed" : timeRange === "Yearly" ? "Subscribed Year" : "Period"}
                   </th>
-                  <th className="px-6 py-[14px] font-bold border-r border-[#E0E6EB] w-[140px]">Start MRR</th>
+                  <th className="px-6 py-[14px] font-bold border-r border-[#E0E6EB] w-[140px] whitespace-nowrap">Start MRR</th>
                   {columns.map((colName) => (
-                    <th key={colName} className="px-4 py-[14px] font-bold text-center border-r border-[#E0E6EB]/50">
+                    <th key={colName} className="px-4 py-[14px] font-bold text-center border-r border-[#E0E6EB]/50 whitespace-nowrap">
                       {colName}
                     </th>
                   ))}
@@ -528,8 +528,8 @@ export default function CohortsPage({ setActiveTab }: { setActiveTab?: (tab: str
 
                   return (
                     <tr key={idx} className={`${bgClass} border-b border-[#E0E6EB] hover:bg-slate-50 transition-colors`}>
-                      <td className="border-r border-[#E0E6EB] px-6 py-[11px] font-semibold text-[#29343D]">{row.month}</td>
-                      <td className="border-r border-[#E0E6EB] px-6 py-[11px] text-[#29343D] font-medium">{displayMRR}</td>
+                      <td className="border-r border-[#E0E6EB] px-6 py-[11px] font-semibold text-[#29343D] whitespace-nowrap">{row.month}</td>
+                      <td className="border-r border-[#E0E6EB] px-6 py-[11px] text-[#29343D] font-medium whitespace-nowrap">{displayMRR}</td>
                       
                       {row.cells.slice(0, columns.length).map((cell, cidx) => {
                         let pillClass = "";

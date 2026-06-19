@@ -116,6 +116,22 @@ export default function SalonActivityPage({ salon, onBack }: SalonActivityPagePr
     }
   ];
 
+  const handleExport = () => {
+    const csvContent = `Type,Title,Description,Timestamp,Performer
+upgrade,Plan Upgraded,Upgraded from Basic to Premium plan,"21/08/2025, 13:33:39",Super Admin (admin)
+addUser,User Added,Added staff member Marco Verdi,"21/08/2025, 13:33:39",Maria Rodriguez (user)
+login,Login,Logged in from 192.168.1.1,"21/08/2025, 13:33:39",Maria Rodriguez (system)
+updateProfile,Profile Updated,Updated salon contact information,"21/08/2025, 13:33:39",Maria Rodriguez (system)
+`;
+    const element = document.createElement("a");
+    const file = new Blob([csvContent], { type: "text/csv" });
+    element.href = URL.createObjectURL(file);
+    element.download = "salon_activity_log.csv";
+    document.body.appendChild(element);
+    element.click();
+    document.body.removeChild(element);
+  };
+
   return (
     <div className="flex flex-col gap-6 animate-in fade-in duration-300 w-full text-left">
       {/* Top Header Breadcrumbs Card */}
@@ -140,7 +156,7 @@ export default function SalonActivityPage({ salon, onBack }: SalonActivityPagePr
         <div className="flex items-center justify-between mb-8">
           <h2 className="text-xl font-bold text-slate-800">Activity Log</h2>
           <button
-            onClick={() => alert("Exporting activity logs...")}
+            onClick={handleExport}
             className="flex items-center gap-2 px-4 py-2.5 bg-[#f2f1ff] hover:bg-[#e4e2ff] text-[#5e53fc] border border-[#e2dfff] rounded-2xl text-xs font-semibold transition-all shadow-sm"
           >
             <DownloadIcon />

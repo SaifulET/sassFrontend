@@ -11,7 +11,8 @@ import {
   Mail01Icon,
   CustomerSupportIcon,
   Settings01Icon,
-  Cancel01Icon
+  Cancel01Icon,
+  Menu01Icon
 } from "@hugeicons/core-free-icons";
 
 const SidebarIcon = ({ src, size = 20, className = "" }: { src: string; size?: number; className?: string }) => {
@@ -47,6 +48,8 @@ interface SidebarProps {
   setSalonSubTab: (tab: string) => void;
   isOpen: boolean;
   setIsOpen: (isOpen: boolean) => void;
+  isExpanded?: boolean;
+  setIsExpanded?: (val: boolean) => void;
 }
 
 export default function Sidebar({
@@ -57,7 +60,9 @@ export default function Sidebar({
   salonSubTab,
   setSalonSubTab,
   isOpen,
-  setIsOpen
+  setIsOpen,
+  isExpanded = true,
+  setIsExpanded = () => {}
 }: SidebarProps) {
   const [analyticsExpanded, setAnalyticsExpanded] = React.useState(false);
   const [revenueExpanded, setRevenueExpanded] = React.useState(false);
@@ -119,12 +124,12 @@ export default function Sidebar({
         }}
         className={`w-12 h-12 rounded-2xl flex items-center justify-center transition-all duration-200 relative group ${
           isHighlighted
-            ? "bg-[#5e53fc] text-white shadow-md shadow-indigo-150 scale-105"
+            ? "bg-[#5e53fc] text-white shadow-md shadow-indigo-150"
             : "text-[#7e8b9b] hover:bg-slate-50 hover:text-slate-900"
         }`}
         title={item.label}
       >
-        <SidebarIcon src={item.icon} size={22} />
+        <SidebarIcon src={item.icon} size={20} />
         {isHighlighted && (
           <span className="absolute right-0 w-1.5 h-1.5 rounded-full bg-white mr-1" />
         )}
@@ -146,15 +151,25 @@ export default function Sidebar({
 
         {/* Sidebar Container - Desktop */}
         <aside
-          className={`fixed inset-y-0 left-0 w-[280px] bg-white border-r border-[#eef2f6] flex flex-col z-50 lg:z-30 transform lg:transform-none transition-transform duration-300 ease-in-out ${
+          className={`fixed inset-y-0 left-0 ${isExpanded ? "w-[280px]" : "w-20"} bg-white border-r border-[#eef2f6] flex flex-col z-50 lg:z-30 transform lg:transform-none transition-all duration-300 ease-in-out ${
             isOpen ? "translate-x-0" : "-translate-x-full lg:translate-x-0"
           }`}
         >
           {/* Brand/Logo Header */}
-          <div className="h-[63px] px-6 border-b border-[#eef2f6] flex items-center justify-between shrink-0">
-            <div className="flex items-center">
-              <img src="/logo.svg" alt="MatDash" className="w-[135px] h-[80px] object-contain" />
-            </div>
+          <div className={`h-[63px] ${isExpanded ? "px-6 justify-between" : "px-2 justify-center"} border-b border-[#eef2f6] flex items-center shrink-0`}>
+            {isExpanded && (
+              <div className="flex items-center">
+                <img src="/logo.svg" alt="MatDash" className="w-[120px] h-[50px] object-contain" />
+              </div>
+            )}
+
+            {/* Desktop Hamburger / Collapse Button */}
+            <button
+              onClick={() => setIsExpanded(!isExpanded)}
+              className="hidden lg:flex p-2 rounded-xl text-slate-500 hover:bg-slate-50 hover:text-slate-800 transition-colors"
+            >
+              <HugeiconsIcon icon={Menu01Icon} size={20} />
+            </button>
 
             {/* Mobile Close Button */}
             <button
@@ -166,14 +181,47 @@ export default function Sidebar({
           </div>
 
           {/* Sidebar Nav Links */}
-          <div className="flex-1 overflow-y-auto px-4 py-6 flex flex-col gap-6 text-left">
+          <div className={`flex-1 overflow-y-auto ${isExpanded ? "px-4" : "px-2"} py-6 flex flex-col gap-6 text-left`}>
             {/* Main Section */}
             <div className="flex flex-col gap-1">
-              <span className="px-4 text-[10px] font-extrabold uppercase tracking-wider text-[#b0bac9] mb-2">
-                Main
-              </span>
+              {isExpanded && (
+                <span className="px-4 text-[10px] font-extrabold uppercase tracking-wider text-[#b0bac9] mb-2">
+                  Main
+                </span>
+              )}
               {mainNavigation.map((item) => {
-                const isActive = activeTab === item.id;
+                const isActive = activeTab === item.id || 
+                  (item.id === "analytics" && activeTab.startsWith("analytics_")) ||
+                  (item.id === "leads" && (activeTab.startsWith("leads_") || activeTab === "analytics_customers_leads"));
+                
+                if (!isExpanded) {
+                  return (
+                    <div key={item.id} className="relative group flex justify-center w-full my-1">
+                      <button
+                        type="button"
+                        onClick={() => {
+                          if (item.id === "analytics") {
+                            handleMainItemClick("analytics_revenue_mrr_arr");
+                          } else if (item.id === "leads") {
+                            handleMainItemClick("leads_pipeline");
+                          } else {
+                            handleMainItemClick(item.id);
+                          }
+                        }}
+                        className={`w-10 h-10 rounded-xl flex items-center justify-center transition-all duration-200 ${
+                          isActive
+                            ? "bg-[#5e53fc] text-white shadow-md shadow-indigo-150"
+                            : "text-[#7e8b9b] hover:bg-slate-50 hover:text-slate-900"
+                        }`}
+                      >
+                        <SidebarIcon src={item.icon} size={20} />
+                      </button>
+                      <div className="absolute left-full ml-3 px-2.5 py-1.5 bg-[#635BFF] text-white text-[10px] font-bold rounded-lg shadow-lg opacity-0 group-hover:opacity-100 transition-opacity duration-200 pointer-events-none whitespace-nowrap z-50">
+                        {item.label}
+                      </div>
+                    </div>
+                  );
+                }
                 if (item.id === "leads") {
                   const isLeadsActive = activeTab.startsWith("leads_") || activeTab === "leads" || activeTab === "analytics_customers_leads";
                   return (
@@ -444,11 +492,33 @@ export default function Sidebar({
 
             {/* Others Section */}
             <div className="flex flex-col gap-1">
-              <span className="px-4 text-[10px] font-extrabold uppercase tracking-wider text-[#b0bac9] mb-2">
-                Others
-              </span>
+              {isExpanded && (
+                <span className="px-4 text-[10px] font-extrabold uppercase tracking-wider text-[#b0bac9] mb-2">
+                  Others
+                </span>
+              )}
               {secondaryNavigation.map((item) => {
                 const isActive = activeTab === item.id;
+                if (!isExpanded) {
+                  return (
+                    <div key={item.id} className="relative group flex justify-center w-full my-1">
+                      <button
+                        type="button"
+                        onClick={() => handleMainItemClick(item.id)}
+                        className={`w-10 h-10 rounded-xl flex items-center justify-center transition-all duration-200 ${
+                          isActive
+                            ? "bg-[#5e53fc] text-white shadow-md shadow-indigo-150"
+                            : "text-[#7e8b9b] hover:bg-slate-50 hover:text-slate-900"
+                        }`}
+                      >
+                        <SidebarIcon src={item.icon} size={20} />
+                      </button>
+                      <div className="absolute left-full ml-3 px-2.5 py-1.5 bg-[#635BFF] text-white text-[10px] font-bold rounded-lg shadow-lg opacity-0 group-hover:opacity-100 transition-opacity duration-200 pointer-events-none whitespace-nowrap z-50">
+                        {item.label}
+                      </div>
+                    </div>
+                  );
+                }
                 return (
                   <button
                     key={item.id}
@@ -483,10 +553,16 @@ export default function Sidebar({
       )}
 
       {/* DESKTOP SIDEBAR: Double column fixed structure starting at top (top-0) */}
-      <aside className="hidden lg:flex fixed top-0 bottom-0 left-0 w-72 bg-white z-30">
+      <aside className={`hidden lg:flex fixed top-0 bottom-0 left-0 ${isExpanded ? "w-72" : "w-20"} bg-white z-30 transition-all duration-300`}>
         {/* Column 1: Narrow vertical icon bar */}
         <div className="w-20 bg-white border-r border-[#eef2f6] flex flex-col items-center py-6 justify-between shrink-0">
           <div className="flex flex-col items-center gap-4.5 w-full">
+            <button
+              onClick={() => setIsExpanded(!isExpanded)}
+              className="p-2 mb-2 rounded-xl text-slate-500 hover:bg-slate-50 hover:text-slate-800 transition-colors"
+            >
+              <HugeiconsIcon icon={Menu01Icon} size={20} />
+            </button>
             {mainNavigation.map(renderNarrowIcon)}
           </div>
           <div className="flex flex-col items-center gap-4.5 w-full">
@@ -495,7 +571,8 @@ export default function Sidebar({
         </div>
 
         {/* Column 2: Extended text menu bar */}
-        <div className="w-52 bg-[#f8fafc] border-r border-[#eef2f6] flex flex-col pt-[87px] pb-6 px-3.5 overflow-y-auto">
+        {isExpanded && (
+          <div className="w-52 bg-[#f8fafc] border-r border-[#eef2f6] flex flex-col pt-[87px] pb-6 px-3.5 overflow-y-auto animate-in fade-in duration-200">
           <div className="flex flex-col gap-6 w-full text-left">
             <div>
               <span className="px-4 text-[10px] font-extrabold uppercase tracking-wider text-[#b0bac9]">
@@ -525,7 +602,8 @@ export default function Sidebar({
             </div>
           </div>
         </div>
-      </aside>
+      )}
+    </aside>
 
       {/* MOBILE DRAWER: Full sliding menu bar containing narrow & extended side-by-side */}
       <aside

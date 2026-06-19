@@ -530,7 +530,7 @@ export default function AutomationsMailPage() {
 
         {isOpen && (
           <div
-            className="absolute left-0 top-full mt-1.5 w-64 bg-white border border-[#E0E6EB] rounded-xl shadow-2xl z-50 p-2 flex flex-col gap-0.5 animate-in fade-in slide-in-from-top-1 origin-top"
+            className="absolute left-0 top-full mt-1.5 w-max min-w-[150px] max-w-[320px] bg-white border border-[#E0E6EB] rounded-xl shadow-2xl z-50 p-2 flex flex-col gap-0.5 animate-in fade-in slide-in-from-top-1 origin-top"
             style={{ boxShadow: "0px 16px 32px -8px rgba(12, 12, 13, 0.4)" }}
           >
             <div className="max-h-60 overflow-y-auto custom-scrollbar flex flex-col gap-0.5">
@@ -541,7 +541,7 @@ export default function AutomationsMailPage() {
                     setValue(option);
                     setActiveDropdown(null);
                   }}
-                  className={`w-full text-left px-3.5 py-2 rounded-lg text-xs font-semibold transition-colors ${currentValue === option
+                  className={`w-full text-left px-3.5 py-2 rounded-lg text-xs font-semibold transition-colors whitespace-nowrap ${currentValue === option
                       ? "bg-[#EFF4FA] text-[#635BFF]"
                       : "text-[#29343D] hover:bg-[#EFF4FA] hover:text-[#29343D]"
                     }`}
@@ -870,9 +870,9 @@ export default function AutomationsMailPage() {
                           </button>
 
                           {/* Eye Tooltip */}
-                          <div className="absolute bottom-full left-1/2 transform -translate-x-1/2 mb-2 px-3 py-1.5 bg-[#635BFF] text-white text-[10px] font-bold rounded-lg shadow-lg opacity-0 group-hover/btn:opacity-100 transition-opacity duration-200 pointer-events-none whitespace-nowrap z-50">
+                          <div className="absolute right-full top-1/2 transform -translate-y-1/2 mr-2 px-3 py-1.5 bg-[#635BFF] text-white text-[10px] font-bold rounded-lg shadow-lg opacity-0 group-hover/btn:opacity-100 transition-opacity duration-200 pointer-events-none whitespace-nowrap z-50">
                             View Details
-                            <div className="absolute top-full left-1/2 transform -translate-x-1/2 -mt-1 border-4 border-transparent border-t-[#635BFF]" />
+                            <div className="absolute left-full top-1/2 transform -translate-y-1/2 -ml-1 border-4 border-transparent border-l-[#635BFF]" />
                           </div>
                         </div>
 
@@ -888,9 +888,9 @@ export default function AutomationsMailPage() {
                             </button>
 
                             {/* Checkmark Tooltip */}
-                            <div className="absolute bottom-full left-1/2 transform -translate-x-1/2 mb-2 px-3 py-1.5 bg-[#36C76C] text-white text-[10px] font-bold rounded-lg shadow-lg opacity-0 group-hover/btn:opacity-100 transition-opacity duration-200 pointer-events-none whitespace-nowrap z-50">
+                            <div className="absolute right-full top-1/2 transform -translate-y-1/2 mr-2 px-3 py-1.5 bg-[#36C76C] text-white text-[10px] font-bold rounded-lg shadow-lg opacity-0 group-hover/btn:opacity-100 transition-opacity duration-200 pointer-events-none whitespace-nowrap z-50">
                               Mark As Read
-                              <div className="absolute top-full left-1/2 transform -translate-x-1/2 -mt-1 border-4 border-transparent border-t-[#36C76C]" style={{ borderTopColor: "#36C76C" }} />
+                              <div className="absolute left-full top-1/2 transform -translate-y-1/2 -ml-1 border-4 border-transparent border-l-[#36C76C]" style={{ borderLeftColor: "#36C76C" }} />
                             </div>
                           </div>
                         )}

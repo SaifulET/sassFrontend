@@ -83,7 +83,6 @@ export default function PermissionsPage({ salon, employeeId, onBack }: Permissio
   };
 
   const handleSave = () => {
-    alert("Permissions updated successfully!");
     onBack();
   };
 

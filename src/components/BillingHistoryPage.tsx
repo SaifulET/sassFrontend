@@ -81,6 +81,29 @@ interface BillingHistoryPageProps {
 
 export default function BillingHistoryPage({ salon, onBack }: BillingHistoryPageProps) {
   const [selectedInvoiceId, setSelectedInvoiceId] = useState<string | null>(null);
+  const [retrying, setRetrying] = useState(false);
+
+  const handleRetry = () => {
+    setRetrying(true);
+    setTimeout(() => {
+      setRetrying(false);
+    }, 1500);
+  };
+
+  const handleExport = () => {
+    const csvContent = `Invoice ID,Date,Description,Period,Amount,Method,Status
+BILL__001,November 30, 2024,Premium,December 2024,EUR 299.00,Credit Card,Paid
+BILL__002,November 30, 2024,Premium,December 2024,EUR 299.00,Credit Card,Paid
+BILL__003,November 30, 2024,Premium,December 2024,EUR 299.00,Bank Transfer,Paid
+`;
+    const element = document.createElement("a");
+    const file = new Blob([csvContent], { type: "text/csv" });
+    element.href = URL.createObjectURL(file);
+    element.download = "billing_history_export.csv";
+    document.body.appendChild(element);
+    element.click();
+    document.body.removeChild(element);
+  };
 
   // Mock billing history list matching the screenshot
   const invoices = [
@@ -155,14 +178,15 @@ export default function BillingHistoryPage({ salon, onBack }: BillingHistoryPage
 
           <div className="flex items-center gap-3">
             <button
-              onClick={() => alert("Retrying failed invoices...")}
-              className="flex items-center gap-2 px-4 py-2.5 bg-white border border-[#eef2f6] hover:bg-slate-50 rounded-2xl text-xs font-semibold text-slate-600 transition-all shadow-sm"
+              onClick={handleRetry}
+              disabled={retrying}
+              className="flex items-center gap-2 px-4 py-2.5 bg-white border border-[#eef2f6] hover:bg-slate-50 rounded-2xl text-xs font-semibold text-slate-600 transition-all shadow-sm disabled:opacity-50"
             >
               <RefreshIcon />
-              <span>Retry Failed</span>
+              <span>{retrying ? "Retrying..." : "Retry Failed"}</span>
             </button>
             <button
-              onClick={() => alert("Exporting billing history...")}
+              onClick={handleExport}
               className="flex items-center gap-2 px-4 py-2.5 bg-[#f2f1ff] hover:bg-[#e4e2ff] text-[#5e53fc] border border-[#e2dfff] rounded-2xl text-xs font-semibold transition-all shadow-sm"
             >
               <DownloadIcon />
@@ -208,8 +232,8 @@ export default function BillingHistoryPage({ salon, onBack }: BillingHistoryPage
         </div>
 
         {/* Invoices Table */}
-        <div className="border border-slate-100 rounded-2xl overflow-hidden w-full bg-white">
-          <table className="w-full border-collapse text-left text-xs">
+        <div className="border border-slate-100 rounded-2xl overflow-x-auto w-full bg-white">
+          <table className="w-full min-w-[800px] border-collapse text-left text-xs">
             <thead>
               <tr className="bg-[#f5f4ff] border-b border-slate-100 text-slate-600 font-bold uppercase tracking-wider">
                 <th className="px-6 py-4">Date</th>

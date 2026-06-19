@@ -354,7 +354,10 @@ export default function SettingsPage({ defaultActiveTab = "Profile" }: { default
     const file = e.target.files?.[0];
     if (file) {
       if (file.size > 800 * 1024) {
-        alert("File size exceeds 800K limit!");
+        setToastMessage("File size exceeds 800K limit!");
+        setTimeout(() => {
+          setToastMessage(null);
+        }, 2000);
         return;
       }
       const reader = new FileReader();

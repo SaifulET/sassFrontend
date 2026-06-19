@@ -52,10 +52,69 @@ interface EmployeeDetailPageProps {
   employee: Employee;
   onBack: () => void;
   onViewPermissions: () => void;
+  onUpdateEmployee?: (updated: Employee) => void;
 }
 
-export default function EmployeeDetailPage({ employee, onBack, onViewPermissions }: EmployeeDetailPageProps) {
+export default function EmployeeDetailPage({ employee, onBack, onViewPermissions, onUpdateEmployee }: EmployeeDetailPageProps) {
   const [activeSubTab, setActiveSubTab] = useState<"basic" | "remuneration" | "activity" | "production">("basic");
+
+  // Edit employee details modal states
+  const [isEditModalOpen, setIsEditModalOpen] = useState(false);
+  const [editFirstName, setEditFirstName] = useState(employee.firstName);
+  const [editLastName, setEditLastName] = useState(employee.lastName);
+  const [editDob, setEditDob] = useState(employee.dob);
+  const [editAddress, setEditAddress] = useState(employee.address);
+  const [editPhone, setEditPhone] = useState(employee.phone);
+  const [editEmail, setEditEmail] = useState(employee.email);
+  const [editEmergencyName, setEditEmergencyName] = useState(employee.emergencyName);
+  const [editEmergencyPhone, setEditEmergencyPhone] = useState(employee.emergencyPhone);
+  
+  const [editContractType, setEditContractType] = useState(employee.contractType);
+  const [editTaxCode, setEditTaxCode] = useState(employee.taxCode);
+  const [editIban, setEditIban] = useState(employee.iban);
+  const [editStartDate, setEditStartDate] = useState(employee.startDate);
+  const [editEndDate, setEditEndDate] = useState(employee.endDate || "");
+  const [editOccupation, setEditOccupation] = useState(employee.occupation);
+  const [editRemuneration, setEditRemuneration] = useState(employee.remuneration);
+
+  const convertToInputDate = (dStr: string) => {
+    if (!dStr) return "";
+    if (dStr.includes("-")) return dStr;
+    const parts = dStr.split("/");
+    if (parts.length === 3) {
+      return `${parts[2]}-${parts[1].padStart(2, "0")}-${parts[0].padStart(2, "0")}`;
+    }
+    return dStr;
+  };
+
+  const convertToDisplayDate = (dStr: string) => {
+    if (!dStr) return "";
+    if (dStr.includes("/")) return dStr;
+    const parts = dStr.split("-");
+    if (parts.length === 3) {
+      return `${parts[2]}/${parts[1]}/${parts[0]}`;
+    }
+    return dStr;
+  };
+
+  const openEditModal = () => {
+    setEditFirstName(employee.firstName);
+    setEditLastName(employee.lastName);
+    setEditDob(employee.dob);
+    setEditAddress(employee.address || "");
+    setEditPhone(employee.phone || "");
+    setEditEmail(employee.email);
+    setEditEmergencyName(employee.emergencyName || "");
+    setEditEmergencyPhone(employee.emergencyPhone || "");
+    setEditContractType(employee.contractType || "Permanent");
+    setEditTaxCode(employee.taxCode || "");
+    setEditIban(employee.iban || "");
+    setEditStartDate(employee.startDate || "");
+    setEditEndDate(employee.endDate || "");
+    setEditOccupation(employee.occupation || "Staff");
+    setEditRemuneration(employee.remuneration || "");
+    setIsEditModalOpen(true);
+  };
 
   // Additional Data Form edit modal state
   const [isEditAdditionalOpen, setIsEditAdditionalOpen] = useState(false);
@@ -333,7 +392,7 @@ export default function EmployeeDetailPage({ employee, onBack, onViewPermissions
 
           <div className="flex items-center gap-3 shrink-0">
             <button
-              onClick={() => alert(`Editing employee: ${employee.firstName}`)}
+              onClick={openEditModal}
               className="px-5 py-2.5 bg-[#f2f1ff] hover:bg-[#e2dfff] text-[#5e53fc] rounded-xl text-xs font-bold transition-all"
             >
               Edit Employee
@@ -397,7 +456,7 @@ export default function EmployeeDetailPage({ employee, onBack, onViewPermissions
                 {/* Personal Data */}
                 <div className="border border-slate-100 rounded-3xl p-6 bg-white flex flex-col relative">
                   <button
-                    onClick={() => alert("Edit Personal Data")}
+                    onClick={openEditModal}
                     className="absolute right-6 top-6 px-4.5 py-1.5 border border-slate-100 hover:bg-slate-50 text-[#5e53fc] rounded-xl text-[11px] font-bold transition-all"
                   >
                     Edit
@@ -432,14 +491,42 @@ export default function EmployeeDetailPage({ employee, onBack, onViewPermissions
                   <div className="absolute right-6 top-6 flex items-center gap-2">
                     <button
                       title="Download Contract"
-                      onClick={() => alert("Downloading employee contract...")}
+                      onClick={() => {
+                        const contractText = `EMPLOYEE CONTRACT DETAILS
+-------------------------
+Employee: ${employee.firstName} ${employee.lastName}
+Date of Birth: ${employee.dob}
+Address: ${employee.address}
+Phone: ${employee.phone}
+Email: ${employee.email}
+
+CONTRACT INFO
+-------------
+Contract Type: ${employee.contractType || "Permanent"}
+Start Date: ${employee.startDate}
+End Date: ${employee.endDate || "N/A"}
+Occupation: ${employee.occupation}
+Remuneration: ${employee.remuneration}
+Tax Code: ${employee.taxCode}
+IBAN: ${employee.iban}
+Emergency Contact: ${employee.emergencyName} (${employee.emergencyPhone})
+`;
+                        const filename = `${employee.firstName}_${employee.lastName}_Contract.txt`;
+                        const element = document.createElement("a");
+                        const file = new Blob([contractText], { type: "text/plain" });
+                        element.href = URL.createObjectURL(file);
+                        element.download = filename;
+                        document.body.appendChild(element);
+                        element.click();
+                        document.body.removeChild(element);
+                      }}
                       className="px-3 py-1.5 bg-[#5e53fc] hover:bg-[#4d42eb] text-white rounded-xl text-[11px] font-bold transition-all flex items-center gap-1.5"
                     >
                       <DownloadIcon />
                       <span>Download Contract</span>
                     </button>
                     <button
-                      onClick={() => alert("Edit Contract Details")}
+                      onClick={openEditModal}
                       className="px-4.5 py-1.5 border border-slate-100 hover:bg-slate-50 text-[#5e53fc] rounded-xl text-[11px] font-bold transition-all"
                     >
                       Edit
@@ -754,7 +841,33 @@ export default function EmployeeDetailPage({ employee, onBack, onViewPermissions
                           <td className="px-6 py-4 text-slate-400 font-medium">{ps.login}</td>
                           <td className="px-6 py-4 text-center">
                             <button
-                              onClick={() => alert(`Downloading payslip for ${ps.date}`)}
+                              onClick={() => {
+                                const payslipText = `PAYSLIP FOR ${ps.date.toUpperCase()}
+------------------------------------------
+Employee: ${employee.firstName} ${employee.lastName}
+Contract: ${employee.contractType || "Permanent"}
+Occupation: ${employee.occupation}
+
+EARNINGS DETAILS
+----------------
+Net: ${ps.net}
+Gross: ${ps.gross}
+Contributions: ${ps.contributions}
+TFR: ${ps.tfr}
+`;
+                                const filename = `${employee.firstName}_${employee.lastName}_Payslip_${ps.date.replace(/,?\s+/g, "_")}.txt`;
+                                const element = document.createElement;
+                                const customDownload = (fname: string, text: string) => {
+                                  const el = document.createElement("a");
+                                  const file = new Blob([text], { type: "text/plain" });
+                                  el.href = URL.createObjectURL(file);
+                                  el.download = fname;
+                                  document.body.appendChild(el);
+                                  el.click();
+                                  document.body.removeChild(el);
+                                };
+                                customDownload(filename, payslipText);
+                              }}
                               className="p-2 bg-indigo-50/60 hover:bg-indigo-100 text-[#5e53fc] rounded-xl transition-all inline-flex"
                             >
                               <DownloadIcon />
@@ -1820,7 +1933,14 @@ export default function EmployeeDetailPage({ employee, onBack, onViewPermissions
             <form
               onSubmit={(e) => {
                 e.preventDefault();
-                alert(`Contract terminated! End Date: ${terminateEndDate}, Access Date: ${terminateAccessDate}`);
+                const updated: Employee = {
+                  ...employee,
+                  status: "Inactive",
+                  endDate: convertToDisplayDate(terminateEndDate) || undefined
+                };
+                if (onUpdateEmployee) {
+                  onUpdateEmployee(updated);
+                }
                 setIsTerminateModalOpen(false);
               }}
               className="flex flex-col gap-5 text-sm"
@@ -1911,6 +2031,210 @@ export default function EmployeeDetailPage({ employee, onBack, onViewPermissions
                   className="px-6 py-2.5 bg-[#fff1f2] hover:bg-[#ffe4e6] text-[#ff4e73] rounded-lg text-sm font-semibold transition-all"
                 >
                   Terminate Now
+                </button>
+              </div>
+            </form>
+          </div>
+        </div>
+      )}
+
+      {/* Edit Employee Modal */}
+      {isEditModalOpen && (
+        <div className="fixed inset-0 bg-[#0f172a]/40 backdrop-blur-[6px] z-50 flex items-center justify-center p-4">
+          <div className="bg-white rounded-[24px] w-full max-w-[640px] shadow-2xl p-8 flex flex-col gap-6 relative animate-in zoom-in-95 duration-200 text-left max-h-[90vh] overflow-y-auto">
+            <div className="flex items-center justify-between border-b border-slate-100 pb-4">
+              <h3 className="text-lg font-bold text-[#0f172a]">Edit Employee Details</h3>
+              <button
+                onClick={() => setIsEditModalOpen(false)}
+                className="p-1 hover:bg-slate-100 rounded-lg transition-colors"
+              >
+                <HugeiconsIcon icon={Cancel01Icon} size={20} className="text-slate-400" />
+              </button>
+            </div>
+
+            <form
+              onSubmit={(e) => {
+                e.preventDefault();
+                const updated: Employee = {
+                  ...employee,
+                  firstName: editFirstName,
+                  lastName: editLastName,
+                  dob: convertToDisplayDate(editDob),
+                  address: editAddress,
+                  phone: editPhone,
+                  email: editEmail,
+                  emergencyName: editEmergencyName,
+                  emergencyPhone: editEmergencyPhone,
+                  contractType: editContractType,
+                  taxCode: editTaxCode,
+                  iban: editIban,
+                  startDate: convertToDisplayDate(editStartDate),
+                  endDate: editEndDate ? convertToDisplayDate(editEndDate) : undefined,
+                  occupation: editOccupation,
+                  remuneration: editRemuneration
+                };
+                if (onUpdateEmployee) {
+                  onUpdateEmployee(updated);
+                }
+                setIsEditModalOpen(false);
+              }}
+              className="flex flex-col gap-5 text-sm"
+            >
+              <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                <div className="flex flex-col gap-1.5">
+                  <label className="text-[#334155] font-semibold text-xs">First Name *</label>
+                  <input
+                    type="text"
+                    required
+                    value={editFirstName}
+                    onChange={(e) => setEditFirstName(e.target.value)}
+                    className="h-10 border border-slate-200 rounded-lg px-3 focus:outline-none focus:border-[#5e53fc]"
+                  />
+                </div>
+                <div className="flex flex-col gap-1.5">
+                  <label className="text-[#334155] font-semibold text-xs">Last Name *</label>
+                  <input
+                    type="text"
+                    required
+                    value={editLastName}
+                    onChange={(e) => setEditLastName(e.target.value)}
+                    className="h-10 border border-slate-200 rounded-lg px-3 focus:outline-none focus:border-[#5e53fc]"
+                  />
+                </div>
+                <div className="flex flex-col gap-1.5">
+                  <label className="text-[#334155] font-semibold text-xs">Email *</label>
+                  <input
+                    type="email"
+                    required
+                    value={editEmail}
+                    onChange={(e) => setEditEmail(e.target.value)}
+                    className="h-10 border border-slate-200 rounded-lg px-3 focus:outline-none focus:border-[#5e53fc]"
+                  />
+                </div>
+                <div className="flex flex-col gap-1.5">
+                  <label className="text-[#334155] font-semibold text-xs">Phone</label>
+                  <input
+                    type="text"
+                    value={editPhone}
+                    onChange={(e) => setEditPhone(e.target.value)}
+                    className="h-10 border border-slate-200 rounded-lg px-3 focus:outline-none focus:border-[#5e53fc]"
+                  />
+                </div>
+                <div className="flex flex-col gap-1.5">
+                  <label className="text-[#334155] font-semibold text-xs">Date of Birth</label>
+                  <input
+                    type="date"
+                    value={convertToInputDate(editDob)}
+                    onChange={(e) => setEditDob(e.target.value)}
+                    className="h-10 border border-slate-200 rounded-lg px-3 focus:outline-none focus:border-[#5e53fc]"
+                  />
+                </div>
+                <div className="flex flex-col gap-1.5">
+                  <label className="text-[#334155] font-semibold text-xs">Tax Code *</label>
+                  <input
+                    type="text"
+                    required
+                    value={editTaxCode}
+                    onChange={(e) => setEditTaxCode(e.target.value)}
+                    className="h-10 border border-slate-200 rounded-lg px-3 focus:outline-none focus:border-[#5e53fc]"
+                  />
+                </div>
+                <div className="flex flex-col gap-1.5 sm:col-span-2">
+                  <label className="text-[#334155] font-semibold text-xs">Address</label>
+                  <input
+                    type="text"
+                    value={editAddress}
+                    onChange={(e) => setEditAddress(e.target.value)}
+                    className="h-10 border border-slate-200 rounded-lg px-3 focus:outline-none focus:border-[#5e53fc]"
+                  />
+                </div>
+                <div className="flex flex-col gap-1.5">
+                  <label className="text-[#334155] font-semibold text-xs">Contract Type</label>
+                  <input
+                    type="text"
+                    value={editContractType}
+                    onChange={(e) => setEditContractType(e.target.value)}
+                    className="h-10 border border-slate-200 rounded-lg px-3 focus:outline-none focus:border-[#5e53fc]"
+                  />
+                </div>
+                <div className="flex flex-col gap-1.5">
+                  <label className="text-[#334155] font-semibold text-xs">IBAN</label>
+                  <input
+                    type="text"
+                    value={editIban}
+                    onChange={(e) => setEditIban(e.target.value)}
+                    className="h-10 border border-slate-200 rounded-lg px-3 focus:outline-none focus:border-[#5e53fc]"
+                  />
+                </div>
+                <div className="flex flex-col gap-1.5">
+                  <label className="text-[#334155] font-semibold text-xs">Start Date</label>
+                  <input
+                    type="date"
+                    value={convertToInputDate(editStartDate)}
+                    onChange={(e) => setEditStartDate(e.target.value)}
+                    className="h-10 border border-slate-200 rounded-lg px-3 focus:outline-none focus:border-[#5e53fc]"
+                  />
+                </div>
+                <div className="flex flex-col gap-1.5">
+                  <label className="text-[#334155] font-semibold text-xs">End Date</label>
+                  <input
+                    type="date"
+                    value={convertToInputDate(editEndDate)}
+                    onChange={(e) => setEditEndDate(e.target.value)}
+                    className="h-10 border border-slate-200 rounded-lg px-3 focus:outline-none focus:border-[#5e53fc]"
+                  />
+                </div>
+                <div className="flex flex-col gap-1.5">
+                  <label className="text-[#334155] font-semibold text-xs">Occupation</label>
+                  <input
+                    type="text"
+                    value={editOccupation}
+                    onChange={(e) => setEditOccupation(e.target.value)}
+                    className="h-10 border border-slate-200 rounded-lg px-3 focus:outline-none focus:border-[#5e53fc]"
+                  />
+                </div>
+                <div className="flex flex-col gap-1.5">
+                  <label className="text-[#334155] font-semibold text-xs">Remuneration</label>
+                  <input
+                    type="text"
+                    value={editRemuneration}
+                    onChange={(e) => setEditRemuneration(e.target.value)}
+                    className="h-10 border border-slate-200 rounded-lg px-3 focus:outline-none focus:border-[#5e53fc]"
+                  />
+                </div>
+                <div className="flex flex-col gap-1.5">
+                  <label className="text-[#334155] font-semibold text-xs">Emergency Contact Name</label>
+                  <input
+                    type="text"
+                    value={editEmergencyName}
+                    onChange={(e) => setEditEmergencyName(e.target.value)}
+                    className="h-10 border border-slate-200 rounded-lg px-3 focus:outline-none focus:border-[#5e53fc]"
+                  />
+                </div>
+                <div className="flex flex-col gap-1.5">
+                  <label className="text-[#334155] font-semibold text-xs">Emergency Contact Phone</label>
+                  <input
+                    type="text"
+                    value={editEmergencyPhone}
+                    onChange={(e) => setEditEmergencyPhone(e.target.value)}
+                    className="h-10 border border-slate-200 rounded-lg px-3 focus:outline-none focus:border-[#5e53fc]"
+                  />
+                </div>
+              </div>
+
+              <div className="flex items-center justify-end gap-3 mt-4 border-t border-slate-100 pt-4">
+                <button
+                  type="button"
+                  onClick={() => setIsEditModalOpen(false)}
+                  className="px-5 py-2 bg-slate-50 hover:bg-slate-100 text-slate-650 rounded-xl font-bold transition-all text-xs"
+                >
+                  Cancel
+                </button>
+                <button
+                  type="submit"
+                  className="px-5 py-2 bg-[#5e53fc] hover:bg-[#4d42eb] text-white rounded-xl font-bold transition-all text-xs shadow-md shadow-indigo-100"
+                >
+                  Save Changes
                 </button>
               </div>
             </form>

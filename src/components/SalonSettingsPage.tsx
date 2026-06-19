@@ -41,6 +41,7 @@ interface SettingItem {
 }
 
 export default function SalonSettingsPage({ salon, onBack }: SalonSettingsPageProps) {
+  const [saveStatus, setSaveStatus] = useState<"idle" | "saving" | "saved">("idle");
   // Local state for all settings toggle buttons (initialized to matching values in screenshot)
   const [settings, setSettings] = useState<Record<string, boolean>>({
     advancedAnalytics: true,
@@ -60,7 +61,11 @@ export default function SalonSettingsPage({ salon, onBack }: SalonSettingsPagePr
   };
 
   const handleSaveChanges = () => {
-    alert("Settings saved successfully!");
+    setSaveStatus("saving");
+    setTimeout(() => {
+      setSaveStatus("saved");
+      setTimeout(() => setSaveStatus("idle"), 2000);
+    }, 1000);
   };
 
   const Toggle = ({ id }: { id: string }) => {
@@ -215,9 +220,10 @@ export default function SalonSettingsPage({ salon, onBack }: SalonSettingsPagePr
           </button>
           <button
             onClick={handleSaveChanges}
-            className="px-6 py-2.5 bg-[#5e53fc] hover:bg-[#4d42eb] text-white rounded-xl text-xs font-bold transition-all shadow-md shadow-indigo-100"
+            disabled={saveStatus === "saving"}
+            className="px-6 py-2.5 bg-[#5e53fc] hover:bg-[#4d42eb] text-white rounded-xl text-xs font-bold transition-all shadow-md shadow-indigo-100 disabled:opacity-50"
           >
-            Save Changes
+            {saveStatus === "saving" ? "Saving..." : saveStatus === "saved" ? "Saved!" : "Save Changes"}
           </button>
         </div>
       </div>

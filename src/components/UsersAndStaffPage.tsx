@@ -85,6 +85,13 @@ export default function UsersAndStaffPage({
   const [menuCoords, setMenuCoords] = useState<{ top: number; left: number } | null>(null);
   const menuRef = useRef<HTMLDivElement>(null);
 
+  // Custom confirmation modal states
+  const [suspendEmployeeId, setSuspendEmployeeId] = useState<string | null>(null);
+  const [deleteEmployeeId, setDeleteEmployeeId] = useState<string | null>(null);
+  const [resetPasswordEmployeeId, setResetPasswordEmployeeId] = useState<string | null>(null);
+  const [newPassword, setNewPassword] = useState("");
+  const [confirmPassword, setConfirmPassword] = useState("");
+
   const convertToInputDate = (dateStr: string) => {
     if (dateStr && dateStr.includes("/")) {
       const parts = dateStr.split("/");
@@ -226,21 +233,17 @@ export default function UsersAndStaffPage({
   };
 
   const handleDeleteEmployee = (id: string) => {
-    const name = employees.find(e => e.id === id);
-    if (name && confirm(`Are you sure you want to delete ${name.firstName} ${name.lastName}?`)) {
-      setEmployees(prev => prev.filter(e => e.id !== id));
-      setActiveMenuId(null);
-    }
+    setEmployees(prev => prev.filter(e => e.id !== id));
+    setDeleteEmployeeId(null);
   };
 
-  const handleResetPassword = (email: string) => {
-    alert(`Password reset link sent to: ${email}`);
-    setActiveMenuId(null);
+  const handleResetPassword = (id: string) => {
+    setResetPasswordEmployeeId(null);
   };
 
-  const handleSuspendEmployee = (emp: Employee) => {
-    alert(`Employee ${emp.firstName} ${emp.lastName} has been suspended.`);
-    setActiveMenuId(null);
+  const handleSuspendEmployee = (id: string) => {
+    setEmployees(prev => prev.map(e => e.id === id ? { ...e, status: e.status === "Active" ? "Inactive" : "Active" } : e));
+    setSuspendEmployeeId(null);
   };
 
   // Intercept render if viewing an employee detail page
@@ -254,6 +257,9 @@ export default function UsersAndStaffPage({
           onViewPermissions={() => {
             setActivePermissionEmployeeId(activeEmployee.id);
             setSalonSubTab("permissions");
+          }}
+          onUpdateEmployee={(updated) => {
+            setEmployees(prev => prev.map(e => e.id === updated.id ? updated : e));
           }}
         />
       );
@@ -475,7 +481,6 @@ export default function UsersAndStaffPage({
                         </button>
                         <button
                           onClick={() => {
-                            alert(`Impersonating staff member: ${emp.firstName} ${emp.lastName}`);
                             setActiveMenuId(null);
                           }}
                           className="flex items-center gap-2.5 w-full px-4 py-2.5 hover:bg-slate-50 text-slate-600 font-semibold text-xs"
@@ -517,7 +522,12 @@ export default function UsersAndStaffPage({
                           Edit Employee
                         </button>
                         <button
-                          onClick={() => handleResetPassword(emp.email)}
+                          onClick={() => {
+                            setResetPasswordEmployeeId(emp.id);
+                            setNewPassword("");
+                            setConfirmPassword("");
+                            setActiveMenuId(null);
+                          }}
                           className="flex items-center gap-2.5 w-full px-4 py-2.5 hover:bg-slate-50 text-slate-600 font-semibold text-xs"
                         >
                           <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5">
@@ -527,7 +537,10 @@ export default function UsersAndStaffPage({
                           Reset Password
                         </button>
                         <button
-                          onClick={() => handleSuspendEmployee(emp)}
+                          onClick={() => {
+                            setSuspendEmployeeId(emp.id);
+                            setActiveMenuId(null);
+                          }}
                           className="flex items-center gap-2.5 w-full px-4 py-2.5 hover:bg-slate-50 text-amber-600 font-bold text-xs"
                         >
                           <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5">
@@ -537,7 +550,10 @@ export default function UsersAndStaffPage({
                           Suspend
                         </button>
                         <button
-                          onClick={() => handleDeleteEmployee(emp.id)}
+                          onClick={() => {
+                            setDeleteEmployeeId(emp.id);
+                            setActiveMenuId(null);
+                          }}
                           className="flex items-center gap-2.5 w-full px-4 py-2.5 hover:bg-rose-50 text-rose-600 font-bold text-xs border-t border-slate-50 mt-1 pt-1.5"
                         >
                           <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5">
@@ -953,6 +969,133 @@ export default function UsersAndStaffPage({
           </div>
         </div>
       )}
+
+      {/* Custom Delete Confirmation Modal */}
+      {deleteEmployeeId !== null && (
+        <div className="fixed inset-0 bg-[#0f172a]/40 backdrop-blur-[6px] z-50 flex items-center justify-center p-4">
+          <div className="bg-white rounded-[20px] w-full max-w-[440px] shadow-2xl p-6 flex flex-col gap-6 relative animate-in zoom-in-95 duration-200 text-left">
+            <div className="flex flex-col gap-1.5">
+              <h3 className="text-lg font-bold text-[#0f172a]">Delete Employee</h3>
+              <p className="text-sm text-[#475569]">Are you sure you want to delete this employee? This action cannot be undone.</p>
+            </div>
+            <div className="flex items-center justify-end gap-3 border-t border-slate-100 pt-4">
+              <button
+                type="button"
+                onClick={() => setDeleteEmployeeId(null)}
+                className="px-5 py-2.5 bg-slate-50 hover:bg-slate-100 text-slate-650 rounded-xl text-xs font-bold transition-all"
+              >
+                Cancel
+              </button>
+              <button
+                type="button"
+                onClick={() => handleDeleteEmployee(deleteEmployeeId)}
+                className="px-5 py-2.5 bg-rose-50 hover:bg-rose-100 text-rose-600 rounded-xl text-xs font-bold transition-all"
+              >
+                Delete
+              </button>
+            </div>
+          </div>
+        </div>
+      )}
+
+      {/* Custom Suspend Confirmation Modal */}
+      {suspendEmployeeId !== null && (() => {
+        const emp = employees.find(e => e.id === suspendEmployeeId);
+        if (!emp) return null;
+        const isSuspended = emp.status === "Inactive";
+        return (
+          <div className="fixed inset-0 bg-[#0f172a]/40 backdrop-blur-[6px] z-50 flex items-center justify-center p-4">
+            <div className="bg-white rounded-[20px] w-full max-w-[440px] shadow-2xl p-6 flex flex-col gap-6 relative animate-in zoom-in-95 duration-200 text-left">
+              <div className="flex flex-col gap-1.5">
+                <h3 className="text-lg font-bold text-[#0f172a]">{isSuspended ? "Reactivate" : "Suspend"} Employee</h3>
+                <p className="text-sm text-[#475569]">
+                  Are you sure you want to {isSuspended ? "reactivate" : "suspend"} <strong>{emp.firstName} {emp.lastName}</strong>?
+                </p>
+              </div>
+              <div className="flex items-center justify-end gap-3 border-t border-slate-100 pt-4">
+                <button
+                  type="button"
+                  onClick={() => setSuspendEmployeeId(null)}
+                  className="px-5 py-2.5 bg-slate-50 hover:bg-slate-100 text-slate-650 rounded-xl text-xs font-bold transition-all"
+                >
+                  Cancel
+                </button>
+                <button
+                  type="button"
+                  onClick={() => handleSuspendEmployee(suspendEmployeeId)}
+                  className="px-5 py-2.5 bg-amber-50 hover:bg-amber-100 text-amber-600 rounded-xl text-xs font-bold transition-all"
+                >
+                  {isSuspended ? "Reactivate" : "Suspend"}
+                </button>
+              </div>
+            </div>
+          </div>
+        );
+      })()}
+
+      {/* Custom Reset Password Modal */}
+      {resetPasswordEmployeeId !== null && (() => {
+        const emp = employees.find(e => e.id === resetPasswordEmployeeId);
+        if (!emp) return null;
+        return (
+          <div className="fixed inset-0 bg-[#0f172a]/40 backdrop-blur-[6px] z-50 flex items-center justify-center p-4">
+            <div className="bg-white rounded-[20px] w-full max-w-[440px] shadow-2xl p-6 flex flex-col gap-5 relative animate-in zoom-in-95 duration-200 text-left">
+              <div className="flex flex-col gap-1">
+                <h3 className="text-lg font-bold text-[#0f172a]">Reset Password</h3>
+                <p className="text-xs text-[#475569]">Reset password for {emp.firstName} {emp.lastName} ({emp.email})</p>
+              </div>
+
+              <form
+                onSubmit={(e) => {
+                  e.preventDefault();
+                  if (!newPassword || newPassword !== confirmPassword) {
+                    alert("Passwords do not match or are empty.");
+                    return;
+                  }
+                  handleResetPassword(resetPasswordEmployeeId);
+                }}
+                className="flex flex-col gap-4 text-sm"
+              >
+                <div className="flex flex-col gap-1.5">
+                  <label className="text-[#334155] font-semibold text-xs">New Password *</label>
+                  <input
+                    type="password"
+                    required
+                    value={newPassword}
+                    onChange={(e) => setNewPassword(e.target.value)}
+                    className="h-10 border border-slate-200 rounded-lg px-3 focus:outline-none focus:border-[#5e53fc]"
+                  />
+                </div>
+                <div className="flex flex-col gap-1.5">
+                  <label className="text-[#334155] font-semibold text-xs">Confirm New Password *</label>
+                  <input
+                    type="password"
+                    required
+                    value={confirmPassword}
+                    onChange={(e) => setConfirmPassword(e.target.value)}
+                    className="h-10 border border-slate-200 rounded-lg px-3 focus:outline-none focus:border-[#5e53fc]"
+                  />
+                </div>
+                <div className="flex items-center justify-end gap-3 border-t border-slate-100 pt-4 mt-2">
+                  <button
+                    type="button"
+                    onClick={() => setResetPasswordEmployeeId(null)}
+                    className="px-5 py-2.5 bg-slate-50 hover:bg-slate-100 text-slate-650 rounded-xl text-xs font-bold transition-all"
+                  >
+                    Cancel
+                  </button>
+                  <button
+                    type="submit"
+                    className="px-5 py-2.5 bg-[#5e53fc] hover:bg-[#4d42eb] text-white rounded-xl text-xs font-bold transition-all shadow-md shadow-indigo-150"
+                  >
+                    Reset Password
+                  </button>
+                </div>
+              </form>
+            </div>
+          </div>
+        );
+      })()}
     </div>
   );
 }
