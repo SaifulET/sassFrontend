@@ -1,5 +1,6 @@
 "use client";
 import React, { useState, useMemo } from "react";
+import AnalyticsHeader from "./AnalyticsHeader";
 
 type TimeRange = "Monthly" | "Yearly" | "2023-2025";
 type TabType = "Net MRR Retention" | "Subscriber Retention";
@@ -311,40 +312,16 @@ export default function CohortsPage({ setActiveTab }: { setActiveTab?: (tab: str
       <div className="flex w-full flex-col gap-5 text-left text-[#283442] animate-in fade-in slide-in-from-bottom-4 duration-300">
         
         {/* Header toolbar */}
-      <div className="rounded-2xl bg-white px-5 py-4 shadow-[0_4px_18px_rgba(17,31,56,0.06)]">
-        <div className="flex flex-col md:flex-row md:items-center justify-between gap-4">
-          <div className="flex items-center gap-3">
-          <button
-            type="button"
-            onClick={() => setActiveTab && setActiveTab("dashboard")}
-            className="w-10 h-10 rounded-2xl bg-white border border-[#eef2f6] flex items-center justify-center text-slate-500 hover:bg-slate-50 hover:text-slate-800 transition-colors shadow-sm"
-          >
-            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round">
-              <line x1="19" y1="12" x2="5" y2="12" />
-              <polyline points="12 19 5 12 12 5" />
-            </svg>
-          </button>
-          <h1 className="text-sm font-extrabold text-[#1f2937]">Analytics</h1>
-        </div>
-
-          <button
-            type="button"
-            onClick={() => {
-              setActiveTabType("Net MRR Retention");
-              setTimeRange("Monthly");
-              setPlanFilter("All");
-              setCityFilter("All cities");
-            }}
-            className="inline-flex h-11 items-center gap-2 rounded-[8px] bg-[#635BFF] hover:bg-[#4d42eb] px-4 text-[14px] font-medium text-white shadow-[0px_2px_4px_-1px_rgba(175,182,201,0.2)] transition-all duration-150 self-start"
-          >
-            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round">
-              <path d="M21 12a9 9 0 1 1-9-9c2.52 0 4.93 1 6.74 2.74L21 8" />
-              <polyline points="21 3 21 8 16 8" />
-            </svg>
-            Resync
-          </button>
-        </div>
-      </div>
+        <AnalyticsHeader
+          title="Analytics"
+          setActiveTab={setActiveTab}
+          onResync={() => {
+            setActiveTabType("Net MRR Retention");
+            setTimeRange("Monthly");
+            setPlanFilter("All");
+            setCityFilter("All cities");
+          }}
+        />
 
         {/* Heatmap Panel */}
         <section className="relative w-full rounded-xl bg-white p-6 shadow-[0_4px_18px_rgba(17,31,56,0.06)]">
