@@ -426,9 +426,8 @@ function CashflowChart({
               return (
                 <span
                   key={i}
-                  className={`absolute font-manrope font-normal text-center transition-colors text-[11.3951px] leading-[15px] h-[15.35px] ${
-                    hoveredIndex === i ? "text-[#007AFE] font-semibold" : "text-[#98A4AE]"
-                  }`}
+                  className={`absolute font-manrope font-normal text-center transition-colors text-[11.3951px] leading-[15px] h-[15.35px] ${hoveredIndex === i ? "text-[#007AFE] font-semibold" : "text-[#98A4AE]"
+                    }`}
                   style={{
                     left: `${(x / W) * 100}%`,
                     transform: "translateX(-50%)",
@@ -475,7 +474,7 @@ export default function CashflowPage({ setActiveTab }: { setActiveTab?: (tab: st
   return (
     <div className="w-full min-w-0">
       <div className="flex w-full flex-col gap-5 text-left text-[#283442] animate-in fade-in slide-in-from-bottom-4 duration-300">
-        
+
         {/* Header toolbar */}
         <AnalyticsHeader
           title="Analytics"
@@ -520,9 +519,8 @@ export default function CashflowPage({ setActiveTab }: { setActiveTab?: (tab: st
                           setTimeRange(opt);
                           setTimeRangeOpen(false);
                         }}
-                        className={`flex h-9 w-full items-center rounded-[8px] px-3 text-[12px] font-medium ${
-                          timeRange === opt ? "bg-[#EFF4FA] text-[#0A2540]" : "text-[#0A2540] hover:bg-[#F7F9FC]"
-                        }`}
+                        className={`flex h-9 w-full items-center rounded-[8px] px-3 text-[12px] font-medium ${timeRange === opt ? "bg-[#EFF4FA] text-[#0A2540]" : "text-[#0A2540] hover:bg-[#F7F9FC]"
+                          }`}
                       >
                         {opt}
                       </button>
@@ -542,7 +540,17 @@ export default function CashflowPage({ setActiveTab }: { setActiveTab?: (tab: st
 
               <button
                 type="button"
-                onClick={() => setExportModalOpen(true)}
+                onClick={() => {
+                  const csvContent = "Month,Gross,Refunds,Net\n" +
+                    "Jan,€ 238K,€ 12K,€ 226K\n";
+                  const blob = new Blob([csvContent], { type: "text/csv;charset=utf-8;" });
+                  const url = URL.createObjectURL(blob);
+                  const link = document.createElement("a");
+                  link.href = url;
+                  link.download = "cashflow_report.csv";
+                  link.click();
+                  URL.revokeObjectURL(url);
+                }}
                 className="inline-flex h-9 items-center rounded-[8px] border border-[#635BFF] bg-white px-4 text-[12px] font-medium text-[#635BFF] hover:bg-[#F1F2FE]"
               >
                 Export Data

@@ -317,9 +317,8 @@ function ARPAChart({
               return (
                 <span
                   key={i}
-                  className={`absolute font-manrope font-normal text-center transition-colors text-[11.3951px] leading-[15px] h-[15.35px] ${
-                    hoveredIndex === i ? "text-[#16CDC7] font-semibold" : "text-[#98A4AE]"
-                  }`}
+                  className={`absolute font-manrope font-normal text-center transition-colors text-[11.3951px] leading-[15px] h-[15.35px] ${hoveredIndex === i ? "text-[#16CDC7] font-semibold" : "text-[#98A4AE]"
+                    }`}
                   style={{
                     left: `${(x / W) * 100}%`,
                     transform: "translateX(-50%)",
@@ -390,7 +389,7 @@ export default function ARPAPage({ setActiveTab }: { setActiveTab?: (tab: string
   return (
     <div className="w-full min-w-0">
       <div className="flex w-full flex-col gap-5 text-left text-[#283442] animate-in fade-in slide-in-from-bottom-4 duration-300">
-        
+
         {/* Header toolbar */}
         <AnalyticsHeader
           title="Analytics"
@@ -427,9 +426,8 @@ export default function ARPAPage({ setActiveTab }: { setActiveTab?: (tab: string
                           setTimeRange(opt);
                           setTimeRangeOpen(false);
                         }}
-                        className={`flex h-9 w-full items-center rounded-[8px] px-3 text-[12px] font-medium ${
-                          timeRange === opt ? "bg-[#EFF4FA] text-[#0A2540]" : "text-[#0A2540] hover:bg-[#F7F9FC]"
-                        }`}
+                        className={`flex h-9 w-full items-center rounded-[8px] px-3 text-[12px] font-medium ${timeRange === opt ? "bg-[#EFF4FA] text-[#0A2540]" : "text-[#0A2540] hover:bg-[#F7F9FC]"
+                          }`}
                       >
                         {opt}
                       </button>
@@ -449,7 +447,17 @@ export default function ARPAPage({ setActiveTab }: { setActiveTab?: (tab: string
 
               <button
                 type="button"
-                onClick={() => setExportModalOpen(true)}
+                onClick={() => {
+                  const csvContent = "Category,Value\n" +
+                    "Average Revenue Per Salon,€ 255\n";
+                  const blob = new Blob([csvContent], { type: "text/csv;charset=utf-8;" });
+                  const url = URL.createObjectURL(blob);
+                  const link = document.createElement("a");
+                  link.href = url;
+                  link.download = "arpa_report.csv";
+                  link.click();
+                  URL.revokeObjectURL(url);
+                }}
                 className="inline-flex h-9 items-center rounded-[8px] border border-[#635BFF] bg-white px-4 text-[12px] font-medium text-[#635BFF] hover:bg-[#F1F2FE]"
               >
                 Export Data
@@ -540,7 +548,7 @@ export default function ARPAPage({ setActiveTab }: { setActiveTab?: (tab: string
 
         {/* Table 2: Salon Rankings with selectors */}
         <section className="overflow-hidden rounded-xl bg-white p-6 shadow-[0_4px_18px_rgba(17,31,56,0.06)]">
-          
+
           {/* Header selectors */}
           <div className="flex flex-wrap items-center gap-4 mb-6 text-[12px]">
             {/* Plan selector */}
@@ -550,9 +558,8 @@ export default function ARPAPage({ setActiveTab }: { setActiveTab?: (tab: string
                   key={plan}
                   type="button"
                   onClick={() => setPlanFilter(plan)}
-                  className={`px-3 py-1.5 rounded-[8px] font-semibold transition-all ${
-                    planFilter === plan ? "bg-white text-[#635BFF] shadow-sm" : "text-[#7e8b9b] hover:text-[#29343D]"
-                  }`}
+                  className={`px-3 py-1.5 rounded-[8px] font-semibold transition-all ${planFilter === plan ? "bg-white text-[#635BFF] shadow-sm" : "text-[#7e8b9b] hover:text-[#29343D]"
+                    }`}
                 >
                   {plan}
                 </button>
@@ -578,9 +585,8 @@ export default function ARPAPage({ setActiveTab }: { setActiveTab?: (tab: string
                         setCityFilter(c);
                         setCityOpen(false);
                       }}
-                      className={`flex h-9 w-full items-center rounded-[8px] px-3 font-medium ${
-                        cityFilter === c ? "bg-[#EFF4FA] text-[#0A2540]" : "text-[#0A2540] hover:bg-[#F7F9FC]"
-                      }`}
+                      className={`flex h-9 w-full items-center rounded-[8px] px-3 font-medium ${cityFilter === c ? "bg-[#EFF4FA] text-[#0A2540]" : "text-[#0A2540] hover:bg-[#F7F9FC]"
+                        }`}
                     >
                       {c}
                     </button>
@@ -608,9 +614,8 @@ export default function ARPAPage({ setActiveTab }: { setActiveTab?: (tab: string
                         setEarningsOrder(ord as any);
                         setEarningsOpen(false);
                       }}
-                      className={`flex h-9 w-full items-center rounded-[8px] px-3 font-medium ${
-                        earningsOrder === ord ? "bg-[#EFF4FA] text-[#0A2540]" : "text-[#0A2540] hover:bg-[#F7F9FC]"
-                      }`}
+                      className={`flex h-9 w-full items-center rounded-[8px] px-3 font-medium ${earningsOrder === ord ? "bg-[#EFF4FA] text-[#0A2540]" : "text-[#0A2540] hover:bg-[#F7F9FC]"
+                        }`}
                     >
                       {ord}
                     </button>
@@ -643,8 +648,8 @@ export default function ARPAPage({ setActiveTab }: { setActiveTab?: (tab: string
                     row.subType === "Premium"
                       ? "bg-emerald-50 text-emerald-600"
                       : row.subType === "Basic"
-                      ? "bg-indigo-50 text-indigo-600"
-                      : "bg-[#DDDBFF] text-[#635BFF]";
+                        ? "bg-indigo-50 text-indigo-600"
+                        : "bg-[#DDDBFF] text-[#635BFF]";
                   return (
                     <tr key={idx} className="bg-white border-b border-[#E0E6EB] hover:bg-slate-50 transition-colors">
                       <td className="border-r border-[#E0E6EB] px-6 py-4 font-bold text-[#7e8b9b]">{row.rank}</td>

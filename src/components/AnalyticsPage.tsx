@@ -1157,7 +1157,16 @@ export default function AnalyticsPage({ setActiveTab }: { setActiveTab?: (tab: s
 
               <button
                 type="button"
-                onClick={() => setExportModalOpen(true)}
+                onClick={() => {
+                  const csvContent = "Category,Value,Percentage,Trend\nNew,€ 98,260,45,2.5%\nReactivation,€ 40,000,5,5.5%\nRenewals,€ 80,000,45,5%\nChurn,€ 60,260,5%,(2.5%)\n";
+                  const blob = new Blob([csvContent], { type: "text/csv;charset=utf-8;" });
+                  const url = URL.createObjectURL(blob);
+                  const link = document.createElement("a");
+                  link.href = url;
+                  link.download = "analytics_mrr_report.csv";
+                  link.click();
+                  URL.revokeObjectURL(url);
+                }}
                 className="inline-flex h-9 items-center rounded-[8px] border border-[#635BFF] bg-white px-4 text-[12px] font-medium text-[#635BFF] hover:bg-[#F1F2FE]"
               >
                 Export Data

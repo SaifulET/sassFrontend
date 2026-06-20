@@ -361,7 +361,17 @@ export default function ASPPage({ setActiveTab }: { setActiveTab?: (tab: string)
 
               <button
                 type="button"
-                onClick={() => setExportModalOpen(true)}
+                onClick={() => {
+                  const csvContent = "Month,ASP,Count\n" +
+                    "Jan,€ 250,15\n";
+                  const blob = new Blob([csvContent], { type: "text/csv;charset=utf-8;" });
+                  const url = URL.createObjectURL(blob);
+                  const link = document.createElement("a");
+                  link.href = url;
+                  link.download = "asp_report.csv";
+                  link.click();
+                  URL.revokeObjectURL(url);
+                }}
                 className="inline-flex h-9 items-center rounded-[8px] border border-[#635BFF] bg-white px-4 text-[12px] font-medium text-[#635BFF] hover:bg-[#F1F2FE]"
               >
                 Export Data

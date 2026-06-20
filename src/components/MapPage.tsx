@@ -230,7 +230,16 @@ export default function MapPage({ setActiveTab }: { setActiveTab?: (tab: string)
               <button
                 type="button"
                 onClick={() => {
-                  alert("Exporting Map Performance Analytics Report...");
+                  const csvContent = "Region,Salons,MRR,Percentage\nLazio,12,€ 3,588,24%\nLombardia,15,€ 4,485,30%\n";
+                  const blob = new Blob([csvContent], { type: "text/csv;charset=utf-8;" });
+                  const url = URL.createObjectURL(blob);
+                  const link = document.createElement("a");
+                  link.setAttribute("href", url);
+                  link.setAttribute("download", "map_performance_report.csv");
+                  link.style.visibility = 'hidden';
+                  document.body.appendChild(link);
+                  link.click();
+                  document.body.removeChild(link);
                 }}
                 className="inline-flex h-9 items-center rounded-[8px] border border-[#635BFF] bg-white px-4 text-[12px] font-semibold text-[#635BFF] hover:bg-[#F1F2FE]"
               >

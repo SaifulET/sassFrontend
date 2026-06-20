@@ -14,13 +14,13 @@ interface Ticket {
   date: string;
   initialRequest: string;
   emailsSent: Array<{ sender: string; message: string; date: string }>;
-  internalNotes: Array<{ 
-    title?: string; 
-    category?: string; 
-    author: string; 
-    message: string; 
-    daysAgo: string; 
-    type: "note" | "resolution"; 
+  internalNotes: Array<{
+    title?: string;
+    category?: string;
+    author: string;
+    message: string;
+    daysAgo: string;
+    type: "note" | "resolution";
   }>;
 }
 
@@ -144,18 +144,18 @@ const UserGroupIcon = () => (
 
 const SupportAvatar = () => (
   <svg width="120" height="120" viewBox="0 0 120 120" fill="none" xmlns="http://www.w3.org/2000/svg" className="mx-auto drop-shadow-md shrink-0">
-    <circle cx="60" cy="60" r="60" fill="#DDDBFF"/>
-    <path d="M60 90C73.8 90 85 78.8 85 65V45C85 36.7 78.3 30 70 30H50C41.7 30 35 36.7 35 45V65C35 78.8 46.2 90 60 90Z" fill="#F8B195"/>
-    <rect x="38" y="52" width="18" height="12" rx="3" stroke="#29343D" strokeWidth="3" fill="none"/>
-    <rect x="64" y="52" width="18" height="12" rx="3" stroke="#29343D" strokeWidth="3" fill="none"/>
-    <line x1="56" y1="58" x2="64" y2="58" stroke="#29343D" strokeWidth="3"/>
-    <path d="M34 44C34 25.2 45.6 10 60 10C74.4 10 86 25.2 86 44H34Z" fill="#635BFF"/>
-    <path d="M30 40H90V46H30V40Z" fill="#4D42EB"/>
-    <circle cx="60" cy="22" r="6" fill="#FFD648"/>
-    <path d="M50 78C53 82 67 82 70 78V74H50V78Z" fill="#5A3E36"/>
-    <circle cx="47" cy="58" r="2" fill="#29343D"/>
-    <circle cx="73" cy="58" r="2" fill="#29343D"/>
-    <path d="M56 84C58 86 62 86 64 84" stroke="#29343D" strokeWidth="2" strokeLinecap="round"/>
+    <circle cx="60" cy="60" r="60" fill="#DDDBFF" />
+    <path d="M60 90C73.8 90 85 78.8 85 65V45C85 36.7 78.3 30 70 30H50C41.7 30 35 36.7 35 45V65C35 78.8 46.2 90 60 90Z" fill="#F8B195" />
+    <rect x="38" y="52" width="18" height="12" rx="3" stroke="#29343D" strokeWidth="3" fill="none" />
+    <rect x="64" y="52" width="18" height="12" rx="3" stroke="#29343D" strokeWidth="3" fill="none" />
+    <line x1="56" y1="58" x2="64" y2="58" stroke="#29343D" strokeWidth="3" />
+    <path d="M34 44C34 25.2 45.6 10 60 10C74.4 10 86 25.2 86 44H34Z" fill="#635BFF" />
+    <path d="M30 40H90V46H30V40Z" fill="#4D42EB" />
+    <circle cx="60" cy="22" r="6" fill="#FFD648" />
+    <path d="M50 78C53 82 67 82 70 78V74H50V78Z" fill="#5A3E36" />
+    <circle cx="47" cy="58" r="2" fill="#29343D" />
+    <circle cx="73" cy="58" r="2" fill="#29343D" />
+    <path d="M56 84C58 86 62 86 64 84" stroke="#29343D" strokeWidth="2" strokeLinecap="round" />
   </svg>
 );
 
@@ -868,7 +868,7 @@ export default function SupportPage({ activeTicketId, onCloseTicketDetail }: Sup
         </button>
 
         {isOpen && (
-          <div 
+          <div
             className="absolute left-0 top-full mt-1.5 w-60 bg-white border border-[#E0E6EB] rounded-xl shadow-2xl z-50 p-1.5 flex flex-col gap-0.5 animate-in fade-in slide-in-from-top-1 origin-top"
             style={{ boxShadow: "0px 16px 32px -8px rgba(12, 12, 13, 0.4)" }}
           >
@@ -881,11 +881,10 @@ export default function SupportPage({ activeTicketId, onCloseTicketDetail }: Sup
                     setValue(option);
                     setActiveDropdown(null);
                   }}
-                  className={`w-full text-left px-3 py-2 rounded-lg text-xs font-semibold transition-colors ${
-                    currentValue === option
-                      ? "bg-[#EFF4FA] text-[#635BFF]"
-                      : "text-[#29343D] hover:bg-[#EFF4FA]"
-                  }`}
+                  className={`w-full text-left px-3 py-2 rounded-lg text-xs font-semibold transition-colors ${currentValue === option
+                    ? "bg-[#EFF4FA] text-[#635BFF]"
+                    : "text-[#29343D] hover:bg-[#EFF4FA]"
+                    }`}
                 >
                   {option}
                 </button>
@@ -943,17 +942,15 @@ export default function SupportPage({ activeTicketId, onCloseTicketDetail }: Sup
   // Close ticket handler inside profile card
   const handleCloseActiveTicket = () => {
     if (!activeTicket) return;
-    if (confirm(`Are you sure you want to close ticket ${activeTicket.id}?`)) {
-      const updated = tickets.map((t) => {
-        if (t.id === activeTicket.id) {
-          return { ...t, status: "Closed" as const };
-        }
-        return t;
-      });
-      setTickets(updated);
-      setActiveTicket({ ...activeTicket, status: "Closed" });
-      triggerToast(`Ticket ${activeTicket.id} marked as Closed`, "success");
-    }
+    const updated = tickets.map((t) => {
+      if (t.id === activeTicket.id) {
+        return { ...t, status: "Closed" as const };
+      }
+      return t;
+    });
+    setTickets(updated);
+    setActiveTicket({ ...activeTicket, status: "Closed" });
+    triggerToast(`Ticket ${activeTicket.id} marked as Closed`, "success");
   };
 
   // Delete announcement handler
@@ -1318,7 +1315,7 @@ export default function SupportPage({ activeTicketId, onCloseTicketDetail }: Sup
         </button>
 
         {isOpen && (
-          <div 
+          <div
             className="absolute left-0 top-full mt-1.5 w-60 bg-white border border-[#E0E6EB] rounded-xl shadow-2xl z-50 p-1.5 flex flex-col gap-0.5 animate-in fade-in slide-in-from-top-1 origin-top"
             style={{ boxShadow: "0px 16px 32px -8px rgba(12, 12, 13, 0.4)" }}
           >
@@ -1331,11 +1328,10 @@ export default function SupportPage({ activeTicketId, onCloseTicketDetail }: Sup
                     setValue(option);
                     setActiveDropdown(null);
                   }}
-                  className={`w-full text-left px-3 py-2 rounded-lg text-xs font-semibold transition-colors ${
-                    currentValue === option
-                      ? "bg-[#EFF4FA] text-[#635BFF]"
-                      : "text-[#29343D] hover:bg-[#EFF4FA]"
-                  }`}
+                  className={`w-full text-left px-3 py-2 rounded-lg text-xs font-semibold transition-colors ${currentValue === option
+                    ? "bg-[#EFF4FA] text-[#635BFF]"
+                    : "text-[#29343D] hover:bg-[#EFF4FA]"
+                    }`}
                 >
                   {option}
                 </button>
@@ -1388,11 +1384,10 @@ export default function SupportPage({ activeTicketId, onCloseTicketDetail }: Sup
                     onChange(option);
                     setActiveDropdown(null);
                   }}
-                  className={`h-7 rounded-[4px] px-2 text-left text-[12px] font-normal leading-4 transition-colors ${
-                    value === option
-                      ? "bg-[#F1F2FE] text-[#635BFF]"
-                      : "text-[#29343D] hover:bg-[#EFF4FA]"
-                  }`}
+                  className={`h-7 rounded-[4px] px-2 text-left text-[12px] font-normal leading-4 transition-colors ${value === option
+                    ? "bg-[#F1F2FE] text-[#635BFF]"
+                    : "text-[#29343D] hover:bg-[#EFF4FA]"
+                    }`}
                 >
                   {option}
                 </button>
@@ -1433,7 +1428,7 @@ export default function SupportPage({ activeTicketId, onCloseTicketDetail }: Sup
   if (activeTicket) {
     return (
       <div className="flex flex-col gap-6 w-full text-left font-sans select-none animate-in fade-in duration-300">
-        
+
         {/* Toast Container */}
         <div className="fixed top-6 right-6 z-[120] flex flex-col gap-2 pointer-events-none">
           {toasts.map((toast) => (
@@ -1449,7 +1444,7 @@ export default function SupportPage({ activeTicketId, onCloseTicketDetail }: Sup
         </div>
 
         {/* Title Bar (Breadcrumb Header - Figma height 60px, padding 16px 30px) */}
-        <div 
+        <div
           className="bg-white rounded-xl flex items-center justify-between w-full px-[30px] py-4"
           style={{
             boxShadow: "0px 2px 4px -1px rgba(175, 182, 201, 0.2)",
@@ -1458,13 +1453,13 @@ export default function SupportPage({ activeTicketId, onCloseTicketDetail }: Sup
           }}
         >
           <div className="flex items-center gap-4">
-            <button 
+            <button
               onClick={handleGoBack}
               className="p-1 hover:bg-slate-100 rounded-lg transition-colors text-[#635BFF]"
               title="Back to Ticket List"
             >
               <svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
-                <path d="M15 19L8 12L15 5" stroke="#635BFF" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round"/>
+                <path d="M15 19L8 12L15 5" stroke="#635BFF" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round" />
               </svg>
             </button>
             <h1 className="font-bold text-[#29343D] text-[16px] leading-[22px] font-sans">
@@ -1485,92 +1480,134 @@ export default function SupportPage({ activeTicketId, onCloseTicketDetail }: Sup
         </div>
 
         {/* Profile Card & Info Grid */}
-        <div className="grid grid-cols-1 md:grid-cols-2 gap-[30px] w-full">
-          
+        <div className="flex flex-col lg:flex-row items-stretch w-full gap-[30px] h-auto lg:h-[337px] flex-none order-0 self-stretch grow-0">
+
           {/* Left Card: Change profile pic (Figma size: 584.5px x 337px) */}
-          <div className="bg-white border border-[#E0E6EB] rounded-xl p-[30px] flex flex-col items-center justify-between h-[337px] shadow-sm">
-            <div className="flex flex-col items-center gap-3">
+          <div className="bg-white border border-[#E0E6EB] rounded-[12px] p-[30px] flex flex-col items-center justify-center w-full lg:w-[584.5px] h-[337px] flex-none lg:grow shadow-sm">
+            {/* img */}
+            <div className="flex flex-col items-center justify-center p-0 gap-6 w-full max-w-[524.5px]">
               <SupportAvatar />
-              <div className="text-center">
-                <h3 className="font-bold text-[18px] leading-[25px] text-[#29343D] font-sans">
+              
+              {/* txt */}
+              <div className="flex flex-col justify-center items-center p-0 w-full gap-1">
+                <h3 className="font-sans font-semibold text-[18px] leading-[25px] text-[#29343D] text-center w-full truncate">
                   {salonContacts[activeTicket.salonName]?.name || activeTicket.assignTo}
                 </h3>
-                <p className="text-sm text-[#98A4AE] font-sans">
+                <p className="font-sans font-normal text-[14px] leading-[20px] text-[#98A4AE] text-center w-full truncate">
                   {salonContacts[activeTicket.salonName]?.email || "maria@bellavista.com"}
                 </p>
               </div>
-            </div>
 
-            <div className="flex items-center gap-4 justify-center">
-              <button
-                onClick={() => setShowSendEmailModal(true)}
-                className="flex items-center justify-center gap-2.5 px-4 py-2.5 bg-[#EFF4FA] hover:bg-slate-200 text-sm font-semibold text-[#0A2540] rounded-lg transition-all"
-                style={{ width: "130px", height: "44px" }}
-              >
-                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.2" strokeLinecap="round" strokeLinejoin="round">
-                  <path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z" />
-                  <polyline points="22,6 12,13 2,6" />
-                </svg>
-                <span>Send Email</span>
-              </button>
+              {/* buttons */}
+              <div className="flex flex-row items-center justify-center p-0 gap-4 w-full max-w-[260px] h-11">
+                {/* Btn 1 */}
+                <button
+                  onClick={() => setShowSendEmailModal(true)}
+                  className="flex flex-row justify-center items-center p-[10px_16px] gap-2.5 w-[130px] h-11 bg-[#EFF4FA] rounded-lg flex-none cursor-pointer hover:bg-slate-200 transition-all"
+                >
+                  <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.2" strokeLinecap="round" strokeLinejoin="round" className="text-[#0A2540] shrink-0">
+                    <path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z" />
+                    <polyline points="22,6 12,13 2,6" />
+                  </svg>
+                  <span className="font-sans font-medium text-[14px] leading-[24px] text-center text-[#0A2540]">
+                    Send Email
+                  </span>
+                </button>
 
-              <button
-                onClick={handleCloseActiveTicket}
-                className="flex items-center justify-center gap-2.5 px-4 py-2.5 bg-[#FF6692] hover:bg-[#e6557e] text-sm font-semibold text-white rounded-lg transition-all shadow-sm"
-                style={{ width: "114px", height: "44px" }}
-              >
-                <span>Close Ticket</span>
-              </button>
+                {/* Btn 2 */}
+                <button
+                  onClick={handleCloseActiveTicket}
+                  className="flex flex-row justify-center items-center p-[10px_16px] gap-2.5 w-[114px] h-11 bg-[#FF6692] rounded-lg flex-none cursor-pointer hover:bg-[#e6557e] transition-all"
+                >
+                  <span className="font-sans font-medium text-[14px] leading-[24px] text-center text-white">
+                    Close Ticket
+                  </span>
+                </button>
+              </div>
             </div>
           </div>
 
           {/* Right Card: Ticket Informations Widget (Figma size: 584.5px x 337px) */}
-          <div className="bg-white border border-[#E0E6EB] rounded-xl p-[30px] flex flex-col h-[337px] shadow-sm text-left">
-            <h3 className="font-bold text-[18px] leading-[25px] text-[#29343D] border-b border-slate-100 pb-3 font-sans">
+          <div className="bg-white border border-[#E0E6EB] rounded-[12px] p-[30px] flex flex-col items-start justify-center gap-6 w-full lg:w-[584.5px] h-[337px] flex-none lg:grow shadow-sm text-left">
+            <h3 className="font-sans font-semibold text-[18px] leading-[25px] text-[#29343D]">
               Ticket Informations
             </h3>
 
-            <div className="grid grid-cols-2 gap-x-6 gap-y-5 mt-5">
+            {/* Frame 1000003970 */}
+            <div className="flex flex-col items-start gap-5 w-full">
               
-              <div className="flex flex-col gap-1">
-                <span className="text-xs font-semibold text-[#999999] uppercase tracking-wide">ID</span>
-                <span className="text-[13px] font-bold text-[#29343D] font-mono">{activeTicket.id}</span>
-              </div>
+              {/* Row 1 */}
+              <div className="flex flex-row items-start gap-4 w-full">
+                {/* ID */}
+                <div className="flex flex-col justify-start items-start gap-1 flex-1">
+                  <span className="font-sans font-normal text-[12px] leading-none text-[#999999]">
+                    ID
+                  </span>
+                  <span className="font-sans font-semibold text-[13px] leading-tight text-[#29343D]">
+                    {activeTicket.id}
+                  </span>
+                </div>
 
-              <div className="flex flex-col gap-1">
-                <span className="text-xs font-semibold text-[#999999] uppercase tracking-wide">Salon Beauty</span>
-                <span className="text-[13px] font-bold text-[#29343D]">{activeTicket.salonName}</span>
-              </div>
-
-              <div className="flex flex-col gap-1">
-                <span className="text-xs font-semibold text-[#999999] uppercase tracking-wide">Category</span>
-                <div>
-                  <span className="inline-flex items-center px-2 py-0.5 bg-[#FFF9E5] text-[#FFD648] rounded-full text-xs font-bold">
-                    {activeTicket.category}
+                {/* Salon Beauty */}
+                <div className="flex flex-col justify-start items-start gap-1 flex-1">
+                  <span className="font-sans font-normal text-[12px] leading-none text-[#999999] uppercase">
+                    Salon Beauty
+                  </span>
+                  <span className="font-sans font-semibold text-[13px] leading-tight text-[#29343D] truncate block max-w-full">
+                    {activeTicket.salonName}
                   </span>
                 </div>
               </div>
 
-              <div className="flex flex-col gap-1">
-                <span className="text-xs font-semibold text-[#999999] uppercase tracking-wide">Date</span>
-                <span className="text-[13px] font-bold text-[#29343D]">{activeTicket.date}</span>
-              </div>
+              {/* Row 2 */}
+              <div className="flex flex-row items-start gap-4 w-full">
+                {/* Category */}
+                <div className="flex flex-col justify-start items-start gap-1 flex-1">
+                  <span className="font-sans font-normal text-[12px] leading-none text-[#999999]">
+                    Category
+                  </span>
+                  <div className="flex flex-row items-center justify-center p-[4px_8px] bg-[#FFF9E5] rounded-[999px]">
+                    <span className="font-sans font-medium text-[12px] leading-none text-[#FFD648]">
+                      {activeTicket.category}
+                    </span>
+                  </div>
+                </div>
 
-              <div className="flex flex-col gap-1">
-                <span className="text-xs font-semibold text-[#999999] uppercase tracking-wide">Priority</span>
-                <div>
-                  <span className="inline-flex items-center px-2.5 py-1 bg-[#FF6692] text-[#FFE5ED] rounded text-xs font-bold uppercase tracking-wide">
-                    {activeTicket.priority}
+                {/* Date */}
+                <div className="flex flex-col justify-start items-start gap-1 flex-1">
+                  <span className="font-sans font-normal text-[12px] leading-none text-[#999999]">
+                    Date
+                  </span>
+                  <span className="font-sans font-semibold text-[13px] leading-tight text-[#29343D]">
+                    {activeTicket.date}
                   </span>
                 </div>
               </div>
 
-              <div className="flex flex-col gap-1">
-                <span className="text-xs font-semibold text-[#999999] uppercase tracking-wide">Status</span>
-                <div>
-                  <span className="inline-flex items-center px-2.5 py-1 bg-[#ECFDFD] text-[#16CDC7] rounded text-xs font-bold uppercase tracking-wide">
-                    {activeTicket.status}
+              {/* Row 3 */}
+              <div className="flex flex-row items-start gap-4 w-full">
+                {/* Priority */}
+                <div className="flex flex-col justify-start items-start gap-1 flex-1">
+                  <span className="font-sans font-normal text-[12px] leading-none text-[#999999]">
+                    Priority
                   </span>
+                  <div className="flex flex-row justify-center items-center p-[2px_8px] bg-[#FF6692] rounded-[6px]">
+                    <span className="font-sans font-semibold text-[13px] leading-none text-[#FFE5ED]">
+                      {activeTicket.priority}
+                    </span>
+                  </div>
+                </div>
+
+                {/* Status */}
+                <div className="flex flex-col justify-start items-start gap-1 flex-1">
+                  <span className="font-sans font-normal text-[12px] leading-none text-[#999999]">
+                    Status
+                  </span>
+                  <div className="flex flex-row justify-center items-center p-[2px_8px] bg-[#ECFDFD] rounded-[6px]">
+                    <span className="font-sans font-semibold text-[13px] leading-none text-[#16CDC7]">
+                      {activeTicket.status}
+                    </span>
+                  </div>
                 </div>
               </div>
 
@@ -1600,13 +1637,13 @@ export default function SupportPage({ activeTicketId, onCloseTicketDetail }: Sup
               </div>
             ) : (
               activeTicket.emailsSent.map((email, i) => (
-                <div 
-                  key={i} 
+                <div
+                  key={i}
                   className="bg-[#F1F2FE] rounded-xl p-6 flex flex-col gap-2 relative border border-[#EFF4FA]"
                 >
                   <div className="flex items-center justify-between">
                     <span className="font-bold text-sm text-[#29343D]">{email.sender}</span>
-                    <button 
+                    <button
                       onClick={() => setViewingEmailItem(email)}
                       className="w-12 h-9 bg-[#DDDBFF] text-[#635BFF] hover:bg-slate-200 rounded-lg transition-colors flex items-center justify-center shrink-0"
                     >
@@ -1627,7 +1664,7 @@ export default function SupportPage({ activeTicketId, onCloseTicketDetail }: Sup
         <div className="bg-white border border-[#E0E6EB] rounded-xl p-[30px] flex flex-col gap-6 shadow-sm text-left">
           <div className="flex items-center justify-between">
             <h4 className="font-bold text-[18px] leading-[25px] text-[#29343D]">Internal Notes</h4>
-            <button 
+            <button
               onClick={handleAddNewNoteClick}
               className="w-12 h-9 bg-[#B5EAF7] text-[#2F889E] hover:bg-[#99dff0] rounded-lg transition-colors flex items-center justify-center shrink-0"
               title="Add Internal Note"
@@ -1645,24 +1682,21 @@ export default function SupportPage({ activeTicketId, onCloseTicketDetail }: Sup
               </div>
             ) : (
               activeTicket.internalNotes.map((note, i) => (
-                <div 
+                <div
                   key={i}
-                  className={`border rounded-xl p-4 flex items-center justify-between gap-4 ${
-                    note.type === "resolution" 
-                      ? "bg-[#EBFAF0] border-[#36C76C]" 
-                      : "bg-[#FFF9E5] border-[#FFD648]"
-                  }`}
+                  className={`border rounded-xl p-4 flex items-center justify-between gap-4 ${note.type === "resolution"
+                    ? "bg-[#EBFAF0] border-[#36C76C]"
+                    : "bg-[#FFF9E5] border-[#FFD648]"
+                    }`}
                 >
                   <div className="flex gap-4 items-center flex-1">
-                    <div className={`w-0.5 h-10 rounded-full shrink-0 ${
-                      note.type === "resolution" ? "bg-[#36C76C]" : "bg-[#FFD648]"
-                    }`} />
+                    <div className={`w-0.5 h-10 rounded-full shrink-0 ${note.type === "resolution" ? "bg-[#36C76C]" : "bg-[#FFD648]"
+                      }`} />
 
                     <div className="flex flex-col gap-1 flex-1">
                       <div className="flex items-center gap-2">
-                        <span className={`text-[14px] font-bold ${
-                          note.type === "resolution" ? "text-[#36C76C]" : "text-[#29343D]"
-                        }`}>
+                        <span className={`text-[14px] font-bold ${note.type === "resolution" ? "text-[#36C76C]" : "text-[#29343D]"
+                          }`}>
                           {note.title || note.author}
                         </span>
                         {note.category && (
@@ -1671,20 +1705,18 @@ export default function SupportPage({ activeTicketId, onCloseTicketDetail }: Sup
                           </span>
                         )}
                       </div>
-                      <p className={`text-sm leading-relaxed ${
-                        note.type === "resolution" ? "text-[#36C76C]" : "text-[#98A4AE]"
-                      }`}>
+                      <p className={`text-sm leading-relaxed ${note.type === "resolution" ? "text-[#36C76C]" : "text-[#98A4AE]"
+                        }`}>
                         {note.message}
                       </p>
-                      <span className={`text-xs font-semibold ${
-                        note.type === "resolution" ? "text-[#36C76C]/80" : "text-[#526B7A]"
-                      }`}>
+                      <span className={`text-xs font-semibold ${note.type === "resolution" ? "text-[#36C76C]/80" : "text-[#526B7A]"
+                        }`}>
                         {note.daysAgo}
                       </span>
                     </div>
                   </div>
 
-                  <button 
+                  <button
                     onClick={() => handleStartEditNote(note, i)}
                     className="p-2 text-slate-400 hover:text-slate-700 hover:bg-slate-50 rounded-lg transition-colors shrink-0"
                     title="Edit Note"
@@ -1731,15 +1763,15 @@ export default function SupportPage({ activeTicketId, onCloseTicketDetail }: Sup
                   />
                 </div>
                 <div className="flex justify-end gap-3 mt-2">
-                  <button 
-                    type="button" 
+                  <button
+                    type="button"
                     onClick={() => setShowSendEmailModal(false)}
                     className="px-4 py-2 bg-white border border-slate-200 text-xs font-bold text-slate-700 rounded-lg hover:bg-slate-50 transition-colors"
                   >
                     Cancel
                   </button>
-                  <button 
-                    type="submit" 
+                  <button
+                    type="submit"
                     disabled={isSendingEmail || !emailMessageText.trim()}
                     className="px-5 py-2 bg-[#635BFF] text-white hover:bg-[#4d42eb] text-xs font-bold rounded-lg transition-all"
                   >
@@ -1753,11 +1785,11 @@ export default function SupportPage({ activeTicketId, onCloseTicketDetail }: Sup
 
         {/* MODAL: Edit Note popup */}
         {showAddNoteModal && (
-          <div 
+          <div
             className="fixed inset-0 bg-slate-900/40 backdrop-blur-sm z-[130] flex items-center justify-center p-4"
             onClick={() => setShowAddNoteModal(false)}
           >
-            <div 
+            <div
               className="bg-white rounded-xl shadow-2xl w-full max-w-md overflow-hidden flex flex-col text-left border border-[#E0E6EB] p-6 gap-5 relative"
               onClick={(e) => e.stopPropagation()}
             >
@@ -1766,8 +1798,8 @@ export default function SupportPage({ activeTicketId, onCloseTicketDetail }: Sup
                 <h3 className="font-bold text-base text-[#29343D]">
                   {editingNoteIndex !== null ? "Edit Note" : "Add Note"}
                 </h3>
-                <button 
-                  onClick={() => setShowAddNoteModal(false)} 
+                <button
+                  onClick={() => setShowAddNoteModal(false)}
                   className="text-slate-400 hover:text-slate-600 transition-colors"
                 >
                   <CloseIcon />
@@ -1775,7 +1807,7 @@ export default function SupportPage({ activeTicketId, onCloseTicketDetail }: Sup
               </div>
 
               {/* Form */}
-              <form 
+              <form
                 onSubmit={(e) => {
                   e.preventDefault();
                   if (editingNoteIndex !== null) {
@@ -1873,8 +1905,8 @@ export default function SupportPage({ activeTicketId, onCloseTicketDetail }: Sup
 
                 {/* Actions */}
                 <div className="flex justify-end mt-2">
-                  <button 
-                    type="submit" 
+                  <button
+                    type="submit"
                     className="px-5 py-2 bg-[#635BFF] text-white hover:bg-[#4d42eb] text-xs font-bold rounded-lg transition-all"
                   >
                     Save Changes
@@ -1887,11 +1919,11 @@ export default function SupportPage({ activeTicketId, onCloseTicketDetail }: Sup
 
         {/* MODAL: View Email Details popup */}
         {viewingEmailItem && (
-          <div 
+          <div
             className="fixed inset-0 bg-slate-900/40 backdrop-blur-sm z-[150] flex items-center justify-center p-4 overflow-y-auto"
             onClick={() => setViewingEmailItem(null)}
           >
-            <div 
+            <div
               className="bg-white rounded-xl shadow-[0px_16px_32px_-8px_rgba(12,12,13,0.4)] w-[638px] max-w-full flex flex-col gap-6 p-6 overflow-y-auto max-h-[90vh] text-left border border-[#E0E6EB] relative"
               onClick={(e) => e.stopPropagation()}
             >
@@ -1902,8 +1934,8 @@ export default function SupportPage({ activeTicketId, onCloseTicketDetail }: Sup
                     View Email Details
                   </h3>
                 </div>
-                <button 
-                  onClick={() => setViewingEmailItem(null)} 
+                <button
+                  onClick={() => setViewingEmailItem(null)}
                   className="w-6 h-6 flex items-center justify-center shrink-0 text-[#29343D] hover:opacity-80 transition-opacity"
                 >
                   <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round">
@@ -1915,7 +1947,7 @@ export default function SupportPage({ activeTicketId, onCloseTicketDetail }: Sup
 
               {/* Inner widget card container */}
               <div className="w-full border border-[#E0E6EB] rounded-xl p-6 flex flex-col gap-6 bg-white shadow-[0px_2px_4px_-1px_rgba(175,182,201,0.2)]">
-                
+
                 {/* Username header */}
                 <div className="flex flex-row items-center gap-3 w-full h-10">
                   <div className="w-10 h-10 rounded-full bg-[#16CDC7] flex items-center justify-center shrink-0">
@@ -2031,11 +2063,11 @@ export default function SupportPage({ activeTicketId, onCloseTicketDetail }: Sup
                     <div className="flex flex-row items-center gap-3">
                       <div className="w-10 h-10 flex items-center justify-center shrink-0">
                         <svg width="40" height="40" viewBox="0 0 40 40" fill="none" xmlns="http://www.w3.org/2000/svg">
-                          <rect width="40" height="40" rx="8" fill="#F1F2FE"/>
-                          <path d="M14 11H22L28 17V29C28 30.1 27.1 31 26 31H14C12.9 31 12 30.1 12 29V13C12 11.9 12.9 11 14 11Z" stroke="#635BFF" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/>
-                          <path d="M22 11V17H28" stroke="#635BFF" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/>
-                          <path d="M17 21H23" stroke="#635BFF" strokeWidth="2" strokeLinecap="round"/>
-                          <path d="M17 25H23" stroke="#635BFF" strokeWidth="2" strokeLinecap="round"/>
+                          <rect width="40" height="40" rx="8" fill="#F1F2FE" />
+                          <path d="M14 11H22L28 17V29C28 30.1 27.1 31 26 31H14C12.9 31 12 30.1 12 29V13C12 11.9 12.9 11 14 11Z" stroke="#635BFF" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" />
+                          <path d="M22 11V17H28" stroke="#635BFF" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" />
+                          <path d="M17 21H23" stroke="#635BFF" strokeWidth="2" strokeLinecap="round" />
+                          <path d="M17 25H23" stroke="#635BFF" strokeWidth="2" strokeLinecap="round" />
                         </svg>
                       </div>
                       <div className="flex flex-col items-start gap-1">
@@ -2049,20 +2081,29 @@ export default function SupportPage({ activeTicketId, onCloseTicketDetail }: Sup
                     </div>
                     <div className="flex flex-row items-center gap-4">
                       {/* Eyeball preview */}
-                      <button className="w-12 h-9 rounded-lg bg-[#F1F2FE] hover:bg-[#e0e2fe] transition-colors flex items-center justify-center">
+                      <button
+                        onClick={() => window.open("/sample.pdf", "_blank")}
+                        className="w-12 h-9 rounded-lg bg-[#F1F2FE] hover:bg-[#e0e2fe] transition-colors flex items-center justify-center cursor-pointer"
+                        title="View PDF"
+                      >
                         <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#635BFF" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round">
                           <path d="M2 12s3-7 10-7 10 7 10 7-3 7-10 7-10-7-10-7Z" />
                           <circle cx="12" cy="12" r="3" />
                         </svg>
                       </button>
                       {/* Download */}
-                      <button className="w-12 h-9 rounded-lg bg-[#DDDBFF] hover:bg-[#c6c3fe] transition-colors flex items-center justify-center">
+                      <a
+                        href="/sample.pdf"
+                        download="originalname.pdf"
+                        className="w-12 h-9 rounded-lg bg-[#DDDBFF] hover:bg-[#c6c3fe] transition-colors flex items-center justify-center cursor-pointer"
+                        title="Download File"
+                      >
                         <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#635BFF" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round">
                           <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4" />
                           <polyline points="7 10 12 15 17 10" />
                           <line x1="12" y1="15" x2="12" y2="3" />
                         </svg>
-                      </button>
+                      </a>
                     </div>
                   </div>
                 </div>
@@ -2071,8 +2112,11 @@ export default function SupportPage({ activeTicketId, onCloseTicketDetail }: Sup
 
               {/* Footer Foward button */}
               <div className="flex flex-row justify-end items-center gap-2.5 w-full mt-2">
-                <button 
-                  onClick={() => triggerToast("Email forwarded", "success")}
+                <button
+                  onClick={() => {
+                    triggerToast("Email forwarded", "success");
+                    setViewingEmailItem(null);
+                  }}
                   className="px-4 py-2.5 bg-[#EFF4FA] hover:bg-slate-200 text-sm font-semibold text-[#0A2540] rounded-lg transition-all"
                   style={{ width: "79px", height: "44px" }}
                 >
@@ -2107,13 +2151,12 @@ export default function SupportPage({ activeTicketId, onCloseTicketDetail }: Sup
           {toasts.map((toast) => (
             <div
               key={toast.id}
-              className={`flex items-center gap-3 px-5 py-3.5 rounded-2xl shadow-2xl border text-xs font-bold text-[#29343D] bg-white pointer-events-auto animate-in slide-in-from-right duration-250 ${
-                toast.type === "success"
-                  ? "border-emerald-100 shadow-emerald-50/20"
-                  : toast.type === "error"
+              className={`flex items-center gap-3 px-5 py-3.5 rounded-2xl shadow-2xl border text-xs font-bold text-[#29343D] bg-white pointer-events-auto animate-in slide-in-from-right duration-250 ${toast.type === "success"
+                ? "border-emerald-100 shadow-emerald-50/20"
+                : toast.type === "error"
                   ? "border-[#FFE5ED] shadow-rose-50/20"
                   : "border-indigo-100 shadow-indigo-50/20"
-              }`}
+                }`}
             >
               {toast.type === "success" && <div className="w-5 h-5 rounded-full bg-[#EBFAF0] text-[#36C76C] flex items-center justify-center"><CheckIcon className="w-3.5 h-3.5" /></div>}
               {toast.type === "error" && <div className="w-5 h-5 rounded-full bg-[#FFE5ED] text-[#FF6692] flex items-center justify-center font-black">!</div>}
@@ -2253,12 +2296,12 @@ export default function SupportPage({ activeTicketId, onCloseTicketDetail }: Sup
     const matchingSalonCount = getAudienceSalonCount(viewedAudience.name);
 
     return (
-      <div 
+      <div
         className="flex flex-col items-start p-[30px] gap-[30px] w-full bg-[#F4F7FB] rounded-[20px] select-none animate-in fade-in duration-300"
         style={{ minHeight: "805px" }}
       >
         {/* Title Bar */}
-        <div 
+        <div
           className="bg-white rounded-[12px] flex items-center justify-between w-full px-[30px] py-4 border border-[#E0E6EB]"
           style={{
             boxShadow: "0px 2px 4px -1px rgba(175, 182, 201, 0.2)",
@@ -2266,7 +2309,7 @@ export default function SupportPage({ activeTicketId, onCloseTicketDetail }: Sup
           }}
         >
           <div className="flex flex-row items-center gap-4 flex-grow">
-            <button 
+            <button
               onClick={() => setViewedAudience(null)}
               className="p-1 hover:bg-slate-100 rounded-lg transition-colors text-[#635BFF] flex items-center justify-center"
               title="Back to Audience List"
@@ -2292,7 +2335,7 @@ export default function SupportPage({ activeTicketId, onCloseTicketDetail }: Sup
             >
               View list
             </button>
-            
+
             <div className="flex items-center gap-2 text-xs font-bold text-[#29343D]">
               <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className="opacity-50 text-[#29343D]">
                 <path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z" />
@@ -2308,16 +2351,16 @@ export default function SupportPage({ activeTicketId, onCloseTicketDetail }: Sup
 
         {/* Grid Container (3 Rows) */}
         <div className="flex flex-col gap-6 w-full">
-          
+
           {/* Row 1: Recipient Profile & Company Structure */}
           <div className="flex flex-col md:flex-row gap-6 w-full">
-            
+
             {/* Widget 1: Recipient Profile */}
             <div className="flex-grow flex-1 bg-white border border-[#E0E6EB] rounded-[12px] p-6 flex flex-col gap-6 shadow-[0px_2px_4px_-1px_rgba(175, 182, 201, 0.2)]" style={{ height: "201px" }}>
               <h3 className="font-sans font-semibold text-[18px] leading-[25px] text-[#29343D] text-left">
                 Recipient Profile
               </h3>
-              
+
               <div className="grid grid-cols-2 gap-x-6 gap-y-4 text-left">
                 <div className="flex flex-col gap-1">
                   <span className="text-[12px] leading-4 text-[#999999] font-normal">Name</span>
@@ -2347,7 +2390,7 @@ export default function SupportPage({ activeTicketId, onCloseTicketDetail }: Sup
               <h3 className="font-sans font-semibold text-[18px] leading-[25px] text-[#29343D] text-left">
                 Company Structure
               </h3>
-              
+
               <div className="grid grid-cols-2 gap-x-6 gap-y-4 text-left">
                 <div className="flex flex-col gap-1 items-start">
                   <span className="text-[12px] leading-4 text-[#999999] font-normal">Number of Employees</span>
@@ -2366,31 +2409,29 @@ export default function SupportPage({ activeTicketId, onCloseTicketDetail }: Sup
 
           {/* Row 2: Digital Presence & Demographics */}
           <div className="flex flex-col md:flex-row gap-6 w-full">
-            
+
             {/* Widget 3: Digital Presence */}
             <div className="flex-grow flex-1 bg-white border border-[#E0E6EB] rounded-[12px] p-6 flex flex-col gap-6 shadow-[0px_2px_4px_-1px_rgba(175, 182, 201, 0.2)]" style={{ height: "141px" }}>
               <h3 className="font-sans font-semibold text-[18px] leading-[25px] text-[#29343D] text-left">
                 Digital Presence
               </h3>
-              
+
               <div className="grid grid-cols-2 gap-x-6 gap-y-4 text-left">
                 <div className="flex flex-col gap-1 items-start">
                   <span className="text-[12px] leading-4 text-[#999999] font-normal">Social Media Linked</span>
-                  <span className={`inline-flex items-center px-2 py-0.5 text-xs font-semibold ${
-                    (viewedAudience.socialMediaLinked || "No").toLowerCase() === "yes" 
-                      ? "bg-[#EBFAF0] text-[#36C76C] rounded-full" 
-                      : "bg-[#FFE5ED] text-[#FF6692] rounded-full"
-                  }`}>
+                  <span className={`inline-flex items-center px-2 py-0.5 text-xs font-semibold ${(viewedAudience.socialMediaLinked || "No").toLowerCase() === "yes"
+                    ? "bg-[#EBFAF0] text-[#36C76C] rounded-full"
+                    : "bg-[#FFE5ED] text-[#FF6692] rounded-full"
+                    }`}>
                     {viewedAudience.socialMediaLinked || "No"}
                   </span>
                 </div>
                 <div className="flex flex-col gap-1 items-start">
                   <span className="text-[12px] leading-4 text-[#999999] font-normal">Has WhatsApp API</span>
-                  <span className={`inline-flex items-center px-2 py-0.5 text-xs font-semibold ${
-                    (viewedAudience.hasWhatsappApi || "No").toLowerCase() === "yes" 
-                      ? "bg-[#EBFAF0] text-[#36C76C] rounded-full" 
-                      : "bg-[#FFE5ED] text-[#FF6692] rounded-full"
-                  }`}>
+                  <span className={`inline-flex items-center px-2 py-0.5 text-xs font-semibold ${(viewedAudience.hasWhatsappApi || "No").toLowerCase() === "yes"
+                    ? "bg-[#EBFAF0] text-[#36C76C] rounded-full"
+                    : "bg-[#FFE5ED] text-[#FF6692] rounded-full"
+                    }`}>
                     {viewedAudience.hasWhatsappApi || "No"}
                   </span>
                 </div>
@@ -2402,7 +2443,7 @@ export default function SupportPage({ activeTicketId, onCloseTicketDetail }: Sup
               <h3 className="font-sans font-semibold text-[18px] leading-[25px] text-[#29343D] text-left">
                 Demographics
               </h3>
-              
+
               <div className="grid grid-cols-2 gap-x-6 gap-y-4 text-left">
                 <div className="flex flex-col gap-1 items-start">
                   <span className="text-[12px] leading-4 text-[#999999] font-normal">Age</span>
@@ -2421,13 +2462,13 @@ export default function SupportPage({ activeTicketId, onCloseTicketDetail }: Sup
 
           {/* Row 3: Location & Engagement */}
           <div className="flex flex-col md:flex-row gap-6 w-full">
-            
+
             {/* Widget 5: Location */}
             <div className="flex-grow flex-1 bg-white border border-[#E0E6EB] rounded-[12px] p-6 flex flex-col gap-6 shadow-[0px_2px_4px_-1px_rgba(175,182,201,0.2)]" style={{ height: "191px" }}>
               <h3 className="font-sans font-semibold text-[18px] leading-[25px] text-[#29343D] text-left">
                 Location
               </h3>
-              
+
               <div className="grid grid-cols-2 gap-x-6 gap-y-4 text-left">
                 <div className="flex flex-col gap-1">
                   <span className="text-[12px] leading-4 text-[#999999] font-normal">Region</span>
@@ -2449,7 +2490,7 @@ export default function SupportPage({ activeTicketId, onCloseTicketDetail }: Sup
               <h3 className="font-sans font-semibold text-[18px] leading-[25px] text-[#29343D] text-left">
                 Engagement
               </h3>
-              
+
               <div className="grid grid-cols-2 gap-x-6 gap-y-4 text-left">
                 <div className="flex flex-col gap-1">
                   <span className="text-[12px] leading-4 text-[#999999] font-normal">Subscribed From</span>
@@ -2464,11 +2505,11 @@ export default function SupportPage({ activeTicketId, onCloseTicketDetail }: Sup
 
         {/* MODAL: Salons in Audience */}
         {showSalonsListModal && (
-          <div 
+          <div
             className="fixed inset-0 bg-slate-900/40 backdrop-blur-sm z-[160] flex items-center justify-center p-4 overflow-y-auto animate-in fade-in duration-200"
             onClick={() => setShowSalonsListModal(false)}
           >
-            <div 
+            <div
               className="bg-white rounded-[12px] shadow-[0px_16px_32px_-8px_rgba(12,12,13,0.4)] w-[1000px] max-w-full flex flex-col gap-6 p-6 text-left border border-[#E0E6EB] relative overflow-hidden animate-in zoom-in-95 duration-150"
               style={{ height: "537px" }}
               onClick={(e) => e.stopPropagation()}
@@ -2478,9 +2519,9 @@ export default function SupportPage({ activeTicketId, onCloseTicketDetail }: Sup
                 <h3 className="font-sans font-semibold text-[18px] leading-[25px] text-[#29343D]">
                   Salons in {viewedAudience.name}
                 </h3>
-                <button 
+                <button
                   type="button"
-                  onClick={() => setShowSalonsListModal(false)} 
+                  onClick={() => setShowSalonsListModal(false)}
                   className="w-6 h-6 flex items-center justify-center text-slate-400 hover:text-slate-650 transition-colors shrink-0"
                 >
                   <CloseIcon />
@@ -2526,11 +2567,10 @@ export default function SupportPage({ activeTicketId, onCloseTicketDetail }: Sup
                     salonsInAudience.map((salon, idx) => {
                       const isEven = idx % 2 === 0;
                       return (
-                        <div 
-                          key={salon.id} 
-                          className={`flex w-full h-[76px] shrink-0 border-b border-[#E0E6EB] hover:bg-slate-50/50 transition-colors ${
-                            isEven ? "bg-white" : "bg-[#FAFAFA]"
-                          }`}
+                        <div
+                          key={salon.id}
+                          className={`flex w-full h-[76px] shrink-0 border-b border-[#E0E6EB] hover:bg-slate-50/50 transition-colors ${isEven ? "bg-white" : "bg-[#FAFAFA]"
+                            }`}
                         >
                           {/* Salon Name Column */}
                           <div className="w-[288px] h-full flex items-center gap-3 px-6 py-3.5 border-r border-[#E0E6EB] overflow-hidden">
@@ -2550,13 +2590,12 @@ export default function SupportPage({ activeTicketId, onCloseTicketDetail }: Sup
 
                           {/* Plan Column */}
                           <div className="w-[288px] h-full flex items-center px-6 py-3.5 border-r border-[#E0E6EB]">
-                            <span className={`inline-flex items-center px-2 py-0.5 text-xs font-semibold rounded-[8px] ${
-                              salon.plan === "Premium" 
-                                ? "bg-[#D2F4F2] text-[#29343D]" 
-                                : salon.plan === "Enterprise" 
-                                ? "bg-[#6C63FF] text-white" 
+                            <span className={`inline-flex items-center px-2 py-0.5 text-xs font-semibold rounded-[8px] ${salon.plan === "Premium"
+                              ? "bg-[#D2F4F2] text-[#29343D]"
+                              : salon.plan === "Enterprise"
+                                ? "bg-[#6C63FF] text-white"
                                 : "bg-slate-100 text-slate-700"
-                            }`}>
+                              }`}>
                               {salon.plan}
                             </span>
                           </div>
@@ -2596,11 +2635,11 @@ export default function SupportPage({ activeTicketId, onCloseTicketDetail }: Sup
 
         {/* MODAL: Delete Salon Confirmation */}
         {deletingSalonId && (
-          <div 
+          <div
             className="fixed inset-0 bg-slate-900/40 backdrop-blur-sm z-[170] flex items-center justify-center p-4 overflow-y-auto animate-in fade-in duration-200"
             onClick={() => setDeletingSalonId(null)}
           >
-            <div 
+            <div
               className="bg-white rounded-[12px] shadow-[0px_16px_32px_-8px_rgba(12,12,13,0.4)] w-[400px] flex flex-col gap-6 p-6 text-left border border-[#E0E6EB] relative overflow-hidden animate-in zoom-in-95 duration-150"
               onClick={(e) => e.stopPropagation()}
             >
@@ -2614,14 +2653,14 @@ export default function SupportPage({ activeTicketId, onCloseTicketDetail }: Sup
               </div>
 
               <div className="flex flex-row justify-end items-center gap-2.5 w-full">
-                <button 
+                <button
                   type="button"
                   onClick={() => setDeletingSalonId(null)}
                   className="px-4 py-2 bg-[#EFF4FA] hover:bg-slate-200 text-xs font-semibold text-[#0A2540] rounded-[8px] h-[38px] transition-all"
                 >
                   Cancel
                 </button>
-                <button 
+                <button
                   type="button"
                   onClick={() => {
                     handleRemoveSalon(deletingSalonId);
@@ -2638,11 +2677,11 @@ export default function SupportPage({ activeTicketId, onCloseTicketDetail }: Sup
 
         {/* MODAL: Add Salon */}
         {showAddSalonModal && (
-          <div 
+          <div
             className="fixed inset-0 bg-slate-900/40 backdrop-blur-sm z-[170] flex items-center justify-center p-4 overflow-y-auto animate-in fade-in duration-200"
             onClick={() => setShowAddSalonModal(false)}
           >
-            <div 
+            <div
               className="bg-white rounded-[12px] shadow-[0px_16px_32px_-8px_rgba(12,12,13,0.4)] w-[450px] flex flex-col gap-6 p-6 text-left border border-[#E0E6EB] relative overflow-visible animate-in zoom-in-95 duration-150"
               onClick={() => setIsAddSalonDropdownOpen(false)}
             >
@@ -2651,9 +2690,9 @@ export default function SupportPage({ activeTicketId, onCloseTicketDetail }: Sup
                 <h3 className="font-sans font-bold text-[18px] leading-[25px] text-[#29343D]">
                   Add Salon
                 </h3>
-                <button 
+                <button
                   type="button"
-                  onClick={() => setShowAddSalonModal(false)} 
+                  onClick={() => setShowAddSalonModal(false)}
                   className="w-6 h-6 flex items-center justify-center text-slate-400 hover:text-slate-600 transition-colors shrink-0"
                 >
                   <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round">
@@ -2666,7 +2705,7 @@ export default function SupportPage({ activeTicketId, onCloseTicketDetail }: Sup
               {/* Form Input Container */}
               <div className="flex flex-col gap-1.5 w-full relative">
                 <label className="text-xs font-semibold text-[#29343D]">Salon</label>
-                
+
                 {/* Custom Dropdown Trigger */}
                 <div className="relative w-full">
                   <button
@@ -2691,7 +2730,7 @@ export default function SupportPage({ activeTicketId, onCloseTicketDetail }: Sup
 
                   {/* Dropdown Options overlay */}
                   {isAddSalonDropdownOpen && (
-                    <div 
+                    <div
                       className="absolute left-0 right-0 top-full mt-1.5 bg-white border border-[#E0E6EB] rounded-[8px] shadow-lg max-h-48 overflow-y-auto z-50 p-1.5 flex flex-col gap-0.5"
                       onClick={(e) => e.stopPropagation()}
                     >
@@ -2725,15 +2764,14 @@ export default function SupportPage({ activeTicketId, onCloseTicketDetail }: Sup
 
               {/* Action Button */}
               <div className="flex flex-row justify-end items-center w-full mt-2">
-                <button 
+                <button
                   type="button"
                   onClick={handleAddSalonConfirm}
                   disabled={!selectedSalonToAddId}
-                  className={`px-5 py-2 text-xs font-semibold rounded-[8px] h-[38px] transition-all flex items-center justify-center ${
-                    selectedSalonToAddId
-                      ? "bg-[#635BFF] hover:bg-[#4d42eb] text-white cursor-pointer shadow-md"
-                      : "bg-[#e2e8f0] text-slate-400 cursor-not-allowed"
-                  }`}
+                  className={`px-5 py-2 text-xs font-semibold rounded-[8px] h-[38px] transition-all flex items-center justify-center ${selectedSalonToAddId
+                    ? "bg-[#635BFF] hover:bg-[#4d42eb] text-white cursor-pointer shadow-md"
+                    : "bg-[#e2e8f0] text-slate-400 cursor-not-allowed"
+                    }`}
                 >
                   Add Salon
                 </button>
@@ -2744,11 +2782,11 @@ export default function SupportPage({ activeTicketId, onCloseTicketDetail }: Sup
 
         {/* MODAL: Edit Audience */}
         {editingAudienceItem && (
-          <div 
+          <div
             className="fixed inset-0 bg-slate-900/40 backdrop-blur-sm z-[150] flex items-center justify-center p-4 overflow-y-auto animate-in fade-in duration-200"
             onClick={() => setEditingAudienceItem(null)}
           >
-            <form 
+            <form
               onSubmit={handleEditAudienceSubmit}
               className="bg-white rounded-[12px] shadow-[0px_16px_32px_-8px_rgba(12,12,13,0.4)] w-[638px] max-w-full flex flex-col gap-6 p-6 text-left border border-[#E0E6EB] relative overflow-hidden animate-in zoom-in-95 duration-150"
               onClick={(e) => e.stopPropagation()}
@@ -2758,9 +2796,9 @@ export default function SupportPage({ activeTicketId, onCloseTicketDetail }: Sup
                 <h3 className="font-sans font-semibold text-[18px] leading-[25px] text-[#29343D]">
                   Edit Audience
                 </h3>
-                <button 
+                <button
                   type="button"
-                  onClick={() => setEditingAudienceItem(null)} 
+                  onClick={() => setEditingAudienceItem(null)}
                   className="w-6 h-6 flex items-center justify-center text-[#29343D] hover:opacity-80 transition-opacity shrink-0"
                 >
                   <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round">
@@ -2890,14 +2928,14 @@ export default function SupportPage({ activeTicketId, onCloseTicketDetail }: Sup
 
               {/* Footer actions */}
               <div className="flex flex-row justify-end items-center gap-2.5 w-full mt-2 border-t border-slate-100 pt-3">
-                <button 
+                <button
                   type="button"
                   onClick={() => setEditingAudienceItem(null)}
                   className="px-4 py-2 bg-slate-100 hover:bg-slate-200 text-sm font-semibold text-slate-700 rounded-lg transition-all"
                 >
                   Cancel
                 </button>
-                <button 
+                <button
                   type="submit"
                   className="px-5 py-2 bg-[#635BFF] hover:bg-[#4d42eb] text-white text-sm font-semibold rounded-lg transition-all"
                 >
@@ -2914,15 +2952,15 @@ export default function SupportPage({ activeTicketId, onCloseTicketDetail }: Sup
   // Render original full ticket list dashboard
   return (
     <div className="flex flex-col gap-6 w-full text-left relative font-sans">
-      
+
       {/* Invisible backdrop to dismiss dropdowns */}
       {(activeDropdown || activeAudienceMenuId) && (
-        <div 
-          className="fixed inset-0 z-40 bg-transparent" 
+        <div
+          className="fixed inset-0 z-40 bg-transparent"
           onClick={() => {
             setActiveDropdown(null);
             setActiveAudienceMenuId(null);
-          }} 
+          }}
         />
       )}
 
@@ -2931,13 +2969,12 @@ export default function SupportPage({ activeTicketId, onCloseTicketDetail }: Sup
         {toasts.map((toast) => (
           <div
             key={toast.id}
-            className={`flex items-center gap-3 px-5 py-3.5 rounded-2xl shadow-2xl border text-xs font-bold text-[#29343D] bg-white pointer-events-auto animate-in slide-in-from-right duration-250 ${
-              toast.type === "success"
-                ? "border-emerald-100 shadow-emerald-50/20"
-                : toast.type === "error"
+            className={`flex items-center gap-3 px-5 py-3.5 rounded-2xl shadow-2xl border text-xs font-bold text-[#29343D] bg-white pointer-events-auto animate-in slide-in-from-right duration-250 ${toast.type === "success"
+              ? "border-emerald-100 shadow-emerald-50/20"
+              : toast.type === "error"
                 ? "border-[#FFE5ED] shadow-rose-50/20"
                 : "border-indigo-100 shadow-indigo-50/20"
-            }`}
+              }`}
           >
             {toast.type === "success" && <div className="w-5 h-5 rounded-full bg-[#EBFAF0] text-[#36C76C] flex items-center justify-center"><CheckIcon className="w-3.5 h-3.5" /></div>}
             {toast.type === "error" && <div className="w-5 h-5 rounded-full bg-[#FFE5ED] text-[#FF6692] flex items-center justify-center font-black">!</div>}
@@ -2948,7 +2985,7 @@ export default function SupportPage({ activeTicketId, onCloseTicketDetail }: Sup
       </div>
 
       {/* Main Top Header Section */}
-      <div 
+      <div
         className="bg-white rounded-xl flex flex-col md:flex-row md:items-center justify-between w-full px-6 py-4 gap-4"
         style={{
           boxShadow: "0px 2px 4px -1px rgba(175, 182, 201, 0.2)",
@@ -2968,9 +3005,8 @@ export default function SupportPage({ activeTicketId, onCloseTicketDetail }: Sup
           <button
             onClick={handleRefreshData}
             disabled={refreshing}
-            className={`flex items-center justify-center px-4 py-2.5 bg-[#EFF4FA] hover:bg-slate-200 text-xs font-semibold text-[#0A2540] rounded-lg transition-all ${
-              refreshing ? "opacity-50 cursor-not-allowed" : ""
-            }`}
+            className={`flex items-center justify-center px-4 py-2.5 bg-[#EFF4FA] hover:bg-slate-200 text-xs font-semibold text-[#0A2540] rounded-lg transition-all ${refreshing ? "opacity-50 cursor-not-allowed" : ""
+              }`}
             style={{ height: "44px" }}
           >
             <RefreshIcon />
@@ -3008,15 +3044,16 @@ export default function SupportPage({ activeTicketId, onCloseTicketDetail }: Sup
       </div>
 
       {/* KPI Metrics Cards */}
-      <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-5 w-full">
-        
-        {/* Metric 1: Total */}
-        <div 
-          className="rounded-2xl p-5 border flex flex-col justify-between transition-all duration-300 hover:-translate-y-0.5 cursor-pointer"
+      <div className="flex flex-col sm:grid sm:grid-cols-2 lg:flex lg:flex-row items-center gap-6 w-full">
+
+        {/* Metric 1: Total Tickets */}
+        <div
+          className="flex flex-col items-start p-6 gap-4 w-full lg:w-[281.75px] h-[138px] rounded-xl flex-none lg:flex-1 transition-all duration-300 hover:-translate-y-0.5 cursor-pointer bg-white"
           style={{
-            background: "linear-gradient(135deg, rgba(99, 91, 255, 0.12) 0%, rgba(99, 91, 255, 0.03) 100%)",
-            borderColor: "rgba(99, 91, 255, 0.20)",
-            boxShadow: "0px 2px 4px -1px rgba(175, 182, 201, 0.1)"
+            background: "linear-gradient(180deg, rgba(99, 91, 255, 0.12) 0%, rgba(99, 91, 255, 0.03) 100%), #FFFFFF",
+            borderRadius: "12px",
+            border: "1px solid rgba(99, 91, 255, 0.20)",
+            boxShadow: "0px 2px 4px -1px rgba(175, 182, 201, 0.2)"
           }}
           onClick={() => {
             setPriorityFilter("All Priority");
@@ -3024,94 +3061,137 @@ export default function SupportPage({ activeTicketId, onCloseTicketDetail }: Sup
             triggerToast("Showing all support tickets", "info");
           }}
         >
-          <div className="flex items-center justify-between">
-            <span className="text-[11px] font-bold text-[#635BFF] uppercase tracking-wide">Total Tickets</span>
-            <div className="w-8 h-8 rounded-lg bg-[#635BFF]/10 text-[#635BFF] flex items-center justify-center">
-              <TicketIcon />
+          {/* Frame 1000003732 */}
+          <div className="flex flex-col justify-center items-start p-0 gap-4 w-full h-[90px]">
+            {/* Frame 1000003729 */}
+            <div className="flex flex-row items-center p-0 gap-2 w-full h-10">
+              {/* icon */}
+              <div className="flex flex-col justify-center items-center p-[4px_2px] gap-2.5 w-10 h-10 bg-[#635BFF] rounded-xl flex-none">
+                <img src="/totalTicket.svg" alt="Total Tickets" className="w-6 h-6 object-contain" />
+              </div>
+              {/* Total Tickets */}
+              <span className="text-[#29343D] font-semibold text-[13px] leading-[18px] font-sans flex-1">
+                Total Tickets
+              </span>
             </div>
-          </div>
-          <div className="mt-4 flex items-baseline gap-2 text-left">
-            <span className="text-3xl font-extrabold text-[#29343D]">{totalCount}</span>
-            <span className="text-[10px] font-bold text-slate-400">across all salons</span>
+            {/* Frame 1000003730 */}
+            <div className="flex flex-col justify-center items-start p-0 gap-2 w-full h-[34px]">
+              <span className="text-[#29343D] font-semibold text-[28px] leading-[120%] font-sans text-center">
+                {totalCount}
+              </span>
+            </div>
           </div>
         </div>
 
-        {/* Metric 2: Open */}
-        <div 
-          className="rounded-2xl p-5 border flex flex-col justify-between transition-all duration-300 hover:-translate-y-0.5 cursor-pointer"
+        {/* Metric 2: Open Tickets */}
+        <div
+          className="flex flex-col items-start p-6 gap-4 w-full lg:w-[281.75px] h-[138px] rounded-xl flex-none lg:flex-1 transition-all duration-300 hover:-translate-y-0.5 cursor-pointer bg-white"
           style={{
-            background: "linear-gradient(135deg, rgba(255, 102, 146, 0.12) 0%, rgba(255, 102, 146, 0.03) 100%)",
-            borderColor: "rgba(255, 102, 146, 0.20)",
-            boxShadow: "0px 2px 4px -1px rgba(175, 182, 201, 0.1)"
+            background: "linear-gradient(180deg, rgba(255, 102, 146, 0.13) 0%, rgba(255, 102, 146, 0.03) 100%), #FFFFFF",
+            border: "1px solid #FFCCDB",
+            boxShadow: "0px 2px 4px -1px rgba(175, 182, 201, 0.2)",
+            borderRadius: "12px"
           }}
           onClick={() => {
             triggerToast("Filtered to Open tickets", "info");
           }}
         >
-          <div className="flex items-center justify-between">
-            <span className="text-[11px] font-bold text-[#FF6692] uppercase tracking-wide">Open Tickets</span>
-            <div className="w-8 h-8 rounded-lg bg-[#FF6692]/10 text-[#FF6692] flex items-center justify-center">
-              <span className="font-extrabold text-sm">!</span>
+          {/* Frame 1000003732 */}
+          <div className="flex flex-col justify-center items-start p-0 gap-4 w-full h-[90px]">
+            {/* Frame 1000003729 */}
+            <div className="flex flex-row items-center p-0 gap-2 w-full h-10">
+              {/* icon */}
+              <div className="flex flex-col justify-center items-center p-[4px_2px] gap-2.5 w-10 h-10 bg-[#FF6692] rounded-xl flex-none">
+                <img src="/openTickets.svg" alt="Open Tickets" className="w-6 h-6 object-contain" />
+              </div>
+              {/* Open Tickets */}
+              <span className="text-[#29343D] font-semibold text-[13px] leading-[18px] font-sans flex-1">
+                Open Tickets
+              </span>
             </div>
-          </div>
-          <div className="mt-4 flex items-baseline gap-2 text-left">
-            <span className="text-3xl font-extrabold text-[#29343D]">{openCount}</span>
-            <span className="text-[10px] font-bold text-[#FF6692]">requires response</span>
+            {/* Frame 1000003730 */}
+            <div className="flex flex-col justify-center items-start p-0 gap-2 w-full h-[34px]">
+              <span className="text-[#29343D] font-semibold text-[28px] leading-[120%] font-sans text-center">
+                {openCount}
+              </span>
+            </div>
           </div>
         </div>
 
-        {/* Metric 3: Waiting */}
-        <div 
-          className="rounded-2xl p-5 border flex flex-col justify-between transition-all duration-300 hover:-translate-y-0.5 cursor-pointer"
+        {/* Metric 3: Waiting For Customer */}
+        <div
+          className="flex flex-col items-start p-6 gap-4 w-full lg:w-[281.75px] h-[138px] rounded-xl flex-none lg:flex-1 transition-all duration-300 hover:-translate-y-0.5 cursor-pointer bg-white"
           style={{
-            background: "linear-gradient(135deg, rgba(248, 194, 10, 0.12) 0%, rgba(248, 194, 10, 0.03) 100%)",
-            borderColor: "rgba(248, 194, 10, 0.20)",
-            boxShadow: "0px 2px 4px -1px rgba(175, 182, 201, 0.1)"
+            background: "linear-gradient(180deg, rgba(248, 194, 9, 0.13) 0%, rgba(248, 194, 9, 0.03) 100%), #FFFFFF",
+            border: "1px solid #FFD648",
+            boxShadow: "0px 2px 4px -1px rgba(175, 182, 201, 0.2)",
+            borderRadius: "12px"
           }}
           onClick={() => {
             triggerToast("Filtered to Waiting tickets", "info");
           }}
         >
-          <div className="flex items-center justify-between">
-            <span className="text-[11px] font-bold text-[#d97706] uppercase tracking-wide">Waiting Customer</span>
-            <div className="w-8 h-8 rounded-lg bg-[#FFF9E5] text-[#d97706] flex items-center justify-center">
-              <span className="font-extrabold text-sm">?</span>
+          {/* Frame 1000003732 */}
+          <div className="flex flex-col justify-center items-start p-0 gap-4 w-full h-[90px]">
+            {/* Frame 1000003729 */}
+            <div className="flex flex-row items-center p-0 gap-2 w-full h-10">
+              {/* icon */}
+              <div className="flex flex-col justify-center items-center p-[4px_2px] gap-2.5 w-10 h-10 bg-[#F8C20A] rounded-xl flex-none">
+                <img src="/waitForPayment.svg" alt="Waiting For Customer" className="w-6 h-6 object-contain" />
+              </div>
+              {/* Waiting For Customer */}
+              <span className="text-[#29343D] font-semibold text-[13px] leading-[18px] font-sans flex-1">
+                Waiting For Customer
+              </span>
             </div>
-          </div>
-          <div className="mt-4 flex items-baseline gap-2 text-left">
-            <span className="text-3xl font-extrabold text-[#29343D]">{waitingCount}</span>
-            <span className="text-[10px] font-bold text-amber-600">awaiting feedback</span>
+            {/* Frame 1000003730 */}
+            <div className="flex flex-col justify-center items-start p-0 gap-2 w-full h-[34px]">
+              <span className="text-[#29343D] font-semibold text-[28px] leading-[120%] font-sans text-center">
+                {waitingCount}
+              </span>
+            </div>
           </div>
         </div>
 
-        {/* Metric 4: Closed */}
-        <div 
-          className="rounded-2xl p-5 border flex flex-col justify-between transition-all duration-300 hover:-translate-y-0.5 cursor-pointer"
+        {/* Metric 4: Closed Tickets */}
+        <div
+          className="flex flex-col items-start p-6 gap-4 w-full lg:w-[281.75px] h-[138px] rounded-xl flex-none lg:flex-1 transition-all duration-300 hover:-translate-y-0.5 cursor-pointer bg-white"
           style={{
-            background: "linear-gradient(135deg, rgba(54, 199, 108, 0.12) 0%, rgba(54, 199, 108, 0.03) 100%)",
-            borderColor: "rgba(54, 199, 108, 0.20)",
-            boxShadow: "0px 2px 4px -1px rgba(175, 182, 201, 0.1)"
+            background: "linear-gradient(180deg, rgba(22, 205, 199, 0.13) 0%, rgba(22, 205, 199, 0.03) 100%), #FFFFFF",
+            border: "1px solid #A6F7F5",
+            boxShadow: "0px 2px 4px -1px rgba(175, 182, 201, 0.2)",
+            borderRadius: "12px"
           }}
           onClick={() => {
             triggerToast("Filtered to Closed tickets", "info");
           }}
         >
-          <div className="flex items-center justify-between">
-            <span className="text-[11px] font-bold text-[#36C76C] uppercase tracking-wide">Closed Tickets</span>
-            <div className="w-8 h-8 rounded-lg bg-[#EBFAF0] text-[#36C76C] flex items-center justify-center">
-              <CheckIcon className="w-4 h-4" />
+          {/* Frame 1000003732 */}
+          <div className="flex flex-col justify-center items-start p-0 gap-4 w-full h-[90px]">
+            {/* Frame 1000003729 */}
+            <div className="flex flex-row items-center p-0 gap-2 w-full h-10">
+              {/* icon */}
+              <div className="flex flex-col justify-center items-center p-[4px_2px] gap-2.5 w-10 h-10 bg-[#16CDC7] rounded-xl flex-none">
+                <img src="/closedTickets.svg" alt="Closed Tickets" className="w-6 h-6 object-contain" />
+              </div>
+              {/* Closed Tickets */}
+              <span className="text-[#29343D] font-semibold text-[13px] leading-[18px] font-sans flex-1">
+                Closed Tickets
+              </span>
             </div>
-          </div>
-          <div className="mt-4 flex items-baseline gap-2 text-left">
-            <span className="text-3xl font-extrabold text-[#29343D]">{closedCount}</span>
-            <span className="text-[10px] font-bold text-[#36C76C]">resolved tickets</span>
+            {/* Frame 1000003730 */}
+            <div className="flex flex-col justify-center items-start p-0 gap-2 w-full h-[34px]">
+              <span className="text-[#29343D] font-semibold text-[28px] leading-[120%] font-sans text-center">
+                {closedCount}
+              </span>
+            </div>
           </div>
         </div>
 
       </div>
 
       {/* Tabs Navigation Card */}
-      <div 
+      <div
         className="bg-white rounded-xl w-full flex flex-col"
         style={{
           boxShadow: "0px 2px 4px -1px rgba(175, 182, 201, 0.2)",
@@ -3119,8 +3199,8 @@ export default function SupportPage({ activeTicketId, onCloseTicketDetail }: Sup
         }}
       >
         {/* Tab selection bar */}
-        <div className="flex border-b border-[#E0E6EB] px-6 select-none bg-slate-50/50 justify-between items-center w-full rounded-t-xl">
-          <div className="flex">
+        <div className="flex flex-col md:flex-row border-b border-[#E0E6EB] px-4 md:px-6 select-none bg-slate-50/50 justify-between items-stretch md:items-center w-full rounded-t-xl py-2 md:py-0 gap-3">
+          <div className="flex flex-wrap items-center justify-start gap-1 -mb-[1px] w-full md:w-auto">
             {[
               { id: "tickets", label: "Support Tickets", icon: <TicketIcon /> },
               { id: "announcements", label: "Announcements", icon: <MegaphoneIcon /> },
@@ -3131,11 +3211,10 @@ export default function SupportPage({ activeTicketId, onCloseTicketDetail }: Sup
                 <button
                   key={tab.id}
                   onClick={() => setCurrentTab(tab.id as any)}
-                  className={`flex items-center gap-2.5 py-4 px-4 text-xs font-bold transition-all relative border-b-2 -mb-[1px] ${
-                    isActive
-                      ? "border-[#635BFF] text-[#635BFF]"
-                      : "border-transparent text-[#98A4AE] hover:text-[#29343D]"
-                  }`}
+                  className={`flex items-center gap-2 py-3 md:py-4 px-2 sm:px-4 text-xs font-bold transition-all relative border-b-2 shrink-0 ${isActive
+                    ? "border-[#635BFF] text-[#635BFF]"
+                    : "border-transparent text-[#98A4AE] hover:text-[#29343D]"
+                    }`}
                 >
                   {tab.icon}
                   <span>{tab.label}</span>
@@ -3144,30 +3223,28 @@ export default function SupportPage({ activeTicketId, onCloseTicketDetail }: Sup
             })}
           </div>
 
-          {currentTab === "audiences" && (
-            <button
-              onClick={handleNewAudienceClick}
-              className="flex items-center justify-center px-4 py-2 bg-[#DDDBFF] hover:bg-[#c6c3fe] text-xs font-bold text-[#635BFF] rounded-lg transition-all"
-              style={{ height: "44px", width: "126px" }}
-            >
-              <span>New Audience</span>
-            </button>
-          )}
+          <button
+            onClick={handleNewAudienceClick}
+            className="flex items-center justify-center px-4 py-2 bg-[#DDDBFF] hover:bg-[#c6c3fe] text-xs font-bold text-[#635BFF] rounded-lg transition-all self-start md:self-auto shrink-0 mb-2 md:mb-0"
+            style={{ height: "44px", width: "126px" }}
+          >
+            <span>New Audience</span>
+          </button>
         </div>
 
         {/* Tab Content Panels */}
         <div className="p-6">
-          
+
           {/* TAB 1: Support Tickets */}
           {currentTab === "tickets" && (
             <div className="flex flex-col gap-6">
-              
+
               {/* Table Filters Header */}
               <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 border-b border-slate-100 pb-5">
                 <div className="flex items-center gap-4 flex-wrap">
                   {renderCustomDropdown("Priority", "priority", priorityFilter, priorityOptions, setPriorityFilter)}
                   {renderCustomDropdown("Category", "category", categoryFilter, categoryOptions, setCategoryFilter)}
-                  
+
                   {/* Reset button */}
                   {(priorityFilter !== "All Priority" || categoryFilter !== "All Categories") && (
                     <button
@@ -3178,15 +3255,15 @@ export default function SupportPage({ activeTicketId, onCloseTicketDetail }: Sup
                     </button>
                   )}
                 </div>
-                
+
                 <div className="text-right text-[11px] text-slate-400 font-semibold mt-auto">
                   Showing {filteredTickets.length} of {tickets.length} tickets
                 </div>
               </div>
 
               {/* Tickets Data Table */}
-              <div className="border border-[#E0E6EB] rounded-xl overflow-hidden w-full bg-white shadow-sm">
-                <table className="w-full border-collapse text-left text-xs">
+              <div className="border border-[#E0E6EB] rounded-xl overflow-x-auto w-full bg-white shadow-sm">
+                <table className="w-full border-collapse text-left text-xs min-w-[900px]">
                   <thead>
                     <tr className="bg-slate-50 border-b border-[#E0E6EB] text-slate-500 font-bold uppercase tracking-wider">
                       <th className="px-6 py-4">ID</th>
@@ -3209,11 +3286,10 @@ export default function SupportPage({ activeTicketId, onCloseTicketDetail }: Sup
                       </tr>
                     ) : (
                       filteredTickets.map((t, idx) => (
-                        <tr 
-                          key={t.id} 
-                          className={`hover:bg-slate-50/70 transition-colors ${
-                            idx % 2 === 1 ? "bg-[#FAFAFA]" : "bg-white"
-                          }`}
+                        <tr
+                          key={t.id}
+                          className={`hover:bg-slate-50/70 transition-colors ${idx % 2 === 1 ? "bg-[#FAFAFA]" : "bg-white"
+                            }`}
                         >
                           {/* ID */}
                           <td className="px-6 py-4 text-[#98A4AE] font-mono font-bold">{t.id}</td>
@@ -3301,8 +3377,8 @@ export default function SupportPage({ activeTicketId, onCloseTicketDetail }: Sup
                 </span>
               </div>
 
-              <div className="border border-[#E0E6EB] rounded-xl overflow-hidden w-full bg-white shadow-sm">
-                <table className="w-full border-collapse text-left text-xs">
+              <div className="border border-[#E0E6EB] rounded-xl overflow-x-auto w-full bg-white shadow-sm">
+                <table className="w-full border-collapse text-left text-xs min-w-[900px]">
                   <thead>
                     <tr className="bg-[#F3F3FF] border-b border-[#E0E6EB] text-[#29343D] font-bold h-[52px]">
                       <th className="px-6 py-4 font-bold text-[16px] text-[#29343D]">Recent Announcements</th>
@@ -3320,11 +3396,10 @@ export default function SupportPage({ activeTicketId, onCloseTicketDetail }: Sup
                       </tr>
                     ) : (
                       announcements.map((a, idx) => (
-                        <tr 
-                          key={a.id} 
-                          className={`hover:bg-slate-50/70 transition-colors ${
-                            idx % 2 === 1 ? "bg-[#FAFAFA]" : "bg-white"
-                          }`}
+                        <tr
+                          key={a.id}
+                          className={`hover:bg-slate-50/70 transition-colors ${idx % 2 === 1 ? "bg-[#FAFAFA]" : "bg-white"
+                            }`}
                         >
                           {/* Announcement details */}
                           <td className="px-6 py-5 max-w-[500px]">
@@ -3439,8 +3514,8 @@ export default function SupportPage({ activeTicketId, onCloseTicketDetail }: Sup
               </div>
 
               {/* Data Table */}
-              <div className="border border-[#E0E6EB] rounded-xl overflow-hidden w-full bg-white shadow-sm">
-                <table className="w-full border-collapse text-left text-xs">
+              <div className="border border-[#E0E6EB] rounded-xl overflow-x-auto w-full bg-white shadow-sm">
+                <table className="w-full border-collapse text-left text-xs min-w-[900px]">
                   <thead>
                     <tr className="bg-[#F3F3FF] border-b border-[#E0E6EB] text-[#29343D] font-bold h-[52px]">
                       <th className="px-6 py-4 font-bold text-[16px] text-[#29343D]">Name of Audience</th>
@@ -3486,11 +3561,10 @@ export default function SupportPage({ activeTicketId, onCloseTicketDetail }: Sup
                       }
 
                       return filtered.map((aud, idx) => (
-                        <tr 
-                          key={aud.id} 
-                          className={`hover:bg-slate-50/70 transition-colors ${
-                            idx % 2 === 1 ? "bg-[#FAFAFA]" : "bg-white"
-                          }`}
+                        <tr
+                          key={aud.id}
+                          className={`hover:bg-slate-50/70 transition-colors ${idx % 2 === 1 ? "bg-[#FAFAFA]" : "bg-white"
+                            }`}
                         >
                           <td className="px-6 py-4 text-[#29343D] font-bold">
                             {aud.name}
@@ -3537,7 +3611,7 @@ export default function SupportPage({ activeTicketId, onCloseTicketDetail }: Sup
                             </button>
 
                             {activeAudienceMenuId === aud.id && (
-                              <div 
+                              <div
                                 className="absolute right-6 top-10 w-36 bg-white border border-[#E0E6EB] rounded-xl shadow-2xl z-50 p-1.5 flex flex-col gap-0.5 origin-top-right text-left"
                                 style={{ boxShadow: "0px 16px 32px -8px rgba(12, 12, 13, 0.4)" }}
                               >
@@ -3591,25 +3665,24 @@ export default function SupportPage({ activeTicketId, onCloseTicketDetail }: Sup
       {/* MODAL: Compose Announcement Modal */}
       {showAnnouncementModal && (
         <div className="fixed inset-0 bg-slate-900/40 backdrop-blur-sm z-[110] flex items-center justify-center p-4">
-          <div 
-            className={`bg-white rounded-[12px] shadow-[0px_16px_32px_-8px_rgba(12,12,13,0.4)] w-[638px] max-w-full flex flex-col text-left border border-[#E0E6EB] animate-in zoom-in-95 duration-150 ${
-              !editingAnnouncementId && composeStep === 1 
-                ? "h-auto max-h-[90vh]" 
-                : "h-[90vh] max-h-[1112px]"
-            }`}
+          <div
+            className={`bg-white rounded-[12px] shadow-[0px_16px_32px_-8px_rgba(12,12,13,0.4)] w-[638px] max-w-full flex flex-col text-left border border-[#E0E6EB] animate-in zoom-in-95 duration-150 ${!editingAnnouncementId && composeStep === 1
+              ? "h-auto max-h-[90vh]"
+              : "h-[90vh] max-h-[1112px]"
+              }`}
           >
             {/* Modal Header */}
             <div className="px-6 py-4 flex items-center justify-between bg-white h-[59px] shrink-0">
               <h3 className="font-sans font-semibold text-[18px] leading-[25px] text-[#29343D]">
                 {editingAnnouncementId ? "Edit Announcement" : "Create New Announcement"}
               </h3>
-              <button 
+              <button
                 type="button"
                 onClick={() => setShowAnnouncementModal(false)}
                 className="w-6 h-6 flex items-center justify-center text-[#29343D] hover:opacity-80 transition-opacity shrink-0"
               >
                 <svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
-                  <path d="M18 6L6 18M6 6L18 18" stroke="#29343D" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round"/>
+                  <path d="M18 6L6 18M6 6L18 18" stroke="#29343D" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round" />
                 </svg>
               </button>
             </div>
@@ -3621,16 +3694,15 @@ export default function SupportPage({ activeTicketId, onCloseTicketDetail }: Sup
                   <div className="flex items-center justify-center relative w-[240px]">
                     {/* Background Line */}
                     <div className="absolute top-[16px] left-8 right-8 h-[2px] bg-[#E2E8F0]" />
-                    
+
                     <div className="flex justify-between w-full relative z-10">
                       {/* Step 1: Audience */}
                       <div className="flex flex-col items-center gap-1 bg-white px-2">
-                        <div 
-                          className={`w-8 h-8 rounded-full flex items-center justify-center text-sm font-bold transition-all ${
-                            composeStep === 1 
-                              ? "bg-[#635BFF] text-white" 
-                              : "bg-[#475569] text-white"
-                          }`}
+                        <div
+                          className={`w-8 h-8 rounded-full flex items-center justify-center text-sm font-bold transition-all ${composeStep === 1
+                            ? "bg-[#635BFF] text-white"
+                            : "bg-[#475569] text-white"
+                            }`}
                         >
                           {composeStep === 1 ? "1" : <CheckIcon className="w-4 h-4 text-white" />}
                         </div>
@@ -3641,12 +3713,11 @@ export default function SupportPage({ activeTicketId, onCloseTicketDetail }: Sup
 
                       {/* Step 2: Announcement */}
                       <div className="flex flex-col items-center gap-1 bg-white px-2">
-                        <div 
-                          className={`w-8 h-8 rounded-full flex items-center justify-center text-sm font-bold transition-all ${
-                            composeStep === 2 
-                              ? "bg-[#635BFF] text-white" 
-                              : "bg-[#EFF2F5] text-[#98A4AE]"
-                          }`}
+                        <div
+                          className={`w-8 h-8 rounded-full flex items-center justify-center text-sm font-bold transition-all ${composeStep === 2
+                            ? "bg-[#635BFF] text-white"
+                            : "bg-[#EFF2F5] text-[#98A4AE]"
+                            }`}
                         >
                           2
                         </div>
@@ -3684,7 +3755,7 @@ export default function SupportPage({ activeTicketId, onCloseTicketDetail }: Sup
                     </select>
                     <div className="absolute inset-y-0 right-3 flex items-center pointer-events-none text-[#98A4AE]">
                       <svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
-                        <path d="M6 9L12 15L18 9" stroke="#98A4AE" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/>
+                        <path d="M6 9L12 15L18 9" stroke="#98A4AE" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" />
                       </svg>
                     </div>
                   </div>
@@ -3720,7 +3791,7 @@ export default function SupportPage({ activeTicketId, onCloseTicketDetail }: Sup
               <form onSubmit={handleAnnouncementSubmit} className="flex-1 flex flex-col min-h-0">
                 {/* Scrollable Fields container */}
                 <div className="flex-1 overflow-y-auto p-6 flex flex-col gap-6">
-                  
+
                   {/* Title */}
                   <div className="flex flex-col gap-2 w-full">
                     <label className="font-sans font-semibold text-[14px] leading-[19px] text-[#29343D]">
@@ -3752,7 +3823,7 @@ export default function SupportPage({ activeTicketId, onCloseTicketDetail }: Sup
 
                   {/* Type and Category Selection */}
                   <div className="grid grid-cols-2 gap-6 w-full">
-                    
+
                     {/* Type */}
                     <div className="flex flex-col gap-2 w-full">
                       <label className="font-sans font-semibold text-[14px] leading-[19px] text-[#29343D]">
@@ -3772,7 +3843,7 @@ export default function SupportPage({ activeTicketId, onCloseTicketDetail }: Sup
                         </select>
                         <div className="absolute inset-y-0 right-3 flex items-center pointer-events-none text-[#98A4AE]">
                           <svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
-                            <path d="M6 9L12 15L18 9" stroke="#98A4AE" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/>
+                            <path d="M6 9L12 15L18 9" stroke="#98A4AE" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" />
                           </svg>
                         </div>
                       </div>
@@ -3796,7 +3867,7 @@ export default function SupportPage({ activeTicketId, onCloseTicketDetail }: Sup
                         </select>
                         <div className="absolute inset-y-0 right-3 flex items-center pointer-events-none text-[#98A4AE]">
                           <svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
-                            <path d="M6 9L12 15L18 9" stroke="#98A4AE" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/>
+                            <path d="M6 9L12 15L18 9" stroke="#98A4AE" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" />
                           </svg>
                         </div>
                       </div>
@@ -3834,7 +3905,7 @@ export default function SupportPage({ activeTicketId, onCloseTicketDetail }: Sup
 
                   {/* Signature and Disclaimer */}
                   <div className="grid grid-cols-2 gap-6 w-full">
-                    
+
                     {/* Signature */}
                     <div className="flex flex-col gap-2 w-full">
                       <span className="font-sans font-semibold text-[14px] leading-[19px] text-[#29343D]">
@@ -3884,7 +3955,7 @@ export default function SupportPage({ activeTicketId, onCloseTicketDetail }: Sup
                       </select>
                       <div className="absolute inset-y-0 right-3 flex items-center pointer-events-none text-[#98A4AE]">
                         <svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
-                          <path d="M6 9L12 15L18 9" stroke="#98A4AE" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/>
+                          <path d="M6 9L12 15L18 9" stroke="#98A4AE" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" />
                         </svg>
                       </div>
                     </div>
@@ -3892,7 +3963,7 @@ export default function SupportPage({ activeTicketId, onCloseTicketDetail }: Sup
 
                   {/* Date & Time Selection */}
                   <div className="grid grid-cols-2 gap-6 w-full">
-                    
+
                     {/* Date */}
                     <div className="flex flex-col gap-2 w-full">
                       <span className="font-sans font-semibold text-[14px] leading-[19px] text-[#29343D]">
@@ -3908,7 +3979,7 @@ export default function SupportPage({ activeTicketId, onCloseTicketDetail }: Sup
                         />
                         <div className="absolute inset-y-0 right-3 flex items-center pointer-events-none text-[#1C274C]">
                           <svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
-                            <path d="M8 2V5M16 2V5M3.5 9.09H20.5M21 8.5V17C21 19.2091 19.2091 21 17 21H7C4.79086 21 3 19.2091 3 17V8.5C3 6.29086 4.79086 4.5 7 4.5H17C19.2091 4.5 21 6.29086 21 8.5Z" stroke="#1C274C" strokeWidth="1.5" strokeLinecap="round"/>
+                            <path d="M8 2V5M16 2V5M3.5 9.09H20.5M21 8.5V17C21 19.2091 19.2091 21 17 21H7C4.79086 21 3 19.2091 3 17V8.5C3 6.29086 4.79086 4.5 7 4.5H17C19.2091 4.5 21 6.29086 21 8.5Z" stroke="#1C274C" strokeWidth="1.5" strokeLinecap="round" />
                           </svg>
                         </div>
                       </div>
@@ -3929,8 +4000,8 @@ export default function SupportPage({ activeTicketId, onCloseTicketDetail }: Sup
                         />
                         <div className="absolute inset-y-0 right-3 flex items-center pointer-events-none text-[#1C274C]">
                           <svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
-                            <path d="M12 22C17.5228 22 22 17.5228 22 12C22 6.47715 17.5228 2 12 2C6.47715 2 2 6.47715 2 12C2 17.5228 6.47715 22 12 22Z" stroke="#1C274C" strokeWidth="1.5"/>
-                            <path d="M12 6V12L16 14" stroke="#1C274C" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round"/>
+                            <path d="M12 22C17.5228 22 22 17.5228 22 12C22 6.47715 17.5228 2 12 2C6.47715 2 2 6.47715 2 12C2 17.5228 6.47715 22 12 22Z" stroke="#1C274C" strokeWidth="1.5" />
+                            <path d="M12 6V12L16 14" stroke="#1C274C" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round" />
                           </svg>
                         </div>
                       </div>
@@ -3939,7 +4010,7 @@ export default function SupportPage({ activeTicketId, onCloseTicketDetail }: Sup
                   </div>
 
                   {/* File Upload zone */}
-                  <div 
+                  <div
                     onClick={() => {
                       const fakeName = prompt("Enter file name to upload:", "announcement_banner.png");
                       if (fakeName) setAnnFileName(fakeName);
@@ -3948,8 +4019,8 @@ export default function SupportPage({ activeTicketId, onCloseTicketDetail }: Sup
                   >
                     <div className="w-[48px] h-[48px] bg-[#F1F2FE] border border-[#DDDBFF] rounded-[12px] flex items-center justify-center shrink-0">
                       <svg width="20" height="20" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
-                        <path d="M12 16V8M12 8L9 11M12 8L15 11" stroke="#635BFF" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/>
-                        <path d="M3 15V16C3 18.2091 4.79086 21 7 21H17C19.2091 21 21 18.2091 21 16V15" stroke="#635BFF" strokeWidth="2" strokeLinecap="round"/>
+                        <path d="M12 16V8M12 8L9 11M12 8L15 11" stroke="#635BFF" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" />
+                        <path d="M3 15V16C3 18.2091 4.79086 21 7 21H17C19.2091 21 21 18.2091 21 16V15" stroke="#635BFF" strokeWidth="2" strokeLinecap="round" />
                       </svg>
                     </div>
                     <span className="font-sans font-semibold text-[14px] leading-[19px] text-[#635BFF]">
@@ -3977,11 +4048,11 @@ export default function SupportPage({ activeTicketId, onCloseTicketDetail }: Sup
 
       {/* MODAL: Preview Announcement Details */}
       {previewingAnnouncement && (
-        <div 
+        <div
           className="fixed inset-0 bg-slate-900/40 backdrop-blur-sm z-[150] flex items-center justify-center p-4 overflow-y-auto"
           onClick={() => setPreviewingAnnouncement(null)}
         >
-          <div 
+          <div
             className="bg-white rounded-[12px] shadow-[0px_16px_32px_-8px_rgba(12,12,13,0.4)] w-[638px] max-w-full h-[409px] flex flex-col gap-6 p-6 text-left border border-[#E0E6EB] relative overflow-hidden animate-in zoom-in-95 duration-150"
             onClick={(e) => e.stopPropagation()}
           >
@@ -3998,7 +4069,7 @@ export default function SupportPage({ activeTicketId, onCloseTicketDetail }: Sup
                     if (type === "Maintenance") typeStyle = "bg-[#FFF9E5] text-[#FFD648]";
                     else if (type === "New Feature") typeStyle = "bg-[#ECFDFD] text-[#16CDC7]";
                     else if (type === "Update") typeStyle = "bg-[#E8E5FF] text-[#635BFF]";
-                    
+
                     return (
                       <div className={`flex flex-row items-center px-2.5 py-1 gap-2.5 h-[24px] rounded-full ${typeStyle} font-sans font-medium text-[12px] leading-[16px] shrink-0`}>
                         {type}
@@ -4011,7 +4082,7 @@ export default function SupportPage({ activeTicketId, onCloseTicketDetail }: Sup
                     let statusStyle = "bg-[#EBFAF0] text-[#36C76C]";
                     if (status === "Scheduled") statusStyle = "bg-[#FFF9E5] text-[#FFD648]";
                     else if (status === "Draft") statusStyle = "bg-[#FFE5ED] text-[#FF6692]";
-                    
+
                     return (
                       <div className={`flex flex-row justify-center items-center px-2 py-0.5 gap-2 h-[22px] rounded-[6px] ${statusStyle} font-sans font-semibold text-[13px] leading-[18px] shrink-0`}>
                         {status}
@@ -4020,12 +4091,12 @@ export default function SupportPage({ activeTicketId, onCloseTicketDetail }: Sup
                   })()}
                 </div>
               </div>
-              <button 
-                onClick={() => setPreviewingAnnouncement(null)} 
+              <button
+                onClick={() => setPreviewingAnnouncement(null)}
                 className="w-6 h-6 flex items-center justify-center text-[#29343D] hover:opacity-80 transition-opacity shrink-0"
               >
                 <svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
-                  <path d="M18 6L6 18M6 6L18 18" stroke="#29343D" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round"/>
+                  <path d="M18 6L6 18M6 6L18 18" stroke="#29343D" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round" />
                 </svg>
               </button>
             </div>
@@ -4081,7 +4152,7 @@ export default function SupportPage({ activeTicketId, onCloseTicketDetail }: Sup
 
             {/* Footer Details Action */}
             <div className="flex flex-row justify-end items-center gap-6 w-full h-[36px] shrink-0">
-              <button 
+              <button
                 onClick={() => handleStartEditAnnouncement(previewingAnnouncement)}
                 className="w-[55px] h-[36px] bg-[#635BFF] hover:bg-[#4d42eb] text-[#FFFFFF] font-sans font-medium text-[12px] leading-[16px] rounded-[8px] flex items-center justify-center transition-colors cursor-pointer shrink-0"
               >
@@ -4095,11 +4166,11 @@ export default function SupportPage({ activeTicketId, onCloseTicketDetail }: Sup
 
       {/* MODAL: Delete Ticket Confirmation */}
       {deletingTicketId && (
-        <div 
+        <div
           className="fixed inset-0 bg-slate-900/40 backdrop-blur-sm z-[160] flex items-center justify-center p-4"
           onClick={() => setDeletingTicketId(null)}
         >
-          <div 
+          <div
             className="bg-white rounded-[12px] shadow-[0px_16px_32px_-8px_rgba(12,12,13,0.4)] w-full max-w-[480px] p-6 flex flex-col gap-6 text-left border border-[#E0E6EB] relative animate-in zoom-in-95 duration-150"
             onClick={(e) => e.stopPropagation()}
           >
@@ -4108,8 +4179,8 @@ export default function SupportPage({ activeTicketId, onCloseTicketDetail }: Sup
               <h3 className="font-sans font-bold text-[18px] leading-[25px] text-[#29343D]">
                 Are you sure you want to delete this ticket?
               </h3>
-              <button 
-                onClick={() => setDeletingTicketId(null)} 
+              <button
+                onClick={() => setDeletingTicketId(null)}
                 className="text-slate-400 hover:text-slate-650 transition-colors"
               >
                 <CloseIcon />
@@ -4123,16 +4194,16 @@ export default function SupportPage({ activeTicketId, onCloseTicketDetail }: Sup
 
             {/* Actions Buttons */}
             <div className="flex flex-row justify-end items-center gap-3 mt-2">
-              <button 
-                type="button" 
+              <button
+                type="button"
                 onClick={() => setDeletingTicketId(null)}
                 className="px-5 py-2.5 bg-slate-100 hover:bg-slate-200 text-slate-700 text-xs font-bold rounded-lg transition-colors"
                 style={{ height: "38px" }}
               >
                 Cancel
               </button>
-              <button 
-                type="button" 
+              <button
+                type="button"
                 onClick={confirmDeleteTicket}
                 className="px-5 py-2.5 bg-[#FFE5ED] text-[#FF6692] hover:bg-[#ffd1de] text-xs font-bold rounded-lg transition-colors animate-pulse-once"
                 style={{ height: "38px" }}
@@ -4147,11 +4218,11 @@ export default function SupportPage({ activeTicketId, onCloseTicketDetail }: Sup
 
       {/* MODAL: Delete Announcement Confirmation */}
       {deletingAnnouncementId && (
-        <div 
+        <div
           className="fixed inset-0 bg-slate-900/40 backdrop-blur-sm z-[160] flex items-center justify-center p-4"
           onClick={() => setDeletingAnnouncementId(null)}
         >
-          <div 
+          <div
             className="bg-white rounded-[12px] shadow-[0px_16px_32px_-8px_rgba(12,12,13,0.4)] w-full max-w-[480px] p-6 flex flex-col gap-6 text-left border border-[#E0E6EB] relative animate-in zoom-in-95 duration-150"
             onClick={(e) => e.stopPropagation()}
           >
@@ -4167,16 +4238,16 @@ export default function SupportPage({ activeTicketId, onCloseTicketDetail }: Sup
 
             {/* Actions Buttons */}
             <div className="flex flex-row justify-end items-center gap-3 mt-2">
-              <button 
-                type="button" 
+              <button
+                type="button"
                 onClick={() => setDeletingAnnouncementId(null)}
                 className="px-5 py-2 bg-[#EFF4FA] hover:bg-slate-200 text-[#0A2540] text-xs font-bold rounded-[8px] transition-colors"
                 style={{ height: "38px" }}
               >
                 Cancel
               </button>
-              <button 
-                type="button" 
+              <button
+                type="button"
                 onClick={confirmDeleteAnnouncement}
                 className="px-5 py-2 bg-[#FFE5ED] text-[#FF6692] hover:bg-[#ffd1de] text-xs font-bold rounded-[8px] transition-colors"
                 style={{ height: "38px" }}
@@ -4193,14 +4264,14 @@ export default function SupportPage({ activeTicketId, onCloseTicketDetail }: Sup
 
       {/* MODAL: New / Edit Audience */}
       {(showNewAudienceModal || editingAudienceItem) && (
-        <div 
+        <div
           className="fixed inset-0 bg-slate-900/40 backdrop-blur-sm z-[150] flex items-center justify-center p-4 overflow-y-auto"
           onClick={() => {
             setShowNewAudienceModal(false);
             setEditingAudienceItem(null);
           }}
         >
-          <form 
+          <form
             onSubmit={editingAudienceItem ? handleEditAudienceSubmit : handleNewAudienceSubmit}
             className="bg-white rounded-[12px] shadow-[0px_16px_32px_-8px_rgba(12,12,13,0.4)] w-[638px] max-w-full flex flex-col gap-6 p-6 text-left border border-[#E0E6EB] relative overflow-hidden animate-in zoom-in-95 duration-150"
             onClick={(e) => e.stopPropagation()}
@@ -4210,12 +4281,12 @@ export default function SupportPage({ activeTicketId, onCloseTicketDetail }: Sup
               <h3 className="font-sans font-semibold text-[18px] leading-[25px] text-[#29343D]">
                 {editingAudienceItem ? "Edit Audience" : "Create New Audience"}
               </h3>
-              <button 
+              <button
                 type="button"
                 onClick={() => {
                   setShowNewAudienceModal(false);
                   setEditingAudienceItem(null);
-                }} 
+                }}
                 className="w-6 h-6 flex items-center justify-center text-[#29343D] hover:opacity-80 transition-opacity shrink-0"
               >
                 <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round">
@@ -4345,7 +4416,7 @@ export default function SupportPage({ activeTicketId, onCloseTicketDetail }: Sup
 
             {/* Footer actions */}
             <div className="flex flex-row justify-end items-center gap-2.5 w-full mt-2 border-t border-slate-100 pt-3">
-              <button 
+              <button
                 type="button"
                 onClick={() => {
                   setShowNewAudienceModal(false);
@@ -4355,7 +4426,7 @@ export default function SupportPage({ activeTicketId, onCloseTicketDetail }: Sup
               >
                 Cancel
               </button>
-              <button 
+              <button
                 type="submit"
                 className="px-5 py-2 bg-[#635BFF] hover:bg-[#4d42eb] text-white text-sm font-semibold rounded-lg transition-all"
               >
@@ -4368,11 +4439,11 @@ export default function SupportPage({ activeTicketId, onCloseTicketDetail }: Sup
 
       {/* MODAL: Delete Audience Confirmation */}
       {deletingAudienceItem && (
-        <div 
+        <div
           className="fixed inset-0 z-[160] flex items-center justify-center bg-slate-900/10 p-4"
           onClick={() => setDeletingAudienceItem(null)}
         >
-          <div 
+          <div
             className="flex h-[177px] w-full max-w-[521px] flex-col items-start gap-6 rounded-[12px] bg-white p-6 text-left shadow-[0px_16px_32px_-8px_rgba(12,12,13,0.4)] animate-in zoom-in-95 duration-150"
             onClick={(e) => e.stopPropagation()}
           >
@@ -4388,15 +4459,15 @@ export default function SupportPage({ activeTicketId, onCloseTicketDetail }: Sup
 
             {/* Actions Buttons */}
             <div className="flex h-9 w-full flex-row items-start justify-end gap-2.5">
-              <button 
-                type="button" 
+              <button
+                type="button"
                 onClick={() => setDeletingAudienceItem(null)}
                 className="flex h-9 w-[72px] items-center justify-center rounded-[8px] bg-[#F6F7F9] px-4 py-2.5 text-center text-[12px] font-medium leading-4 text-[#0A2540] transition-colors hover:bg-[#EFF4FA]"
               >
                 Cancel
               </button>
-              <button 
-                type="button" 
+              <button
+                type="button"
                 onClick={confirmDeleteAudience}
                 className="flex h-9 w-[125px] items-center justify-center rounded-[8px] bg-[#FFE5ED] px-4 py-2.5 text-center text-[12px] font-medium leading-4 text-[#FF6692] transition-colors hover:bg-[#ffd1de]"
               >
@@ -4410,11 +4481,11 @@ export default function SupportPage({ activeTicketId, onCloseTicketDetail }: Sup
 
       {/* MODAL: Advanced Filters */}
       {showAdvancedFiltersModal && (
-        <div 
+        <div
           className="fixed inset-0 bg-slate-900/40 backdrop-blur-sm z-[150] flex items-center justify-center p-4 overflow-y-auto animate-in fade-in duration-200"
           onClick={() => setShowAdvancedFiltersModal(false)}
         >
-          <div 
+          <div
             className="bg-white rounded-[12px] shadow-[0px_16px_32px_-8px_rgba(12,12,13,0.4)] w-[638px] max-w-full flex flex-col gap-6 p-6 text-left border border-[#E0E6EB] relative overflow-hidden animate-in zoom-in-95 duration-150"
             onClick={(e) => e.stopPropagation()}
           >
@@ -4423,9 +4494,9 @@ export default function SupportPage({ activeTicketId, onCloseTicketDetail }: Sup
               <h3 className="font-sans font-bold text-[18px] leading-[25px] text-[#29343D]">
                 Advanced Filters
               </h3>
-              <button 
+              <button
                 type="button"
-                onClick={() => setShowAdvancedFiltersModal(false)} 
+                onClick={() => setShowAdvancedFiltersModal(false)}
                 className="w-6 h-6 flex items-center justify-center text-slate-400 hover:text-slate-650 transition-colors shrink-0"
               >
                 <CloseIcon />
@@ -4629,11 +4700,11 @@ export default function SupportPage({ activeTicketId, onCloseTicketDetail }: Sup
 
       {/* MODAL: Salons in Audience */}
       {showSalonsListModal && viewedAudience && (
-        <div 
+        <div
           className="fixed inset-0 bg-slate-900/40 backdrop-blur-sm z-[160] flex items-center justify-center p-4 overflow-y-auto animate-in fade-in duration-200"
           onClick={() => setShowSalonsListModal(false)}
         >
-          <div 
+          <div
             className="bg-white rounded-[12px] shadow-[0px_16px_32px_-8px_rgba(12,12,13,0.4)] w-[1000px] max-w-full flex flex-col gap-6 p-6 text-left border border-[#E0E6EB] relative overflow-hidden animate-in zoom-in-95 duration-150"
             style={{ height: "537px" }}
             onClick={(e) => e.stopPropagation()}
@@ -4643,9 +4714,9 @@ export default function SupportPage({ activeTicketId, onCloseTicketDetail }: Sup
               <h3 className="font-sans font-semibold text-[18px] leading-[25px] text-[#29343D]">
                 Salons in {(viewedAudience as any)?.name}
               </h3>
-              <button 
+              <button
                 type="button"
-                onClick={() => setShowSalonsListModal(false)} 
+                onClick={() => setShowSalonsListModal(false)}
                 className="w-6 h-6 flex items-center justify-center text-slate-400 hover:text-slate-650 transition-colors shrink-0"
               >
                 <CloseIcon />
@@ -4691,11 +4762,10 @@ export default function SupportPage({ activeTicketId, onCloseTicketDetail }: Sup
                   salonsInAudience.map((salon, idx) => {
                     const isEven = idx % 2 === 0;
                     return (
-                      <div 
-                        key={salon.id} 
-                        className={`flex w-full h-[76px] shrink-0 border-b border-[#E0E6EB] hover:bg-slate-50/50 transition-colors ${
-                          isEven ? "bg-white" : "bg-[#FAFAFA]"
-                        }`}
+                      <div
+                        key={salon.id}
+                        className={`flex w-full h-[76px] shrink-0 border-b border-[#E0E6EB] hover:bg-slate-50/50 transition-colors ${isEven ? "bg-white" : "bg-[#FAFAFA]"
+                          }`}
                       >
                         {/* Salon Name Column */}
                         <div className="w-[288px] h-full flex items-center gap-3 px-6 py-3.5 border-r border-[#E0E6EB] overflow-hidden">
@@ -4715,13 +4785,12 @@ export default function SupportPage({ activeTicketId, onCloseTicketDetail }: Sup
 
                         {/* Plan Column */}
                         <div className="w-[288px] h-full flex items-center px-6 py-3.5 border-r border-[#E0E6EB]">
-                          <span className={`inline-flex items-center px-2 py-0.5 text-xs font-semibold rounded-[8px] ${
-                            salon.plan === "Premium" 
-                              ? "bg-[#D2F4F2] text-[#29343D]" 
-                              : salon.plan === "Enterprise" 
-                              ? "bg-[#6C63FF] text-white" 
+                          <span className={`inline-flex items-center px-2 py-0.5 text-xs font-semibold rounded-[8px] ${salon.plan === "Premium"
+                            ? "bg-[#D2F4F2] text-[#29343D]"
+                            : salon.plan === "Enterprise"
+                              ? "bg-[#6C63FF] text-white"
                               : "bg-slate-100 text-slate-700"
-                          }`}>
+                            }`}>
                             {salon.plan}
                           </span>
                         </div>

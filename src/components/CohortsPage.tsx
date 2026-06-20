@@ -388,7 +388,17 @@ export default function CohortsPage({ setActiveTab }: { setActiveTab?: (tab: str
 
               <button
                 type="button"
-                onClick={() => setExportModalOpen(true)}
+                onClick={() => {
+                  const csvContent = "Cohort,Size,Month 0,Month 1,Month 2\n" +
+                    "Jan 2024,15,100%,90%,85%\n";
+                  const blob = new Blob([csvContent], { type: "text/csv;charset=utf-8;" });
+                  const url = URL.createObjectURL(blob);
+                  const link = document.createElement("a");
+                  link.href = url;
+                  link.download = "cohorts_report.csv";
+                  link.click();
+                  URL.revokeObjectURL(url);
+                }}
                 className="inline-flex h-9 items-center rounded-[8px] border border-[#635BFF] bg-white px-4 text-[12px] font-semibold text-[#635BFF] hover:bg-[#F1F2FE]"
               >
                 Export Data
@@ -641,7 +651,17 @@ export default function CohortsPage({ setActiveTab }: { setActiveTab?: (tab: str
                 <button
                   type="button"
                   onClick={() => {
-                    alert("Exporting CSV file...");
+                    const csvContent = "Cohort,Size,Month 0,Month 1,Month 2\n" +
+                      "Jan 2024,15,100%,90%,85%\n";
+                    const blob = new Blob([csvContent], { type: "text/csv;charset=utf-8;" });
+                    const url = URL.createObjectURL(blob);
+                    const link = document.createElement("a");
+                    link.setAttribute("href", url);
+                    link.setAttribute("download", "cohorts_report.csv");
+                    link.style.visibility = 'hidden';
+                    document.body.appendChild(link);
+                    link.click();
+                    document.body.removeChild(link);
                     setExportModalOpen(false);
                   }}
                   className="px-6 py-2.5 bg-[#635BFF] hover:bg-[#4d42eb] text-white rounded-[8px] text-[14px] font-semibold shadow-md transition-all"
