@@ -538,6 +538,10 @@ export default function SupportPage({ activeTicketId, onCloseTicketDetail }: Sup
   const [annTime, setAnnTime] = useState("");
   const [annFileName, setAnnFileName] = useState("");
 
+  const dateInputRef = React.useRef<HTMLInputElement>(null);
+  const timeInputRef = React.useRef<HTMLInputElement>(null);
+  const fileInputRef = React.useRef<HTMLInputElement>(null);
+
   const [emailMessageText, setEmailMessageText] = useState("");
   const [internalNoteText, setInternalNoteText] = useState("");
   const [internalNoteType, setInternalNoteType] = useState<"note" | "resolution">("note");
@@ -2302,16 +2306,16 @@ export default function SupportPage({ activeTicketId, onCloseTicketDetail }: Sup
       >
         {/* Title Bar */}
         <div
-          className="bg-white rounded-[12px] flex items-center justify-between w-full px-[30px] py-4 border border-[#E0E6EB]"
+          className="bg-white rounded-[12px] flex flex-row items-center justify-between w-full px-4 sm:px-[30px] py-4 border border-[#E0E6EB] gap-3"
           style={{
             boxShadow: "0px 2px 4px -1px rgba(175, 182, 201, 0.2)",
-            height: "68px"
+            minHeight: "68px"
           }}
         >
-          <div className="flex flex-row items-center gap-4 flex-grow">
+          <div className="flex flex-row items-center gap-3 flex-wrap">
             <button
               onClick={() => setViewedAudience(null)}
-              className="p-1 hover:bg-slate-100 rounded-lg transition-colors text-[#635BFF] flex items-center justify-center"
+              className="p-1 hover:bg-slate-100 rounded-lg transition-colors text-[#635BFF] flex items-center justify-center shrink-0"
               title="Back to Audience List"
               style={{ width: "24px", height: "24px" }}
             >
@@ -2319,24 +2323,24 @@ export default function SupportPage({ activeTicketId, onCloseTicketDetail }: Sup
                 <polyline points="15 18 9 12 15 6" />
               </svg>
             </button>
-            <h1 className="font-sans font-bold text-[16px] leading-[22px] text-[#29343D]">
+            <h1 className="font-sans font-bold text-[15px] sm:text-[16px] leading-[22px] text-[#29343D] whitespace-nowrap truncate max-w-[180px] sm:max-w-none">
               Salons in {viewedAudience.name}
             </h1>
-            <div className="flex items-center justify-center w-6 h-6 bg-[#635BFF] text-white rounded-full text-[12px] font-bold">
+            <div className="flex items-center justify-center w-5 h-5 sm:w-6 sm:h-6 bg-[#635BFF] text-white rounded-full text-[11px] sm:text-[12px] font-bold shrink-0">
               {matchingSalonCount}
             </div>
           </div>
 
-          <div className="flex items-center gap-6">
+          <div className="flex items-center gap-4 sm:gap-6 shrink-0">
             <button
               onClick={() => setShowSalonsListModal(true)}
-              className="flex items-center justify-center px-4 py-2 bg-[#F1F2FE] hover:bg-slate-200 rounded-lg text-xs font-semibold text-[#635BFF] transition-all"
+              className="flex items-center justify-center px-4 py-2 bg-[#F1F2FE] hover:bg-slate-200 rounded-lg text-xs font-semibold text-[#635BFF] transition-all shrink-0 cursor-pointer"
               style={{ height: "36px", width: "79px" }}
             >
               View list
             </button>
 
-            <div className="flex items-center gap-2 text-xs font-bold text-[#29343D]">
+            <div className="hidden sm:flex items-center gap-2 text-xs font-bold text-[#29343D] shrink-0">
               <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className="opacity-50 text-[#29343D]">
                 <path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z" />
                 <polyline points="9 22 9 12 15 12 15 22" />
@@ -3309,21 +3313,21 @@ export default function SupportPage({ activeTicketId, onCloseTicketDetail }: Sup
 
                           {/* Priority badge */}
                           <td className="px-6 py-4">
-                            <span className={`px-2.5 py-1 rounded-full text-[9px] font-extrabold uppercase tracking-wide ${getPriorityStyle(t.priority)}`}>
+                            <span className={`px-2.5 py-1 rounded-full text-[9px] font-extrabold uppercase tracking-wide whitespace-nowrap ${getPriorityStyle(t.priority)}`}>
                               {t.priority}
                             </span>
                           </td>
 
                           {/* Status badge */}
                           <td className="px-6 py-4">
-                            <span className={`px-2.5 py-1 rounded-full text-[9px] font-extrabold uppercase tracking-wide ${getStatusStyle(t.status)}`}>
+                            <span className={`px-2.5 py-1 rounded-full text-[9px] font-extrabold uppercase tracking-wide whitespace-nowrap ${getStatusStyle(t.status)}`}>
                               {t.status}
                             </span>
                           </td>
 
                           {/* Category badge */}
                           <td className="px-6 py-4">
-                            <span className={`px-2.5 py-1 rounded-full text-[9px] font-extrabold uppercase tracking-wide ${getCategoryStyle(t.category)}`}>
+                            <span className={`px-2.5 py-1 rounded-full text-[9px] font-extrabold uppercase tracking-wide whitespace-nowrap ${getCategoryStyle(t.category)}`}>
                               {t.category}
                             </span>
                           </td>
@@ -3340,18 +3344,24 @@ export default function SupportPage({ activeTicketId, onCloseTicketDetail }: Sup
                               {/* View button */}
                               <button
                                 onClick={() => setActiveTicket(t)}
-                                className="p-2 bg-[#F1F2FE] text-[#635BFF] hover:bg-[#e0e2fe] rounded-lg transition-colors inline-flex"
-                                title="View Ticket Details"
+                                className="p-2 bg-[#F1F2FE] text-[#635BFF] hover:bg-[#e0e2fe] rounded-lg transition-colors inline-flex group relative cursor-pointer"
                               >
                                 <EyeIcon />
+                                <div className="absolute bottom-full left-1/2 -translate-x-1/2 mb-2 px-3 py-1 bg-[#635BFF] text-white text-[11px] font-semibold rounded-full whitespace-nowrap opacity-0 pointer-events-none group-hover:opacity-100 transition-opacity duration-200 z-50 shadow-lg">
+                                  View Ticket Details
+                                  <div className="absolute top-full left-1/2 -translate-x-1/2 border-4 border-transparent border-t-[#635BFF]"></div>
+                                </div>
                               </button>
                               {/* Delete button */}
                               <button
                                 onClick={() => handleDeleteTicket(t.id)}
-                                className="p-2 bg-[#FFE5ED] text-[#FF6692] hover:bg-[#ffd1de] rounded-lg transition-colors inline-flex"
-                                title="Delete Ticket"
+                                className="p-2 bg-[#FFE5ED] text-[#FF6692] hover:bg-[#ffd1de] rounded-lg transition-colors inline-flex group relative cursor-pointer"
                               >
                                 <TrashIcon />
+                                <div className="absolute bottom-full left-1/2 -translate-x-1/2 mb-2 px-3 py-1 bg-[#FF6692] text-white text-[11px] font-semibold rounded-full whitespace-nowrap opacity-0 pointer-events-none group-hover:opacity-100 transition-opacity duration-200 z-50 shadow-lg">
+                                  Delete Ticket
+                                  <div className="absolute top-full left-1/2 -translate-x-1/2 border-4 border-transparent border-t-[#FF6692]"></div>
+                                </div>
                               </button>
                             </div>
                           </td>
@@ -3465,18 +3475,24 @@ export default function SupportPage({ activeTicketId, onCloseTicketDetail }: Sup
                               {/* View / Preview button */}
                               <button
                                 onClick={() => setPreviewingAnnouncement(a)}
-                                className="p-2 bg-[#F1F2FE] text-[#635BFF] hover:bg-[#e0e2fe] rounded-lg transition-colors inline-flex"
-                                title="Preview Announcement"
+                                className="p-2 bg-[#F1F2FE] text-[#635BFF] hover:bg-[#e0e2fe] rounded-lg transition-colors inline-flex group relative cursor-pointer"
                               >
                                 <EyeIcon />
+                                <div className="absolute bottom-full left-1/2 -translate-x-1/2 mb-2 px-3 py-1 bg-[#635BFF] text-white text-[11px] font-semibold rounded-full whitespace-nowrap opacity-0 pointer-events-none group-hover:opacity-100 transition-opacity duration-200 z-50 shadow-lg">
+                                  Preview Announcement
+                                  <div className="absolute top-full left-1/2 -translate-x-1/2 border-4 border-transparent border-t-[#635BFF]"></div>
+                                </div>
                               </button>
                               {/* Delete button */}
                               <button
                                 onClick={() => handleDeleteAnnouncement(a.id)}
-                                className="p-2 bg-[#FFE5ED] text-[#FF6692] hover:bg-[#ffd1de] rounded-lg transition-colors inline-flex"
-                                title="Remove Announcement"
+                                className="p-2 bg-[#FFE5ED] text-[#FF6692] hover:bg-[#ffd1de] rounded-lg transition-colors inline-flex group relative cursor-pointer"
                               >
                                 <TrashIcon />
+                                <div className="absolute bottom-full left-1/2 -translate-x-1/2 mb-2 px-3 py-1 bg-[#FF6692] text-white text-[11px] font-semibold rounded-full whitespace-nowrap opacity-0 pointer-events-none group-hover:opacity-100 transition-opacity duration-200 z-50 shadow-lg">
+                                  Remove Announcement
+                                  <div className="absolute top-full left-1/2 -translate-x-1/2 border-4 border-transparent border-t-[#FF6692]"></div>
+                                </div>
                               </button>
                             </div>
                           </td>
@@ -3965,19 +3981,23 @@ export default function SupportPage({ activeTicketId, onCloseTicketDetail }: Sup
                   <div className="grid grid-cols-2 gap-6 w-full">
 
                     {/* Date */}
-                    <div className="flex flex-col gap-2 w-full">
+                    <div className="flex flex-col gap-2 w-full text-left">
                       <span className="font-sans font-semibold text-[14px] leading-[19px] text-[#29343D]">
                         Date
                       </span>
                       <div className="relative w-full h-[42px]">
                         <input
-                          type="text"
+                          ref={dateInputRef}
+                          type="date"
                           value={annDate}
                           onChange={(e) => setAnnDate(e.target.value)}
                           placeholder="mm/dd/yyyy"
-                          className="w-full bg-white border border-[#E0E6EB] rounded-[4px] px-3 pr-10 h-[42px] text-sm font-normal text-[#29343D] focus:border-[#635BFF] focus:outline-none transition-all"
+                          className="w-full bg-white border border-[#E0E6EB] rounded-[4px] px-3 pr-10 h-[42px] text-sm font-normal text-[#29343D] focus:border-[#635BFF] focus:outline-none transition-all cursor-pointer"
                         />
-                        <div className="absolute inset-y-0 right-3 flex items-center pointer-events-none text-[#1C274C]">
+                        <div
+                          onClick={() => dateInputRef.current?.showPicker()}
+                          className="absolute inset-y-0 right-3 flex items-center cursor-pointer text-[#1C274C]"
+                        >
                           <svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
                             <path d="M8 2V5M16 2V5M3.5 9.09H20.5M21 8.5V17C21 19.2091 19.2091 21 17 21H7C4.79086 21 3 19.2091 3 17V8.5C3 6.29086 4.79086 4.5 7 4.5H17C19.2091 4.5 21 6.29086 21 8.5Z" stroke="#1C274C" strokeWidth="1.5" strokeLinecap="round" />
                           </svg>
@@ -3986,19 +4006,23 @@ export default function SupportPage({ activeTicketId, onCloseTicketDetail }: Sup
                     </div>
 
                     {/* Time */}
-                    <div className="flex flex-col gap-2 w-full">
+                    <div className="flex flex-col gap-2 w-full text-left">
                       <span className="font-sans font-semibold text-[14px] leading-[19px] text-[#29343D]">
                         Time
                       </span>
                       <div className="relative w-full h-[42px]">
                         <input
-                          type="text"
+                          ref={timeInputRef}
+                          type="time"
                           value={annTime}
                           onChange={(e) => setAnnTime(e.target.value)}
                           placeholder="HH:MM"
-                          className="w-full bg-white border border-[#E0E6EB] rounded-[4px] px-3 pr-10 h-[42px] text-sm font-normal text-[#29343D] focus:border-[#635BFF] focus:outline-none transition-all"
+                          className="w-full bg-white border border-[#E0E6EB] rounded-[4px] px-3 pr-10 h-[42px] text-sm font-normal text-[#29343D] focus:border-[#635BFF] focus:outline-none transition-all cursor-pointer"
                         />
-                        <div className="absolute inset-y-0 right-3 flex items-center pointer-events-none text-[#1C274C]">
+                        <div
+                          onClick={() => timeInputRef.current?.showPicker()}
+                          className="absolute inset-y-0 right-3 flex items-center cursor-pointer text-[#1C274C]"
+                        >
                           <svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
                             <path d="M12 22C17.5228 22 22 17.5228 22 12C22 6.47715 17.5228 2 12 2C6.47715 2 2 6.47715 2 12C2 17.5228 6.47715 22 12 22Z" stroke="#1C274C" strokeWidth="1.5" />
                             <path d="M12 6V12L16 14" stroke="#1C274C" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round" />
@@ -4010,11 +4034,19 @@ export default function SupportPage({ activeTicketId, onCloseTicketDetail }: Sup
                   </div>
 
                   {/* File Upload zone */}
-                  <div
-                    onClick={() => {
-                      const fakeName = prompt("Enter file name to upload:", "announcement_banner.png");
-                      if (fakeName) setAnnFileName(fakeName);
+                  <input
+                    ref={fileInputRef}
+                    type="file"
+                    className="hidden"
+                    onChange={(e) => {
+                      const file = e.target.files?.[0];
+                      if (file) {
+                        setAnnFileName(file.name);
+                      }
                     }}
+                  />
+                  <div
+                    onClick={() => fileInputRef.current?.click()}
                     className="w-full h-[127px] bg-white border border-dashed border-[#635BFF] rounded-[12px] flex flex-col items-center justify-center p-4 gap-2 cursor-pointer hover:bg-[#F1F2FE]/30 transition-all shrink-0 select-none"
                   >
                     <div className="w-[48px] h-[48px] bg-[#F1F2FE] border border-[#DDDBFF] rounded-[12px] flex items-center justify-center shrink-0">
@@ -4053,13 +4085,13 @@ export default function SupportPage({ activeTicketId, onCloseTicketDetail }: Sup
           onClick={() => setPreviewingAnnouncement(null)}
         >
           <div
-            className="bg-white rounded-[12px] shadow-[0px_16px_32px_-8px_rgba(12,12,13,0.4)] w-[638px] max-w-full h-[409px] flex flex-col gap-6 p-6 text-left border border-[#E0E6EB] relative overflow-hidden animate-in zoom-in-95 duration-150"
+            className="bg-white rounded-[12px] shadow-[0px_16px_32px_-8px_rgba(12,12,13,0.4)] w-[638px] max-w-full h-auto max-h-[90vh] overflow-y-auto flex flex-col gap-6 p-6 text-left border border-[#E0E6EB] relative animate-in zoom-in-95 duration-150"
             onClick={(e) => e.stopPropagation()}
           >
             {/* Header Block */}
-            <div className="flex flex-row items-center justify-between w-full h-[59px] shrink-0">
+            <div className="flex flex-row items-center justify-between w-full shrink-0">
               <div className="flex flex-col items-start gap-2.5 flex-grow">
-                <h3 className="font-sans font-semibold text-[18px] leading-[25px] text-[#29343D] truncate max-w-[500px]" title={previewingAnnouncement.title}>
+                <h3 className="font-sans font-semibold text-[18px] leading-[25px] text-[#29343D] truncate max-w-[280px] sm:max-w-[500px]" title={previewingAnnouncement.title}>
                   {previewingAnnouncement.title}
                 </h3>
                 <div className="flex flex-row items-center gap-2 h-[24px]">
@@ -4102,37 +4134,37 @@ export default function SupportPage({ activeTicketId, onCloseTicketDetail }: Sup
             </div>
 
             {/* Content Message */}
-            <div className="flex flex-col items-start gap-2 w-full h-[87px] shrink-0">
-              <span className="font-sans font-semibold text-[14px] leading-[19px] text-[#29343D] h-[19px]">
+            <div className="flex flex-col items-start gap-2 w-full shrink-0">
+              <span className="font-sans font-semibold text-[14px] leading-[19px] text-[#29343D]">
                 Content
               </span>
-              <p className="w-full h-[60px] font-sans font-normal text-[14px] leading-[20px] text-[#98A4AE] select-text overflow-y-auto break-words whitespace-pre-wrap">
+              <p className="w-full font-sans font-normal text-[14px] leading-[20px] text-[#98A4AE] select-text overflow-y-auto break-words whitespace-pre-wrap max-h-[120px]">
                 {previewingAnnouncement.message}
               </p>
             </div>
 
             {/* Times Frame */}
-            <div className="flex flex-row items-start gap-6 w-full h-[47px] shrink-0">
-              <div className="flex flex-col items-start gap-2 w-[283px] flex-grow h-[47px]">
-                <span className="font-sans font-semibold text-[14px] leading-[19px] text-[#29343D] h-[19px]">
+            <div className="flex flex-col sm:flex-row items-start gap-4 sm:gap-6 w-full shrink-0">
+              <div className="flex flex-col items-start gap-2 w-full sm:w-[283px] flex-grow">
+                <span className="font-sans font-semibold text-[14px] leading-[19px] text-[#29343D]">
                   From When
                 </span>
-                <span className="font-sans font-normal text-[14px] leading-[20px] text-[#98A4AE] h-[20px]">
+                <span className="font-sans font-normal text-[14px] leading-[20px] text-[#98A4AE]">
                   {previewingAnnouncement.status === "Scheduled" ? previewingAnnouncement.scheduleTime || "08/19/2025 12:00" : "08/19/2025 12:00"}
                 </span>
               </div>
-              <div className="flex flex-col items-start gap-2 w-[283px] flex-grow h-[47px]">
-                <span className="font-sans font-semibold text-[14px] leading-[19px] text-[#29343D] h-[19px]">
+              <div className="flex flex-col items-start gap-2 w-full sm:w-[283px] flex-grow">
+                <span className="font-sans font-semibold text-[14px] leading-[19px] text-[#29343D]">
                   To When
                 </span>
-                <span className="font-sans font-normal text-[14px] leading-[20px] text-[#98A4AE] h-[20px]">
+                <span className="font-sans font-normal text-[14px] leading-[20px] text-[#98A4AE]">
                   08/20/2025 12:00
                 </span>
               </div>
             </div>
 
             {/* Pill Badges Row */}
-            <div className="flex flex-row items-center gap-2 w-full h-[36px] shrink-0 overflow-x-hidden">
+            <div className="flex flex-wrap items-center gap-2 w-full shrink-0">
               <div className="flex flex-row justify-center items-center px-3.5 h-[36px] bg-[#DDDBFF] rounded-full text-[#635BFF] font-sans font-medium text-[12px] leading-[16px] text-center shrink-0">
                 Audience: {previewingAnnouncement.audience}
               </div>
@@ -4151,7 +4183,7 @@ export default function SupportPage({ activeTicketId, onCloseTicketDetail }: Sup
             </div>
 
             {/* Footer Details Action */}
-            <div className="flex flex-row justify-end items-center gap-6 w-full h-[36px] shrink-0">
+            <div className="flex flex-row justify-end items-center gap-6 w-full shrink-0 mt-2">
               <button
                 onClick={() => handleStartEditAnnouncement(previewingAnnouncement)}
                 className="w-[55px] h-[36px] bg-[#635BFF] hover:bg-[#4d42eb] text-[#FFFFFF] font-sans font-medium text-[12px] leading-[16px] rounded-[8px] flex items-center justify-center transition-colors cursor-pointer shrink-0"

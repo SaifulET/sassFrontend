@@ -77,8 +77,7 @@ export default function Sidebar({
     { id: "leads", label: "Leads", icon: "/leads.svg" },
     { id: "billing", label: "Billing", icon: "/billing.svg" },
     { id: "analytics", label: "Analytics", icon: "/analytics.svg" },
-    { id: "automations", label: "Automations & Mail", icon: "/automationAndMails.svg" },
-    { id: "waivers", label: "Waivers", icon: "/file.svg" }
+    { id: "automations", label: "Automations & Mail", icon: "/automationAndMails.svg" }
   ];
 
   const secondaryNavigation = [

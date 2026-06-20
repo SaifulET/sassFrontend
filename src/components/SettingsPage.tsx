@@ -88,6 +88,7 @@ const QRCodePlaceholder = () => (
 export default function SettingsPage({ defaultActiveTab = "Profile" }: { defaultActiveTab?: string }) {
   const [activeTab, setActiveTab] = useState(defaultActiveTab);
   const fileInputRef = useRef<HTMLInputElement>(null);
+  const importFileInputRef = useRef<HTMLInputElement>(null);
 
   // State for avatar image
   const [avatarSrc, setAvatarSrc] = useState("/avatar.png");
@@ -133,8 +134,11 @@ export default function SettingsPage({ defaultActiveTab = "Profile" }: { default
 
   // Modal state variables
   const [activeModal, setActiveModal] = useState<
-    "change_password" | "signout_all" | "2fa_step1_qr" | "2fa_step1_key" | "2fa_backup" | "2fa_success" | null
+    "change_password" | "signout_all" | "2fa_step1_qr" | "2fa_step1_key" | "2fa_backup" | "2fa_success" | "recovery_email" | "recovery_phone" | null
   >(null);
+
+  const [tempRecoveryEmail, setTempRecoveryEmail] = useState("");
+  const [tempRecoveryPhone, setTempRecoveryPhone] = useState("");
 
   const [passwordFields, setPasswordFields] = useState({
     currentPassword: "••••••••••••••••",
@@ -374,6 +378,64 @@ export default function SettingsPage({ defaultActiveTab = "Profile" }: { default
     }
   };
 
+  const handleExportSettings = () => {
+    try {
+      const settingsData = {
+        formData,
+        systemData,
+        securityData,
+        billingData,
+        notificationData,
+        avatarSrc
+      };
+      const jsonString = `data:text/json;charset=utf-8,${encodeURIComponent(
+        JSON.stringify(settingsData, null, 2)
+      )}`;
+      const downloadAnchor = document.createElement("a");
+      downloadAnchor.setAttribute("href", jsonString);
+      downloadAnchor.setAttribute("download", "system_settings.json");
+      document.body.appendChild(downloadAnchor);
+      downloadAnchor.click();
+      downloadAnchor.remove();
+      setToastMessage("Settings exported successfully!");
+      setTimeout(() => setToastMessage(null), 2500);
+    } catch (error) {
+      setToastMessage("Failed to export settings");
+      setTimeout(() => setToastMessage(null), 2500);
+    }
+  };
+
+  const handleImportClick = () => {
+    importFileInputRef.current?.click();
+  };
+
+  const handleImportFileChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const file = e.target.files?.[0];
+    if (!file) return;
+
+    const reader = new FileReader();
+    reader.onload = (event) => {
+      try {
+        const importedData = JSON.parse(event.target?.result as string);
+        
+        if (importedData.formData) setFormData(importedData.formData);
+        if (importedData.systemData) setSystemData(importedData.systemData);
+        if (importedData.securityData) setSecurityData(importedData.securityData);
+        if (importedData.billingData) setBillingData(importedData.billingData);
+        if (importedData.notificationData) setNotificationData(importedData.notificationData);
+        if (importedData.avatarSrc) setAvatarSrc(importedData.avatarSrc);
+
+        setToastMessage("Settings imported successfully!");
+        setTimeout(() => setToastMessage(null), 2500);
+      } catch (error) {
+        setToastMessage("Invalid settings JSON file!");
+        setTimeout(() => setToastMessage(null), 2500);
+      }
+    };
+    reader.readAsText(file);
+    e.target.value = "";
+  };
+
   const handleSystemInputChange = (e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement>) => {
     const { name, value } = e.target;
     setSystemData((prev) => ({
@@ -482,6 +544,15 @@ export default function SettingsPage({ defaultActiveTab = "Profile" }: { default
         className="hidden"
       />
 
+      {/* Hidden File Input for Settings Import */}
+      <input
+        type="file"
+        ref={importFileInputRef}
+        onChange={handleImportFileChange}
+        accept=".json"
+        className="hidden"
+      />
+
       {/* Toast Notification */}
       {toastMessage && (
         <div className="fixed bottom-5 right-5 z-50 rounded-xl bg-[#253143] px-5 py-3 text-xs font-semibold text-white shadow-2xl transition-all animate-bounce">
@@ -501,10 +572,7 @@ export default function SettingsPage({ defaultActiveTab = "Profile" }: { default
             {/* Btn: Export Settings */}
             <button
               type="button"
-              onClick={() => {
-                setToastMessage("Exporting settings...");
-                setTimeout(() => setToastMessage(null), 2000);
-              }}
+              onClick={handleExportSettings}
               className="flex items-center gap-2 px-4 py-2.5 bg-white border border-[#eef2f6] hover:bg-slate-50 rounded-2xl text-xs font-semibold text-slate-600 transition-all shadow-sm"
             >
               <ExportIcon />
@@ -513,11 +581,8 @@ export default function SettingsPage({ defaultActiveTab = "Profile" }: { default
             {/* Btn: Import Settings */}
             <button
               type="button"
-              onClick={() => {
-                setToastMessage("Importing settings...");
-                setTimeout(() => setToastMessage(null), 2000);
-              }}
-              className="px-5 py-2.5 bg-[#5e53fc] hover:bg-indigo-700 text-white rounded-2xl text-xs font-semibold tracking-wide shadow-lg shadow-indigo-150 transition-all"
+              onClick={handleImportClick}
+              className="flex items-center gap-2 px-5 py-2.5 bg-[#5e53fc] hover:bg-indigo-700 text-white rounded-2xl text-xs font-semibold tracking-wide shadow-lg shadow-indigo-150 transition-all"
             >
               <ImportIcon />
               <span>Import Settings</span>
@@ -770,30 +835,30 @@ export default function SettingsPage({ defaultActiveTab = "Profile" }: { default
         <form onSubmit={handleSystemSave} className="flex flex-col items-start p-6 gap-6 bg-white rounded-xl shadow-[0_4px_18px_rgba(17,31,56,0.06)] w-full min-h-[818px] flex-none order-1 self-stretch grow-0">
           
           {/* Cards: Stat Cards container */}
-          <div className="flex flex-row flex-wrap items-center p-0 gap-6 w-full flex-none order-0 self-stretch grow-0">
+          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6 w-full flex-none order-0 self-stretch grow-0">
             {/* Stat 1: Uptime */}
-            <div className="box-border flex flex-col justify-center items-center p-6 gap-[30px] flex-1 min-w-[200px] h-[108px] bg-white rounded-xl shadow-[0_4px_18px_rgba(17,31,56,0.06)] flex-none order-0">
+            <div className="box-border flex flex-col justify-center items-center p-6 h-[108px] bg-white rounded-xl shadow-[0_4px_18px_rgba(17,31,56,0.06)] w-full">
               <div className="flex flex-col items-center p-0 gap-2 w-full h-[60px] flex-none order-0 grow-0">
                 <span className="font-['Manrope'] font-semibold text-[28px] leading-[34px] text-center text-[#36C76C] h-[34px] flex-none order-0 grow-0">99.9%</span>
                 <span className="font-['Manrope'] font-semibold text-[13px] leading-[18px] text-[#29343D] h-[18px] flex-none order-0 grow-0">Uptime</span>
               </div>
             </div>
             {/* Stat 2: Avg Response */}
-            <div className="box-border flex flex-col justify-center items-center p-6 gap-[30px] flex-1 min-w-[200px] h-[108px] bg-white rounded-xl shadow-[0_4px_18px_rgba(17,31,56,0.06)] flex-none order-1">
+            <div className="box-border flex flex-col justify-center items-center p-6 h-[108px] bg-white rounded-xl shadow-[0_4px_18px_rgba(17,31,56,0.06)] w-full">
               <div className="flex flex-col items-center p-0 gap-2 w-full h-[60px] flex-none order-0 grow-0">
                 <span className="font-['Manrope'] font-semibold text-[28px] leading-[34px] text-center text-[#46CAEB] h-[34px] flex-none order-0 grow-0">156ms</span>
                 <span className="font-['Manrope'] font-semibold text-[13px] leading-[18px] text-[#29343D] h-[18px] flex-none order-0 grow-0">Avg Response</span>
               </div>
             </div>
             {/* Stat 3: Active Salons */}
-            <div className="box-border flex flex-col justify-center items-center p-6 gap-[30px] flex-1 min-w-[200px] h-[108px] bg-white rounded-xl shadow-[0_4px_18px_rgba(17,31,56,0.06)] flex-none order-2">
+            <div className="box-border flex flex-col justify-center items-center p-6 h-[108px] bg-white rounded-xl shadow-[0_4px_18px_rgba(17,31,56,0.06)] w-full">
               <div className="flex flex-col items-center p-0 gap-2 w-full h-[60px] flex-none order-0 grow-0">
                 <span className="font-['Manrope'] font-semibold text-[28px] leading-[34px] text-center text-[#635BFF] h-[34px] flex-none order-0 grow-0">47</span>
                 <span className="font-['Manrope'] font-semibold text-[13px] leading-[18px] text-[#29343D] h-[18px] flex-none order-0 grow-0">Active Salons</span>
               </div>
             </div>
             {/* Stat 4: Database */}
-            <div className="box-border flex flex-col justify-center items-center p-6 gap-[30px] flex-1 min-w-[200px] h-[108px] bg-white rounded-xl shadow-[0_4px_18px_rgba(17,31,56,0.06)] flex-none order-3">
+            <div className="box-border flex flex-col justify-center items-center p-6 h-[108px] bg-white rounded-xl shadow-[0_4px_18px_rgba(17,31,56,0.06)] w-full">
               <div className="flex flex-col items-center p-0 gap-2 w-full h-[60px] flex-none order-0 grow-0">
                 <span className="font-['Manrope'] font-semibold text-[28px] leading-[34px] text-center text-[#36C76C] h-[34px] flex-none order-0 grow-0">Healthy</span>
                 <span className="font-['Manrope'] font-semibold text-[13px] leading-[18px] text-[#29343D] h-[18px] flex-none order-0 grow-0">Database</span>
@@ -945,19 +1010,19 @@ export default function SettingsPage({ defaultActiveTab = "Profile" }: { default
           </div>
 
           {/* System Controls Card */}
-          <div className="box-border flex flex-col justify-center items-start p-[30px] gap-[30px] bg-white rounded-xl shadow-[0_4px_18px_rgba(17,31,56,0.06)] w-full h-auto lg:h-[154px] flex-none order-3 self-stretch grow-0">
-            <h2 className="font-['Manrope'] font-semibold text-[18px] leading-[25px] text-[#29343D] w-full h-[25px] flex-none order-0 self-stretch grow-0 text-left">
+          <div className="box-border flex flex-col justify-center items-start p-[30px] gap-[30px] bg-white rounded-xl shadow-[0_4px_18px_rgba(17,31,56,0.06)] w-full h-auto flex-none order-3 self-stretch grow-0">
+            <h2 className="font-['Manrope'] font-semibold text-[18px] leading-[25px] text-[#29343D] w-full h-auto flex-none order-0 self-stretch grow-0 text-left">
               System Controls
             </h2>
             
-            <div className="flex flex-row flex-wrap justify-between items-center p-0 gap-[30px] w-full h-[39px] flex-none order-1 self-stretch grow-0">
-              {/* Toggle 1: Max Salons per Account (Maintenance Mode) */}
-              <div className="flex flex-row items-center p-0 gap-[30px] flex-grow lg:flex-1 justify-between lg:justify-start lg:gap-6 w-full lg:w-auto h-[39px] flex-none">
-                <div className="flex flex-col justify-center items-start p-0 gap-[4px] w-[264px] h-[39px] flex-none">
-                  <span className="font-['Manrope'] font-semibold text-[14px] leading-[19px] text-[#29343D] w-[165px] h-[19px] flex-none text-left">
-                    Max Salons per Account:
+            <div className="flex flex-col lg:flex-row flex-wrap justify-between items-stretch lg:items-center p-0 gap-[30px] w-full h-auto flex-none order-1 self-stretch grow-0">
+              {/* Toggle 1: Maintenance Mode */}
+              <div className="flex flex-row items-center p-0 gap-[30px] flex-grow lg:flex-1 justify-between lg:justify-start lg:gap-6 w-full lg:w-auto h-auto flex-none">
+                <div className="flex flex-col justify-center items-start p-0 gap-[4px] w-auto flex-none">
+                  <span className="font-['Manrope'] font-semibold text-[14px] leading-[19px] text-[#29343D] flex-none text-left">
+                    Maintenance Mode
                   </span>
-                  <span className="font-['Manrope'] font-normal text-[12px] leading-[16px] text-[#98A4AE] w-[264px] h-[16px] flex-none text-left">
+                  <span className="font-['Manrope'] font-normal text-[12px] leading-[16px] text-[#98A4AE] flex-none text-left">
                     Temporarily disable platform access for all users
                   </span>
                 </div>
@@ -978,12 +1043,12 @@ export default function SettingsPage({ defaultActiveTab = "Profile" }: { default
               </div>
 
               {/* Toggle 2: New Signups Enabled */}
-              <div className="flex flex-row items-center p-0 gap-[30px] flex-grow lg:flex-1 justify-between lg:justify-start lg:gap-6 w-full lg:w-auto h-[39px] flex-none">
-                <div className="flex flex-col justify-center items-start p-0 gap-[4px] w-[161px] h-[39px] flex-none">
-                  <span className="font-['Manrope'] font-semibold text-[14px] leading-[19px] text-[#29343D] w-[143px] h-[19px] flex-none text-left">
+              <div className="flex flex-row items-center p-0 gap-[30px] flex-grow lg:flex-1 justify-between lg:justify-start lg:gap-6 w-full lg:w-auto h-auto flex-none">
+                <div className="flex flex-col justify-center items-start p-0 gap-[4px] w-auto flex-none">
+                  <span className="font-['Manrope'] font-semibold text-[14px] leading-[19px] text-[#29343D] flex-none text-left">
                     New Signups Enabled
                   </span>
-                  <span className="font-['Manrope'] font-normal text-[12px] leading-[16px] text-[#98A4AE] w-[161px] h-[16px] flex-none text-left">
+                  <span className="font-['Manrope'] font-normal text-[12px] leading-[16px] text-[#98A4AE] flex-none text-left">
                     Allow new salon registrations
                   </span>
                 </div>
@@ -1004,12 +1069,12 @@ export default function SettingsPage({ defaultActiveTab = "Profile" }: { default
               </div>
 
               {/* Toggle 3: Auto Backup */}
-              <div className="flex flex-row items-center p-0 gap-[30px] flex-grow lg:flex-1 justify-between lg:justify-start lg:gap-6 w-full lg:w-auto h-[39px] flex-none">
-                <div className="flex flex-col justify-center items-start p-0 gap-[4px] w-[190px] h-[39px] flex-none">
-                  <span className="font-['Manrope'] font-semibold text-[14px] leading-[19px] text-[#29343D] w-[84px] h-[19px] flex-none text-left">
+              <div className="flex flex-row items-center p-0 gap-[30px] flex-grow lg:flex-1 justify-between lg:justify-start lg:gap-6 w-full lg:w-auto h-auto flex-none">
+                <div className="flex flex-col justify-center items-start p-0 gap-[4px] w-auto flex-none">
+                  <span className="font-['Manrope'] font-semibold text-[14px] leading-[19px] text-[#29343D] flex-none text-left">
                     Auto Backup
                   </span>
-                  <span className="font-['Manrope'] font-normal text-[12px] leading-[16px] text-[#98A4AE] w-[190px] h-[16px] flex-none text-left">
+                  <span className="font-['Manrope'] font-normal text-[12px] leading-[16px] text-[#98A4AE] flex-none text-left">
                     Automatically backup system data
                   </span>
                 </div>
@@ -1222,12 +1287,8 @@ export default function SettingsPage({ defaultActiveTab = "Profile" }: { default
                   <button
                     type="button"
                     onClick={() => {
-                      const email = prompt("Enter new recovery email:", securityData.recoveryEmail);
-                      if (email) {
-                        setSecurityData(prev => ({ ...prev, recoveryEmail: email }));
-                        setToastMessage("Recovery email updated");
-                        setTimeout(() => setToastMessage(null), 2000);
-                      }
+                      setTempRecoveryEmail(securityData.recoveryEmail);
+                      setActiveModal("recovery_email");
                     }}
                     className="flex flex-row justify-center items-center py-[5px] px-4 h-[34px] bg-[#DDDBFF] rounded-lg font-['Manrope'] font-semibold text-[14px] leading-6 text-[#635BFF] transition-colors cursor-pointer border-none flex-none hover:bg-[#c9c6ff]"
                   >
@@ -1270,12 +1331,8 @@ export default function SettingsPage({ defaultActiveTab = "Profile" }: { default
                   <button
                     type="button"
                     onClick={() => {
-                      const phone = prompt("Enter new recovery phone:", securityData.recoveryPhone);
-                      if (phone) {
-                        setSecurityData(prev => ({ ...prev, recoveryPhone: phone }));
-                        setToastMessage("Recovery phone updated");
-                        setTimeout(() => setToastMessage(null), 2000);
-                      }
+                      setTempRecoveryPhone(securityData.recoveryPhone);
+                      setActiveModal("recovery_phone");
                     }}
                     className="flex flex-row justify-center items-center py-[5px] px-4 h-[34px] bg-[#DDDBFF] rounded-lg font-['Manrope'] font-semibold text-[14px] leading-6 text-[#635BFF] transition-colors cursor-pointer border-none flex-none hover:bg-[#c9c6ff]"
                   >
@@ -2230,6 +2287,132 @@ export default function SettingsPage({ defaultActiveTab = "Profile" }: { default
             <p className="font-['Manrope'] font-normal text-[13px] leading-[18px] text-[#98A4AE] text-center mb-4">
               Your account is now more secure.
             </p>
+          </div>
+        </div>
+      )}
+
+      {/* 7. Recovery Email Modal */}
+      {activeModal === "recovery_email" && (
+        <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/50 backdrop-blur-sm p-4 animate-in fade-in duration-200" onClick={() => setActiveModal(null)}>
+          <div className="bg-white rounded-[16px] w-full max-w-[450px] p-[30px] relative shadow-[0px_4px_24px_rgba(0,0,0,0.1)] border border-[#E0E6EB] animate-in zoom-in-95 duration-200 flex flex-col gap-6 text-left" onClick={(e) => e.stopPropagation()}>
+            <div className="flex justify-between items-center">
+              <h3 className="font-['Manrope'] font-semibold text-[18px] leading-[26px] text-[#29343D]">
+                Setup Recovery Email
+              </h3>
+              <button
+                type="button"
+                onClick={() => setActiveModal(null)}
+                className="text-[#98A4AE] hover:text-[#29343D] transition-colors cursor-pointer border-none bg-transparent p-0 flex items-center justify-center"
+              >
+                <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round">
+                  <line x1="18" y1="6" x2="6" y2="18" />
+                  <line x1="6" y1="6" x2="18" y2="18" />
+                </svg>
+              </button>
+            </div>
+            
+            <div className="flex flex-col gap-2">
+              <label className="font-['Manrope'] font-semibold text-[14px] leading-[19px] text-[#29343D]">
+                Recovery Email
+              </label>
+              <div className="box-border flex flex-row items-center px-3 gap-4 w-full h-[42px] bg-white border border-[#E0E6EB] rounded-[4px]">
+                <input
+                  type="email"
+                  value={tempRecoveryEmail}
+                  onChange={(e) => setTempRecoveryEmail(e.target.value)}
+                  placeholder="Enter recovery email"
+                  required
+                  className="w-full bg-transparent border-none outline-none font-['Manrope'] font-normal text-[14px] leading-5 text-[#29343D] placeholder-[#98A4AE]"
+                />
+              </div>
+            </div>
+
+            <div className="flex flex-row justify-end items-center gap-3 mt-2">
+              <button
+                type="button"
+                onClick={() => setActiveModal(null)}
+                className="flex flex-row justify-center items-center py-2.5 px-4 bg-[#EFF4FA] rounded-lg font-['Manrope'] font-semibold text-[14px] leading-5 text-[#0A2540] transition-colors cursor-pointer border-none"
+              >
+                Cancel
+              </button>
+              <button
+                type="button"
+                onClick={() => {
+                  if (tempRecoveryEmail.trim()) {
+                    setSecurityData((prev) => ({ ...prev, recoveryEmail: tempRecoveryEmail.trim() }));
+                    setActiveModal(null);
+                    setToastMessage("Recovery email updated");
+                    setTimeout(() => setToastMessage(null), 2000);
+                  }
+                }}
+                className="flex flex-row justify-center items-center py-2.5 px-4 bg-[#635BFF] hover:bg-[#5249eb] rounded-lg font-['Manrope'] font-semibold text-[14px] leading-5 text-white transition-colors cursor-pointer border-none"
+              >
+                Save
+              </button>
+            </div>
+          </div>
+        </div>
+      )}
+
+      {/* 8. Recovery Phone Modal */}
+      {activeModal === "recovery_phone" && (
+        <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/50 backdrop-blur-sm p-4 animate-in fade-in duration-200" onClick={() => setActiveModal(null)}>
+          <div className="bg-white rounded-[16px] w-full max-w-[450px] p-[30px] relative shadow-[0px_4px_24px_rgba(0,0,0,0.1)] border border-[#E0E6EB] animate-in zoom-in-95 duration-200 flex flex-col gap-6 text-left" onClick={(e) => e.stopPropagation()}>
+            <div className="flex justify-between items-center">
+              <h3 className="font-['Manrope'] font-semibold text-[18px] leading-[26px] text-[#29343D]">
+                Edit Recovery Phone
+              </h3>
+              <button
+                type="button"
+                onClick={() => setActiveModal(null)}
+                className="text-[#98A4AE] hover:text-[#29343D] transition-colors cursor-pointer border-none bg-transparent p-0 flex items-center justify-center"
+              >
+                <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round">
+                  <line x1="18" y1="6" x2="6" y2="18" />
+                  <line x1="6" y1="6" x2="18" y2="18" />
+                </svg>
+              </button>
+            </div>
+            
+            <div className="flex flex-col gap-2">
+              <label className="font-['Manrope'] font-semibold text-[14px] leading-[19px] text-[#29343D]">
+                Recovery Phone
+              </label>
+              <div className="box-border flex flex-row items-center px-3 gap-4 w-full h-[42px] bg-white border border-[#E0E6EB] rounded-[4px]">
+                <input
+                  type="text"
+                  value={tempRecoveryPhone}
+                  onChange={(e) => setTempRecoveryPhone(e.target.value)}
+                  placeholder="Enter recovery phone"
+                  required
+                  className="w-full bg-transparent border-none outline-none font-['Manrope'] font-normal text-[14px] leading-5 text-[#29343D] placeholder-[#98A4AE]"
+                />
+              </div>
+            </div>
+
+            <div className="flex flex-row justify-end items-center gap-3 mt-2">
+              <button
+                type="button"
+                onClick={() => setActiveModal(null)}
+                className="flex flex-row justify-center items-center py-2.5 px-4 bg-[#EFF4FA] rounded-lg font-['Manrope'] font-semibold text-[14px] leading-5 text-[#0A2540] transition-colors cursor-pointer border-none"
+              >
+                Cancel
+              </button>
+              <button
+                type="button"
+                onClick={() => {
+                  if (tempRecoveryPhone.trim()) {
+                    setSecurityData((prev) => ({ ...prev, recoveryPhone: tempRecoveryPhone.trim() }));
+                    setActiveModal(null);
+                    setToastMessage("Recovery phone updated");
+                    setTimeout(() => setToastMessage(null), 2000);
+                  }
+                }}
+                className="flex flex-row justify-center items-center py-2.5 px-4 bg-[#635BFF] hover:bg-[#5249eb] rounded-lg font-['Manrope'] font-semibold text-[14px] leading-5 text-white transition-colors cursor-pointer border-none"
+              >
+                Save
+              </button>
+            </div>
           </div>
         </div>
       )}

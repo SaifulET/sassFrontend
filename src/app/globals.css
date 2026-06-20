@@ -89,3 +89,8 @@ body {
   }
 }
 
+/* Hide native calendar picker indicator icon */
+input::-webkit-calendar-picker-indicator {
+  display: none !important;
+  -webkit-appearance: none !important;
+}

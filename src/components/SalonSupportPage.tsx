@@ -237,21 +237,21 @@ export default function SalonSupportPage({ salon, onBack }: SalonSupportPageProp
 
                   {/* Priority */}
                   <td className="px-6 py-4">
-                    <span className={`px-2.5 py-1 rounded-full text-[9px] font-extrabold uppercase tracking-wide ${getPriorityStyle(t.priority)}`}>
+                    <span className={`px-2.5 py-1 rounded-full text-[9px] font-extrabold uppercase tracking-wide whitespace-nowrap ${getPriorityStyle(t.priority)}`}>
                       {t.priority}
                     </span>
                   </td>
 
                   {/* Status */}
                   <td className="px-6 py-4">
-                    <span className={`px-2.5 py-1 rounded-full text-[9px] font-extrabold uppercase tracking-wide ${getStatusStyle(t.status)}`}>
+                    <span className={`px-2.5 py-1 rounded-full text-[9px] font-extrabold uppercase tracking-wide whitespace-nowrap ${getStatusStyle(t.status)}`}>
                       {t.status}
                     </span>
                   </td>
 
                   {/* Category */}
                   <td className="px-6 py-4">
-                    <span className={`px-2.5 py-1 rounded-full text-[9px] font-extrabold uppercase tracking-wide ${getCategoryStyle(t.category)}`}>
+                    <span className={`px-2.5 py-1 rounded-full text-[9px] font-extrabold uppercase tracking-wide whitespace-nowrap ${getCategoryStyle(t.category)}`}>
                       {t.category}
                     </span>
                   </td>

@@ -16,7 +16,6 @@ import SalonActivityPage from "../components/SalonActivityPage";
 import SalonSupportPage from "../components/SalonSupportPage";
 import SalonAutomationsPage from "../components/SalonAutomationsPage";
 import AutomationsMailPage from "../components/AutomationsMailPage";
-import WaiversPage from "../components/WaiversPage";
 import SettingsPage from "../components/SettingsPage";
 import SupportPage from "../components/SupportPage";
 import ASPPage from "../components/ASPPage";
@@ -518,10 +517,7 @@ export default function Home() {
         return (
           <AutomationsMailPage />
         );
-      case "waivers":
-        return (
-          <WaiversPage />
-        );
+
       case "settings":
       case "settings_Profile":
         return (
