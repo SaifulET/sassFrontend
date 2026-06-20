@@ -179,7 +179,8 @@ export default function MapPage({ setActiveTab }: { setActiveTab?: (tab: string)
             className="inline-flex h-11 items-center gap-2 rounded-[8px] bg-[#635BFF] hover:bg-[#4d42eb] px-4 text-[14px] font-medium text-white shadow-[0px_2px_4px_-1px_rgba(175,182,201,0.2)] transition-all duration-150"
           >
             <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round">
-              <path d="M20 11a8 8 0 1 0 2 5" /><path d="M20 5v6h-6" />
+              <path d="M21 12a9 9 0 1 1-9-9c2.52 0 4.93 1 6.74 2.74L21 8" />
+              <polyline points="21 3 21 8 16 8" />
             </svg>
             Resync
           </button>
