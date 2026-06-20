@@ -462,7 +462,7 @@ export default function Home() {
         );
       case "billing":
         return (
-          <BillingRevenuePage />
+          <BillingRevenuePage setActiveTab={setActiveTab} />
         );
       case "analytics":
       case "analytics_revenue_mrr_arr":

@@ -245,71 +245,102 @@ function PlanDistributionModal({
   const labels = view === "monthly" ? distributionMonths : distributionYears;
   const axis = view === "monthly" ? ["EUR300.000", "EUR250.000", "EUR200.000", "EUR150.000", "EUR100.000", "EUR50.000"] : ["EUR3.0M", "EUR2.5M", "EUR2.0M", "EUR1.5M", "EUR1.0M", "EUR0.5M"];
 
+  React.useEffect(() => {
+    document.body.style.overflow = "hidden";
+    return () => {
+      document.body.style.overflow = "";
+    };
+  }, []);
+
   return (
-    <div className="fixed inset-0 z-50 flex items-center justify-center bg-[#111827]/25 p-4 backdrop-blur-sm">
-      <div className="w-full max-w-[980px] bg-white px-5 py-5 shadow-2xl sm:px-6 sm:py-6">
-        <div className="flex items-start justify-between gap-4">
+    <div className="fixed inset-0 z-50 flex items-center justify-center bg-[#111827]/35 p-4 backdrop-blur-sm">
+      <div className="flex max-h-[92vh] w-full max-w-[980px] flex-col rounded-2xl bg-white p-5 shadow-2xl sm:p-6 overflow-hidden">
+        {/* Header */}
+        <div className="flex items-start justify-between gap-4 border-b border-[#edf1f6] pb-4">
           <div>
             <h2 className="text-[17px] font-bold text-[#253143]">Plan Distribution</h2>
-            <p className="mt-3 text-[13px] font-semibold text-[#253143]">Revenue breakdown by subscription plan</p>
+            <p className="mt-1 text-[12px] font-medium text-[#9aa7b8]">Revenue breakdown by subscription plan</p>
           </div>
-          <button onClick={onClose} className="p-1 text-[#263241] transition-colors hover:text-[#635bff]" aria-label="Close">
-            <svg width="19" height="19" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.4" strokeLinecap="round">
+          <button onClick={onClose} className="rounded-lg p-1 text-[#263241] transition-colors hover:bg-slate-100 hover:text-[#635bff]" aria-label="Close">
+            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.4" strokeLinecap="round">
               <path d="M18 6 6 18" />
               <path d="m6 6 12 12" />
             </svg>
           </button>
         </div>
 
-        <div className="mt-8 flex flex-col gap-4 md:flex-row md:items-center md:justify-between">
-          <div className="flex flex-wrap items-center gap-5">
-            <span className="flex items-center gap-2 text-[12px] font-medium text-[#526174]"><span className="h-2 w-2 rounded-full bg-[#c9f3ee]" />Basic Plan</span>
-            <span className="flex items-center gap-2 text-[12px] font-medium text-[#526174]"><span className="h-2 w-2 rounded-full bg-[#d9d5f6]" />Premium Plan</span>
-            <span className="flex items-center gap-2 text-[12px] font-medium text-[#526174]"><span className="h-2 w-2 rounded-full bg-[#635bff]" />Enterprise plan</span>
-          </div>
-          <div className="flex items-center gap-2">
-            <button onClick={() => setView("monthly")} className={`h-9 rounded-lg border px-5 text-[12px] font-semibold ${view === "monthly" ? "border-[#635bff] text-[#635bff]" : "border-[#edf1f6] text-[#253143]"}`}>Monthly View</button>
-            <button onClick={() => setView("yearly")} className={`h-9 rounded-lg border px-5 text-[12px] font-semibold ${view === "yearly" ? "border-[#635bff] text-[#635bff]" : "border-[#edf1f6] text-[#253143]"}`}>Yearly View</button>
-          </div>
-        </div>
-
-        <div className="mt-7 grid grid-cols-[72px_1fr] gap-4">
-          <div className="flex h-[230px] flex-col justify-between pt-1 text-[11px] font-medium text-[#a6b2c0]">
-            {axis.map((label) => <span key={label}>{label}</span>)}
-          </div>
-          <div className="relative h-[230px] border-l border-[#e9eef6]">
-            <div className="absolute inset-0 flex flex-col justify-between">
-              {axis.map((label) => <div key={label} className="h-px bg-[#edf1f6]" />)}
+        {/* Scrollable Content Container */}
+        <div className="flex-1 overflow-y-auto pr-1 py-4">
+          <div className="flex flex-col gap-6">
+            {/* Legend & View Switcher */}
+            <div className="flex flex-col gap-4 sm:flex-row sm:items-center sm:justify-between">
+              <div className="flex flex-wrap items-center gap-5">
+                <span className="flex items-center gap-2 text-[12px] font-semibold text-[#526174]">
+                  <span className="h-2 w-2 rounded-full bg-[#c9f3ee]" />
+                  Basic Plan
+                </span>
+                <span className="flex items-center gap-2 text-[12px] font-semibold text-[#526174]">
+                  <span className="h-2 w-2 rounded-full bg-[#d9d5f6]" />
+                  Premium Plan
+                </span>
+                <span className="flex items-center gap-2 text-[12px] font-semibold text-[#526174]">
+                  <span className="h-2 w-2 rounded-full bg-[#635bff]" />
+                  Enterprise Plan
+                </span>
+              </div>
+              <div className="flex items-center gap-2">
+                <button onClick={() => setView("monthly")} className={`h-9 rounded-lg border px-5 text-[12px] font-semibold transition-all ${view === "monthly" ? "border-[#635bff] bg-[#f5f4ff] text-[#635bff]" : "border-[#edf1f6] text-[#253143] hover:bg-slate-50"}`}>Monthly View</button>
+                <button onClick={() => setView("yearly")} className={`h-9 rounded-lg border px-5 text-[12px] font-semibold transition-all ${view === "yearly" ? "border-[#635bff] bg-[#f5f4ff] text-[#635bff]" : "border-[#edf1f6] text-[#253143] hover:bg-slate-50"}`}>Yearly View</button>
+              </div>
             </div>
-            <div className="relative z-10 grid h-full grid-cols-6 items-end gap-6 px-5">
-              {labels.map((label) => (
-                <div key={label} className="flex h-full flex-col items-center justify-end gap-3">
-                  <div className="flex h-[210px] w-full max-w-[126px] flex-col-reverse overflow-hidden rounded-t-md">
-                    <div className="flex h-[48%] items-center justify-center bg-[#cbf3f0] text-[13px] font-semibold text-[#253143]">48%</div>
-                    <div className="flex h-[32%] items-center justify-center bg-[#dddaf6] text-[13px] font-semibold text-[#253143]">32%</div>
-                    <div className="flex h-[20%] items-center justify-center bg-[#635bff] text-[13px] font-semibold text-white">20%</div>
+
+            {/* Scrollable Chart (Horizontal Scroll for Mobile) */}
+            <div className="overflow-x-auto overflow-y-hidden pb-2">
+              <div className="mt-4 grid min-w-[640px] grid-cols-[76px_1fr] gap-4">
+                <div className="flex h-[230px] flex-col justify-between pt-1 text-[11px] font-medium text-[#a6b2c0]">
+                  {axis.map((label) => <span key={label}>{label}</span>)}
+                </div>
+                <div className="relative h-[230px] border-l border-[#e9eef6]">
+                  <div className="absolute inset-0 flex flex-col justify-between">
+                    {axis.map((label) => <div key={label} className="h-px bg-[#edf1f6]" />)}
                   </div>
-                  <span className="text-[11px] font-medium text-[#a6b2c0]">{label}</span>
+                  <div className="relative z-10 grid h-full grid-cols-6 items-end gap-6 px-5">
+                    {labels.map((label) => (
+                      <div key={label} className="flex h-full flex-col items-center justify-end gap-3">
+                        <div className="flex h-[210px] w-full max-w-[126px] flex-col-reverse overflow-hidden rounded-t-md">
+                          {/* Basic segment (bottom in flex-col-reverse): 20% */}
+                          <div className="flex h-[20%] items-center justify-center bg-[#cbf3f0] text-[12px] font-bold text-[#253143]">20%</div>
+                          {/* Premium segment (middle in flex-col-reverse): 32% */}
+                          <div className="flex h-[32%] items-center justify-center bg-[#dddaf6] text-[12px] font-bold text-[#253143]">32%</div>
+                          {/* Enterprise segment (top in flex-col-reverse): 48% */}
+                          <div className="flex h-[48%] items-center justify-center bg-[#635bff] text-[12px] font-bold text-white">48%</div>
+                        </div>
+                        <span className="text-[11px] font-medium text-[#a6b2c0]">{label}</span>
+                      </div>
+                    ))}
+                  </div>
+                </div>
+              </div>
+            </div>
+
+            {/* Card breakdown */}
+            <div className="grid grid-cols-1 gap-4 sm:grid-cols-3">
+              {[
+                ["Basic Plan", "20%", "text-[#00c9c9]"],
+                ["Premium Plan", "32%", "text-[#8275f6]"],
+                ["Enterprise Plan", "48%", "text-[#635bff]"]
+              ].map(([name, value, color]) => (
+                <div key={name} className="rounded-xl border border-[#edf1f6] bg-white px-5 py-4 shadow-[0_4px_12px_rgba(17,31,56,0.04)]">
+                  <div className="text-[12px] font-semibold text-[#8b99aa]">{name}</div>
+                  <div className={`mt-2 text-[26px] font-extrabold ${color}`}>{value}</div>
                 </div>
               ))}
             </div>
           </div>
         </div>
 
-        <div className="mt-10 grid grid-cols-1 gap-6 md:grid-cols-3">
-          {[
-            ["Basic Plan", "20%", "text-[#635bff]"],
-            ["Premium Plan", "32%", "text-[#00c9c9]"],
-            ["Enterprise Plan", "48%", "text-[#635bff]"]
-          ].map(([name, value, color]) => (
-            <div key={name} className="rounded-xl bg-white px-6 py-5 shadow-[0_4px_12px_rgba(17,31,56,0.08)]">
-              <div className="text-[13px] font-semibold text-[#253143]">{name}</div>
-              <div className={`mt-4 text-[28px] font-extrabold ${color}`}>{value}</div>
-            </div>
-          ))}
-        </div>
-
-        <div className="mt-6 flex justify-end">
+        {/* Footer */}
+        <div className="mt-4 flex justify-end border-t border-[#edf1f6] pt-4">
           <button onClick={onAnalytics} className="flex h-11 items-center gap-2 rounded-lg bg-[#635bff] px-7 text-[13px] font-bold text-white shadow-[0_8px_18px_rgba(94,83,252,0.22)]">
             <AnalyticsIcon />
             View Analytics
@@ -434,7 +465,7 @@ function ReportModal({
   );
 }
 
-export default function BillingRevenuePage() {
+export default function BillingRevenuePage({ setActiveTab }: { setActiveTab?: (tab: string) => void }) {
   const [records, setRecords] = useState<BillingRecord[]>(recordsSeed);
   const [failedPayments, setFailedPayments] = useState<FailedPayment[]>(failedPaymentsSeed);
   const [statusFilter, setStatusFilter] = useState<FilterStatus>("All Statuses");
@@ -483,6 +514,20 @@ export default function BillingRevenuePage() {
     showNotice(`Payments synced at ${now}`);
   };
 
+  const downloadUserDetails = (record: BillingRecord) => {
+    const content = `Salon: ${record.salon} (${record.legal})
+Owner: ${record.owner}
+Email: ${record.email}
+City: ${record.city}
+Invoice: ${record.invoice}
+Plan: ${record.plan}
+Amount: ${record.amount}
+Status: ${record.status}
+Billing Date: ${record.billingDate}
+Due Date: ${record.dueDate}`;
+    exportFile(`${record.salon.toLowerCase().replace(/[^a-z0-9]+/g, "_")}_details.txt`, content);
+  };
+
   if (selectedInvoice) {
     return (
       <InvoiceDetailPage
@@ -515,7 +560,24 @@ export default function BillingRevenuePage() {
               <div className="text-xs font-bold text-[#253143]">{card.title}</div>
               <div className={`mt-4 text-3xl font-extrabold ${card.tone}`}>{card.value}</div>
               <div className="mt-2 text-[11px] font-semibold text-[#263241]">{card.note}</div>
-              <button onClick={() => card.title === "Failed Payments" ? setModal("failed") : showNotice(`${card.title} details opened`)} className="mt-5 rounded-md bg-white px-5 py-2 text-[11px] font-bold text-[#40516a] shadow-[0_5px_12px_rgba(17,31,56,0.08)]">View All</button>
+              <button
+                onClick={() => {
+                  if (card.title === "Failed Payments") {
+                    setModal("failed");
+                  } else if (setActiveTab) {
+                    if (card.title === "2025 Revenue" || card.title === "Monthly Recurring Revenue") {
+                      setActiveTab("analytics_revenue_mrr_arr");
+                    } else if (card.title === "Total Active Subscriptions") {
+                      setActiveTab("analytics_customers_subscribers");
+                    }
+                  } else {
+                    showNotice(`${card.title} details opened`);
+                  }
+                }}
+                className="mt-5 rounded-md bg-white px-5 py-2 text-[11px] font-bold text-[#40516a] shadow-[0_5px_12px_rgba(17,31,56,0.08)]"
+              >
+                View All
+              </button>
             </div>
           );
         })}
@@ -540,11 +602,20 @@ export default function BillingRevenuePage() {
             <FilterButton id="time" value={timeFilter} options={["All Time", "This Month", "Last Month", "Custom..."]} openFilter={openFilter} setOpenFilter={setOpenFilter} showNotice={showNotice} onSelect={(value) => setTimeFilter(value as FilterTime)} />
           </div>
         </div>
-        <div className="overflow-hidden rounded-lg border border-[#edf1f6]"><div className="max-h-[360px] overflow-auto"><table className="w-full min-w-[920px] border-collapse text-left text-xs"><thead className="sticky top-0 z-10 bg-[#f5f4ff]"><tr><th className="w-9 px-3 py-3"><input type="checkbox" aria-label="Select all records" /></th><th className="px-3 py-3">Salon</th><th className="px-3 py-3">Invoice</th><th className="px-3 py-3">Plan</th><th className="px-3 py-3">Amount</th><th className="px-3 py-3">Status</th><th className="px-3 py-3">Billing Date</th><th className="px-3 py-3">Due Date</th><th className="px-3 py-3 text-center">Actions</th></tr></thead><tbody className="divide-y divide-[#edf1f6]">{filteredRecords.map((record) => <tr key={record.id} className={`${record.selected ? "bg-[#f3f1ff]" : "bg-white"} hover:bg-[#f9fbfe]`}><td className="px-3 py-3"><input type="checkbox" defaultChecked={record.selected} aria-label={`Select ${record.salon}`} /></td><td className="px-3 py-3"><div className="flex items-center gap-3"><AvatarMark /><div><div className="flex items-center gap-2"><span className="font-extrabold">{record.salon}</span><span className="rounded-full border px-1.5 py-0.5 text-[8px]">{record.legal}</span></div><div className="text-[10px] text-[#8190a4]">{record.owner} &bull; {record.city}</div><div className="text-[10px] text-[#a4afbd]">{record.email}</div></div></div></td><td className="px-3 py-3">{record.invoice}</td><td className="px-3 py-3"><span className={`${planClass(record.plan)} rounded-md px-2 py-1 text-[10px] font-bold`}>{record.plan}</span></td><td className="px-3 py-3">{record.amount}</td><td className="px-3 py-3"><span className={`${statusClass(record.status)} rounded-md px-2 py-1 text-[10px] font-bold`}>{record.status}</span>{record.tag && <div className="mt-1 text-[10px] text-[#ff4f82]">{record.tag}</div>}</td><td className="px-3 py-3">{record.billingDate}</td><td className="px-3 py-3">{record.dueDate}</td><td className="px-3 py-3"><div className="flex justify-center gap-2"><button onClick={() => setSelectedInvoice(record)} className="flex h-8 w-10 items-center justify-center rounded-lg bg-[#eeedff] text-[#635bff]" title="View Invoice"><EyeIcon /></button><button onClick={() => setSelectedInvoice(record)} className="flex h-8 w-10 items-center justify-center rounded-lg bg-[#eeedff] text-[#635bff]" title="Open Details"><DownloadIcon /></button><button onClick={() => retryRecord(record.id)} className="flex h-8 w-10 items-center justify-center rounded-lg bg-[#e9fbfc] text-[#00c4cb]"><RefreshIcon /></button></div></td></tr>)}</tbody></table></div></div>
+        <div className="overflow-hidden rounded-lg border border-[#edf1f6]"><div className="max-h-[360px] overflow-auto"><table className="w-full min-w-[920px] border-collapse text-left text-xs"><thead className="sticky top-0 z-10 bg-[#f5f4ff]"><tr><th className="w-9 px-3 py-3"><input type="checkbox" aria-label="Select all records" /></th><th className="px-3 py-3">Salon</th><th className="px-3 py-3">Invoice</th><th className="px-3 py-3">Plan</th><th className="px-3 py-3">Amount</th><th className="px-3 py-3">Status</th><th className="px-3 py-3">Billing Date</th><th className="px-3 py-3">Due Date</th><th className="px-3 py-3 text-center">Actions</th></tr></thead><tbody className="divide-y divide-[#edf1f6]">{filteredRecords.map((record) => <tr key={record.id} className={`${record.selected ? "bg-[#f3f1ff]" : "bg-white"} hover:bg-[#f9fbfe]`}><td className="px-3 py-3"><input type="checkbox" defaultChecked={record.selected} aria-label={`Select ${record.salon}`} /></td><td className="px-3 py-3"><div className="flex items-center gap-3"><AvatarMark /><div><div className="flex items-center gap-2"><span className="font-extrabold">{record.salon}</span><span className="rounded-full border px-1.5 py-0.5 text-[8px]">{record.legal}</span></div><div className="text-[10px] text-[#8190a4]">{record.owner} &bull; {record.city}</div><div className="text-[10px] text-[#a4afbd]">{record.email}</div></div></div></td><td className="px-3 py-3">{record.invoice}</td><td className="px-3 py-3"><span className={`${planClass(record.plan)} rounded-md px-2 py-1 text-[10px] font-bold`}>{record.plan}</span></td><td className="px-3 py-3">{record.amount}</td><td className="px-3 py-3"><span className={`${statusClass(record.status)} rounded-md px-2 py-1 text-[10px] font-bold`}>{record.status}</span>{record.tag && <div className="mt-1 text-[10px] text-[#ff4f82]">{record.tag}</div>}</td><td className="px-3 py-3">{record.billingDate}</td><td className="px-3 py-3">{record.dueDate}</td><td className="px-3 py-3"><div className="flex justify-center gap-2"><button onClick={() => setSelectedInvoice(record)} className="flex h-8 w-10 items-center justify-center rounded-lg bg-[#eeedff] text-[#635bff]" title="View Invoice"><EyeIcon /></button><button onClick={() => downloadUserDetails(record)} className="flex h-8 w-10 items-center justify-center rounded-lg bg-[#eeedff] text-[#635bff]" title="Download Details"><DownloadIcon /></button><button onClick={() => retryRecord(record.id)} className="flex h-8 w-10 items-center justify-center rounded-lg bg-[#e9fbfc] text-[#00c4cb]"><RefreshIcon /></button></div></td></tr>)}</tbody></table></div></div>
       </section>
 
       <div className="grid grid-cols-1 gap-5 lg:grid-cols-3">
-        <section className="relative rounded-xl bg-white p-6 shadow-[0_4px_18px_rgba(17,31,56,0.06)]"><button onClick={() => setModal("failed")} className="absolute right-5 top-0 rounded-b-lg bg-[#635bff] px-8 py-2 text-[11px] font-bold text-white">View Details</button><div className="text-sm font-bold">Recent Failed Payments</div><p className="mt-1 text-xs text-[#9aa7b8]">{failedPayments.length || 1} payments require attention</p><button onClick={() => setModal("failed")} className="mt-4 flex h-8 w-10 items-center justify-center rounded-lg bg-[#eeedff] text-[#635bff]"><EyeIcon /></button><button onClick={retryAllFailed} className="mt-4 h-10 w-full rounded-lg bg-[#ddd8ff] text-xs font-bold text-[#635bff]">Retry All Failed Payments</button></section>
+        <section className="rounded-xl bg-white p-6 shadow-[0_4px_18px_rgba(17,31,56,0.06)]">
+          <div className="flex items-start justify-between gap-4">
+            <div>
+              <div className="text-sm font-bold text-[#253143]">Recent Failed Payments</div>
+              <p className="mt-1 text-xs text-[#9aa7b8]">{failedPayments.length || 1} payments require attention</p>
+            </div>
+            <button onClick={() => setModal("failed")} className="rounded-lg border border-[#635bff] px-4 py-2 text-[11px] font-bold text-[#635bff]">View Details</button>
+          </div>
+          <button onClick={retryAllFailed} className="mt-12 h-10 w-full rounded-lg bg-[#ddd8ff] text-xs font-bold text-[#635bff]">Retry All Failed Payments</button>
+        </section>
         <section className="rounded-xl bg-white p-6 shadow-[0_4px_18px_rgba(17,31,56,0.06)]"><div className="text-sm font-bold">Pending Payments</div><p className="mt-1 text-xs text-[#9aa7b8]">8 payments in progress</p><button onClick={() => setStatusFilter("Pending")} className="mt-12 h-10 w-full rounded-lg bg-[#edf3fa] text-xs font-bold text-[#40516a]">Review Pending Payments</button></section>
         <section className="rounded-xl bg-white p-6 shadow-[0_4px_18px_rgba(17,31,56,0.06)]"><div className="text-sm font-bold">Billing Records Report</div><p className="mt-1 text-xs text-[#9aa7b8]">Export detailed financial reports</p><button onClick={() => setModal("report")} className="mt-12 flex h-10 w-full items-center justify-center gap-2 rounded-lg bg-[#edf3fa] text-xs font-bold text-[#40516a]"><DownloadIcon />Generate Report</button></section>
       </div>
