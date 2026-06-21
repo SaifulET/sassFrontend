@@ -587,14 +587,6 @@ export default function LeadsPage({ setActiveTab }: { setActiveTab?: (tab: strin
           <h1 className="text-sm font-extrabold text-[#1f2937]">Leads Management</h1>
         </div>
         <div className="flex flex-wrap items-center gap-3 w-full sm:w-auto justify-start sm:justify-end">
-            {/* Trash button */}
-            <button
-              type="button"
-              className="w-[95px] h-[44px] flex flex-row justify-center items-center py-[10px] px-4 gap-2.5 border border-[#FF6692] rounded-lg text-[#FF6692] hover:bg-red-50/30 transition-colors cursor-pointer"
-            >
-              <TrashIconMini color="#FF6692" />
-              <span className="text-[14px] font-medium leading-[24px] text-center font-sans">Trash</span>
-            </button>
 
             {/* Refresh Data button */}
             <button
@@ -830,7 +822,6 @@ export default function LeadsPage({ setActiveTab }: { setActiveTab?: (tab: strin
               <button
                 type="button"
                 onClick={() => {
-                  alert("Exporting CSV file...");
                   setExportModalOpen(false);
                 }}
                 className="px-6 py-2.5 bg-[#635BFF] hover:bg-[#4d42eb] text-white rounded-[8px] text-[14px] font-semibold shadow-md transition-all"

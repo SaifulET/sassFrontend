@@ -1458,9 +1458,7 @@ export default function LeadsPipelinePage({ setActiveTab }: { setActiveTab?: (ta
                 <button
                   type="button"
                   onClick={() => {
-                    if (window.confirm("Are you sure you want to delete all Lost leads?")) {
-                      setLeads((prev) => prev.filter((l) => l.stage !== "lost"));
-                    }
+                    setLeads((prev) => prev.filter((l) => l.stage !== "lost"));
                   }}
                   className="w-[95px] h-[44px] flex flex-row justify-center items-center py-[10px] px-4 gap-2.5 border border-[#FF6692] rounded-lg text-[#FF6692] hover:bg-red-50/30 transition-colors"
                 >
@@ -2408,7 +2406,6 @@ export default function LeadsPipelinePage({ setActiveTab }: { setActiveTab?: (ta
               <button
                 type="button"
                 onClick={() => {
-                  alert("Exporting CSV file...");
                   setExportModalOpen(false);
                 }}
                 className="px-5 py-2.5 bg-[#635BFF] hover:bg-[#4d42eb] text-white rounded-[8px] text-xs font-semibold shadow-md transition-all"
