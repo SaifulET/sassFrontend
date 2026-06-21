@@ -481,7 +481,6 @@ export default function LeadsPage({ setActiveTab }: { setActiveTab?: (tab: strin
   const [chartMode, setChartMode] = useState<ChartMode>("line");
   const [timeRange, setTimeRange] = useState<TimeRange>("Monthly");
   const [timeRangeOpen, setTimeRangeOpen] = useState(false);
-  const [exportModalOpen, setExportModalOpen] = useState(false);
   const [activeSubTab, setActiveSubTab] = useState<SubTab>("New Leads");
 
   const currentTableMonths = useMemo(() => {
@@ -576,6 +575,24 @@ export default function LeadsPage({ setActiveTab }: { setActiveTab?: (tab: strin
     setChartMode((m) => (m === "line" ? "bar" : "line"));
   }, []);
 
+  const handleExportCSV = () => {
+    const headers = ["Metric", ...currentTableMonths.map(m => m.label)];
+    const rows = currentTableRows.map((r) => [
+      r.label,
+      ...currentTableMonths.map(m => r.values[m.key as keyof typeof r.values])
+    ]);
+    const csvContent = [headers.join(","), ...rows.map(e => e.join(","))].join("\n");
+    const blob = new Blob([csvContent], { type: "text/csv;charset=utf-8;" });
+    const url = URL.createObjectURL(blob);
+    const link = document.createElement("a");
+    link.setAttribute("href", url);
+    link.setAttribute("download", `leads_analytics_report_${Date.now()}.csv`);
+    link.style.visibility = "hidden";
+    document.body.appendChild(link);
+    link.click();
+    document.body.removeChild(link);
+  };
+
   return (
     <div className="w-full min-w-0">
       <div className="flex w-full flex-col gap-5 text-left text-[#283442] animate-in fade-in slide-in-from-bottom-4 duration-300">
@@ -601,7 +618,7 @@ export default function LeadsPage({ setActiveTab }: { setActiveTab?: (tab: strin
             {/* Export button */}
             <button
               type="button"
-              onClick={() => setExportModalOpen(true)}
+              onClick={handleExportCSV}
               className="w-[149px] h-[44px] flex flex-row justify-center items-center py-[10px] px-4 gap-2.5 bg-[#635BFF] rounded-lg text-white hover:bg-[#4d42eb] transition-colors cursor-pointer"
             >
               <DownloadIcon color="#FFFFFF" />
@@ -774,64 +791,7 @@ export default function LeadsPage({ setActiveTab }: { setActiveTab?: (tab: strin
 
       </div>
 
-      {/* Export Data Modal */}
-      {exportModalOpen && (
-        <div className="fixed inset-0 z-50 flex items-center justify-center bg-slate-900/40 backdrop-blur-sm px-4">
-          <div className="relative w-full max-w-[638px] min-h-[350px] sm:h-[400px] max-h-[90vh] overflow-y-auto bg-white rounded-[12px] shadow-[0px_16px_32px_-8px_rgba(12,12,13,0.4)] flex flex-col p-6 gap-6 justify-between box-sizing-border-box">
-            <div className="flex flex-col sm:flex-row sm:items-center justify-between w-full border-b border-slate-100 pb-2 gap-2">
-              <div className="flex flex-col items-start gap-1">
-                <span className="font-manrope font-bold text-[18px] text-[#29343D]">
-                  Export Lead Conversion Data
-                </span>
-                <span className="font-manrope font-normal text-[14px] text-[#98A4AE]">
-                  Generate spreadsheets for all leads funnel reports
-                </span>
-              </div>
-              <button
-                type="button"
-                onClick={() => setExportModalOpen(false)}
-                className="w-8 h-8 flex items-center justify-center rounded-full text-[#29343D] hover:bg-[#EFF4FA] transition-colors"
-              >
-                <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round">
-                  <line x1="18" y1="6" x2="6" y2="18"></line>
-                  <line x1="6" y1="6" x2="18" y2="18"></line>
-                </svg>
-              </button>
-            </div>
 
-            <div className="flex-1 flex flex-col justify-center items-center gap-4 text-center">
-              <svg className="text-[#FFD648]" width="48" height="48" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
-                <path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z" />
-                <polyline points="14 2 14 8 20 8" />
-                <line x1="16" y1="13" x2="8" y2="13" />
-                <line x1="16" y1="17" x2="8" y2="17" />
-              </svg>
-              <span className="text-[14px] text-[#29343D] font-medium max-w-sm">
-                Click the button below to download the CSV statement of current leads conversion funnel.
-              </span>
-            </div>
-
-            <div className="flex justify-end pt-4 gap-3">
-              <button
-                type="button"
-                onClick={() => setExportModalOpen(false)}
-                className="px-4 py-2 border border-slate-200 text-slate-500 rounded-[8px] text-[14px] font-semibold hover:bg-slate-50"
-              >
-                Cancel
-              </button>
-              <button
-                type="button"
-                onClick={() => {
-                  setExportModalOpen(false);
-                }}
-                className="px-6 py-2.5 bg-[#635BFF] hover:bg-[#4d42eb] text-white rounded-[8px] text-[14px] font-semibold shadow-md transition-all"
-              >
-                Export CSV
-              </button>
-            </div>
-          </div>
-        </div>
-      )}
 
     </div>
   );
