@@ -15,7 +15,7 @@ import {
   Menu01Icon
 } from "@hugeicons/core-free-icons";
 
-const SidebarIcon = ({ src, size = 20, className = "" }: { src: string; size?: number; className?: string }) => {
+const SidebarIcon = ({ src, size = 24, className = "" }: { src: string; size?: number; className?: string }) => {
   return (
     <span
       className={`inline-block bg-current transition-all duration-200 ${className}`}
@@ -87,13 +87,13 @@ export default function Sidebar({
 
   // Salon specific sub-navigation links
   const salonNavigation = [
-    { id: "overview", label: "Overview" },
-    { id: "users_and_staff", label: "Users and Staff" },
-    { id: "billing", label: "Billing" },
-    { id: "settings", label: "Settings" },
-    { id: "activity", label: "Activity" },
-    { id: "support", label: "Support" },
-    { id: "automations", label: "Automations and Mail" }
+    { id: "overview", label: "Overview", icon: "/dashboard.svg" },
+    { id: "users_and_staff", label: "Users and Staff", icon: "/customers.svg" },
+    { id: "billing", label: "Billing", icon: "/billing.svg" },
+    { id: "settings", label: "Settings", icon: "/settings.svg" },
+    { id: "activity", label: "Activity", icon: "/performance.svg" },
+    { id: "support", label: "Support", icon: "/supports.svg" },
+    { id: "automations", label: "Automations and Mail", icon: "/automationAndMails.svg" }
   ];
 
   const handleMainItemClick = (id: string) => {
@@ -128,7 +128,7 @@ export default function Sidebar({
         }`}
         title={item.label}
       >
-        <SidebarIcon src={item.icon} size={20} />
+        <SidebarIcon src={item.icon} size={24} />
         {isHighlighted && (
           <span className="absolute right-0 w-1.5 h-1.5 rounded-full bg-white mr-1" />
         )}
@@ -213,7 +213,7 @@ export default function Sidebar({
                             : "text-[#7e8b9b] hover:bg-slate-50 hover:text-slate-900"
                         }`}
                       >
-                        <SidebarIcon src={item.icon} size={20} />
+                        <SidebarIcon src={item.icon} size={24} />
                       </button>
                       <div className="absolute left-full ml-3 px-2.5 py-1.5 bg-[#635BFF] text-white text-[10px] font-bold rounded-lg shadow-lg opacity-0 group-hover:opacity-100 transition-opacity duration-200 pointer-events-none whitespace-nowrap z-50">
                         {item.label}
@@ -225,62 +225,79 @@ export default function Sidebar({
                   const isLeadsActive = activeTab.startsWith("leads_") || activeTab === "leads" || activeTab === "analytics_customers_leads";
                   return (
                     <div key={item.id} className="flex flex-col gap-1 w-full">
-                      <button
-                        type="button"
-                        onClick={() => {
-                          const nextState = !leadsExpanded;
-                          setLeadsExpanded(nextState);
-                          if (nextState) {
-                            setAnalyticsExpanded(false);
-                          }
-                        }}
-                        className={`w-full flex items-center justify-between px-4 py-3 rounded-2xl transition-all duration-200 ${
-                          isLeadsActive
-                            ? "bg-[#F5F8FC]/60 text-[#635BFF]"
-                            : "text-[#7e8b9b] hover:bg-slate-50 hover:text-slate-900"
-                        }`}
-                      >
-                        <div className="flex items-center gap-3">
-                          <SidebarIcon src={item.icon} size={20} />
-                          <span className="text-xs font-semibold tracking-wide">{item.label}</span>
-                        </div>
-                        <span className={`text-[#b0bac9] transition-transform duration-200 ${leadsExpanded ? "rotate-180" : ""}`}>
-                          <ChevronDownIcon />
-                        </span>
-                      </button>
+                      {leadsExpanded ? (
+                        <div className="flex flex-col items-start p-4 gap-6 w-full bg-[#F1F2FE] rounded-lg flex-none border border-[#E8EEF5]">
+                          {/* Header: Click to collapse */}
+                          <button
+                            type="button"
+                            onClick={() => setLeadsExpanded(false)}
+                            className="flex flex-row items-center justify-between w-full h-6 text-[#635BFF]"
+                          >
+                            <div className="flex flex-row items-center gap-2">
+                              <SidebarIcon src={item.icon} size={24} className="text-[#635BFF]" />
+                              <span className="font-['Manrope'] font-semibold text-[15px] leading-[20px]">
+                                Leads
+                              </span>
+                            </div>
+                            <span className="text-[#635BFF] transform rotate-180">
+                              <ChevronDownIcon />
+                            </span>
+                          </button>
 
-                      {leadsExpanded && (
-                        <div className="mx-1.5 p-3.5 bg-[#F4F7FB] border border-[#E8EEF5] rounded-[16px] flex flex-col gap-2">
-                          {[
-                            {
-                              id: "leads_pipeline",
-                              label: "Pipeline",
-                              icon: "/pipeline.svg"
-                            },
-                            {
-                              id: "analytics_customers_leads",
-                              label: "Data Analysis",
-                              icon: "/dataAnalysis.svg"
-                            }
-                          ].map((sub) => {
-                            const isSubActive = activeTab === sub.id;
-                            return (
-                              <button
-                                key={sub.id}
-                                type="button"
-                                onClick={() => handleMainItemClick(sub.id)}
-                                className={`w-full flex items-center gap-2 px-4 py-2.5 rounded-xl text-[11px] font-bold tracking-wide transition-all duration-150 ${
-                                  isSubActive
-                                    ? "bg-white text-[#635BFF] shadow-sm"
-                                    : "bg-transparent text-[#7e8b9b] hover:bg-white/40 hover:text-slate-950"
-                                }`}
-                              >
-                                <SidebarIcon src={sub.icon} size={16} />
-                                <span>{sub.label}</span>
-                              </button>
-                            );
-                          })}
+                          {/* Sub-items list */}
+                          <div className="flex flex-col items-start p-0 gap-2 self-stretch w-full">
+                            {[
+                              {
+                                id: "leads_pipeline",
+                                label: "Pipeline",
+                                icon: "/pipeline.svg"
+                              },
+                              {
+                                id: "analytics_customers_leads",
+                                label: "Data Analysis",
+                                icon: "/dataAnalysis.svg"
+                              }
+                            ].map((sub) => {
+                              const isSubActive = activeTab === sub.id;
+                              return (
+                                <button
+                                  key={sub.id}
+                                  type="button"
+                                  onClick={() => handleMainItemClick(sub.id)}
+                                  className={`w-full h-[44px] rounded-full px-4 py-2 flex items-center justify-start text-[15px] font-normal font-sans leading-[20px] transition-all ${
+                                    isSubActive
+                                      ? "bg-[#635BFF] text-white shadow-sm"
+                                      : "bg-white text-[#635BFF] hover:bg-slate-50"
+                                  }`}
+                                >
+                                  <SidebarIcon src={sub.icon} size={24} className={isSubActive ? "text-white" : "text-[#635BFF]"} />
+                                  <span className="ml-2">{sub.label}</span>
+                                </button>
+                              );
+                            })}
+                          </div>
                         </div>
+                      ) : (
+                        <button
+                          type="button"
+                          onClick={() => {
+                            setLeadsExpanded(true);
+                            setAnalyticsExpanded(false);
+                          }}
+                          className={`w-full h-[44px] flex items-center justify-between px-4 py-2 rounded-full transition-all duration-200 ${
+                            isLeadsActive
+                              ? "bg-[#F5F8FC]/60 text-[#635BFF]"
+                              : "text-[#29343D] hover:bg-slate-50 hover:text-slate-900"
+                          }`}
+                        >
+                          <div className="flex items-center gap-3">
+                            <SidebarIcon src={item.icon} size={24} />
+                            <span className="text-[15px] font-normal font-sans leading-[20px]">{item.label}</span>
+                          </div>
+                          <span className="text-[#b0bac9]">
+                            <ChevronDownIcon />
+                          </span>
+                        </button>
                       )}
                     </div>
                   );
@@ -290,182 +307,198 @@ export default function Sidebar({
                   const isAnalyticsActive = activeTab.startsWith("analytics_") || activeTab === "analytics";
                   return (
                     <div key={item.id} className="flex flex-col gap-1 w-full">
-                      <button
-                        type="button"
-                        onClick={() => {
-                          const nextState = !analyticsExpanded;
-                          setAnalyticsExpanded(nextState);
-                          if (nextState) {
+                      {analyticsExpanded ? (
+                        <div className="flex flex-col items-start p-4 gap-6 w-full bg-[#F1F2FE] rounded-lg flex-none border border-[#E8EEF5]">
+                          {/* Header: Click to collapse */}
+                          <button
+                            type="button"
+                            onClick={() => setAnalyticsExpanded(false)}
+                            className="flex flex-row items-center justify-between w-full h-6 text-[#635BFF]"
+                          >
+                            <div className="flex flex-row items-center gap-2">
+                              <SidebarIcon src={item.icon} size={24} className="text-[#635BFF]" />
+                              <span className="font-['Manrope'] font-semibold text-[15px] leading-[20px]">
+                                Analytics
+                              </span>
+                            </div>
+                            <span className="text-[#635BFF] transform rotate-180">
+                              <ChevronDownIcon />
+                            </span>
+                          </button>
+
+                          {/* Sub-items list */}
+                          <div className="flex flex-col items-start p-0 gap-4 self-stretch w-full">
+                            {/* Revenue Group */}
+                            <div className="flex flex-col gap-2 w-full">
+                              <button
+                                type="button"
+                                onClick={() => {
+                                  const nextState = !revenueExpanded;
+                                  setRevenueExpanded(nextState);
+                                  if (nextState) {
+                                    setCustomersExpanded(false);
+                                    setPerformanceExpanded(false);
+                                  }
+                                }}
+                                className="flex flex-row justify-between items-center px-4 py-2 w-full h-[44px] bg-[#DDDBFF] rounded-full text-[#635BFF] font-['Manrope'] font-semibold text-[15px]"
+                              >
+                                <div className="flex items-center gap-2">
+                                  <SidebarIcon src="/revenue.svg" size={24} className="text-[#635BFF]" />
+                                  <span>Revenue</span>
+                                </div>
+                                <span className={`transition-transform duration-200 ${revenueExpanded ? "rotate-180" : ""}`}>
+                                  <ChevronDownIcon />
+                                </span>
+                              </button>
+                              {revenueExpanded && (
+                                <div className="flex flex-col gap-2 pl-2 w-full">
+                                  {[
+                                    { id: "analytics_revenue_mrr_arr", label: "MRR / ARR" },
+                                    { id: "analytics_revenue_asp", label: "ASP" },
+                                    { id: "analytics_revenue_ltv", label: "LTV" },
+                                    { id: "analytics_revenue_cashflow", label: "Cashflow" }
+                                  ].map((sub) => {
+                                    const isSubActive = activeTab === sub.id;
+                                    return (
+                                      <button
+                                        key={sub.id}
+                                        type="button"
+                                        onClick={() => handleMainItemClick(sub.id)}
+                                        className={`w-full h-[44px] rounded-full px-4 py-2 flex items-center justify-start text-[15px] font-normal font-sans leading-[20px] transition-all ${
+                                          isSubActive
+                                            ? "bg-[#635BFF] text-white shadow-sm"
+                                            : "bg-white text-[#635BFF] hover:bg-slate-50"
+                                        }`}
+                                      >
+                                        {sub.label}
+                                      </button>
+                                    );
+                                  })}
+                                </div>
+                              )}
+                            </div>
+
+                            {/* Customers Group */}
+                            <div className="flex flex-col gap-2 w-full">
+                              <button
+                                type="button"
+                                onClick={() => {
+                                  const nextState = !customersExpanded;
+                                  setCustomersExpanded(nextState);
+                                  if (nextState) {
+                                    setRevenueExpanded(false);
+                                    setPerformanceExpanded(false);
+                                  }
+                                }}
+                                className="flex flex-row justify-between items-center px-4 py-2 w-full h-[44px] bg-[#DDDBFF] rounded-full text-[#635BFF] font-['Manrope'] font-semibold text-[15px]"
+                              >
+                                <div className="flex items-center gap-2">
+                                  <SidebarIcon src="/customers.svg" size={24} className="text-[#635BFF]" />
+                                  <span>Customers</span>
+                                </div>
+                                <span className={`transition-transform duration-200 ${customersExpanded ? "rotate-180" : ""}`}>
+                                  <ChevronDownIcon />
+                                </span>
+                              </button>
+                              {customersExpanded && (
+                                <div className="flex flex-col gap-2 pl-2 w-full">
+                                  {[
+                                    { id: "analytics_customers_subscribers", label: "Subscribers" },
+                                    { id: "analytics_customers_leads", label: "Leads" },
+                                    { id: "analytics_customers_trials", label: "Trials" }
+                                  ].map((sub) => {
+                                    const isSubActive = activeTab === sub.id;
+                                    return (
+                                      <button
+                                        key={sub.id}
+                                        type="button"
+                                        onClick={() => handleMainItemClick(sub.id)}
+                                        className={`w-full h-[44px] rounded-full px-4 py-2 flex items-center justify-start text-[15px] font-normal font-sans leading-[20px] transition-all ${
+                                          isSubActive
+                                            ? "bg-[#635BFF] text-white shadow-sm"
+                                            : "bg-white text-[#635BFF] hover:bg-slate-50"
+                                        }`}
+                                      >
+                                        {sub.label}
+                                      </button>
+                                    );
+                                  })}
+                                </div>
+                              )}
+                            </div>
+
+                            {/* Performance Group */}
+                            <div className="flex flex-col gap-2 w-full">
+                              <button
+                                type="button"
+                                onClick={() => {
+                                  const nextState = !performanceExpanded;
+                                  setPerformanceExpanded(nextState);
+                                  if (nextState) {
+                                    setRevenueExpanded(false);
+                                    setCustomersExpanded(false);
+                                  }
+                                }}
+                                className="flex flex-row justify-between items-center px-4 py-2 w-full h-[44px] bg-[#DDDBFF] rounded-full text-[#635BFF] font-['Manrope'] font-semibold text-[15px]"
+                              >
+                                <div className="flex items-center gap-2">
+                                  <SidebarIcon src="/performance.svg" size={24} className="text-[#635BFF]" />
+                                  <span>Performance</span>
+                                </div>
+                                <span className={`transition-transform duration-200 ${performanceExpanded ? "rotate-180" : ""}`}>
+                                  <ChevronDownIcon />
+                                </span>
+                              </button>
+                              {performanceExpanded && (
+                                <div className="flex flex-col gap-2 pl-2 w-full">
+                                  {[
+                                    { id: "analytics_performance_arpa", label: "ARPA" },
+                                    { id: "analytics_performance_churn", label: "Churn" },
+                                    { id: "analytics_performance_cohorts", label: "Cohorts" },
+                                    { id: "analytics_performance_map", label: "Map" }
+                                  ].map((sub) => {
+                                    const isSubActive = activeTab === sub.id;
+                                    return (
+                                      <button
+                                        key={sub.id}
+                                        type="button"
+                                        onClick={() => handleMainItemClick(sub.id)}
+                                        className={`w-full h-[44px] rounded-full px-4 py-2 flex items-center justify-start text-[15px] font-normal font-sans leading-[20px] transition-all ${
+                                          isSubActive
+                                            ? "bg-[#635BFF] text-white shadow-sm"
+                                            : "bg-white text-[#635BFF] hover:bg-slate-50"
+                                        }`}
+                                      >
+                                        {sub.label}
+                                      </button>
+                                    );
+                                  })}
+                                </div>
+                              )}
+                            </div>
+                          </div>
+                        </div>
+                      ) : (
+                        <button
+                          type="button"
+                          onClick={() => {
+                            setAnalyticsExpanded(true);
                             setLeadsExpanded(false);
-                          }
-                        }}
-                        className={`w-full flex items-center justify-between px-4 py-3 rounded-2xl transition-all duration-200 ${
-                          isAnalyticsActive
-                            ? "bg-[#F5F8FC]/60 text-[#635BFF]"
-                            : "text-[#7e8b9b] hover:bg-slate-50 hover:text-slate-900"
-                        }`}
-                      >
-                        <div className="flex items-center gap-3">
-                          <SidebarIcon src={item.icon} size={20} />
-                          <span className="text-xs font-semibold tracking-wide">{item.label}</span>
-                        </div>
-                        <span className={`text-[#b0bac9] transition-transform duration-200 ${analyticsExpanded ? "rotate-180" : ""}`}>
-                          <ChevronDownIcon />
-                        </span>
-                      </button>
-
-                      {analyticsExpanded && (
-                        <div className="mx-1.5 p-3.5 bg-[#F4F7FB] border border-[#E8EEF5] rounded-[16px] flex flex-col gap-3.5">
-                          {/* Revenue Submenu */}
-                          <div className="flex flex-col gap-2">
-                            <button
-                              type="button"
-                              onClick={() => {
-                                const nextState = !revenueExpanded;
-                                setRevenueExpanded(nextState);
-                                if (nextState) {
-                                  setCustomersExpanded(false);
-                                  setPerformanceExpanded(false);
-                                }
-                              }}
-                              className="w-full flex items-center justify-between py-1.5 px-2 rounded-xl text-[#29343D] hover:bg-[#EFF4FA] transition-colors"
-                            >
-                              <div className="flex items-center gap-2">
-                                <SidebarIcon src="/revenue.svg" size={14} className="text-[#29343D]" />
-                                <span className="text-xs font-bold text-[#29343D]">Revenue</span>
-                              </div>
-                              <span className={`text-[#b0bac9] transition-transform duration-200 ${revenueExpanded ? "rotate-180" : ""}`}>
-                                <ChevronDownIcon />
-                              </span>
-                            </button>
-
-                            {revenueExpanded && (
-                              <div className="flex flex-col gap-1.5 pl-3">
-                                {[
-                                  { id: "analytics_revenue_mrr_arr", label: "MRR / ARR" },
-                                  { id: "analytics_revenue_asp", label: "ASP" },
-                                  { id: "analytics_revenue_ltv", label: "LTV" },
-                                  { id: "analytics_revenue_cashflow", label: "Cashflow" }
-                                ].map((sub) => {
-                                  const isSubActive = activeTab === sub.id;
-                                  return (
-                                    <button
-                                      key={sub.id}
-                                      type="button"
-                                      onClick={() => handleMainItemClick(sub.id)}
-                                      className={`w-full text-left px-4 py-2.5 rounded-xl text-[11px] font-bold tracking-wide transition-all duration-150 ${
-                                        isSubActive
-                                          ? "bg-[#635BFF] text-white shadow-sm"
-                                          : "bg-white border border-[#E0E6EB] text-[#7e8b9b] hover:bg-slate-50 hover:text-slate-950"
-                                      }`}
-                                    >
-                                      {sub.label}
-                                    </button>
-                                  );
-                                })}
-                              </div>
-                            )}
+                          }}
+                          className={`w-full h-[44px] flex items-center justify-between px-4 py-2 rounded-full transition-all duration-200 ${
+                            isAnalyticsActive
+                              ? "bg-[#F5F8FC]/60 text-[#635BFF]"
+                              : "text-[#29343D] hover:bg-slate-50 hover:text-slate-900"
+                          }`}
+                        >
+                          <div className="flex items-center gap-3">
+                            <SidebarIcon src={item.icon} size={24} />
+                            <span className="text-xs font-semibold tracking-wide">{item.label}</span>
                           </div>
-
-                          {/* Customers Submenu */}
-                          <div className="flex flex-col gap-2">
-                            <button
-                              type="button"
-                              onClick={() => {
-                                const nextState = !customersExpanded;
-                                setCustomersExpanded(nextState);
-                                if (nextState) {
-                                  setRevenueExpanded(false);
-                                  setPerformanceExpanded(false);
-                                }
-                              }}
-                              className="w-full flex items-center justify-between py-1.5 px-2 rounded-xl text-[#29343D] hover:bg-[#EFF4FA] transition-colors"
-                            >
-                              <div className="flex items-center gap-2">
-                                <SidebarIcon src="/customers.svg" size={14} className="text-[#29343D]" />
-                                <span className="text-xs font-bold text-[#29343D]">Customers</span>
-                              </div>
-                              <span className={`text-[#b0bac9] transition-transform duration-200 ${customersExpanded ? "rotate-180" : ""}`}>
-                                <ChevronDownIcon />
-                              </span>
-                            </button>
-                            {customersExpanded && (
-                              <div className="flex flex-col gap-1.5 pl-3">
-                                {[
-                                  { id: "analytics_customers_subscribers", label: "Subscribers" },
-                                  { id: "analytics_customers_leads", label: "Leads" },
-                                  { id: "analytics_customers_trials", label: "Trials" }
-                                ].map((sub) => {
-                                  const isSubActive = activeTab === sub.id;
-                                  return (
-                                    <button
-                                      key={sub.id}
-                                      type="button"
-                                      onClick={() => handleMainItemClick(sub.id)}
-                                      className={`w-full text-left px-4 py-2.5 rounded-xl text-[11px] font-bold tracking-wide transition-all duration-150 ${
-                                        isSubActive
-                                          ? "bg-[#635BFF] text-white shadow-sm"
-                                          : "bg-white border border-[#E0E6EB] text-[#7e8b9b] hover:bg-slate-50 hover:text-slate-950"
-                                      }`}
-                                    >
-                                      {sub.label}
-                                    </button>
-                                  );
-                                })}
-                              </div>
-                            )}
-                          </div>
-
-                          {/* Performance Submenu */}
-                          <div className="flex flex-col gap-2">
-                            <button
-                              type="button"
-                              onClick={() => {
-                                const nextState = !performanceExpanded;
-                                setPerformanceExpanded(nextState);
-                                if (nextState) {
-                                  setRevenueExpanded(false);
-                                  setCustomersExpanded(false);
-                                }
-                              }}
-                              className="w-full flex items-center justify-between py-1.5 px-2 rounded-xl text-[#29343D] hover:bg-[#EFF4FA] transition-colors"
-                            >
-                              <div className="flex items-center gap-2">
-                                <SidebarIcon src="/performance.svg" size={14} className="text-[#29343D]" />
-                                <span className="text-xs font-bold text-[#29343D]">Performance</span>
-                              </div>
-                              <span className={`text-[#b0bac9] transition-transform duration-200 ${performanceExpanded ? "rotate-180" : ""}`}>
-                                <ChevronDownIcon />
-                              </span>
-                            </button>
-                            {performanceExpanded && (
-                              <div className="flex flex-col gap-1.5 pl-3">
-                                {[
-                                  { id: "analytics_performance_arpa", label: "ARPA" },
-                                  { id: "analytics_performance_churn", label: "Churn" },
-                                  { id: "analytics_performance_cohorts", label: "Cohorts" },
-                                  { id: "analytics_performance_map", label: "Map" }
-                                ].map((sub) => {
-                                  const isSubActive = activeTab === sub.id;
-                                  return (
-                                    <button
-                                      key={sub.id}
-                                      type="button"
-                                      onClick={() => handleMainItemClick(sub.id)}
-                                      className={`w-full text-left px-4 py-2.5 rounded-xl text-[11px] font-bold tracking-wide transition-all duration-150 ${
-                                        isSubActive
-                                          ? "bg-[#635BFF] text-white shadow-sm"
-                                          : "bg-white border border-[#E0E6EB] text-[#7e8b9b] hover:bg-slate-50 hover:text-slate-950"
-                                      }`}
-                                    >
-                                      {sub.label}
-                                    </button>
-                                  );
-                                })}
-                              </div>
-                            )}
-                          </div>
-                        </div>
+                          <span className="text-[#b0bac9]">
+                            <ChevronDownIcon />
+                          </span>
+                        </button>
                       )}
                     </div>
                   );
@@ -476,14 +509,14 @@ export default function Sidebar({
                     key={item.id}
                     type="button"
                     onClick={() => handleMainItemClick(item.id)}
-                    className={`w-full flex items-center gap-3 px-4 py-3 rounded-2xl transition-all duration-200 ${
+                    className={`w-full h-[44px] flex items-center gap-2 px-4 py-2 rounded-full transition-all duration-200 ${
                       isActive
-                        ? "bg-[#5e53fc] text-white shadow-md shadow-indigo-150"
-                        : "text-[#7e8b9b] hover:bg-slate-50 hover:text-slate-900"
+                        ? "bg-[#635BFF] text-white shadow-md shadow-indigo-150"
+                        : "text-[#29343D] hover:bg-slate-50 hover:text-slate-900"
                     }`}
                   >
-                    <SidebarIcon src={item.icon} size={20} />
-                    <span className="text-xs font-semibold tracking-wide">{item.label}</span>
+                    <SidebarIcon src={item.icon} size={24} className={isActive ? "text-white" : "text-[#98A4AE]"} />
+                    <span className="font-sans font-normal text-[15px] leading-[20px] tracking-wide">{item.label}</span>
                   </button>
                 );
               })}
@@ -504,13 +537,13 @@ export default function Sidebar({
                       <button
                         type="button"
                         onClick={() => handleMainItemClick(item.id)}
-                        className={`w-10 h-10 rounded-xl flex items-center justify-center transition-all duration-200 ${
+                        className={`w-10 h-10 rounded-full flex items-center justify-center transition-all duration-200 ${
                           isActive
-                            ? "bg-[#5e53fc] text-white shadow-md shadow-indigo-150"
-                            : "text-[#7e8b9b] hover:bg-slate-50 hover:text-slate-900"
+                            ? "bg-[#635BFF] text-white shadow-md shadow-indigo-150"
+                            : "text-[#29343D] hover:bg-slate-50 hover:text-slate-900"
                         }`}
                       >
-                        <SidebarIcon src={item.icon} size={20} />
+                        <SidebarIcon src={item.icon} size={24} className={isActive ? "text-white" : "text-[#98A4AE]"} />
                       </button>
                       <div className="absolute left-full ml-3 px-2.5 py-1.5 bg-[#635BFF] text-white text-[10px] font-bold rounded-lg shadow-lg opacity-0 group-hover:opacity-100 transition-opacity duration-200 pointer-events-none whitespace-nowrap z-50">
                         {item.label}
@@ -522,14 +555,14 @@ export default function Sidebar({
                   <button
                     key={item.id}
                     onClick={() => handleMainItemClick(item.id)}
-                    className={`w-full flex items-center gap-3 px-4 py-3 rounded-2xl transition-all duration-200 ${
+                    className={`w-full h-[44px] flex items-center gap-2 px-4 py-2 rounded-full transition-all duration-200 ${
                       isActive
-                        ? "bg-[#5e53fc] text-white shadow-md shadow-indigo-150"
-                        : "text-[#7e8b9b] hover:bg-slate-50 hover:text-slate-900"
+                        ? "bg-[#635BFF] text-white shadow-md shadow-indigo-150"
+                        : "text-[#29343D] hover:bg-slate-50 hover:text-slate-900"
                     }`}
                   >
-                    <SidebarIcon src={item.icon} size={20} />
-                    <span className="text-xs font-semibold tracking-wide">{item.label}</span>
+                    <SidebarIcon src={item.icon} size={24} className={isActive ? "text-white" : "text-[#98A4AE]"} />
+                    <span className="font-sans font-normal text-[15px] leading-[20px] tracking-wide">{item.label}</span>
                   </button>
                 );
               })}
@@ -552,57 +585,73 @@ export default function Sidebar({
       )}
 
       {/* DESKTOP SIDEBAR: Double column fixed structure starting at top (top-0) */}
-      <aside className={`hidden lg:flex fixed top-0 bottom-0 left-0 ${isExpanded ? "w-72" : "w-20"} bg-white z-30 transition-all duration-300`}>
+      <aside className={`hidden lg:flex fixed top-0 bottom-0 left-0 ${isExpanded ? "w-72" : "w-20"} bg-white z-30 border-r border-[#eef2f6] flex flex-row transition-all duration-300`}>
+        
         {/* Column 1: Narrow vertical icon bar */}
-        <div className="w-20 bg-white border-r border-[#eef2f6] flex flex-col items-center py-6 justify-between shrink-0">
-          <div className="flex flex-col items-center gap-4.5 w-full">
+        <div className="w-20 bg-white border-r border-[#eef2f6] flex flex-col items-center shrink-0">
+          {/* Header block for Hamburger button */}
+          <div className="h-[63px] w-full border-b border-[#eef2f6] flex items-center justify-center shrink-0">
             <button
               onClick={() => setIsExpanded(!isExpanded)}
-              className="p-2 mb-2 rounded-xl text-slate-500 hover:bg-slate-50 hover:text-slate-800 transition-colors"
+              className="p-2 rounded-xl text-slate-500 hover:bg-slate-50 hover:text-slate-800 transition-colors"
             >
               <HugeiconsIcon icon={Menu01Icon} size={20} />
             </button>
-            {mainNavigation.map(renderNarrowIcon)}
           </div>
-          <div className="flex flex-col items-center gap-4.5 w-full">
-            {secondaryNavigation.map(renderNarrowIcon)}
+
+          {/* Icons container */}
+          <div className="flex-1 flex flex-col items-center py-6 justify-between w-full overflow-y-auto">
+            <div className="flex flex-col items-center gap-4.5 w-full">
+              {mainNavigation.map(renderNarrowIcon)}
+            </div>
+            <div className="flex flex-col items-center gap-4.5 w-full">
+              {secondaryNavigation.map(renderNarrowIcon)}
+            </div>
           </div>
         </div>
 
         {/* Column 2: Extended text menu bar */}
         {isExpanded && (
-          <div className="w-52 bg-[#f8fafc] border-r border-[#eef2f6] flex flex-col pt-[87px] pb-6 px-3.5 overflow-y-auto animate-in fade-in duration-200">
-          <div className="flex flex-col gap-6 w-full text-left">
-            <div>
-              <span className="px-4 text-[10px] font-extrabold uppercase tracking-wider text-[#b0bac9]">
-                Salon
-              </span>
-              <div className="flex flex-col gap-1 mt-3.5">
-                {salonNavigation.map((item) => {
-                  const isActive = salonSubTab === item.id;
-                  return (
-                    <button
-                      key={item.id}
-                      onClick={() => {
-                        setSalonSubTab(item.id);
-                        setIsOpen(false);
-                      }}
-                      className={`w-full text-left px-4 py-3 rounded-2xl text-xs font-semibold tracking-wide transition-all duration-200 ${
-                        isActive
-                          ? "bg-[#5e53fc] text-white shadow-sm"
-                          : "text-[#7e8b9b] hover:bg-slate-50 hover:text-slate-950"
-                      }`}
-                    >
-                      {item.label}
-                    </button>
-                  );
-                })}
+          <div className="w-52 bg-[#f8fafc] flex flex-col shrink-0">
+            {/* Header block for Logo */}
+            <div className="h-[63px] w-full border-b border-[#eef2f6] flex items-center px-4 shrink-0 bg-white">
+              <img src="/logo.svg" alt="MatDash" className="w-[120px] h-[50px] object-contain" />
+            </div>
+
+            {/* Menu container */}
+            <div className="flex-1 pt-6 pb-6 px-3.5 overflow-y-auto animate-in fade-in duration-200">
+              <div className="flex flex-col gap-6 w-full text-left">
+                <div>
+                  <span className="px-4 text-[10px] font-extrabold uppercase tracking-wider text-[#b0bac9]">
+                    Salon
+                  </span>
+                  <div className="flex flex-col gap-1 mt-3.5">
+                    {salonNavigation.map((item) => {
+                      const isActive = salonSubTab === item.id;
+                      return (
+                        <button
+                          key={item.id}
+                          onClick={() => {
+                            setSalonSubTab(item.id);
+                            setIsOpen(false);
+                          }}
+                          className={`w-full text-left px-4 py-2 h-[44px] rounded-full font-sans font-normal text-[15px] leading-[20px] transition-all duration-200 ${
+                            isActive
+                              ? "bg-[#635BFF] text-white shadow-sm"
+                              : "text-[#29343D] hover:bg-slate-50 hover:text-slate-950"
+                          }`}
+                        >
+                          {item.label}
+                        </button>
+                      );
+                    })}
+                  </div>
+                </div>
               </div>
             </div>
           </div>
-        </div>
-      )}
-    </aside>
+        )}
+      </aside>
 
       {/* MOBILE DRAWER: Full sliding menu bar containing narrow & extended side-by-side */}
       <aside
@@ -643,10 +692,10 @@ export default function Sidebar({
                         setSalonSubTab(item.id);
                         setIsOpen(false);
                       }}
-                      className={`w-full text-left px-4 py-3 rounded-2xl text-xs font-semibold tracking-wide transition-all duration-200 ${
+                      className={`w-full text-left px-4 py-2 h-[44px] rounded-full font-sans font-normal text-[15px] leading-[20px] transition-all duration-200 ${
                         isActive
-                          ? "bg-[#5e53fc] text-white shadow-sm"
-                          : "text-[#7e8b9b] hover:bg-slate-50 hover:text-slate-950"
+                          ? "bg-[#635BFF] text-white shadow-sm"
+                          : "text-[#29343D] hover:bg-slate-50 hover:text-slate-950"
                       }`}
                     >
                       {item.label}

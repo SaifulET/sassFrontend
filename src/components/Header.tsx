@@ -51,12 +51,6 @@ export default function Header({ activeTab, setActiveTab, selectedSalonId, toggl
           <HugeiconsIcon icon={Menu01Icon} size={22} />
         </button>
 
-        {/* Brand/Logo Header - Desktop */}
-        {selectedSalonId !== null && (
-          <div className="hidden lg:flex items-center shrink-0 lg:w-44">
-            <img src="/logo.svg" alt="MatDash" className="w-[135px] h-[80px] object-contain" />
-          </div>
-        )}
 
         {/* Search Bar */}
         <div className="relative w-full hidden md:block max-w-sm">
