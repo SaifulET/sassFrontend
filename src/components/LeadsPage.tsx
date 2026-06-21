@@ -186,12 +186,10 @@ function LeadsChart({
   timeRange,
   activeSubTab,
   chartMode,
-  setExportModalOpen,
 }: {
   timeRange: TimeRange;
   activeSubTab: SubTab;
   chartMode: ChartMode;
-  setExportModalOpen: (open: boolean) => void;
 }) {
   const [hoveredIndex, setHoveredIndex] = useState<number | null>(null);
   const svgRef = useRef<SVGSVGElement>(null);
@@ -702,7 +700,6 @@ export default function LeadsPage({ setActiveTab }: { setActiveTab?: (tab: strin
                 timeRange={timeRange}
                 activeSubTab={activeSubTab}
                 chartMode={chartMode}
-                setExportModalOpen={setExportModalOpen}
               />
             </div>
           </div>
