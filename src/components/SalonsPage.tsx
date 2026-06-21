@@ -444,7 +444,7 @@ export default function SalonsPage({
       <div className="rounded-2xl bg-white px-5 py-4 shadow-[0_4px_18px_rgba(17,31,56,0.06)]">
         <div className="flex flex-col lg:flex-row lg:items-center lg:justify-between gap-4">
           <div>
-            <div className="text-sm font-extrabold text-[#1f2937]">Salon Management</div>
+            <div className="text-base font-bold leading-none tracking-normal text-[#1f2937]">Salon Management</div>
           </div>
           <div className="flex flex-row flex-nowrap items-center p-0 gap-1.5 xs:gap-2.5 sm:gap-6 w-full sm:w-auto h-auto min-h-[44px] flex-none order-1 grow-0 justify-between sm:justify-end self-center sm:self-auto overflow-x-auto no-scrollbar">
             {/* Refresh Data */}

@@ -183,10 +183,10 @@ export default function SalonSupportPage({ salon, onBack }: SalonSupportPageProp
   return (
     <div className="flex flex-col gap-6 animate-in fade-in duration-300 w-full text-left">
       {/* Top Header Breadcrumbs Card */}
-      <div className="bg-white rounded-2xl border border-[#eef2f6] shadow-sm px-6 py-4 flex items-center justify-between w-full">
-        <h1 className="text-sm font-bold text-slate-800">
+      <div className="rounded-2xl bg-white px-5 py-4 shadow-[0_4px_18px_rgba(17,31,56,0.06)] flex items-center justify-between w-full">
+        <div className="text-base font-bold leading-none tracking-normal text-[#1f2937]">
           {salon.name}
-        </h1>
+        </div>
         <div className="flex items-center gap-2 text-xs font-semibold">
           <button onClick={onBack} className="p-1.5 border border-slate-200 rounded-lg hover:bg-slate-50 transition-colors inline-flex">
             <HomeIcon />

@@ -171,7 +171,7 @@ export default function DashboardPage({ onViewAllActivities, onNavigate, onViewS
       <div className="rounded-2xl bg-white px-5 py-4 shadow-[0_4px_18px_rgba(17,31,56,0.06)]">
         <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
           <div>
-            <div className="text-sm font-extrabold text-[#1f2937]">Dashboard</div>
+            <div className="text-base font-bold leading-none tracking-normal text-[#1f2937]">Dashboard</div>
           </div>
 
           <div className="flex items-center gap-3">

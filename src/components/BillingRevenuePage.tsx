@@ -541,7 +541,7 @@ Due Date: ${record.dueDate}`;
     <div className="flex w-full flex-col gap-5 text-left text-[#283442]">
       <div className="rounded-2xl bg-white px-5 py-4 shadow-[0_4px_18px_rgba(17,31,56,0.06)]">
         <div className="flex flex-col gap-4 lg:flex-row lg:items-center lg:justify-between">
-          <div className="text-sm font-extrabold text-[#1f2937]">Billing &amp; Revenue</div>
+          <div className="text-base font-bold leading-none tracking-normal text-[#1f2937]">Billing &amp; Revenue</div>
           <div className="flex flex-wrap items-center gap-3">
             <div className="flex h-9 min-w-[230px] items-center gap-2 rounded-lg border border-[#e8edf5] bg-white px-3 text-[#8b99aa]"><SearchIcon /><input type="search" placeholder="Search" className="w-full bg-transparent text-xs font-medium outline-none" onChange={(event) => showNotice(event.target.value ? `Searching ${event.target.value}` : "Ready")} /></div>
             <button onClick={retryAllFailed} className="flex h-9 items-center gap-2 rounded-lg bg-[#f5f7fc] px-4 text-xs font-bold text-[#40516a]"><RefreshIcon />Reset Failed</button>

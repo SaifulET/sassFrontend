@@ -90,7 +90,7 @@ export default function SalonSettingsPage({ salon, onBack }: SalonSettingsPagePr
     <div className="flex w-full flex-col gap-5 text-left text-[#283442] animate-in fade-in duration-300">
       {/* Top Header Breadcrumbs Card */}
       <div className="rounded-2xl bg-white px-5 py-4 shadow-[0_4px_18px_rgba(17,31,56,0.06)] flex items-center justify-between w-full">
-        <div className="text-sm font-extrabold text-[#1f2937]">
+        <div className="text-base font-bold leading-none tracking-normal text-[#1f2937]">
           {salon.name}
         </div>
         <div className="flex items-center gap-2 text-xs font-semibold">

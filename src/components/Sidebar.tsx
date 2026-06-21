@@ -93,7 +93,7 @@ export default function Sidebar({
     { id: "settings", label: "Settings", icon: "/settings.svg" },
     { id: "activity", label: "Activity", icon: "/performance.svg" },
     { id: "support", label: "Support", icon: "/supports.svg" },
-    { id: "automations", label: "Automations and Mail", icon: "/automationAndMails.svg" }
+    { id: "automations", label: "Automations & Mail", icon: "/automationAndMails.svg" }
   ];
 
   const handleMainItemClick = (id: string) => {
@@ -493,7 +493,7 @@ export default function Sidebar({
                         >
                           <div className="flex items-center gap-3">
                             <SidebarIcon src={item.icon} size={24} />
-                            <span className="text-xs font-semibold tracking-wide">{item.label}</span>
+                            <span className="font-sans font-normal text-[15px] leading-[20px] tracking-wide">{item.label}</span>
                           </div>
                           <span className="text-[#b0bac9]">
                             <ChevronDownIcon />
@@ -635,7 +635,7 @@ export default function Sidebar({
                             setSalonSubTab(item.id);
                             setIsOpen(false);
                           }}
-                          className={`w-full text-left px-4 py-2 h-[44px] rounded-full font-sans font-normal text-[15px] leading-[20px] transition-all duration-200 ${
+                          className={`w-full text-left px-4 py-2 h-[44px] flex items-center rounded-full font-sans font-normal text-[15px] leading-[20px] transition-all duration-200 ${
                             isActive
                               ? "bg-[#635BFF] text-white shadow-sm"
                               : "text-[#29343D] hover:bg-slate-50 hover:text-slate-950"
@@ -692,7 +692,7 @@ export default function Sidebar({
                         setSalonSubTab(item.id);
                         setIsOpen(false);
                       }}
-                      className={`w-full text-left px-4 py-2 h-[44px] rounded-full font-sans font-normal text-[15px] leading-[20px] transition-all duration-200 ${
+                      className={`w-full text-left px-4 py-2 h-[44px] flex items-center rounded-full font-sans font-normal text-[15px] leading-[20px] transition-all duration-200 ${
                         isActive
                           ? "bg-[#635BFF] text-white shadow-sm"
                           : "text-[#29343D] hover:bg-slate-50 hover:text-slate-950"

@@ -599,7 +599,7 @@ export default function LeadsPage({ setActiveTab }: { setActiveTab?: (tab: strin
       <div className="rounded-2xl bg-white px-5 py-4 shadow-[0_4px_18px_rgba(17,31,56,0.06)]">
         <div className="flex flex-col md:flex-row md:items-center justify-between gap-4">
         <div>
-          <h1 className="text-sm font-extrabold text-[#1f2937]">Leads Management</h1>
+          <h1 className="text-base font-bold leading-none tracking-normal text-[#1f2937]">Leads Management</h1>
         </div>
         <div className="flex flex-wrap items-center gap-3 w-full sm:w-auto justify-start sm:justify-end">
 

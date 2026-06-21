@@ -268,19 +268,17 @@ export default function UsersAndStaffPage({
 
   return (
     <div className="flex flex-col gap-6 animate-in fade-in duration-300">
-      {/* Top Header Bar with Breadcrumbs */}
-      <div className="flex items-center justify-between">
-        <div className="flex items-center gap-2">
-          <h1 className="text-2xl font-bold tracking-tight text-slate-800">{salon.name}</h1>
+      {/* Top Header Breadcrumbs Card */}
+      <div className="rounded-2xl bg-white px-5 py-4 shadow-[0_4px_18px_rgba(17,31,56,0.06)] flex items-center justify-between w-full">
+        <div className="text-base font-bold leading-none tracking-normal text-[#1f2937]">
+          {salon.name}
         </div>
-
-        {/* Breadcrumbs */}
         <div className="flex items-center gap-2 text-xs font-semibold">
-          <button onClick={onBack} className="p-1.5 hover:bg-slate-100 rounded-xl transition-colors inline-flex">
+          <button onClick={onBack} className="p-1.5 border border-slate-200 rounded-lg hover:bg-slate-50 transition-colors inline-flex">
             <HomeIcon />
           </button>
           <span className="text-slate-300">/</span>
-          <button onClick={onBack} className="text-[#5e53fc] hover:underline">
+          <button onClick={onBack} className="bg-[#e4e2ff] text-[#5e53fc] px-3 py-1 rounded-full text-[10px] font-extrabold transition-all hover:bg-[#d8d5ff]">
             Salon Beauty
           </button>
         </div>

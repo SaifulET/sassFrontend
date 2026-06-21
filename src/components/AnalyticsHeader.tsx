@@ -33,7 +33,7 @@ export default function AnalyticsHeader({
               <polyline points="12 19 5 12 12 5" />
             </svg>
           </button>
-          <h1 className="text-sm font-extrabold text-[#1f2937] truncate">{title}</h1>
+          <h1 className="text-base font-bold leading-none tracking-normal text-[#1f2937] truncate">{title}</h1>
         </div>
 
         <button
