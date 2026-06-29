@@ -553,12 +553,6 @@ export default function SettingsPage({ defaultActiveTab = "Profile" }: { default
         className="hidden"
       />
 
-      {/* Toast Notification */}
-      {toastMessage && (
-        <div className="fixed bottom-5 right-5 z-50 rounded-xl bg-[#253143] px-5 py-3 text-xs font-semibold text-white shadow-2xl transition-all animate-bounce">
-          {toastMessage}
-        </div>
-      )}
 
       {/* Heading Card */}
       <div className="rounded-2xl bg-white px-5 py-4 shadow-[0_4px_18px_rgba(17,31,56,0.06)]">
@@ -602,8 +596,6 @@ export default function SettingsPage({ defaultActiveTab = "Profile" }: { default
                 type="button"
                 onClick={() => {
                   setActiveTab(tab);
-                  setToastMessage(`${tab} view loaded`);
-                  setTimeout(() => setToastMessage(null), 1500);
                 }}
                 className={`px-5 py-2 text-sm font-bold rounded-lg transition-all ${
                   isActive

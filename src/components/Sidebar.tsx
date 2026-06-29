@@ -121,7 +121,7 @@ export default function Sidebar({
             handleMainItemClick(item.id);
           }
         }}
-        className={`w-12 h-12 rounded-2xl flex items-center justify-center transition-all duration-200 relative group ${
+        className={`w-12 h-12 rounded-xl flex items-center justify-center transition-all duration-200 relative group ${
           isHighlighted
             ? "bg-[#5e53fc] text-white shadow-md shadow-indigo-150"
             : "text-[#7e8b9b] hover:bg-slate-50 hover:text-slate-900"
@@ -226,7 +226,7 @@ export default function Sidebar({
                   return (
                     <div key={item.id} className="flex flex-col gap-1 w-full">
                       {leadsExpanded ? (
-                        <div className="flex flex-col items-start p-4 gap-6 w-full bg-[#F1F2FE] rounded-lg flex-none border border-[#E8EEF5]">
+                        <div className="flex flex-col items-start p-4 gap-6 w-full bg-[#F1F2FE] rounded-2xl flex-none border border-[#E8EEF5]">
                           {/* Header: Click to collapse */}
                           <button
                             type="button"
@@ -264,13 +264,13 @@ export default function Sidebar({
                                   key={sub.id}
                                   type="button"
                                   onClick={() => handleMainItemClick(sub.id)}
-                                  className={`w-full h-[44px] rounded-full px-4 py-2 flex items-center justify-start text-[15px] font-normal font-sans leading-[20px] transition-all ${
+                                  className={`w-full h-[44px] rounded-xl px-4 py-2 flex items-center justify-start text-[15px] font-normal font-sans leading-[20px] transition-all ${
                                     isSubActive
                                       ? "bg-[#635BFF] text-white shadow-sm"
                                       : "bg-white text-[#635BFF] hover:bg-slate-50"
                                   }`}
                                 >
-                                  <SidebarIcon src={sub.icon} size={24} className={isSubActive ? "text-white" : "text-[#635BFF]"} />
+                                  <SidebarIcon src={sub.icon} size={20} className={isSubActive ? "text-white" : "text-[#635BFF]"} />
                                   <span className="ml-2">{sub.label}</span>
                                 </button>
                               );
@@ -284,14 +284,14 @@ export default function Sidebar({
                             setLeadsExpanded(true);
                             setAnalyticsExpanded(false);
                           }}
-                          className={`w-full h-[44px] flex items-center justify-between px-4 py-2 rounded-full transition-all duration-200 ${
+                          className={`w-full h-[44px] flex items-center justify-between px-4 py-2 rounded-xl transition-all duration-200 ${
                             isLeadsActive
                               ? "bg-[#F5F8FC]/60 text-[#635BFF]"
                               : "text-[#29343D] hover:bg-slate-50 hover:text-slate-900"
                           }`}
                         >
                           <div className="flex items-center gap-3">
-                            <SidebarIcon src={item.icon} size={24} />
+                            <SidebarIcon src={item.icon} size={24} className={isLeadsActive ? "text-[#635BFF]" : "text-[#98A4AE]"} />
                             <span className="text-[15px] font-normal font-sans leading-[20px]">{item.label}</span>
                           </div>
                           <span className="text-[#b0bac9]">
@@ -308,7 +308,7 @@ export default function Sidebar({
                   return (
                     <div key={item.id} className="flex flex-col gap-1 w-full">
                       {analyticsExpanded ? (
-                        <div className="flex flex-col items-start p-4 gap-6 w-full bg-[#F1F2FE] rounded-lg flex-none border border-[#E8EEF5]">
+                        <div className="flex flex-col items-start p-4 gap-6 w-full bg-[#F1F2FE] rounded-2xl flex-none border border-[#E8EEF5]">
                           {/* Header: Click to collapse */}
                           <button
                             type="button"
@@ -329,29 +329,27 @@ export default function Sidebar({
                           {/* Sub-items list */}
                           <div className="flex flex-col items-start p-0 gap-4 self-stretch w-full">
                             {/* Revenue Group */}
-                            <div className="flex flex-col gap-2 w-full">
-                              <button
-                                type="button"
-                                onClick={() => {
-                                  const nextState = !revenueExpanded;
-                                  setRevenueExpanded(nextState);
-                                  if (nextState) {
-                                    setCustomersExpanded(false);
-                                    setPerformanceExpanded(false);
-                                  }
-                                }}
-                                className="flex flex-row justify-between items-center px-4 py-2 w-full h-[44px] bg-[#DDDBFF] rounded-full text-[#635BFF] font-['Manrope'] font-semibold text-[15px]"
-                              >
-                                <div className="flex items-center gap-2">
-                                  <SidebarIcon src="/revenue.svg" size={24} className="text-[#635BFF]" />
-                                  <span>Revenue</span>
-                                </div>
-                                <span className={`transition-transform duration-200 ${revenueExpanded ? "rotate-180" : ""}`}>
-                                  <ChevronDownIcon />
-                                </span>
-                              </button>
-                              {revenueExpanded && (
-                                <div className="flex flex-col gap-2 pl-2 w-full">
+                            {revenueExpanded ? (
+                              <div className="flex flex-col items-start p-3 gap-3 w-full bg-[#DDDBFF] rounded-xl flex-none">
+                                {/* Header: Click to collapse */}
+                                <button
+                                  type="button"
+                                  onClick={() => setRevenueExpanded(false)}
+                                  className="flex flex-row items-center justify-between w-full h-6 text-[#635BFF] px-1"
+                                >
+                                  <div className="flex flex-row items-center gap-2">
+                                    <SidebarIcon src="/revenue.svg" size={20} className="text-[#635BFF]" />
+                                    <span className="font-['Manrope'] font-semibold text-[15px] leading-[20px]">
+                                      Revenue
+                                    </span>
+                                  </div>
+                                  <span className="text-[#635BFF] transform rotate-180">
+                                    <ChevronDownIcon />
+                                  </span>
+                                </button>
+
+                                {/* Sub-items list */}
+                                <div className="flex flex-col items-start p-0 gap-2 self-stretch w-full">
                                   {[
                                     { id: "analytics_revenue_mrr_arr", label: "MRR / ARR" },
                                     { id: "analytics_revenue_asp", label: "ASP" },
@@ -364,7 +362,7 @@ export default function Sidebar({
                                         key={sub.id}
                                         type="button"
                                         onClick={() => handleMainItemClick(sub.id)}
-                                        className={`w-full h-[44px] rounded-full px-4 py-2 flex items-center justify-start text-[15px] font-normal font-sans leading-[20px] transition-all ${
+                                        className={`w-full h-[44px] rounded-xl px-4 py-2 flex items-center justify-start text-[15px] font-normal font-sans leading-[20px] transition-all ${
                                           isSubActive
                                             ? "bg-[#635BFF] text-white shadow-sm"
                                             : "bg-white text-[#635BFF] hover:bg-slate-50"
@@ -375,33 +373,49 @@ export default function Sidebar({
                                     );
                                   })}
                                 </div>
-                              )}
-                            </div>
-
-                            {/* Customers Group */}
-                            <div className="flex flex-col gap-2 w-full">
+                              </div>
+                            ) : (
                               <button
                                 type="button"
                                 onClick={() => {
-                                  const nextState = !customersExpanded;
-                                  setCustomersExpanded(nextState);
-                                  if (nextState) {
-                                    setRevenueExpanded(false);
-                                    setPerformanceExpanded(false);
-                                  }
+                                  setRevenueExpanded(true);
+                                  setCustomersExpanded(false);
+                                  setPerformanceExpanded(false);
                                 }}
-                                className="flex flex-row justify-between items-center px-4 py-2 w-full h-[44px] bg-[#DDDBFF] rounded-full text-[#635BFF] font-['Manrope'] font-semibold text-[15px]"
+                                className="flex flex-row justify-between items-center px-4 py-2 w-full h-[44px] bg-[#DDDBFF] rounded-xl text-[#635BFF] font-['Manrope'] font-semibold text-[15px]"
                               >
                                 <div className="flex items-center gap-2">
-                                  <SidebarIcon src="/customers.svg" size={24} className="text-[#635BFF]" />
-                                  <span>Customers</span>
+                                  <SidebarIcon src="/revenue.svg" size={20} className="text-[#635BFF]" />
+                                  <span>Revenue</span>
                                 </div>
-                                <span className={`transition-transform duration-200 ${customersExpanded ? "rotate-180" : ""}`}>
+                                <span>
                                   <ChevronDownIcon />
                                 </span>
                               </button>
-                              {customersExpanded && (
-                                <div className="flex flex-col gap-2 pl-2 w-full">
+                            )}
+
+                            {/* Customers Group */}
+                            {customersExpanded ? (
+                              <div className="flex flex-col items-start p-3 gap-3 w-full bg-[#DDDBFF] rounded-xl flex-none">
+                                {/* Header: Click to collapse */}
+                                <button
+                                  type="button"
+                                  onClick={() => setCustomersExpanded(false)}
+                                  className="flex flex-row items-center justify-between w-full h-6 text-[#635BFF] px-1"
+                                >
+                                  <div className="flex flex-row items-center gap-2">
+                                    <SidebarIcon src="/customers.svg" size={20} className="text-[#635BFF]" />
+                                    <span className="font-['Manrope'] font-semibold text-[15px] leading-[20px]">
+                                      Customers
+                                    </span>
+                                  </div>
+                                  <span className="text-[#635BFF] transform rotate-180">
+                                    <ChevronDownIcon />
+                                  </span>
+                                </button>
+
+                                {/* Sub-items list */}
+                                <div className="flex flex-col items-start p-0 gap-2 self-stretch w-full">
                                   {[
                                     { id: "analytics_customers_subscribers", label: "Subscribers" },
                                     { id: "analytics_customers_leads", label: "Leads" },
@@ -413,7 +427,7 @@ export default function Sidebar({
                                         key={sub.id}
                                         type="button"
                                         onClick={() => handleMainItemClick(sub.id)}
-                                        className={`w-full h-[44px] rounded-full px-4 py-2 flex items-center justify-start text-[15px] font-normal font-sans leading-[20px] transition-all ${
+                                        className={`w-full h-[44px] rounded-xl px-4 py-2 flex items-center justify-start text-[15px] font-normal font-sans leading-[20px] transition-all ${
                                           isSubActive
                                             ? "bg-[#635BFF] text-white shadow-sm"
                                             : "bg-white text-[#635BFF] hover:bg-slate-50"
@@ -424,33 +438,49 @@ export default function Sidebar({
                                     );
                                   })}
                                 </div>
-                              )}
-                            </div>
-
-                            {/* Performance Group */}
-                            <div className="flex flex-col gap-2 w-full">
+                              </div>
+                            ) : (
                               <button
                                 type="button"
                                 onClick={() => {
-                                  const nextState = !performanceExpanded;
-                                  setPerformanceExpanded(nextState);
-                                  if (nextState) {
-                                    setRevenueExpanded(false);
-                                    setCustomersExpanded(false);
-                                  }
+                                  setCustomersExpanded(true);
+                                  setRevenueExpanded(false);
+                                  setPerformanceExpanded(false);
                                 }}
-                                className="flex flex-row justify-between items-center px-4 py-2 w-full h-[44px] bg-[#DDDBFF] rounded-full text-[#635BFF] font-['Manrope'] font-semibold text-[15px]"
+                                className="flex flex-row justify-between items-center px-4 py-2 w-full h-[44px] bg-[#DDDBFF] rounded-xl text-[#635BFF] font-['Manrope'] font-semibold text-[15px]"
                               >
                                 <div className="flex items-center gap-2">
-                                  <SidebarIcon src="/performance.svg" size={24} className="text-[#635BFF]" />
-                                  <span>Performance</span>
+                                  <SidebarIcon src="/customers.svg" size={20} className="text-[#635BFF]" />
+                                  <span>Customers</span>
                                 </div>
-                                <span className={`transition-transform duration-200 ${performanceExpanded ? "rotate-180" : ""}`}>
+                                <span>
                                   <ChevronDownIcon />
                                 </span>
                               </button>
-                              {performanceExpanded && (
-                                <div className="flex flex-col gap-2 pl-2 w-full">
+                            )}
+
+                            {/* Performance Group */}
+                            {performanceExpanded ? (
+                              <div className="flex flex-col items-start p-3 gap-3 w-full bg-[#DDDBFF] rounded-xl flex-none">
+                                {/* Header: Click to collapse */}
+                                <button
+                                  type="button"
+                                  onClick={() => setPerformanceExpanded(false)}
+                                  className="flex flex-row items-center justify-between w-full h-6 text-[#635BFF] px-1"
+                                >
+                                  <div className="flex flex-row items-center gap-2">
+                                    <SidebarIcon src="/performance.svg" size={20} className="text-[#635BFF]" />
+                                    <span className="font-['Manrope'] font-semibold text-[15px] leading-[20px]">
+                                      Performance
+                                    </span>
+                                  </div>
+                                  <span className="text-[#635BFF] transform rotate-180">
+                                    <ChevronDownIcon />
+                                  </span>
+                                </button>
+
+                                {/* Sub-items list */}
+                                <div className="flex flex-col items-start p-0 gap-2 self-stretch w-full">
                                   {[
                                     { id: "analytics_performance_arpa", label: "ARPA" },
                                     { id: "analytics_performance_churn", label: "Churn" },
@@ -463,7 +493,7 @@ export default function Sidebar({
                                         key={sub.id}
                                         type="button"
                                         onClick={() => handleMainItemClick(sub.id)}
-                                        className={`w-full h-[44px] rounded-full px-4 py-2 flex items-center justify-start text-[15px] font-normal font-sans leading-[20px] transition-all ${
+                                        className={`w-full h-[44px] rounded-xl px-4 py-2 flex items-center justify-start text-[15px] font-normal font-sans leading-[20px] transition-all ${
                                           isSubActive
                                             ? "bg-[#635BFF] text-white shadow-sm"
                                             : "bg-white text-[#635BFF] hover:bg-slate-50"
@@ -474,8 +504,26 @@ export default function Sidebar({
                                     );
                                   })}
                                 </div>
-                              )}
-                            </div>
+                              </div>
+                            ) : (
+                              <button
+                                type="button"
+                                onClick={() => {
+                                  setPerformanceExpanded(true);
+                                  setRevenueExpanded(false);
+                                  setCustomersExpanded(false);
+                                }}
+                                className="flex flex-row justify-between items-center px-4 py-2 w-full h-[44px] bg-[#DDDBFF] rounded-xl text-[#635BFF] font-['Manrope'] font-semibold text-[15px]"
+                              >
+                                <div className="flex items-center gap-2">
+                                  <SidebarIcon src="/performance.svg" size={20} className="text-[#635BFF]" />
+                                  <span>Performance</span>
+                                </div>
+                                <span>
+                                  <ChevronDownIcon />
+                                </span>
+                              </button>
+                            )}
                           </div>
                         </div>
                       ) : (
@@ -485,14 +533,14 @@ export default function Sidebar({
                             setAnalyticsExpanded(true);
                             setLeadsExpanded(false);
                           }}
-                          className={`w-full h-[44px] flex items-center justify-between px-4 py-2 rounded-full transition-all duration-200 ${
+                          className={`w-full h-[44px] flex items-center justify-between px-4 py-2 rounded-xl transition-all duration-200 ${
                             isAnalyticsActive
                               ? "bg-[#F5F8FC]/60 text-[#635BFF]"
                               : "text-[#29343D] hover:bg-slate-50 hover:text-slate-900"
                           }`}
                         >
                           <div className="flex items-center gap-3">
-                            <SidebarIcon src={item.icon} size={24} />
+                            <SidebarIcon src={item.icon} size={24} className={isAnalyticsActive ? "text-[#635BFF]" : "text-[#98A4AE]"} />
                             <span className="font-sans font-normal text-[15px] leading-[20px] tracking-wide">{item.label}</span>
                           </div>
                           <span className="text-[#b0bac9]">
@@ -509,7 +557,7 @@ export default function Sidebar({
                     key={item.id}
                     type="button"
                     onClick={() => handleMainItemClick(item.id)}
-                    className={`w-full h-[44px] flex items-center gap-2 px-4 py-2 rounded-full transition-all duration-200 ${
+                    className={`w-full h-[44px] flex items-center gap-2 px-4 py-2 rounded-xl transition-all duration-200 ${
                       isActive
                         ? "bg-[#635BFF] text-white shadow-md shadow-indigo-150"
                         : "text-[#29343D] hover:bg-slate-50 hover:text-slate-900"
@@ -537,7 +585,7 @@ export default function Sidebar({
                       <button
                         type="button"
                         onClick={() => handleMainItemClick(item.id)}
-                        className={`w-10 h-10 rounded-full flex items-center justify-center transition-all duration-200 ${
+                        className={`w-10 h-10 rounded-xl flex items-center justify-center transition-all duration-200 ${
                           isActive
                             ? "bg-[#635BFF] text-white shadow-md shadow-indigo-150"
                             : "text-[#29343D] hover:bg-slate-50 hover:text-slate-900"
@@ -555,7 +603,7 @@ export default function Sidebar({
                   <button
                     key={item.id}
                     onClick={() => handleMainItemClick(item.id)}
-                    className={`w-full h-[44px] flex items-center gap-2 px-4 py-2 rounded-full transition-all duration-200 ${
+                    className={`w-full h-[44px] flex items-center gap-2 px-4 py-2 rounded-xl transition-all duration-200 ${
                       isActive
                         ? "bg-[#635BFF] text-white shadow-md shadow-indigo-150"
                         : "text-[#29343D] hover:bg-slate-50 hover:text-slate-900"
@@ -635,7 +683,7 @@ export default function Sidebar({
                             setSalonSubTab(item.id);
                             setIsOpen(false);
                           }}
-                          className={`w-full text-left px-4 py-2 h-[44px] flex items-center rounded-full font-sans font-normal text-[15px] leading-[20px] transition-all duration-200 ${
+                          className={`w-full text-left px-4 py-2 h-[44px] flex items-center rounded-xl font-sans font-normal text-[15px] leading-[20px] transition-all duration-200 ${
                             isActive
                               ? "bg-[#635BFF] text-white shadow-sm"
                               : "text-[#29343D] hover:bg-slate-50 hover:text-slate-950"
@@ -692,7 +740,7 @@ export default function Sidebar({
                         setSalonSubTab(item.id);
                         setIsOpen(false);
                       }}
-                      className={`w-full text-left px-4 py-2 h-[44px] flex items-center rounded-full font-sans font-normal text-[15px] leading-[20px] transition-all duration-200 ${
+                      className={`w-full text-left px-4 py-2 h-[44px] flex items-center rounded-xl font-sans font-normal text-[15px] leading-[20px] transition-all duration-200 ${
                         isActive
                           ? "bg-[#635BFF] text-white shadow-sm"
                           : "text-[#29343D] hover:bg-slate-50 hover:text-slate-950"
