@@ -744,8 +744,8 @@ export default function AutomationsMailPage() {
         <div className="lg:col-span-9 p-7 flex flex-col gap-6 min-h-[600px] text-left">
 
           {/* Notifications Header */}
-          <div className="flex items-center justify-between pb-3 border-b border-[#EFF4FA]">
-            <div className="flex items-center gap-3 text-left">
+          <div className="flex flex-col sm:flex-row sm:items-center justify-between pb-3 border-b border-[#EFF4FA] gap-3">
+            <div className="flex items-center gap-3 text-left flex-wrap">
               <h2 className="font-bold text-[18px] leading-[25px] text-[#29343D]">
                 Notifications ({filteredNotifications.length})
               </h2>
@@ -758,7 +758,8 @@ export default function AutomationsMailPage() {
             {unreadCount > 0 && (
               <button
                 onClick={handleMarkAllAsRead}
-                className="flex items-center gap-1.5 px-4 py-2 border border-[#635BFF] hover:bg-[#F1F2FE] text-[#635BFF] rounded-lg text-xs font-bold transition-all shadow-sm"
+                className="flex items-center justify-center gap-1.5 px-4 py-2 border border-[#635BFF] hover:bg-[#F1F2FE] text-[#635BFF] rounded-lg text-xs font-bold transition-all shadow-sm w-full sm:w-auto"
+                style={{ minHeight: "36px" }}
               >
                 <span>Mark All As Read</span>
                 <CheckIcon className="w-3.5 h-3.5" />
@@ -782,11 +783,11 @@ export default function AutomationsMailPage() {
                 return (
                   <div
                     key={item.id}
-                    className={`py-4 flex items-center justify-between gap-4 group transition-colors px-2 rounded-xl hover:bg-slate-50/50 ${!item.read ? "bg-slate-50/25" : ""
+                    className={`py-4 flex flex-col lg:flex-row lg:items-center lg:justify-between gap-4 group transition-colors px-2 rounded-xl hover:bg-slate-50/50 ${!item.read ? "bg-slate-50/25" : ""
                       }`}
                   >
                     {/* Circle Icon and Text description combo */}
-                    <div className="flex items-center gap-4 flex-1 min-w-0">
+                    <div className="flex items-start lg:items-center gap-4 flex-1 min-w-0">
                       {/* Circle Category Icon */}
                       <div
                         className={`w-10 h-10 rounded-full flex items-center justify-center shrink-0 ${categoryTheme.bg} ${categoryTheme.text} shadow-sm`}
@@ -836,7 +837,7 @@ export default function AutomationsMailPage() {
                     </div>
 
                     {/* Badge state indicator & Actions buttons layout */}
-                    <div className="flex items-center gap-4 shrink-0">
+                    <div className="flex items-center justify-between lg:justify-end gap-4 shrink-0 w-full lg:w-auto border-t lg:border-t-0 border-[#E0E6EB]/50 pt-3 lg:pt-0">
 
                       {/* Badges status details */}
                       <div className="flex items-center gap-1.5 select-none font-bold">
